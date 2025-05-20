@@ -1,9 +1,10 @@
+import { ProjectShowcaseSection } from "@/components/home/ProjectShowcaseSection";
 import PageLayout from "@/layouts/PageLayout";
 
 export default function HomePage() {
     return (
         <PageLayout>
-            <div>홈</div>
+            <ProjectShowcaseSection />
         </PageLayout>
     );
 }
