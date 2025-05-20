@@ -1,9 +1,10 @@
+import { InterviewSection } from "@/components/home/InterviewSection";
 import PageLayout from "@/layouts/PageLayout";
 
 export default function HomePage() {
     return (
         <PageLayout>
-            <div>홈</div>
+            <InterviewSection />
         </PageLayout>
     );
 }
