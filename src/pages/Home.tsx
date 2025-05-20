@@ -1,9 +1,10 @@
+import { FAQSection } from "@/components/home/FAQSection";
 import PageLayout from "@/layouts/PageLayout";
 
 export default function HomePage() {
     return (
         <PageLayout>
-            <div>홈</div>
+            <FAQSection />
         </PageLayout>
     );
 }
