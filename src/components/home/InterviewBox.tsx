@@ -21,8 +21,8 @@ export const InterviewBox = ({ title, content, name, role }: InterviewBox) => {
                         "radial-gradient(86.25% 48.52% at 50% 100%, rgba(181, 84, 0, 0.2) 0%, rgba(181, 84, 0, 0) 100%"
                 }}
             >
-                <h3 className=" text-[24px] font-semibold pb-[12px]">{title}</h3>
-                <div className="text-[#C4C4C4] text-[20px] line-clamp-10 flex-1 mb-[15px] ">
+                <h3 className=" text-[24px] w-full h-[72px] font-semibold mb-[20px]">{title}</h3>
+                <div className="text-[#C4C4C4] text-[20px] line-clamp-9 flex-1 mb-[35px] ">
                     {content}
                 </div>
                 <div className="flex relative w-full h-[30px]  mt-auto">

@@ -19,6 +19,7 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.0",
     "react-typed": "^2.0.12",
+    "swiper": "^11.2.7",
     "tailwindcss": "^4.1.6"
   },
   "devDependencies": {
