@@ -16,6 +16,13 @@ export const activityDetails: ActivityDetail[] = [
         images: [samplecat, samplecat]
     },
     {
+        tag: "",
+        title: "",
+        description:
+            "정기 세션과 스터디를 통해 기초 역량을 쌓은 후, 본격적인 팀프로젝트에 참여하며 실전 경험을 쌓아갑니다.",
+        images: []
+    },
+    {
         tag: "5월",
         title: "아이디어톤",
         description:
