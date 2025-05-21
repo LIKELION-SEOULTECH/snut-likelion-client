@@ -1,3 +1,4 @@
+import ActivityTimelineSection from "@/components/home/ActivityTimelineSection";
 import { RecruitmentSection } from "@/components/home/RecruitmentSection";
 import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg?react";
@@ -13,6 +14,7 @@ export default function HomePage() {
                 <div className="bg-[#1b1b1b]">
                     <MissionSection />
                     <RecruitmentSection />
+                    <ActivityTimelineSection />
                 </div>
             </div>
         </PageLayout>
