@@ -3,7 +3,7 @@ import OvalLayer from "@/assets/home/oval_layer.png";
 
 export const RecruitmentSection = () => {
     return (
-        <div className="flex flex-col items-center pt-[325px]">
+        <div className="relative flex flex-col items-center pt-[325px]">
             <div className="text-[56px] font-semibold">새로운 사자를 찾습니다</div>
             <div className="flex text-center text-xl text-[#C4C4C4] leading-[130%] pt-7">
                 국내 최대 규모의 IT 창업 동아리로, ”내 아이디어를 내 손으로 실현하자!”는 모토로

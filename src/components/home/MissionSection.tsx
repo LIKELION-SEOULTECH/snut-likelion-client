@@ -36,7 +36,7 @@ export const MissionSection = () => {
         }
     ];
     return (
-        <div className="flex flex-col pt-40 pl-[110px] pb-[400px]">
+        <div className="relative flex flex-col pt-40 pl-[110px] pb-[400px]">
             {/* mission field */}
             <div className="flex flex-col gap-4">
                 {values.map(({ key, word, description }, index) => (
