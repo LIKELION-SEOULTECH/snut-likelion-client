@@ -1,3 +1,4 @@
+import { Footer } from "./Footer";
 import { Header } from "./Header";
 
 export default function PageLayout({ children }: { children: React.ReactNode }) {
@@ -5,6 +6,7 @@ export default function PageLayout({ children }: { children: React.ReactNode }) 
         <>
             <Header />
             <main>{children}</main>
+            <Footer />
         </>
     );
 }
