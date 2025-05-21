@@ -9,7 +9,7 @@ export const RoleCard = ({
     description3
 }: RoleCardProps) => {
     return (
-        <div className="group flex flex-col w-[231px] hover:w-[478px] flex-shrink-0 transition-all duration-300 px-5 py-[26px] rounded-[12px] backdrop-blur-[20px] bg-[linear-gradient(180deg,rgba(0,0,0,0.24)_0%,rgba(198,105,25,0.36)_100%)] overflow-hidden">
+        <div className="group flex flex-col w-[231px] hover:w-[478px] border border-[#666666] flex-shrink-0 transition-all duration-300 px-5 py-[26px] rounded-[12px] backdrop-blur-[20px] bg-[linear-gradient(180deg,rgba(0,0,0,0.24)_0%,rgba(198,105,25,0.36)_100%)] overflow-hidden">
             <div>
                 {/* Title & subtitle */}
                 <div className="font-semibold text-[32px] mb-5">{title}</div>
