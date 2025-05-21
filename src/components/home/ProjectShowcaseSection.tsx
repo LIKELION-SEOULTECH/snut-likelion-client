@@ -1,4 +1,4 @@
-import { ProjectBox } from "../ProjectBox";
+import { ProjectBox } from "./ProjectBox";
 import { projectList } from "@/constants/home/projectList";
 
 export const ProjectShowcaseSection = () => {
