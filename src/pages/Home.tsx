@@ -4,6 +4,7 @@ import ActivityTimelineSection from "@/components/home/ActivityTimelineSection";
 import { RecruitmentSection } from "@/components/home/RecruitmentSection";
 import { ProjectShowcaseSection } from "@/components/home/ProjectShowcaseSection";
 import { InterviewSection } from "@/components/home/InterviewSection";
+import { BottomCTASection } from "@/components/home/BottomCTASection";
 import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg?react";
 import { MainVisualSection } from "@/components/home/MainVisualSection";
@@ -23,6 +24,7 @@ export default function HomePage() {
                     <ProjectShowcaseSection />
                     <InterviewSection />
                     <FAQSection />
+                    <BottomCTASection />
                 </div>
             </div>
         </PageLayout>
