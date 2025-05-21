@@ -1,6 +1,7 @@
 import { ActivityDetailSection } from "@/components/home/ActivityDetailSection";
 import ActivityTimelineSection from "@/components/home/ActivityTimelineSection";
 import { RecruitmentSection } from "@/components/home/RecruitmentSection";
+import { ProjectShowcaseSection } from "@/components/home/ProjectShowcaseSection";
 import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg?react";
 import { MainVisualSection } from "@/components/home/MainVisualSection";
@@ -17,6 +18,7 @@ export default function HomePage() {
                     <RecruitmentSection />
                     <ActivityTimelineSection />
                     <ActivityDetailSection />
+                    <ProjectShowcaseSection />
                 </div>
             </div>
         </PageLayout>

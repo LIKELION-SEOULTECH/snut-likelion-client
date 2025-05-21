@@ -16,7 +16,8 @@ const getTagColor = (ratio: number) => {
 const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: ActivityItemProps) => {
     const opacity = 0.3 + 0.7 * visibleRatio;
     return (
-        <div className={`flex w-full px-8 mb-[400px] z-10`}>
+        <div className={`flex w-full px-8 mb-[300px] mt-[100px] z-10`}>
+            {/* margin 수정 필요 맨 처음 (activity item) */}
             <div className={`flex  ${tag !== "" ? "h-[540px]" : "h-[30px]"}`}>
                 {/* 태그 */}
                 <div className="flex flex-col items-center pl-[113px] z-10  ">

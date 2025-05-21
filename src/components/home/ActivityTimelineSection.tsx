@@ -38,7 +38,7 @@ const ActivityTimelineSection = () => {
             </div>
 
             <div className="flex justify-center">
-                <button className="w-[216px] h-[76px] text-[24px] font-bold rounded-full cursor-pointer border-[2px] border-white text-white hover:bg-white hover:text-black transition duration-200 mb-[200px]">
+                <button className="w-[216px] h-[76px] text-[24px] font-bold rounded-full cursor-pointer border-[2px] border-white text-white hover:bg-white hover:text-black transition duration-200">
                     세부 일정 보기
                 </button>
             </div>
