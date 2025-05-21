@@ -1,3 +1,4 @@
+import { FAQSection } from "@/components/home/FAQSection";
 import { ActivityDetailSection } from "@/components/home/ActivityDetailSection";
 import ActivityTimelineSection from "@/components/home/ActivityTimelineSection";
 import { RecruitmentSection } from "@/components/home/RecruitmentSection";
@@ -21,6 +22,7 @@ export default function HomePage() {
                     <ActivityDetailSection />
                     <ProjectShowcaseSection />
                     <InterviewSection />
+                    <FAQSection />
                 </div>
             </div>
         </PageLayout>
