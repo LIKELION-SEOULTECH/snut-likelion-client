@@ -2,6 +2,7 @@ import { ActivityDetailSection } from "@/components/home/ActivityDetailSection";
 import ActivityTimelineSection from "@/components/home/ActivityTimelineSection";
 import { RecruitmentSection } from "@/components/home/RecruitmentSection";
 import { ProjectShowcaseSection } from "@/components/home/ProjectShowcaseSection";
+import { InterviewSection } from "@/components/home/InterviewSection";
 import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg?react";
 import { MainVisualSection } from "@/components/home/MainVisualSection";
@@ -19,6 +20,7 @@ export default function HomePage() {
                     <ActivityTimelineSection />
                     <ActivityDetailSection />
                     <ProjectShowcaseSection />
+                    <InterviewSection />
                 </div>
             </div>
         </PageLayout>

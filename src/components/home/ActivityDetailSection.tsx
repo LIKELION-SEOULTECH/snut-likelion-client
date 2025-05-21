@@ -14,11 +14,11 @@ export const ActivityDetailSection = () => {
     const gradientHeight = Math.min(300 + scrollY * 1.2, 3280);
 
     return (
-        <section className="pt-[260px] text-white">
+        <section className="relative pt-[260px] text-white">
             <div className="flex w-full px-8">
                 {/* 태그 있는 선: 색변화*/}
                 <div
-                    className="w-[2px]  h-[3280px] absolute left-[179px] top-[270px] z-1"
+                    className="w-[2px]  h-[3280px] absolute left-[179px] top-[370px] z-1"
                     style={{
                         backgroundImage: "linear-gradient(to bottom, #FF7700 0%, #3A3A3A 100%)",
                         backgroundRepeat: "no-repeat",
@@ -29,7 +29,7 @@ export const ActivityDetailSection = () => {
                 ></div>
                 {/* 태그 있는 선: 기본 */}
                 <div
-                    className="w-[2px]  h-[3280px] absolute left-[179px] top-[270px] z-0"
+                    className="w-[2px]  h-[3280px] absolute left-[179px] top-[370px] z-0"
                     style={{
                         background: " #3A3A3A "
                     }}
