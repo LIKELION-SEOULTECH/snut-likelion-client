@@ -1,3 +1,4 @@
+import { RecruitmentSection } from "@/components/home/RecruitmentSection";
 import PageLayout from "@/layouts/PageLayout";
 import { MainVisualSection } from "@/components/home/MainVisualSection";
 
@@ -13,6 +14,11 @@ export default function HomePage() {
             </div>
             <div className="bg-[#1b1b1b]">
                 <MissionSection />
+            </div>
+            <div className="text-[#ffffff]">
+                <div className="bg-[#1b1b1b]">
+                    <RecruitmentSection />
+                </div>
             </div>
         </PageLayout>
     );
