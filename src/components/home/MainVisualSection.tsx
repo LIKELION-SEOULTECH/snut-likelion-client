@@ -1,7 +1,26 @@
+import { useState, useEffect } from "react";
 import { ReactTyped } from "react-typed";
 import mainBg from "@/assets/home/main-bg.png";
+import { NotificationModal } from "@/components/home/NotificationModal";
 
 export const MainVisualSection = () => {
+    const [isModalOpen, setIsModalOpen] = useState(true);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+        };
+    }, [isModalOpen]);
+
     return (
         <div className="relative w-full min-h-screen overflow-hidden pl-[110px] text-white">
             {/* 배경화면 */}
@@ -13,7 +32,7 @@ export const MainVisualSection = () => {
             {/* 컨텐츠 */}
             <div className="relative z-5">
                 {/* likelion with seoul */}
-                <div className="flex flex-col mt-24 text-[#c4c4c4] text-[22px] leading-[130%] tracking-[-0.02em]">
+                <div className="flex flex-col mt-24 text-[#c4c4c4] text-[22px] leading-[130%] tracking-[-0.02em] gap-[6px]">
                     <div className="font-semibold">LIKELION</div>
                     <div className="flex gap-2">
                         <span>With</span>
@@ -22,8 +41,10 @@ export const MainVisualSection = () => {
                 </div>
                 {/* we are [디자이너,기획,개발자] */}
                 <div className="flex flex-col mt-[41px]">
-                    <div className="h-[114px] text-[88px] font-bold leading-[130%] ">WE ARE</div>
-                    <div className="flex flex-row items-center h-[150px]">
+                    <div className="h-[114px] text-[88px] font-bold leading-[130%] tracking-[-0.01em]">
+                        WE ARE
+                    </div>
+                    <div className="flex flex-row items-center h-[150px] -translate-y-[16px]">
                         <span className="text-[120px] mr-[11px] text-[#FF5401] font-regular">
                             {"["}
                         </span>
@@ -48,10 +69,18 @@ export const MainVisualSection = () => {
                     우리와 함께 아이디어를 실현 시킬 사자를 찾습니다.
                 </div>
                 {/* 컴포넌트 분리 */}
-                <button className="w-72 h-18 bg-[#ff7700] text-[25px] font-bold rounded-[250px] mt-[54px] mb-[134px] leading-[130%] tracking-[-0.02em] cursor-pointer">
+                <button
+                    className="w-72 h-18 bg-[#ff7700] text-[25px] font-bold rounded-[250px] mt-[54px] mb-[134px] leading-[130%] tracking-[-0.02em] cursor-pointer"
+                    onClick={() => setIsModalOpen(true)}
+                >
                     3기 모집 알림 받기 →
                 </button>
             </div>
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                    <NotificationModal onClose={() => setIsModalOpen(false)} />
+                </div>
+            )}{" "}
         </div>
     );
 };
