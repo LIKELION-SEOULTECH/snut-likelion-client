@@ -1,9 +1,10 @@
+import { NotificationModal } from "@/components/home/NotificationModal";
 import PageLayout from "@/layouts/PageLayout";
 
 export default function HomePage() {
     return (
         <PageLayout>
-            <div>홈</div>
+            <NotificationModal />
         </PageLayout>
     );
 }
