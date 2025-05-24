@@ -73,7 +73,7 @@ export const MainVisualSection = () => {
                     className="w-72 h-18 bg-[#ff7700] text-[25px] font-bold rounded-[250px] mt-[54px] mb-[134px] leading-[130%] tracking-[-0.02em] cursor-pointer"
                     onClick={() => setIsModalOpen(true)}
                 >
-                    3기 모집 알림 받기 →
+                    14기 모집 알림 받기 →
                 </button>
             </div>
             {isModalOpen && (
