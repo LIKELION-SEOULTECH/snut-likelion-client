@@ -5,28 +5,48 @@ import { RecruitmentSection } from "@/components/home/RecruitmentSection";
 import { ProjectShowcaseSection } from "@/components/home/ProjectShowcaseSection";
 import { InterviewSection } from "@/components/home/InterviewSection";
 import { BottomCTASection } from "@/components/home/BottomCTASection";
-import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg?react";
 import { MainVisualSection } from "@/components/home/MainVisualSection";
 import { MissionSection } from "@/components/home/MissionSection";
+import { Header } from "@/layouts/Header";
+import { Footer } from "@/layouts/Footer";
 
 export default function HomePage() {
     return (
-        <PageLayout>
-            <div className="relative text-[#ffffff]">
-                <MainVisualSection />
-                <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
-                <div className="bg-[#1b1b1b]">
+        <>
+            <div className="text-white h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+                <section className="snap-start min-h-screen relative">
+                    <Header />
+                    <MainVisualSection />
+                    <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
+                </section>
+
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <MissionSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <RecruitmentSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <ActivityTimelineSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <ActivityDetailSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <ProjectShowcaseSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <InterviewSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <FAQSection />
+                </section>
+                <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <BottomCTASection />
-                </div>
+                    <Footer />
+                </section>
             </div>
-        </PageLayout>
+        </>
     );
 }

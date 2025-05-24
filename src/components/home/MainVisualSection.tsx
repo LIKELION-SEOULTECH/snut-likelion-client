@@ -4,7 +4,7 @@ import mainBg from "@/assets/home/main-bg.png";
 import { NotificationModal } from "@/components/home/NotificationModal";
 
 export const MainVisualSection = () => {
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         if (isModalOpen) {

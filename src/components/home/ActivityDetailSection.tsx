@@ -14,7 +14,7 @@ export const ActivityDetailSection = () => {
     const gradientHeight = Math.min(300 + scrollY * 1.2, 3280);
 
     return (
-        <section className="relative pt-[260px] text-white">
+        <section className="relative pt-[260px] text-white ">
             <div className="flex w-full px-8">
                 {/* 태그 있는 선: 색변화*/}
                 <div
