@@ -27,7 +27,7 @@ export default function QuoteCardList() {
     };
 
     return (
-        <div className="relative w-full h-[111px] mx-auto mt-24">
+        <div className="relative w-full h-[111px] mx-auto mt-24 mb-8">
             {quotes.map((quote, i) => {
                 const vIndex = getVisualIndex(i);
                 const topOffset = vIndex * 16;

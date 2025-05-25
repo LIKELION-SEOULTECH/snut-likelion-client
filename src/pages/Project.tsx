@@ -18,7 +18,12 @@ export default function ProjectPage() {
 
     return (
         <PageLayout>
-            <div className="w-full flex flex-col text-white bg-[#111111] items-center px-28">
+            <div
+                className="w-full flex flex-col text-white items-center px-28"
+                style={{
+                    background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
+                }}
+            >
                 <div className="font-extrabold text-7xl mt-[85px] mb-18">
                     Project Archive<span className="text-[#FF7700]">.</span>
                 </div>
