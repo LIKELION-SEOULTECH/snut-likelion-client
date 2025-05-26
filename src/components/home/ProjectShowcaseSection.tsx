@@ -3,7 +3,7 @@ import { projectList } from "@/constants/home/projectList";
 
 export const ProjectShowcaseSection = () => {
     return (
-        <div className="relative flex flex-col pt-[260px] w-full text-[#ffffff] bg-[#1b1b1b] pb-[200px]">
+        <div className="relative flex flex-col pt-[160px] w-full text-[#ffffff] bg-[#1b1b1b] pb-[200px]">
             <h2 className="flex justify-center text-[56px] font-semibold pb-[72px]">프로젝트</h2>
             <div className="relative grid grid-cols-3 gap-[16px] w-[1216px] mx-auto ">
                 {projectList.map((project) => (

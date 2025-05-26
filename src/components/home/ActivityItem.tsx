@@ -16,8 +16,7 @@ const getTagColor = (ratio: number) => {
 const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: ActivityItemProps) => {
     const opacity = 0.3 + 0.7 * visibleRatio;
     return (
-        <div className={`flex w-full px-8 mb-[300px] mt-[100px] z-10`}>
-            {/* margin 수정 필요 맨 처음 (activity item) */}
+        <div className={`flex w-full px-8 mb-[400px] z-10`}>
             <div className={`flex  ${tag !== "" ? "h-[540px]" : "h-[30px]"}`}>
                 {/* 태그 */}
                 <div className="flex flex-col items-center pl-[113px] z-10  ">
@@ -25,7 +24,8 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                         <div
                             className="bg-[#FF7700] w-[71px] h-[44px] text-black text-[20px] font-bold rounded-full flex text-center justify-center items-center leading-[100%] z-10"
                             style={{
-                                backgroundColor: getTagColor(visibleRatio),
+                                backgroundColor:
+                                    tag === "정기" ? "#FF7700" : getTagColor(visibleRatio),
                                 transition: "background-color 0.3s",
                                 opacity: 1,
                                 filter: "none"
@@ -43,13 +43,26 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                     style={{
                         opacity,
                         filter: `grayscale(${1 - visibleRatio})`,
-                        transition: "opacity 0.3s, filter 0.3s"
+                        transition: "opacity 0.4s ease-out, filter 0.4s ease-out"
                     }}
                 >
                     {/* 텍스트 */}
                     <div className="flex items-start max-w-[1200px] mx-auto gap-8">
                         <div className="flex flex-col gap-3">
-                            <h3 className="text-[32px] font-semibold text-white">{title}</h3>
+                            <h3
+                                className={`text-[32px] font-semibold text-white `}
+                                style={
+                                    tag === "정기"
+                                        ? {
+                                              color: "#FFFFFF",
+                                              opacity: 1,
+                                              filter: "none"
+                                          }
+                                        : {}
+                                }
+                            >
+                                {title}
+                            </h3>
                             <p
                                 className={`text-[20px] whitespace-pre-line ${tag !== "" ? "text-[#C4C4C4]" : "text-[#B55400]"}`}
                             >

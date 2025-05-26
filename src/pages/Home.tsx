@@ -15,7 +15,7 @@ import ChatbotBtn from "@/assets/home/chatbot_btn.svg?react";
 export default function HomePage() {
     return (
         <>
-            <div className="text-white h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+            <div className=" text-white h-screen overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
                 <section className="snap-start min-h-screen relative">
                     <Header />
                     <MainVisualSection />
@@ -32,7 +32,7 @@ export default function HomePage() {
                 <section className="snap-start min-h-screen bg-[#1b1b1b]">
                     <ActivityTimelineSection />
                 </section>
-                <section className="snap-start min-h-screen bg-[#1b1b1b]">
+                <section className="scroll-wrapper snap-start min-h-screen bg-[#1b1b1b]">
                     <ActivityDetailSection />
                 </section>
                 <section className="snap-start min-h-screen bg-[#1b1b1b]">
