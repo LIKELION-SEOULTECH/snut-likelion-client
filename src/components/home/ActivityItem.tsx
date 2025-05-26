@@ -40,29 +40,20 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
 
                 <div
                     className="pl-[34px]"
-                    style={{
-                        opacity,
-                        filter: `grayscale(${1 - visibleRatio})`,
-                        transition: "opacity 0.4s ease-out, filter 0.4s ease-out"
-                    }}
+                    style={
+                        tag === "정기"
+                            ? {}
+                            : {
+                                  opacity,
+                                  filter: `grayscale(${1 - visibleRatio})`,
+                                  transition: "opacity 0.4s ease-out, filter 0.4s ease-out"
+                              }
+                    }
                 >
                     {/* 텍스트 */}
                     <div className="flex items-start max-w-[1200px] mx-auto gap-8">
                         <div className="flex flex-col gap-3">
-                            <h3
-                                className={`text-[32px] font-semibold text-white `}
-                                style={
-                                    tag === "정기"
-                                        ? {
-                                              color: "#FFFFFF",
-                                              opacity: 1,
-                                              filter: "none"
-                                          }
-                                        : {}
-                                }
-                            >
-                                {title}
-                            </h3>
+                            <h3 className={`text-[32px] font-semibold text-white `}>{title}</h3>
                             <p
                                 className={`text-[20px] whitespace-pre-line ${tag !== "" ? "text-[#C4C4C4]" : "text-[#B55400]"}`}
                             >
