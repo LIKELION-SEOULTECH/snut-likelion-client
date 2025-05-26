@@ -14,7 +14,7 @@ export const ProjectBox = ({
     image
 }: ProjectBoxProps) => {
     return (
-        <div className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px] ">
+        <div className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer">
             <img
                 src={image}
                 alt={title}
