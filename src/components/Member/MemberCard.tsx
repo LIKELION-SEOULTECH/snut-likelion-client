@@ -10,7 +10,7 @@ export const MemberCard = ({
     image
 }: MemberInfo) => {
     return (
-        <div className="relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
+        <div className="whitespace-pre-line leading-snug relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
             <div className="w-full h-full flex flex-col rounded-[16px] py-[36px] px-[28px]  z-1">
                 <div className="w-[218px] h-[216px] overflow-hidden bg-[#121212]">
                     <img className="w-full h-full object-contain" src={image} alt={name} />

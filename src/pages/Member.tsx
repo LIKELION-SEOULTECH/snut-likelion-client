@@ -1,5 +1,6 @@
-import CategoryTabs from "@/components/CategoryTabs";
-import GenerationTabs from "@/components/GenerationTabs";
+import CategoryTabs from "@/components/Member/CategoryTabs";
+import GenerationTabs from "@/components/Member/GenerationTabs";
+
 import { MemberCardList } from "@/components/Member/MemberCardList";
 import { mockMemberData } from "@/constants/mockMemberData";
 import PageLayout from "@/layouts/PageLayout";
