@@ -15,7 +15,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
     const visibleProjects = projects.slice(0, visibleCount);
 
     useEffect(() => {
-        setVisibleCount(LOAD_COUNT); // 필터 변경 시 초기화
+        setVisibleCount(LOAD_COUNT);
     }, [projects]);
 
     useEffect(() => {

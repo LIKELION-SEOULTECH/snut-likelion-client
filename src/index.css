@@ -37,3 +37,12 @@ body {
 .swiper-wrapper {
     transition-timing-function: linear !important;
 }
+
+/* 프로젝트 부분 가로 스크롤 숨기기 설정 */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE & Edge */
+    scrollbar-width: none; /* Firefox */
+}

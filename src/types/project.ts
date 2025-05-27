@@ -4,5 +4,6 @@ export interface ProjectData {
     description: string;
     class: string;
     tag: string;
+    stack: string[];
     image: string;
 }

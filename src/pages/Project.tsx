@@ -30,7 +30,9 @@ export default function ProjectPage() {
                 <GenerationTabs selected={generation} onSelect={setGeneration} />
                 <CategoryTabs selected={category} onSelect={setCategory} />
                 <ProjectList projects={filteredProjects} />
-                <QuoteCardList />
+                <div className="w-full mt-24">
+                    <QuoteCardList />
+                </div>
             </div>
         </PageLayout>
     );
