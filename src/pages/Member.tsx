@@ -1,6 +1,7 @@
 import CategoryTabs from "@/components/CategoryTabs";
 import GenerationTabs from "@/components/GenerationTabs";
 import { MemberCardList } from "@/components/Member/MemberCardList";
+import { mockMemberData } from "@/constants/mockMemberData";
 import PageLayout from "@/layouts/PageLayout";
 import { useState } from "react";
 
@@ -9,7 +10,19 @@ const MemberCategories = ["운영진", "아기사자"];
 
 export const MemberPage = () => {
     const [generation, setGeneration] = useState("13기");
-    const [categorie, setCategory] = useState("운영진");
+    const [category, setCategory] = useState("운영진");
+    const filteredMembers = mockMemberData.filter((member) => {
+        const matchGen = member.generation === generation;
+        let matchCat = true;
+        if (member.tag === "대표" && category === "운영진") {
+            matchCat = true;
+        } else {
+            matchCat = member.tag === category;
+        }
+
+        return matchGen && matchCat;
+    });
+
     return (
         <PageLayout>
             <div
@@ -28,10 +41,10 @@ export const MemberPage = () => {
                 />
                 <CategoryTabs
                     categories={MemberCategories}
-                    selected={categorie}
+                    selected={category}
                     onSelect={setCategory}
                 />
-                <MemberCardList />
+                <MemberCardList MemberData={filteredMembers} />
                 {/* <QuoteCardList /> */}
             </div>
         </PageLayout>

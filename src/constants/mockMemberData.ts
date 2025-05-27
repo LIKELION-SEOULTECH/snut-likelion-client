@@ -14,7 +14,7 @@ export interface MemberInfo {
     image: string;
 }
 
-export const mockMemberData: MemberInfo[] = Array.from({ length: 12 }, (_, index) => {
+export const mockMemberData: MemberInfo[] = Array.from({ length: 50 }, (_, index) => {
     const id = index + 1;
     return {
         id,

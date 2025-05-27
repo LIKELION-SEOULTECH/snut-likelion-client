@@ -1,10 +1,13 @@
+import type { MemberInfo } from "@/constants/mockMemberData";
 import { MemberCard } from "./MemberCard";
-import { mockMemberData } from "../../constants/mockMemberData";
 
-export const MemberCardList = () => {
+interface MemberCardProps {
+    MemberData: MemberInfo[];
+}
+export const MemberCardList = ({ MemberData }: MemberCardProps) => {
     return (
         <div className="grid grid-cols-4 gap-4 mt-12 w-[1216px] pb-[120px]">
-            {mockMemberData.map((member) => (
+            {MemberData.map((member) => (
                 <MemberCard key={member.id} {...member} />
             ))}
         </div>
