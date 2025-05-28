@@ -57,11 +57,23 @@ export const MemberDetailPage = () => {
                                     ))}
                                 </div>
                                 <div className="flex gap-3 pb-8">
-                                    <SmallBtn tag={"Velog →"} shape={"round"} />
-                                    <SmallBtn tag={"Github →"} shape={"round"} />
+                                    <a
+                                        href={member.velog}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <SmallBtn tag={"Velog →"} shape={"round"} />
+                                    </a>
+                                    <a
+                                        href={member.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <SmallBtn tag={"Github →"} shape={"round"} />
+                                    </a>
                                 </div>
                                 <a
-                                    href="mailto:parkjoah@naver.com"
+                                    href={`mailto:${member.email}`}
                                     className="text-[56px] w-[390px] h-[73px] font-bold cursor-pointer hover:border-b-6 px-0"
                                 >
                                     Contact me<span className="text-[#F70]">.</span> →

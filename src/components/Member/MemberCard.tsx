@@ -7,12 +7,15 @@ export const MemberCard = ({
     role,
     major,
     description,
-    image
+    image,
+
+    github,
+    velog
 }: MemberInfo) => {
     return (
         <div className="whitespace-pre-line leading-snug relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
             <div className="w-full h-full flex flex-col rounded-[16px] py-[36px] px-[28px]  z-1">
-                <div className="w-[218px] h-[216px] overflow-hidden bg-[#121212]">
+                <div className="w-[218px] h-[216px] overflow-hidden ">
                     <img className="w-full h-full object-contain" src={image} alt={name} />
                 </div>
                 <div className="flex flex-col pt-[28px] text-center gap-[15px]">
@@ -46,12 +49,26 @@ export const MemberCard = ({
                         <div className="flex flex-col gap-4 ">
                             <div className="font-medium text-[16px] text-[#FFD5B0]">{major}</div>
                             <div className="flex gap-3 ">
-                                <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold">
-                                    Github →
-                                </button>
-                                <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold">
-                                    Velog →
-                                </button>
+                                <a
+                                    href={github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold">
+                                        Github →
+                                    </button>
+                                </a>
+                                <a
+                                    href={velog}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold">
+                                        Velog →
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
