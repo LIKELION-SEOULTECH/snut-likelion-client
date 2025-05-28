@@ -3,6 +3,7 @@ import { ProjectBox } from "../home/ProjectBox";
 import sample1 from "@/assets/home/sample1.png";
 import sample2 from "@/assets/home/sample2.png";
 import greenmate from "@/assets/project/green-mate.png";
+import { ROUTES } from "@/constants/routes";
 
 const tempProjects = Array.from({ length: 5 }, (_, index) => {
     const id = index + 1;
@@ -42,9 +43,13 @@ export const OtherProjectSection = () => {
             <div ref={scrollRef} className="overflow-x-auto scrollbar-hide">
                 <div className="flex flex-row gap-4">
                     {tempProjects.map((project) => (
-                        <div key={project.id} className="min-w-[395px] cursor-pointer">
+                        <a
+                            key={project.id}
+                            href={`${ROUTES.PROJECT}/${project.id}`}
+                            className="min-w-[395px] cursor-pointer block"
+                        >
                             <ProjectBox {...project} />
-                        </div>
+                        </a>
                     ))}
                 </div>
             </div>

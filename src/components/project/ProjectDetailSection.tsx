@@ -1,15 +1,17 @@
-export const ProjectDetailSection = () => {
+import type { ProjectData } from "@/types/project";
+
+export const ProjectDetailSection = ({ project }: { project: ProjectData }) => {
     return (
         <div className="flex flex-col mt-18">
             <div className="flex flex-row gap-4">
                 <div className="h-12 px-5 rounded-full text-2xl bg-orange-500 text-black font-bold flex items-center justify-center">
-                    13기
+                    {project.class}
                 </div>
                 <div className="h-12 px-5 rounded-full text-2xl bg-orange-500 text-black font-bold flex items-center justify-center">
-                    아이디어톤
+                    {project.tag}
                 </div>
             </div>
-            <div className="text-[50px] font-bold text-white mt-6">그린메이트 Green Mate</div>
+            <div className="text-[50px] font-bold text-white mt-6"> {project.title}</div>
             <div className="flex flex-row gap-3 mt-6">
                 <div className="flex items-center justify-center px-4 text-base h-9 bg-[#2d2d2d] text-gray-100 rounded-[4px]">
                     웹
