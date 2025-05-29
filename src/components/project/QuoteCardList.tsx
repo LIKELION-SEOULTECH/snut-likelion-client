@@ -9,7 +9,12 @@ const quotes = [
         author: "Austin An"
     },
     { text: "코드는 거짓말하지 않는다, 거짓말은 니가 하고 있다.", author: "정윤석" },
-    { text: "하나부터 열까지, 모든 게 다 한 수 위.", author: "TOP" }
+    { text: "No 약자석. (3216번 버스 안, 78세 박순자 여사를 바라보며)", author: "안정후" },
+    { text: "하나부터 열까지, 모든 게 다 한 수 위.", author: "TOP" },
+    {
+        text: "올해라는 코스를 끝까지 완주해보도록 돕겠습니다. 아 물론 저는 부정출발 할 겁니다.",
+        author: "안정후"
+    }
 ];
 
 export default function QuoteCardList() {
