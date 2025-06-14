@@ -41,15 +41,15 @@ export const ActivityDetailSection = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="text-white relative py-[200px] bg-[#1b1b1b]">
+        <section ref={sectionRef} className="text-white relative pb-[200px] bg-[#1b1b1b]">
             {/* 태그 있는 선: 색변화 */}
             <div
-                className="w-[1.5px] absolute left-[179px] top-[210px] z-10 pointer-events-none"
+                className="w-[1.5px] absolute left-[179px] top-[10px] z-10 pointer-events-none"
                 style={{
                     height: `${
                         scrollY < 280
                             ? 280
-                            : Math.min(scrollY / 1.3 > 1000 ? scrollY * 1.15 : scrollY * 1.4, 3280)
+                            : Math.min(scrollY / 1.3 > 500 ? scrollY * 1.3 : scrollY * 1.4, 3280)
                     }px`,
                     backgroundColor: "#FF7700",
                     maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
@@ -59,7 +59,7 @@ export const ActivityDetailSection = () => {
             />
 
             {/* 태그 있는 선: 기본 */}
-            <div className="w-[1.5px] h-[3280px] absolute left-[179px] top-[210px] z-0 bg-[#3A3A3A]" />
+            <div className="w-[1.5px] h-[3280px] absolute left-[179px] top-[10px] z-0 bg-[#3A3A3A]" />
 
             {activityDetails.map((item, index) => (
                 <div

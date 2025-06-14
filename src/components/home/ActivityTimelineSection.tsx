@@ -1,4 +1,7 @@
-const ActivityTimelineSection = () => {
+type Props = {
+    onShowDetail: () => void;
+};
+const ActivityTimelineSection = ({ onShowDetail }: Props) => {
     const timeline = [
         { month: "정기", label: "세션 및 스터디" },
         { month: "5월", label: "아이디어톤" },
@@ -7,7 +10,7 @@ const ActivityTimelineSection = () => {
     ];
 
     return (
-        <div className="flex flex-col pt-[160px] w-full ">
+        <div className="flex flex-col pt-[160px] w-full pb-[260px] ">
             <h2 className="flex justify-center text-[56px] font-semibold pb-[72px]">활동소개</h2>
 
             <div className="relative w-full h-28 flex items-center justify-center gap-[96px]  mx-auto mb-[82px]">
@@ -38,7 +41,10 @@ const ActivityTimelineSection = () => {
             </div>
 
             <div className="flex justify-center">
-                <button className="w-[216px] h-[76px] text-[24px] font-bold rounded-full cursor-pointer border-[2px] border-white text-white hover:bg-[#2D2D2D] transition duration-200">
+                <button
+                    onClick={onShowDetail}
+                    className="w-[216px] h-[76px] text-[24px] font-bold rounded-full cursor-pointer border-[2px] border-white text-white hover:bg-[#2D2D2D] transition duration-200"
+                >
                     세부 일정 보기
                 </button>
             </div>
