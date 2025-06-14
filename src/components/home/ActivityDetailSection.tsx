@@ -46,15 +46,11 @@ export const ActivityDetailSection = () => {
             <div
                 className="w-[1.5px] absolute left-[179px] top-[10px] z-10 pointer-events-none"
                 style={{
-                    height: `${
-                        scrollY < 280
-                            ? 280
-                            : Math.min(scrollY / 1.3 > 500 ? scrollY * 1.3 : scrollY * 1.4, 3280)
-                    }px`,
+                    height: `${scrollY < 150 ? 280 : Math.min(scrollY * 1.15 + 200, 3280)}px`,
                     backgroundColor: "#FF7700",
                     maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
                     WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
-                    transition: "height 0.15s ease-out"
+                    transition: "height 0.s ease-out"
                 }}
             />
 
