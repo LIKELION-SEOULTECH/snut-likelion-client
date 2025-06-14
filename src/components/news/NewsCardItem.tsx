@@ -1,16 +1,27 @@
 import ArrowRight from "@/assets/news/arrow-right.svg?react";
+import { useNavigate } from "react-router-dom";
 interface NewsCardProps {
+    id: number;
     type: string;
     title: string;
     date: string;
     isNew: boolean;
 }
 
-export const NewsCardItem = ({ type, title, date, isNew }: NewsCardProps) => {
+export const NewsCardItem = ({ id, type, title, date, isNew }: NewsCardProps) => {
     const typeColor = type === "공지" ? "#FF7700" : "#A7A7A7";
 
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/news-content/${id}`);
+    };
+
     return (
-        <div className="w-full flex flex-row cursor-pointer border-b border-[#2D2D2D] py-10 justify-between">
+        <div
+            className="w-full flex flex-row cursor-pointer border-b border-[#2D2D2D] py-10 justify-between"
+            onClick={handleClick}
+        >
             <div className="flex flex-row">
                 <div
                     className="h-full flex font-bold text-2xl leading-[150%] pr-[163px] items-center"

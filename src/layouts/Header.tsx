@@ -22,7 +22,9 @@ export const Header = ({ white = false }: HeaderProps) => {
     return (
         <div
             className={`w-full h-24 flex flex-row justify-center ${
-                white ? "bg-white" : "bg-[#000000]"
+                white
+                    ? "bg-white/60 border-b border-[#ECECEC] backdrop-blur-[35px]"
+                    : "bg-[#000000]"
             }`}
         >
             <div className="flex justify-center items-center">
