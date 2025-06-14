@@ -20,10 +20,10 @@ export const ActivityDetailSection = () => {
     }, []);
 
     return (
-        <section className="text-white">
+        <section className="text-white ">
             <div
                 ref={scrollRef}
-                className="pt-[260px] pb-[100px]  max-h-[100vh] overflow-y-scroll relative"
+                className="pt-[260px] pb-[100px]  h-[5440px] overflow-y-scroll relative"
             >
                 {/* 태그 있는 선: 색변화 */}
                 <div
