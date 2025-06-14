@@ -16,7 +16,7 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "멤버", route: ROUTES.HOME },
         { name: "블로그", route: ROUTES.BLOG },
-        { name: "소식", route: ROUTES.HOME }
+        { name: "소식", route: ROUTES.NEWS }
     ];
 
     return (
@@ -25,7 +25,6 @@ export const Header = ({ white = false }: HeaderProps) => {
                 white ? "bg-white" : "bg-[#000000]"
             }`}
         >
-            {" "}
             <div className="flex justify-center items-center">
                 <div className="flex flex-row justify-center items-center gap-[267px]">
                     <LikeLionLogo
