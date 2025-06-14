@@ -1,14 +1,21 @@
-import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { PostHeader } from "./PostHeader";
+import { Footer } from "./Footer";
 import { useEffect } from "react";
 
 interface PageLayoutProps {
     children: React.ReactNode;
     white?: boolean;
+    isPost?: boolean;
+    isUploadEnabled?: boolean;
 }
 
-export default function PageLayout({ children, white = false }: PageLayoutProps) {
-    // html, body에 적용된 배경색 설정
+export default function PageLayout({
+    children,
+    white = false,
+    isPost = false,
+    isUploadEnabled = false
+}: PageLayoutProps) {
     useEffect(() => {
         const html = document.documentElement;
         const body = document.body;
@@ -26,7 +33,7 @@ export default function PageLayout({ children, white = false }: PageLayoutProps)
 
     return (
         <>
-            <Header white={white} />
+            {isPost ? <PostHeader isUploadEnabled={isUploadEnabled} /> : <Header white={white} />}
             <main>{children}</main>
             <Footer white={white} />
         </>
