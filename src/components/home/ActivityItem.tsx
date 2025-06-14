@@ -26,7 +26,7 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                             style={{
                                 backgroundColor:
                                     tag === "정기" ? "#FF7700" : getTagColor(visibleRatio),
-                                transition: "background-color 0.3s",
+                                transition: "all 0.3s",
                                 opacity: 1,
                                 filter: "none",
                                 boxShadow:
