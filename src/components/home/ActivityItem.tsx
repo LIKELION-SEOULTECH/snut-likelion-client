@@ -28,13 +28,26 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                                     tag === "정기" ? "#FF7700" : getTagColor(visibleRatio),
                                 transition: "background-color 0.3s",
                                 opacity: 1,
-                                filter: "none"
+                                filter: "none",
+                                boxShadow:
+                                    visibleRatio > 0.05
+                                        ? `0 0 ${8 * visibleRatio}px 0 rgba(255, 119, 0, ${0.6 * visibleRatio}), 
+           0 0 ${16 * visibleRatio}px 0 rgba(255, 119, 0, ${0.3 * visibleRatio})`
+                                        : "none"
                             }}
                         >
                             {tag}
                         </div>
                     ) : (
-                        <div className="bg-[#B55400] w-[17px] h-[17px] rounded-full ml-[26.5px] mr-[22px] mt-[15px] z-10 "></div>
+                        <div
+                            className="bg-[#B55400] w-[17px] h-[17px] rounded-full ml-[26.5px] mr-[22px] mt-[15px] z-10 "
+                            style={{
+                                backgroundColor: getTagColor(visibleRatio),
+                                transition: "background-color 0.3s",
+                                opacity: 1,
+                                filter: "none"
+                            }}
+                        ></div>
                     )}
                 </div>
 
