@@ -48,7 +48,7 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
         >
             {role === "bot" ? <img src={botImg} alt="bot" className="w-[33px] ml-4 mb-2" /> : null}
             <div
-                className={`max-w-[75%] flex flex-col ${buttons ? " px-4 py-5" : ""} px-4 py-2 text-sm rounded-[12px] leading-[160%] whitespace-pre-line ${
+                className={`max-w-[75%] flex flex-col ${buttons ? " px-4 py-5" : ""} px-4 py-2 text-sm rounded-[12px] leading-[160%]  ${
                     role === "bot"
                         ? "bg-[#404040] text-white self-start ml-4 rounded-bl-none"
                         : "bg-[#F70] text-white self-end mr-4 rounded-br-none"
@@ -106,7 +106,6 @@ export const ChatBotContainer = () => {
         };
 
         setMessages((prev) => [...prev, userMsg, loadingMsg]);
-        setInput("");
 
         setTimeout(() => {
             const botMsg: ChatMessage = {
@@ -146,7 +145,7 @@ export const ChatBotContainer = () => {
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter") {
+                            if (e.key === "Enter" && !e.nativeEvent.isComposing) {
                                 e.preventDefault();
                                 handleSend(input);
                             }
