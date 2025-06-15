@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import botImg from "@/assets/home/chatBotImg.png";
 
 type ChatMessage = {
@@ -8,9 +8,19 @@ type ChatMessage = {
     buttons?: string[];
     timestamp?: string;
 };
+
 const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
+    const bubbleRef = useRef<HTMLDivElement | null>(null);
     const [showLoading, setShowLoading] = useState(false);
 
+    //채팅 - > 스크롤 내려가게
+    useEffect(() => {
+        if ((role === "bot" || role === "loading") && showLoading) {
+            bubbleRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [showLoading, role]);
+
+    //입력중..
     useEffect(() => {
         if (role === "loading") {
             const timer = setTimeout(() => setShowLoading(true), 300);
@@ -22,7 +32,10 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
 
     if (role === "loading" && showLoading) {
         return (
-            <div className="text-sm text-[#fff] w-[82px] px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none ml-4">
+            <div
+                ref={bubbleRef}
+                className="text-sm text-[#fff] w-[82px] px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none ml-4"
+            >
                 입력 중...
             </div>
         );
@@ -30,6 +43,7 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
 
     return (
         <div
+            ref={role === "bot" ? bubbleRef : undefined}
             className={`flex flex-col ${role === "user" ? "justify-end" : "justify-start"} w-full`}
         >
             {role === "bot" ? <img src={botImg} alt="bot" className="w-[33px] ml-4 mb-2" /> : null}
@@ -73,6 +87,8 @@ export const ChatBotContainer = () => {
             buttons: ["지원 문의", "멋사 생활 문의", "채용 예정 문의"]
         }
     ]);
+
+    //채팅입력
     const [input, setInput] = useState("");
 
     const handleSend = (msg: string) => {
@@ -111,6 +127,16 @@ export const ChatBotContainer = () => {
                 <div className="px-[20px] pb-[20px] h-[480px] overflow-scroll gap-4">
                     {messages.map((msg, idx) => (
                         <div key={idx} className="pt-4">
+                            {/* 시간출력 */}
+                            {msg.id === 1 && (
+                                <div className="text-center text-[12px] pb-[68px]  font-semibold text-[#A7A7A7] mb-1">
+                                    {new Date().toLocaleTimeString("ko-KR", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        hour12: true
+                                    })}
+                                </div>
+                            )}
                             <ChatBubble {...msg} />
                         </div>
                     ))}
