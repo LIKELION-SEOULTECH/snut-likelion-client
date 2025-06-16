@@ -41,13 +41,13 @@ export default function HomePage() {
                             <ChatbotCloseBtn className="w-[92px] h-[92px]" />
                         )}
                     </section>
-                    <section className="fixed bottom-[166px] right-[111px] z-10 ">
+                    <section className="fixed bottom-[166px] bg-white  rounded-[19.585px] right-[111px] z-10 ">
                         {isChatOpen ? <ChatBotContainer /> : null}
                     </section>
                     {/* */}
                 </section>
 
-                <section className="snap-start min-h-screen bg-[#1b1b1b]">
+                <section className="snap-start min-h-screen bg-[#1b1b1b] z-1">
                     <MissionSection />
                 </section>
                 <section className="snap-start min-h-screen bg-[#1b1b1b]">

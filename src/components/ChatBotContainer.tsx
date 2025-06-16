@@ -106,6 +106,7 @@ export const ChatBotContainer = () => {
         };
 
         setMessages((prev) => [...prev, userMsg, loadingMsg]);
+        setInput("");
 
         setTimeout(() => {
             const botMsg: ChatMessage = {
