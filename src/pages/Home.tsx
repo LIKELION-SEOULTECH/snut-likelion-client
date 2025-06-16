@@ -11,6 +11,7 @@ import { Header } from "@/layouts/Header";
 import { Footer } from "@/layouts/Footer";
 import Donut from "@/assets/home/donut.svg?react";
 import ChatbotBtn from "@/assets/home/chatbot_btn.svg?react";
+import Shadow from "@/assets/home/shadow.svg?react";
 import { useEffect, useRef, useState } from "react";
 import { NotificationModal } from "@/components/home/NotificationModal";
 
@@ -49,6 +50,9 @@ export default function HomePage() {
     return (
         <>
             <div className=" text-white  bg-[#1b1b1b] relative">
+                <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
+                    <Shadow className="w-full h-full " preserveAspectRatio="none" />
+                </div>
                 <Header />
                 <MainVisualSection onOpenModal={openModal} />
                 <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
