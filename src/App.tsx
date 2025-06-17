@@ -3,6 +3,8 @@ import { ROUTES } from "./constants/routes";
 
 import Home from "@/pages/Home";
 
+import { NewsPage } from "./pages/News";
+
 import { BlogPage } from "./pages/Blog";
 import { BlogPostPage } from "./pages/BlogPost";
 import { BlogContentPage } from "./pages/BlogContent";
@@ -14,11 +16,14 @@ import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 
 
+
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Home />} />
+
+                <Route path={ROUTES.NEWS} element={<NewsPage />} />
               
                 <Route path={ROUTES.BLOG} element={<BlogPage />} />
                 <Route path={ROUTES.BLOG_POST} element={<BlogPostPage />} />
@@ -30,6 +35,7 @@ function App() {
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
               
+
             </Routes>
         </BrowserRouter>
     );
