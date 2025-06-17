@@ -9,7 +9,6 @@ export const Footer = ({ white = false }: FooterProps) => {
                 white ? "bg-white" : "bg-[#000000]"
             }`}
         >
-            {" "}
             <span>
                 Copyright © 2025 멋쟁이사자처럼 서울과학기술대학교 Inc. All rights reserved.
             </span>
