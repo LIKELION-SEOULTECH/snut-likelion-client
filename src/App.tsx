@@ -3,6 +3,8 @@ import { ROUTES } from "./constants/routes";
 
 import Home from "@/pages/Home";
 
+import { BlogPage } from "./pages/Blog";
+
 import ProjectPage from "./pages/Project";
 import ProjectDetailPage from "./pages/ProjectDetail";
 
@@ -15,6 +17,7 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Home />} />
+                <Route path={ROUTES.BLOG} element={<BlogPage />} />
                 <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
                 <Route path="/project/:id" element={<ProjectDetailPage />} />
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
