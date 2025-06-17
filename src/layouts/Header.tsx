@@ -20,6 +20,7 @@ export const Header = ({ white = false }: HeaderProps) => {
     ];
 
     return (
+
         <div
             className={`w-full h-24 flex flex-row justify-center ${
                 white
@@ -27,6 +28,8 @@ export const Header = ({ white = false }: HeaderProps) => {
                     : "bg-[#000000]"
             }`}
         >
+          <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
+
             <div className="flex justify-center items-center">
                 <div className="flex flex-row justify-center items-center gap-[267px]">
                     <LikeLionLogo
