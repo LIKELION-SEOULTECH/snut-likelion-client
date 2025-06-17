@@ -1,5 +1,5 @@
 import { RoleCard } from "./RoleCard";
-import { mockCardData } from "@/constants/mockCardData";
+import { mockCardData } from "@/constants/home/mockCardData";
 import type { RoleCardProps } from "@/types/home";
 
 export const RoleList = () => {

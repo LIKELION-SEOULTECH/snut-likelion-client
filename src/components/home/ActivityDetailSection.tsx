@@ -1,5 +1,5 @@
 import ActivityItem from "./ActivityItem";
-import { activityDetails } from "@/constants/ActivityDetails";
+import { activityDetails } from "@/constants/home/ActivityDetails";
 import { useEffect, useState, useRef } from "react";
 
 export const ActivityDetailSection = () => {
