@@ -10,13 +10,23 @@ import { MissionSection } from "@/components/home/MissionSection";
 import { Header } from "@/layouts/Header";
 import { Footer } from "@/layouts/Footer";
 import Donut from "@/assets/home/donut.svg?react";
+
 import ChatbotBtn from "@/assets/home/chatbot_btn.svg?react";
+
+import ChatbotCloseBtn from "@/assets/home/ChatBotClose.svg?react";
+import { ChatBotContainer } from "@/components/ChatBotContainer";
+
+
 import Shadow from "@/assets/home/shadow.svg?react";
 import { useEffect, useRef, useState } from "react";
 import { NotificationModal } from "@/components/home/NotificationModal";
 
+//
 export default function HomePage() {
-    //모집 모달
+
+    //챗봇 버튼. 모집 모달
+    const [isChatOpen, setIsChatOpen] = useState(false);
+              
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
@@ -57,6 +67,20 @@ export default function HomePage() {
                 <MainVisualSection onOpenModal={openModal} />
                 <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
                 <ChatbotBtn className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
+                {/* chatbot #29*/}
+                    <section
+                        onClick={() => setIsChatOpen((prev) => !prev)}
+                        className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
+                    >
+                        {!isChatOpen ? (
+                            <ChatbotBtn />
+                        ) : (
+                            <ChatbotCloseBtn className="w-[92px] h-[92px]" />
+                        )}
+                    </section>
+                    <section className="fixed bottom-[166px] bg-white  rounded-[19.585px] right-[111px] z-10 ">
+                        {isChatOpen ? <ChatBotContainer /> : null}
+                    </section>
                 <MissionSection />
                 <RecruitmentSection />
                 <ActivityTimelineSection onShowDetail={handleShowDetail} />
@@ -75,6 +99,7 @@ export default function HomePage() {
                         <NotificationModal onClose={closeModal} />
                     </div>
                 )}{" "}
+
             </div>
         </>
     );
