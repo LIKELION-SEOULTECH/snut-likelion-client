@@ -16,19 +16,18 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "블로그", route: ROUTES.BLOG },
         { name: "멤버", route: ROUTES.MEMBER },
-        { name: "소식", route: ROUTES.NEWS ),
+        { name: "소식", route: ROUTES.NEWS }
     ];
 
     return (
-
         <div
-            className={`w-full h-24 flex flex-row justify-center ${
+            className={`w-full h-24 flex flex-row justify-center relative ${
                 white
                     ? "bg-white/60 border-b border-[#ECECEC] backdrop-blur-[35px]"
                     : "bg-[#000000]"
             }`}
         >
-          <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
 
             <div className="flex justify-center items-center">
                 <div className="flex flex-row justify-center items-center gap-[267px]">

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES } from "./constants/routes";
 
-
 import { LoginPage } from "./pages/LoginPage";
 import { PasswordResetPage } from "./pages/PasswordResetPage";
 import { SignupPage } from "./pages/Signup";
@@ -21,7 +20,6 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 
-
 function App() {
     return (
         <BrowserRouter>
@@ -34,17 +32,16 @@ function App() {
 
                 <Route path={ROUTES.NEWS} element={<NewsPage />} />
                 <Route path={ROUTES.NEWS_CONTENT} element={<NewsContentPage />} />
-              
+
                 <Route path={ROUTES.BLOG} element={<BlogPage />} />
                 <Route path={ROUTES.BLOG_POST} element={<BlogPostPage />} />
                 <Route path={ROUTES.BLOG_CONTENT} element={<BlogContentPage />} />
-              
+
                 <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
                 <Route path="/project/:id" element={<ProjectDetailPage />} />
-              
+
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
-              
             </Routes>
         </BrowserRouter>
     );
