@@ -4,6 +4,7 @@ import { ROUTES } from "./constants/routes";
 import Home from "@/pages/Home";
 
 import { BlogPage } from "./pages/Blog";
+import { BlogPostPage } from "./pages/BlogPost";
 import { BlogContentPage } from "./pages/BlogContent";
 
 import ProjectPage from "./pages/Project";
@@ -20,6 +21,7 @@ function App() {
                 <Route path={ROUTES.HOME} element={<Home />} />
               
                 <Route path={ROUTES.BLOG} element={<BlogPage />} />
+                <Route path={ROUTES.BLOG_POST} element={<BlogPostPage />} />
                 <Route path={ROUTES.BLOG_CONTENT} element={<BlogContentPage />} />
               
                 <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
@@ -27,6 +29,7 @@ function App() {
               
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
+              
             </Routes>
         </BrowserRouter>
     );

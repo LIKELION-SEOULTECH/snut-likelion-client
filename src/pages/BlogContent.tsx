@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
 import PageLayout from "@/layouts/PageLayout";
+
 import { ParticipantTags } from "@/components/blog/ParticipantsTags";
 import { PostContent } from "@/components/common/PostContent";
 import { PostNavigator } from "@/components/common/PostNavigator";
+
 import { mockBlogList } from "@/constants/blog/mockBlogList";
 
 export const BlogContentPage = () => {
@@ -22,12 +24,14 @@ export const BlogContentPage = () => {
                         {blog.date}
                     </div>
                     <div className="mt-5 mb-18">
-                        <ParticipantTags names={["전민경", "박진아", "이예한"]} />
+
+                        {/* <ParticipantTags names={["전민경", "박진아", "이예한"]} /> */}
                     </div>
                 </section>
-                <PostContent />
+                {/* <PostContent /> */}
                 <section className="w-full mt-30">
-                    <PostNavigator
+                    {/* <PostNavigator
+
                         prev={
                             blog.id > 1
                                 ? {
@@ -44,7 +48,9 @@ export const BlogContentPage = () => {
                                   }
                                 : undefined
                         }
-                    />
+
+                    /> */}
+
                 </section>
             </div>
         </PageLayout>
