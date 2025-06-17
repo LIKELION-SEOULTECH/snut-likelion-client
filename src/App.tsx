@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES } from "./constants/routes";
+import { LoginPage } from "./pages/LoginPage";
+import { PasswordResetPage } from "./pages/PasswordResetPage";
 
 import Home from "@/pages/Home";
 
@@ -23,6 +25,9 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Home />} />
+
+                <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+                <Route path={ROUTES.PASSWORDRESET} element={<PasswordResetPage />} />
 
                 <Route path={ROUTES.NEWS} element={<NewsPage />} />
                 <Route path={ROUTES.NEWS_CONTENT} element={<NewsContentPage />} />

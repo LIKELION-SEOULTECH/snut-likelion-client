@@ -61,7 +61,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                                 );
                             })}
                         </div>
-                        <LoginSignupBtn />
+                        <LoginSignupBtn onClick={() => navigate(ROUTES.LOGIN)} />
                     </div>
                 </div>
             </div>
