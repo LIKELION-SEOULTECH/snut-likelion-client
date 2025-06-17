@@ -22,9 +22,10 @@ export const ProjectBox = ({
     const navigate = useNavigate();
 
     return (
+        <div className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px] ">
         <div
             onClick={() => navigate(`/project/${id}`)}
-            className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px]"
+            className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer"
         >
             <img
                 src={image}

@@ -1,5 +1,10 @@
 import welcomeImg from "../../assets/home/WELCOME.svg";
-export const BottomCTASection = () => {
+
+type Props = {
+    onOpenModal: () => void;
+};
+
+export const BottomCTASection = ({ onOpenModal }: Props) => {
     return (
         <div className="flex flex-col pt-[244px] w-full h-auto  bg-[#1b1b1b]">
             <div
@@ -12,7 +17,10 @@ export const BottomCTASection = () => {
                     <br />
                     멋사 무리에 합류하세요!
                 </h1>
-                <button className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[269px] h-[76px]  rounded-[300px] text-[24px]	font-bold cursor-pointer">
+                <button
+                    onClick={onOpenModal}
+                    className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[269px] h-[76px]  rounded-[300px] text-[24px]	font-bold cursor-pointer"
+                >
                     14기 모집 알람 받기
                 </button>
             </div>

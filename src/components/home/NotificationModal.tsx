@@ -5,7 +5,7 @@ export const NotificationModal = ({ onClose }: { onClose: () => void }) => {
         <div className="flex justify-center items-center text-black">
             <div className="relative flex flex-col w-[807px] px-26 py-12 items-center rounded-[16px] bg-white">
                 <button
-                    className="absolute w-10 h-10 flex items-center justify-center rounded-[50px] top-0 -right-15 z-10 text-white bg-black rounded-full cursor-pointer"
+                    className="absolute w-10 h-10 flex items-center justify-center rounded-[50px] top-[24px] right-[24px] bg-transparent  z-10 text-[#000] bg-black rounded-full cursor-pointer"
                     aria-label="모달 닫기"
                     onClick={onClose}
                 >
