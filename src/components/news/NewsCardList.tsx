@@ -18,6 +18,7 @@ export const NewsCardList = ({ newsList }: NewsCardListProps) => {
             {newsList.map((news: News) => (
                 <NewsCardItem
                     key={news.id}
+                    id={news.id}
                     type={news.type}
                     title={news.title}
                     date={news.date}
