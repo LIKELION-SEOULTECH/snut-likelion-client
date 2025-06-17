@@ -4,6 +4,7 @@ import { ROUTES } from "./constants/routes";
 import Home from "@/pages/Home";
 
 import { BlogPage } from "./pages/Blog";
+import { BlogContentPage } from "./pages/BlogContent";
 
 import ProjectPage from "./pages/Project";
 import ProjectDetailPage from "./pages/ProjectDetail";
@@ -17,9 +18,13 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path={ROUTES.HOME} element={<Home />} />
+              
                 <Route path={ROUTES.BLOG} element={<BlogPage />} />
+                <Route path={ROUTES.BLOG_CONTENT} element={<BlogContentPage />} />
+              
                 <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
                 <Route path="/project/:id" element={<ProjectDetailPage />} />
+              
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
             </Routes>
