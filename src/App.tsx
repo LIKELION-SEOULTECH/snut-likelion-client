@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ROUTES } from "./constants/routes";
+
+
 import { LoginPage } from "./pages/LoginPage";
 import { PasswordResetPage } from "./pages/PasswordResetPage";
+import { SignupPage } from "./pages/Signup";
 
 import Home from "@/pages/Home";
 
@@ -19,7 +22,6 @@ import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 
 
-
 function App() {
     return (
         <BrowserRouter>
@@ -28,6 +30,7 @@ function App() {
 
                 <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                 <Route path={ROUTES.PASSWORDRESET} element={<PasswordResetPage />} />
+                <Route path={ROUTES.SIGNUP} element={<SignupPage />} />
 
                 <Route path={ROUTES.NEWS} element={<NewsPage />} />
                 <Route path={ROUTES.NEWS_CONTENT} element={<NewsContentPage />} />
