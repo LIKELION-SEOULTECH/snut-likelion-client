@@ -32,8 +32,19 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+button {
+    cursor: pointer;
+}
 /* 일정한 속도로 부드럽게 스크롤되도록 설정 */
 .swiper-wrapper {
     transition-timing-function: linear !important;
+}
+
+/* 프로젝트 부분 가로 스크롤 숨기기 설정 */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE & Edge */
+    scrollbar-width: none; /* Firefox */
 }
