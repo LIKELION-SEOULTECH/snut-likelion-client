@@ -8,6 +8,7 @@ export const projectList = [
             "호버하면 뜨는 설명!!! 3줄 이상으론 자동으로 짤리고 '...'되게 했어유! 2번째 프로젝트 호버해보세용",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample2
     },
     {
@@ -17,6 +18,7 @@ export const projectList = [
             "호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!호버하면 뜨는 설명!!!",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     },
     {
@@ -25,6 +27,7 @@ export const projectList = [
         description: "멋냥냥",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample2
     },
     {
@@ -33,6 +36,7 @@ export const projectList = [
         description: "444",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     },
     {
@@ -41,6 +45,7 @@ export const projectList = [
         description: "555",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     },
     {
@@ -49,6 +54,7 @@ export const projectList = [
         description: "멋냥냥",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     },
     {
@@ -57,6 +63,7 @@ export const projectList = [
         description: "냥",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample2
     },
     {
@@ -65,6 +72,7 @@ export const projectList = [
         description: "냥",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     },
     {
@@ -73,6 +81,7 @@ export const projectList = [
         description: "먄ㅇ",
         class: "12기",
         tag: "중앙해커톤 프로젝트",
+        stack: ["web", "app"],
         image: sample1
     }
 ];

@@ -1,26 +1,11 @@
-import { useState, useEffect } from "react";
 import { ReactTyped } from "react-typed";
 import mainBg from "@/assets/home/main-bg.png";
-import { NotificationModal } from "@/components/home/NotificationModal";
 
-export const MainVisualSection = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+type Props = {
+    onOpenModal: () => void;
+};
 
-    useEffect(() => {
-        if (isModalOpen) {
-            document.body.style.overflow = "hidden";
-            document.documentElement.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "";
-            document.documentElement.style.overflow = "";
-        }
-
-        return () => {
-            document.body.style.overflow = "";
-            document.documentElement.style.overflow = "";
-        };
-    }, [isModalOpen]);
-
+export const MainVisualSection = ({ onOpenModal }: Props) => {
     return (
         <div className="relative w-full min-h-screen overflow-hidden pl-[110px] text-white">
             {/* 배경화면 */}
@@ -71,16 +56,11 @@ export const MainVisualSection = () => {
                 {/* 컴포넌트 분리 */}
                 <button
                     className="w-72 h-18 bg-[#ff7700] text-[25px] font-bold rounded-[250px] mt-[54px] mb-[134px] leading-[130%] tracking-[-0.02em] cursor-pointer"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={onOpenModal}
                 >
                     14기 모집 알림 받기 →
                 </button>
             </div>
-            {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                    <NotificationModal onClose={() => setIsModalOpen(false)} />
-                </div>
-            )}{" "}
         </div>
     );
 };

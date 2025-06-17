@@ -4,7 +4,10 @@ export const ROUTES = {
     SIGNUP: "/signup",
     PROJECT: "/project",
     MEMBER: "/member",
+    MEMBER_DETAIL: "/members/:id",
     BLOG: "/blog",
+    BLOG_POST: "/blog-post",
+    BLOG_CONTENT: "/blog-content/:id",
     NEWS: "/news"
 } as const;
 

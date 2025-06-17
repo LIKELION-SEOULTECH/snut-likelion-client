@@ -16,6 +16,7 @@ export const BlogCardList = ({ blogs }: BlogCardListProps) => {
         <div className="grid grid-cols-3 gap-4 mt-12 w-[1217px]">
             {blogs.map((blog) => (
                 <BlogCardItem
+                    id={blog.id}
                     key={blog.id}
                     imageUrl={blog.imageUrl}
                     title={blog.title}
