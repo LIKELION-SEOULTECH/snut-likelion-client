@@ -32,12 +32,15 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+button {
+    cursor: pointer;
+}
 /* 일정한 속도로 부드럽게 스크롤되도록 설정 */
 .swiper-wrapper {
     transition-timing-function: linear !important;
 }
 
+/*blog-post*/
 @layer base {
     h1 {
         @apply text-[32px] font-bold text-[#1B1B1B] my-5;
@@ -59,4 +62,14 @@ body {
     color: #adb5bd;
     pointer-events: none;
     height: 0;
+
+  
+/*home 프로젝트 부분 가로 스크롤 숨기기 설정 */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE & Edge */
+    scrollbar-width: none; /* Firefox */
+
 }
