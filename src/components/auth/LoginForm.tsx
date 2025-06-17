@@ -55,7 +55,9 @@ export const LoginForm = () => {
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>
                 <span className="text-[#666]">|</span>
-                <span className="cursor-pointer">회원가입</span>
+                <Link to="/signup">
+                    <span className="cursor-pointer">회원가입</span>
+                </Link>
             </div>
         </form>
     );

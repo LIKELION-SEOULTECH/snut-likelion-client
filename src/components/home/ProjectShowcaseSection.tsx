@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { ProjectBox } from "./ProjectBox";
 import { projectList } from "@/constants/home/projectList";
+import { ROUTES } from "@/constants/routes";
 
 export const ProjectShowcaseSection = () => {
     return (
@@ -15,9 +17,11 @@ export const ProjectShowcaseSection = () => {
                         background: "linear-gradient(180deg, rgba(27, 27, 27, 0) 0%, #1B1B1B 100%)"
                     }}
                 ></div>
-                <button className=" text-[24px] w-[143px] h-[76px] bg-[#1B1B1B] font-bold absolute bottom-[48px] left-1/2 -translate-x-1/2 border rounded-full cursor-pointer  hover:bg-[#2D2D2D]">
-                    더보기
-                </button>
+                <Link to={ROUTES.PROJECT}>
+                    <button className=" text-[24px] w-[143px] h-[76px] bg-[#1B1B1B] font-bold absolute bottom-[48px] left-1/2 -translate-x-1/2 border rounded-full cursor-pointer  hover:bg-[#2D2D2D]">
+                        더보기
+                    </button>
+                </Link>
             </div>
         </div>
     );
