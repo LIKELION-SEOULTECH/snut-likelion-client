@@ -14,8 +14,8 @@ export const Header = ({ white = false }: HeaderProps) => {
     const navItems = [
         { name: "모집안내", route: ROUTES.HOME },
         { name: "프로젝트", route: ROUTES.PROJECT },
-        { name: "멤버", route: ROUTES.HOME },
         { name: "블로그", route: ROUTES.BLOG },
+        { name: "멤버", route: ROUTES.MEMBER },
         { name: "소식", route: ROUTES.HOME }
     ];
 
