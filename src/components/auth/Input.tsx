@@ -12,6 +12,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     ({ label, error, className, ...props }, ref) => {
         return (
             <div className="flex flex-col gap-3 w-full">
+
                 {label && <label className="h-5 text-base font-medium text-white">{label}</label>}
                 <input
                     ref={ref}
