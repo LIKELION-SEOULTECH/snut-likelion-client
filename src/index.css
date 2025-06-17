@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 
+
 @keyframes floatTube {
     0% {
         transform: translate(0px, 0px) rotate(0deg);
@@ -22,6 +23,7 @@
     }
 }
 
+
 html,
 body {
     margin: 0;
@@ -32,8 +34,42 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+button {
+    cursor: pointer;
+}
 /* 일정한 속도로 부드럽게 스크롤되도록 설정 */
 .swiper-wrapper {
     transition-timing-function: linear !important;
+}
+
+/*blog-post*/
+@layer base {
+    h1 {
+        @apply text-[32px] font-bold text-[#1B1B1B] my-5;
+    }
+    p {
+        @apply mb-14;
+    }
+    blockquote {
+        @apply border-l-[3px] border-gray-300 pl-4;
+    }
+    hr {
+        @apply border-0 border-t border-gray-200 cursor-pointer my-8;
+    }
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #adb5bd;
+    pointer-events: none;
+    height: 0;
+}
+/*home 프로젝트 부분 가로 스크롤 숨기기 설정 */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE & Edge */
+    scrollbar-width: none; /* Firefox */
 }
