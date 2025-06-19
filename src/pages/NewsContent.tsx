@@ -3,6 +3,7 @@ import PageLayout from "@/layouts/PageLayout";
 import { PostContent } from "@/components/common/PostContent";
 import { PostNavigator } from "@/components/common/PostNavigator";
 import { mockNewsList } from "@/constants/news/mockNewsList";
+import QuoteCardList from "@/components/project/QuoteCardList";
 
 export const NewsContentPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -42,6 +43,9 @@ export const NewsContentPage = () => {
                         }
                     />
                 </section>
+            </div>
+            <div className="w-full h-[150px] px-28  mt-[252px]">
+                <QuoteCardList />
             </div>
         </PageLayout>
     );

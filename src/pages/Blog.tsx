@@ -4,6 +4,7 @@ import PageLayout from "@/layouts/PageLayout";
 import { mockBlogList } from "@/constants/blog/mockBlogList";
 import { BlogCardList } from "@/components/blog/BlogCardList";
 import { Pagination } from "@/components/common/Pagination";
+import QuoteCardList from "@/components/project/QuoteCardList";
 
 type BlogType = "세션 이야기" | "프로젝트 회고" | "전체";
 
@@ -36,6 +37,9 @@ export const BlogPage = () => {
                 <div>
                     <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
                 </div>
+            </div>
+            <div className="w-full h-[150px] px-28  mt-[252px]">
+                <QuoteCardList />
             </div>
         </PageLayout>
     );

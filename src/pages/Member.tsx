@@ -2,6 +2,7 @@ import CategoryTabs from "@/components/Member/CategoryTabs";
 import GenerationTabs from "@/components/Member/GenerationTabs";
 
 import { MemberCardList } from "@/components/Member/MemberCardList";
+import QuoteCardList from "@/components/project/QuoteCardList";
 import { mockMemberData } from "@/constants/mockMemberData";
 import PageLayout from "@/layouts/PageLayout";
 import { useState } from "react";
@@ -46,7 +47,7 @@ export const MemberPage = () => {
                     onSelect={setCategory}
                 />
                 <MemberCardList MemberData={filteredMembers} />
-                {/* <QuoteCardList /> */}
+                <QuoteCardList />
             </div>
         </PageLayout>
     );

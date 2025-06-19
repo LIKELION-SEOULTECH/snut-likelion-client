@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import PageLayout from "@/layouts/PageLayout";
 
-import { ParticipantTags } from "@/components/blog/ParticipantsTags";
-import { PostContent } from "@/components/common/PostContent";
-import { PostNavigator } from "@/components/common/PostNavigator";
+// import { ParticipantTags } from "@/components/blog/ParticipantsTags";
+// import { PostContent } from "@/components/common/PostContent";
+// import { PostNavigator } from "@/components/common/PostNavigator";
 
 import { mockBlogList } from "@/constants/blog/mockBlogList";
+import QuoteCardList from "@/components/project/QuoteCardList";
 
 export const BlogContentPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -24,7 +25,6 @@ export const BlogContentPage = () => {
                         {blog.date}
                     </div>
                     <div className="mt-5 mb-18">
-
                         {/* <ParticipantTags names={["전민경", "박진아", "이예한"]} /> */}
                     </div>
                 </section>
@@ -50,8 +50,10 @@ export const BlogContentPage = () => {
                         }
 
                     /> */}
-
                 </section>
+            </div>
+            <div className="w-full h-[150px] px-28  mt-[252px]">
+                <QuoteCardList />
             </div>
         </PageLayout>
     );

@@ -3,10 +3,14 @@ import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/Member/SmallBtn";
 import { projectList } from "@/constants/home/projectList";
 import { mockMemberData } from "@/constants/mockMemberData";
+import { ROUTES } from "@/constants/routes";
 import PageLayout from "@/layouts/PageLayout";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
 
 export const MemberDetailPage = () => {
+    const navigate = useNavigate();
+
     const { id } = useParams();
     const member = mockMemberData.find((m) => m.id === Number(id));
 
@@ -21,9 +25,25 @@ export const MemberDetailPage = () => {
                 {member ? (
                     // 정보 o 경우
                     <div className="flex w-full h-auto gap-[119px]">
-                        {/* 왼쪽 - 사진*/}
-                        <div className="w-[291px] h-[281px] flex overflow-hidden">
-                            <img className="w-full h-full object-contain" src={member.image} />
+                        <div className=" relative w-[291px]">
+                            <div className="flex flex-row absolute -top-8 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
+                                <span
+                                    className="cursor-pointer"
+                                    onClick={() => {
+                                        navigate(ROUTES.MEMBER);
+                                    }}
+                                >
+                                    멤버
+                                </span>
+                                <span className="flex items-center">
+                                    <DirectoryIcon />
+                                </span>
+                                <span>{member.name}</span>
+                            </div>
+                            {/* 왼쪽 - 사진*/}
+                            <div className="w-[291px] h-[281px] flex overflow-hidden">
+                                <img className="w-full h-full object-contain" src={member.image} />
+                            </div>
                         </div>
                         {/* 오른쪽 - 나머지 정보들*/}
                         <div className="flex flex-col">
@@ -34,7 +54,9 @@ export const MemberDetailPage = () => {
                                     <OrangeBtn tag={member.tag} isNotButton={true} />
                                     <OrangeBtn tag={member.role} isNotButton={true} />
                                 </div>
-                                <h1 className="text-[50px] font-bold pb-10">{member.name}</h1>
+                                <h1 className="text-[50px] text-[#fff] font-bold pb-10">
+                                    {member.name}
+                                </h1>
                                 <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
                                     {member.description}
                                 </div>

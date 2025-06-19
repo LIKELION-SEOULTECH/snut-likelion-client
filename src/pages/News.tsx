@@ -3,6 +3,7 @@ import { mockNewsList } from "@/constants/news/mockNewsList";
 import PageLayout from "@/layouts/PageLayout";
 import { NewsCardList } from "@/components/news/NewsCardList";
 import { Pagination } from "@/components/common/Pagination";
+import QuoteCardList from "@/components/project/QuoteCardList";
 
 const PAGE_SIZE = 8;
 
@@ -25,6 +26,9 @@ export const NewsPage = () => {
                 <div>
                     <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
                 </div>
+            </div>
+            <div className="w-full h-[150px] px-28 ">
+                <QuoteCardList />
             </div>
         </PageLayout>
     );
