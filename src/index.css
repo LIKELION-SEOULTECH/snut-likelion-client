@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
 
-
 @keyframes floatTube {
     0% {
         transform: translate(0px, 0px) rotate(0deg);
@@ -22,7 +21,6 @@
         transform: translate(0px, 0px) rotate(0deg);
     }
 }
-
 
 html,
 body {
