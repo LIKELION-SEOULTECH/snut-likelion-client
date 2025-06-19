@@ -1,27 +1,56 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Input from "./Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "@/apis/auth";
 
 export const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const emailErrorRef = useRef("");
+    const passwordErrorRef = useRef("");
+    const [, forceUpdate] = useState({});
 
-    const [errors, setErrors] = useState({
-        email: "",
-        password: ""
-    });
-    const handleSubmit = (e: React.FormEvent) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const newErrors = {
-            email: email ? "" : "이메일을 입력해주세요.",
-            password: password ? "" : "비밀번호를 입력해주세요."
-        };
 
-        setErrors(newErrors);
+        emailErrorRef.current = email ? "" : "이메일을 입력해주세요.";
+        passwordErrorRef.current = password ? "" : "비밀번호를 입력해주세요.";
 
-        const hasError = Object.values(newErrors).some((v) => v !== "");
-        if (hasError) return;
+        if (emailErrorRef.current || passwordErrorRef.current) {
+            forceUpdate({}); // 에러 UI 반영을 위해 강제 렌더링
+            return;
+        }
+        try {
+            const res = await login(email, password);
+            console.log(res);
+            console.log("로그인 성공", email, password);
+            navigate("/");
+        } catch (err) {
+            console.error("로그인 실패", err);
+            passwordErrorRef.current = "이메일 또는 비밀번호가 올바르지 않습니다.";
+
+            forceUpdate({});
+        }
     };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+        if (emailErrorRef.current) {
+            emailErrorRef.current = "";
+            forceUpdate({});
+        }
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+        if (passwordErrorRef.current) {
+            passwordErrorRef.current = "";
+            forceUpdate({});
+        }
+    };
+
     return (
         <form className="text-white pt-[105px] pb-0 w-[599px] " onSubmit={handleSubmit}>
             <div>
@@ -29,19 +58,17 @@ export const LoginForm = () => {
                     label="이메일"
                     placeholder="olivia@untitledui.com"
                     value={email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                    error={errors.email}
+                    onChange={handleEmailChange}
+                    error={emailErrorRef.current}
                 />
-                <p className="pt-7 "> </p>
+                <div className="pt-7 "></div>
                 <Input
                     label="비밀번호"
                     placeholder="kinglikelion25"
                     type="password"
                     value={password}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setPassword(e.target.value)
-                    }
-                    error={errors.password}
+                    onChange={handlePasswordChange}
+                    error={passwordErrorRef.current}
                 />
             </div>
             <button
@@ -59,6 +86,7 @@ export const LoginForm = () => {
                     <span className="cursor-pointer">회원가입</span>
                 </Link>
             </div>
+            ㅌ
         </form>
     );
 };
