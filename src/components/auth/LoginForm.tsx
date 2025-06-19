@@ -1,55 +1,18 @@
-import { useState, useRef } from "react";
 import Input from "./Input";
-import { Link, useNavigate } from "react-router-dom";
-import { login } from "@/apis/auth";
+import { Link } from "react-router-dom";
+import { useLogin } from "@/hooks/useLogin";
+import { ROUTES } from "@/constants/routes";
 
 export const LoginForm = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const emailErrorRef = useRef("");
-    const passwordErrorRef = useRef("");
-    const [, forceUpdate] = useState({});
-
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        emailErrorRef.current = email ? "" : "이메일을 입력해주세요.";
-        passwordErrorRef.current = password ? "" : "비밀번호를 입력해주세요.";
-
-        if (emailErrorRef.current || passwordErrorRef.current) {
-            forceUpdate({}); // 에러 UI 반영을 위해 강제 렌더링
-            return;
-        }
-        try {
-            const res = await login(email, password);
-            console.log(res);
-            console.log("로그인 성공", email, password);
-            navigate("/");
-        } catch (err) {
-            console.error("로그인 실패", err);
-            passwordErrorRef.current = "이메일 또는 비밀번호가 올바르지 않습니다.";
-
-            forceUpdate({});
-        }
-    };
-
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-        if (emailErrorRef.current) {
-            emailErrorRef.current = "";
-            forceUpdate({});
-        }
-    };
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-        if (passwordErrorRef.current) {
-            passwordErrorRef.current = "";
-            forceUpdate({});
-        }
-    };
+    const {
+        email,
+        password,
+        emailError,
+        passwordError,
+        handleEmailChange,
+        handlePasswordChange,
+        handleSubmit
+    } = useLogin();
 
     return (
         <form className="text-white pt-[105px] pb-0 w-[599px] " onSubmit={handleSubmit}>
@@ -59,7 +22,7 @@ export const LoginForm = () => {
                     placeholder="olivia@untitledui.com"
                     value={email}
                     onChange={handleEmailChange}
-                    error={emailErrorRef.current}
+                    error={emailError}
                 />
                 <div className="pt-7 "></div>
                 <Input
@@ -68,7 +31,7 @@ export const LoginForm = () => {
                     type="password"
                     value={password}
                     onChange={handlePasswordChange}
-                    error={passwordErrorRef.current}
+                    error={passwordError}
                 />
             </div>
             <button
@@ -82,11 +45,10 @@ export const LoginForm = () => {
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>
                 <span className="text-[#666]">|</span>
-                <Link to="/signup">
+                <Link to={ROUTES.REGISTER}>
                     <span className="cursor-pointer">회원가입</span>
                 </Link>
             </div>
-            ㅌ
         </form>
     );
 };
