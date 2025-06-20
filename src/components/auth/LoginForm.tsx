@@ -1,27 +1,19 @@
-import { useState } from "react";
 import Input from "./Input";
 import { Link } from "react-router-dom";
+import { useLogin } from "@/hooks/useLogin";
+import { ROUTES } from "@/constants/routes";
 
 export const LoginForm = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const {
+        email,
+        password,
+        emailError,
+        passwordError,
+        handleEmailChange,
+        handlePasswordChange,
+        handleSubmit
+    } = useLogin();
 
-    const [errors, setErrors] = useState({
-        email: "",
-        password: ""
-    });
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const newErrors = {
-            email: email ? "" : "이메일을 입력해주세요.",
-            password: password ? "" : "비밀번호를 입력해주세요."
-        };
-
-        setErrors(newErrors);
-
-        const hasError = Object.values(newErrors).some((v) => v !== "");
-        if (hasError) return;
-    };
     return (
         <form className="text-white pt-[105px] pb-0 w-[599px] " onSubmit={handleSubmit}>
             <div>
@@ -29,19 +21,17 @@ export const LoginForm = () => {
                     label="이메일"
                     placeholder="olivia@untitledui.com"
                     value={email}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                    error={errors.email}
+                    onChange={handleEmailChange}
+                    error={emailError}
                 />
-                <p className="pt-7 "> </p>
+                <div className="pt-7 "></div>
                 <Input
                     label="비밀번호"
                     placeholder="kinglikelion25"
                     type="password"
                     value={password}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setPassword(e.target.value)
-                    }
-                    error={errors.password}
+                    onChange={handlePasswordChange}
+                    error={passwordError}
                 />
             </div>
             <button
@@ -55,7 +45,7 @@ export const LoginForm = () => {
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>
                 <span className="text-[#666]">|</span>
-                <Link to="/signup">
+                <Link to={ROUTES.REGISTER}>
                     <span className="cursor-pointer">회원가입</span>
                 </Link>
             </div>

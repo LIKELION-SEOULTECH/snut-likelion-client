@@ -1,9 +1,9 @@
-import { SignupForm } from "@/components/auth/SignupForm";
+import { RegisterForm } from "@/components/auth/RegisterForm";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import PageLayout from "@/layouts/PageLayout";
 import { Link } from "react-router-dom";
 
-export const SignupPage = () => {
+export const RegisterPage = () => {
     return (
         <PageLayout>
             <div
@@ -34,7 +34,7 @@ export const SignupPage = () => {
                     </div>
                     {/* 회원가입 폼 */}
                     <div className="w-150">
-                        <SignupForm />
+                        <RegisterForm />
                     </div>
                 </div>
             </div>
