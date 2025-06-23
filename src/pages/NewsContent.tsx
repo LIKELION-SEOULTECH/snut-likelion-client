@@ -1,45 +1,76 @@
 import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import PageLayout from "@/layouts/PageLayout";
 import { PostContent } from "@/components/common/PostContent";
 import { PostNavigator } from "@/components/common/PostNavigator";
-import { mockNewsList } from "@/constants/news/mockNewsList";
 import QuoteCardList from "@/components/project/QuoteCardList";
+import { getNoticeById } from "@/apis/notice";
+import { formatDate } from "@/utils/formatData";
 
 export const NewsContentPage = () => {
     const { id } = useParams<{ id: string }>();
-    const news = mockNewsList.find((b) => b.id === Number(id));
+    const noticeId = Number(id);
 
-    if (!news) return <div>404 Not Found</div>;
+    // {noticeId: 1, title: 'test1', content: 'test2', updatedAt: '2025-06-22T23:22:37.556363'} currentData.data 예시
+    const {
+        data: currentData,
+        isLoading,
+        isError
+    } = useQuery({
+        queryKey: ["notice", noticeId],
+        queryFn: () => getNoticeById(noticeId).then((res) => res.data),
+        enabled: !!noticeId
+    });
+    console.log("notice data", currentData.data);
+    const notice = currentData.data;
+
+    // 이전 글 조회
+    const { data: prevData } = useQuery({
+        queryKey: ["notice", noticeId - 1],
+        queryFn: () => getNoticeById(noticeId - 1).then((res) => res.data),
+        enabled: noticeId > 1
+    });
+
+    // 다음 글 조회
+    const { data: nextData } = useQuery({
+        queryKey: ["notice", noticeId + 1],
+        queryFn: () => getNoticeById(noticeId + 1).then((res) => res.data),
+        enabled: !!noticeId
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError || !notice) return <div>404 Not Found</div>;
+
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
                 <section className="pl-[103px] w-full mt-33">
-                    <div className="font-bold text-2xl text-[#FFA454] leading-[150%]">
-                        {news.type}
+                    <div
+                        className={`font-bold text-2xl leading-[150%] ${
+                            notice.pinned ? "text-[#FFA454]" : "text-[#A7A7A7]"
+                        }`}
+                    >
+                        {notice.pinned ? "공지" : "일반"}
                     </div>
-                    <div className="font-bold text-[50px] mt-5">{news.title}</div>
+                    <div className="font-bold text-[50px] mt-5">{notice.title}</div>
                     <div className="text-xl text-[#666666] font-light leading-[150%] mt-[37px] mb-18">
-                        {news.date}
+                        {formatDate(notice.updatedAt)}
                     </div>
                 </section>
                 <PostContent />
                 <section className="w-full mt-30">
                     <PostNavigator
                         prev={
-                            news.id > 1
-                                ? {
-                                      title: mockNewsList[news.id - 2]?.title,
-                                      href: `/blog-content/${news.id - 1}`
-                                  }
-                                : undefined
+                            prevData?.data && {
+                                title: prevData.data.title,
+                                href: `/news-content/${prevData.data.noticeId}`
+                            }
                         }
                         next={
-                            news.id < mockNewsList.length
-                                ? {
-                                      title: mockNewsList[news.id]?.title,
-                                      href: `/news-content/${news.id + 1}`
-                                  }
-                                : undefined
+                            nextData?.data && {
+                                title: nextData.data.title,
+                                href: `/news-content/${nextData.data.noticeId}`
+                            }
                         }
                     />
                 </section>
