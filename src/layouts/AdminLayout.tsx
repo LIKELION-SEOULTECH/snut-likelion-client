@@ -9,7 +9,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     return (
         <div className="flex w-full">
             {/* Admin Sidebar */}
-            <aside className="h-screen bg-[#2D2D2D] text-white">
+            <aside className="h-100% bg-[#2D2D2D] text-white">
                 <Sidebar />
             </aside>
 
