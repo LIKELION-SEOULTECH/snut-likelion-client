@@ -7,14 +7,21 @@ interface ProjectListProps {
     projects: ProjectData[];
 }
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 
 export default function ProjectList({ projects }: ProjectListProps) {
     const [page, setPage] = useState(1);
 
-    const totalPages = Math.ceil(projects.length / PAGE_SIZE);
+    const totalPages = Math.max(
+        1,
+        Math.ceil((projects.length === 0 ? 12 : projects.length) / PAGE_SIZE)
+    );
 
-    const currentProjects = projects.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+    const currentProjects = Array.isArray(projects)
+        ? projects.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+        : [];
+
+    console.log(projects);
 
     return (
         <>
@@ -23,9 +30,11 @@ export default function ProjectList({ projects }: ProjectListProps) {
                     <ProjectBox key={project.id} {...project} />
                 ))}
             </div>
-            <div className="mt-8">
-                <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-            </div>
+            {totalPages > 1 && (
+                <div className="mt-8">
+                    <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+                </div>
+            )}
         </>
     );
 }

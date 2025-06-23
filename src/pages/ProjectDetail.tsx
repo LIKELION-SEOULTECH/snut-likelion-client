@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { mockProjectList } from "@/constants/mockProjectData";
+import { useProjectDetail } from "@/hooks/useProjectDetail";
+
 import PageLayout from "@/layouts/PageLayout";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { ProjectDetailSection } from "@/components/project/ProjectDetailSection";
@@ -8,16 +9,19 @@ import { ProjectReminderSection } from "@/components/project/ProjectRemindSectio
 import { OtherProjectSection } from "@/components/project/OtherProjectSection";
 import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
 import { ROUTES } from "@/constants/routes";
-import sample from "@/assets/home/sample.png";
 import ArrowLeft from "@/assets/project/arrow-left.svg?react";
 import ArrowRight from "@/assets/project/arrow-right.svg?react";
+import { useAllProjects } from "@/hooks/useAllProjects";
 
 export default function ProjectDetailPage() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
+    const { data } = useProjectDetail(Number(id));
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
-    const project = mockProjectList.find((p) => p.id === Number(id));
+
+    const { allProjects: allProjects } = useAllProjects();
 
     useEffect(() => {
         if (slideRef.current) {
@@ -28,9 +32,9 @@ export default function ProjectDetailPage() {
         }
     }, [currentImageIndex]);
 
-    if (!project) return <div className="text-white">프로젝트를 찾을 수 없습니다.</div>;
+    if (!data) return <div className="text-white">프로젝트를 찾을 수 없습니다.</div>;
 
-    const imageList = [project.image, sample, project.image];
+    const imageList = data.imageUrls ?? [];
     const handlePrev = () => {
         if (slideRef.current) {
             slideRef.current.scrollBy({ left: -slideRef.current.clientWidth, behavior: "smooth" });
@@ -48,7 +52,7 @@ export default function ProjectDetailPage() {
     return (
         <PageLayout>
             <div
-                className="flex flex-col px-28 text-white"
+                className="flex flex-col px-28 text-white "
                 style={{
                     background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
                 }}
@@ -65,7 +69,7 @@ export default function ProjectDetailPage() {
                     <span className="flex items-center">
                         <DirectoryIcon />
                     </span>
-                    <span>{project.title}</span>
+                    <span>{data.name}</span>
                 </div>
                 <div className="relative w-304 h-172 mt-8 overflow-hidden rounded-2xl">
                     <div ref={slideRef} className="flex overflow-hidden w-full h-full">
@@ -73,7 +77,7 @@ export default function ProjectDetailPage() {
                             <img
                                 key={i}
                                 src={img}
-                                alt={`${project.title}-${i}`}
+                                alt={`${data.name}-${i}`}
                                 className="w-full h-full object-cover flex-shrink-0"
                             />
                         ))}
@@ -97,15 +101,15 @@ export default function ProjectDetailPage() {
                 </div>
                 <div className="flex flex-col gap-30">
                     <section className="mt-30">
-                        <ProjectDetailSection project={project} />
+                        <ProjectDetailSection project={data} />
                     </section>
 
                     <section className="flex flex-col">
-                        <ProjectReminderSection />
+                        <ProjectReminderSection projectId={data.id} />
                     </section>
 
                     <section className="flex flex-col">
-                        <OtherProjectSection />
+                        <OtherProjectSection currentProjectId={data.id} allProjects={allProjects} />
                     </section>
                     <QuoteCardList />
                 </div>
