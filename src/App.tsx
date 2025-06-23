@@ -20,6 +20,7 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 
+import { AdminPage } from "./pages/Admin";
 function App() {
     return (
         <BrowserRouter>
@@ -42,6 +43,8 @@ function App() {
 
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
+
+                <Route path={ROUTES.ADMIN} element={<AdminPage />} />
             </Routes>
         </BrowserRouter>
     );
