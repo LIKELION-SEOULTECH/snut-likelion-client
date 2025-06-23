@@ -19,6 +19,7 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
+import { Recruit } from "./pages/Recruit";
 
 function App() {
     return (
@@ -42,6 +43,8 @@ function App() {
 
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
+
+                <Route path={ROUTES.RECRUIT} element={<Recruit />} />
             </Routes>
         </BrowserRouter>
     );
