@@ -16,7 +16,8 @@ export const ROUTES = {
     NEWS_CONTENT: "/news-content/:id",
 
     ADMIN: "/admin",
-    ADMIN_MEMBER: "/admin/member"
+    ADMIN_MEMBER: "/admin/member",
+    ADMIN_NOTICE: "/admin/notice"
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
