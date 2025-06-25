@@ -41,13 +41,13 @@ export const SidebarList = () => {
             {isRecruitOpen && (
                 <div className="flex flex-col">
                     <NavLink
-                        to="/admin/recruit/apply"
+                        to="/admin/recruit/manager"
                         className="h-[69px] px-10 py-[25px] hover:text-white"
                     >
                         운영진 모집
                     </NavLink>
                     <NavLink
-                        to="/admin/recruit/result"
+                        to="/admin/recruit/user"
                         className="h-[69px] px-10 py-[25px] hover:text-white"
                     >
                         아기사자 모집
