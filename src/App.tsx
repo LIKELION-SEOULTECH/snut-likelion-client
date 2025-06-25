@@ -44,7 +44,8 @@ function App() {
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
-                <Route path={ROUTES.RECRUIT} element={<Recruit />} />
+                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isStaff={false} />} />
+                <Route path={ROUTES.RECRUIT_MANEGER} element={<Recruit isStaff={true} />} />
             </Routes>
         </BrowserRouter>
     );

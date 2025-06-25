@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
+
 type InfoBoxProps = {
-    text: string;
+    text: ReactNode;
     note?: string;
     centered?: boolean;
 };
