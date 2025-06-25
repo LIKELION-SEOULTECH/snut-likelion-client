@@ -4,6 +4,7 @@ import joinUs from "@/assets/Recruit/JoinUs.jpg";
 import { ManegerRoleLIst, RoleList } from "@/components/home/RoleList";
 import { InfoBox } from "@/components/Recruit/InfoBox";
 import QuoteCardList from "@/components/project/QuoteCardList";
+import { useNavigate } from "react-router-dom";
 
 // 모집일정 //
 const Member_InfoData = [
@@ -75,10 +76,12 @@ const Mangeger_ScheduleData = [
 ];
 
 interface RecruitProps {
-    isStaff?: boolean; // true면 운영진 모집
+    isManeger?: boolean; // true면 운영진 모집
 }
 
-export const Recruit = ({ isStaff = false }: RecruitProps) => {
+export const Recruit = ({ isManeger = false }: RecruitProps) => {
+    const navigate = useNavigate();
+
     return (
         <PageLayout>
             <div className="w-full flex flex-col  bg-[#1B1B1B]">
@@ -105,7 +108,7 @@ export const Recruit = ({ isStaff = false }: RecruitProps) => {
                     <div className="flex-1 ">
                         <h4 className="text-[32px] text-white font-[700] mb-[44px]">모집 일정</h4>
                         <div className="w-[908px] flex flex-col gap-y-3 mb-[180px]">
-                            {(isStaff ? Maneger_InfoData : Member_InfoData).map((e) => (
+                            {(isManeger ? Maneger_InfoData : Member_InfoData).map((e) => (
                                 <div className="flex gap-x-4 w-full">
                                     <div className="w-[148px] text-center">
                                         <InfoBox text={e.title} centered={true} />
@@ -122,14 +125,14 @@ export const Recruit = ({ isStaff = false }: RecruitProps) => {
                                 text={
                                     <>
                                         <b>서울과학기술대학교 재학생 및 휴학생이면서</b>
-                                        {isStaff
+                                        {isManeger
                                             ? " 차기 멋쟁이 사자처럼을 이끌어가고 싶으신 분"
                                             : " 아래 일정에 적극적으로 참여하실 수 있는 분"}
                                     </>
                                 }
                             />
                             <div className="py-[23px] bg-[#ECECEC] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex flex-col flex-1 leading-[180%]">
-                                {(isStaff ? Mangeger_ScheduleData : Member_ScheduleData).map(
+                                {(isManeger ? Mangeger_ScheduleData : Member_ScheduleData).map(
                                     (item, idx) => (
                                         <div key={idx} className="mb-2">
                                             <span className="font-semibold">
@@ -149,6 +152,12 @@ export const Recruit = ({ isStaff = false }: RecruitProps) => {
                     </div>
                     <button
                         className={`w-auto h-[71px] px-4 py-1 rounded-[250px] text-[24px] cursor-pointer bg-[#F70] text-black font-bold text-white px-10 py-5 align-center leading-[130%] font-pretendard`}
+                        onClick={() => {
+                            const target = isManeger
+                                ? "/recruitform/maneger"
+                                : "/recruitform/member";
+                            navigate(target);
+                        }}
                     >
                         지원하기 →
                     </button>
@@ -163,7 +172,7 @@ export const Recruit = ({ isStaff = false }: RecruitProps) => {
                         <RoleList />
                     </div>
                 </div>
-                {isStaff ? (
+                {isManeger ? (
                     <div>
                         <h4 className="text-[32px] mt-[180px] text-white font-[700] mb-[44px] mx-[112px] flex">
                             운영진 모집 분야

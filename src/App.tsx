@@ -20,6 +20,7 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 import { Recruit } from "./pages/Recruit";
+import { RecruitForm } from "./pages/RecruitForm";
 
 function App() {
     return (
@@ -44,8 +45,16 @@ function App() {
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
-                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isStaff={false} />} />
-                <Route path={ROUTES.RECRUIT_MANEGER} element={<Recruit isStaff={true} />} />
+                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isManeger={false} />} />
+                <Route path={ROUTES.RECRUIT_MANEGER} element={<Recruit isManeger={true} />} />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MANEGER}
+                    element={<RecruitForm isManeger={true} />}
+                />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MEMBER}
+                    element={<RecruitForm isManeger={false} />}
+                />
             </Routes>
         </BrowserRouter>
     );
