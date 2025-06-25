@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ProjectReminderBox } from "./ProjectReminderBox";
 import type { RetrospectionResponse } from "@/types/project";
 import { fetchRetrospections } from "@/apis/projects";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectReminderSectionProps {
     projectId: number;
@@ -9,6 +10,7 @@ interface ProjectReminderSectionProps {
 
 export const ProjectReminderSection = ({ projectId }: ProjectReminderSectionProps) => {
     const [retrospections, setRetrospections] = useState<RetrospectionResponse[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,6 +38,7 @@ export const ProjectReminderSection = ({ projectId }: ProjectReminderSectionProp
                         name={item.writer.name}
                         part={item.writer.part}
                         content={item.content}
+                        onClick={() => navigate(`/members/${item.writer.id}`)}
                     />
                 ))}
             </div>
