@@ -27,8 +27,16 @@ export function TagEditor({ setTags }: { setTags: (tags: string[]) => void }) {
         editorProps: {
             attributes: {
                 class: "w-full h-10 items-center text-xl focus:outline-none focus:border-none"
+            },
+            handleKeyDown(view, event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    return true;
+                }
+                return false;
             }
         },
+
         onUpdate: ({ editor }) => {
             const json = editor.getJSON();
             const newTags: string[] = [];
