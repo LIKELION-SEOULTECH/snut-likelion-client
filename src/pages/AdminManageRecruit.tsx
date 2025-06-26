@@ -1,18 +1,17 @@
 import AdminLayout from "@/layouts/AdminLayout";
-import { MemberSearchList } from "@/components/admin/MemberSearchList";
-import { MemberSearchTool } from "@/components/admin/MemberSearchTool";
+
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyMemberData } from "@/constants/admin/dummyMemberData";
+import { dummyManagerData } from "@/constants/admin/dummyManagerData";
+import { RecruitManagerSearchTool } from "@/components/admin/recruit/RecruitManagerSearchTool";
+import { RecruitManagerSearchList } from "@/components/admin/recruit/RecruitManagerSearchList";
 
 export const AdminManagerRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
-        generation: "all",
-        part: "all",
-        role: "all",
-        keyword: ""
+        department: "",
+        part: ""
     });
 
     const handleSearch = (newFilters: typeof filters) => {
@@ -20,12 +19,10 @@ export const AdminManagerRecruitPage = () => {
     };
 
     // 필터링된 데이터
-    const filteredData = dummyMemberData.filter(
-        (member) =>
-            (filters.generation === "all" || member.generation === filters.generation) &&
-            (filters.part === "all" || member.part === filters.part) &&
-            (filters.role === "all" || member.role === filters.role) &&
-            member.name.includes(filters.keyword)
+    const filteredData = dummyManagerData.filter(
+        (manager) =>
+            (filters.department === "" || manager.department === filters.department) &&
+            (filters.part === "" || manager.part === filters.part)
     );
 
     // 현재 페이지에 해당하는 데이터
@@ -38,9 +35,9 @@ export const AdminManagerRecruitPage = () => {
     return (
         <AdminLayout>
             <div className="mt-12 mb-7">
-                <MemberSearchTool onSearch={handleSearch} />
+                <RecruitManagerSearchTool onSearch={handleSearch} />
             </div>
-            <MemberSearchList data={currentPageData} />
+            <RecruitManagerSearchList data={currentPageData} />
             <div className="mb-[210px]">
                 <Pagination
                     currentPage={currentPage}

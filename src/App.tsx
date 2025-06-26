@@ -22,8 +22,12 @@ import { MemberDetailPage } from "./pages/MemberDetailPage";
 
 import { AdminPage } from "./pages/Admin";
 import { AdminMemberPage } from "./pages/AdminMember";
+import { AdminRecruitPage } from "./pages/AdminRecruit";
 import { AdminUserRecruitPage } from "./pages/AdminUserRecruit";
 import { AdminManagerRecruitPage } from "./pages/AdminManageRecruit";
+
+import { AdminApplyUserPage } from "./pages/AdminApplyUser";
+import { AdminApplyManagerPage } from "./pages/AdminApplyManager";
 function App() {
     return (
         <BrowserRouter>
@@ -49,6 +53,9 @@ function App() {
 
                 <Route path={ROUTES.ADMIN} element={<AdminPage />} />
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT} element={<AdminRecruitPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_MANAGER} element={<AdminApplyManagerPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_USER} element={<AdminApplyUserPage />} />
                 <Route path={ROUTES.ADMIN_RECRUIT_USER} element={<AdminUserRecruitPage />} />
                 <Route path={ROUTES.ADMIN_RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
             </Routes>

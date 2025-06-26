@@ -1,7 +1,7 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyMemberData } from "@/constants/admin/dummyMemberData";
+import { dummyUserData } from "@/constants/admin/dummyUserData";
 import { RecruitUserSearchTool } from "@/components/admin/recruit/RecruitUserSearchTool";
 import { RecruitUserSearchList } from "@/components/admin/recruit/RecruitUserSearchList";
 
@@ -9,16 +9,15 @@ export const AdminUserRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
-        part: "all"
+        part: ""
     });
-
     const handleSearch = (newFilters: typeof filters) => {
         setFilters(newFilters);
     };
 
     // 필터링된 데이터
-    const filteredData = dummyMemberData.filter(
-        (member) => filters.part === "all" || member.part === filters.part
+    const filteredData = dummyUserData.filter(
+        (member) => filters.part === "" || member.part === filters.part
     );
 
     // 현재 페이지에 해당하는 데이터
