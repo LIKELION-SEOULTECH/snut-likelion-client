@@ -9,9 +9,9 @@ export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
-        generation: "all",
-        part: "all",
-        role: "all",
+        generation: "",
+        part: "",
+        role: "",
         keyword: ""
     });
 
@@ -22,9 +22,9 @@ export const AdminMemberPage = () => {
     // 필터링된 데이터
     const filteredData = dummyMemberData.filter(
         (member) =>
-            (filters.generation === "all" || member.generation === filters.generation) &&
-            (filters.part === "all" || member.part === filters.part) &&
-            (filters.role === "all" || member.role === filters.role) &&
+            (filters.generation === "" || member.generation === filters.generation) &&
+            (filters.part === "" || member.part === filters.part) &&
+            (filters.role === "" || member.role === filters.role) &&
             member.name.includes(filters.keyword)
     );
 

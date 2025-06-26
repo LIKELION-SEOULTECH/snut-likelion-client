@@ -6,118 +6,87 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface MemberSearchToolProps {
-    onSearch: (filters: {
-        generation: string;
-        part: string;
-        role: string;
-        keyword: string;
-    }) => void;
+    onSearch: (filters: { department: string; part: string }) => void;
 }
 
 export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) => {
-    const [generation, setGeneration] = useState("");
     const [part, setPart] = useState("");
-    const [role, setRole] = useState("");
-    const [keyword, setKeyword] = useState("");
+    const [department, setDepartment] = useState("");
 
     const handleSearch = () => {
-        onSearch({ generation, part, role, keyword });
+        onSearch({ department, part });
     };
 
     return (
-        <div className="h-11 flex flex-row gap-2 items-center">
-            {/* Generation */}
-            <Select value={generation} onValueChange={setGeneration}>
-                <SelectTrigger className="w-[86px] !h-full bg-white rounded-sm data-[placeholder]:text-black">
-                    <SelectValue placeholder="기수별" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[86px] min-w-0">
-                    <SelectItem value="13기" className="w-[86px]">
-                        13기
-                    </SelectItem>
-                    <SelectItem value="12기" className="w-[86px]">
-                        12기
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-
-            <Select value={part} onValueChange={setPart}>
-                <SelectTrigger className="w-[93px] bg-white rounded-sm !h-full data-[placeholder]:text-black whitespace-nowrap">
-                    <SelectValue placeholder="파트별" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[93px] min-w-0">
-                    <SelectItem
-                        value="frontend"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        프론트엔드
-                    </SelectItem>
-                    <SelectItem
-                        value="backend"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        백엔드
-                    </SelectItem>
-                    <SelectItem
-                        value="design"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        디자인
-                    </SelectItem>
-                    <SelectItem
-                        value="plan"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        기획
-                    </SelectItem>
-                    <SelectItem
-                        value="ai"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        AI
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-
-            {/* Role */}
-            <Select onValueChange={setRole}>
-                <SelectTrigger className="w-[86px] rounded-sm bg-white !h-full data-[placeholder]:text-black">
-                    <SelectValue placeholder="역할" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[86px] min-w-0">
-                    <SelectItem
-                        value="대표"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        대표
-                    </SelectItem>
-                    <SelectItem
-                        value="운영진"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        운영진
-                    </SelectItem>
-                    <SelectItem
-                        value="아기사자"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        아기사자
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-
-            {/* Keyword Input */}
-            <Input
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="이름 검색"
-                className="w-[631px] bg-white !h-full rounded-sm"
-            />
-
+        <div className="h-11 flex flex-row gap-2 items-center justify-between">
+            <div className="flex flex-row gap-[6px]">
+                {/* Role */}
+                <Select value={department} onValueChange={setDepartment}>
+                    <SelectTrigger className="w-[93px] rounded-sm bg-white !h-full data-[placeholder]:text-black">
+                        <SelectValue placeholder="부서별" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-sm w-[93px] min-w-0">
+                        <SelectItem
+                            value="운영부"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            운영부
+                        </SelectItem>
+                        <SelectItem
+                            value="홍보부"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            홍보부
+                        </SelectItem>
+                        <SelectItem
+                            value="학술부"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            학술부
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+                <Select value={part} onValueChange={setPart}>
+                    <SelectTrigger className="w-[135px] bg-white rounded-sm !h-full data-[placeholder]:text-black whitespace-nowrap">
+                        <SelectValue placeholder="파트별" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-sm w-[135px] min-w-0">
+                        <SelectItem
+                            value="프론트엔드"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            프론트엔드
+                        </SelectItem>
+                        <SelectItem
+                            value="백엔드"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            백엔드
+                        </SelectItem>
+                        <SelectItem
+                            value="디자인"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            디자인
+                        </SelectItem>
+                        <SelectItem
+                            value="기획"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            기획
+                        </SelectItem>
+                        <SelectItem
+                            value="AI"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            AI
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             {/* Search Button */}
             <Button
                 onClick={handleSearch}

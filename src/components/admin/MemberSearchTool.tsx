@@ -53,25 +53,25 @@ export const MemberSearchTool = ({ onSearch }: MemberSearchToolProps) => {
                 </SelectTrigger>
                 <SelectContent className="rounded-sm w-[93px] min-w-0">
                     <SelectItem
-                        value="frontend"
+                        value="프론트엔드"
                         className="whitespace-nowrap data-[state=checked]:font-bold"
                     >
                         프론트엔드
                     </SelectItem>
                     <SelectItem
-                        value="backend"
+                        value="백엔드"
                         className="whitespace-nowrap data-[state=checked]:font-bold"
                     >
                         백엔드
                     </SelectItem>
                     <SelectItem
-                        value="design"
+                        value="디자인"
                         className="whitespace-nowrap data-[state=checked]:font-bold"
                     >
                         디자인
                     </SelectItem>
                     <SelectItem
-                        value="plan"
+                        value="기획"
                         className="whitespace-nowrap data-[state=checked]:font-bold"
                     >
                         기획
@@ -86,7 +86,7 @@ export const MemberSearchTool = ({ onSearch }: MemberSearchToolProps) => {
             </Select>
 
             {/* Role */}
-            <Select onValueChange={setRole}>
+            <Select value={role} onValueChange={setRole}>
                 <SelectTrigger className="w-[86px] rounded-sm bg-white !h-full data-[placeholder]:text-black">
                     <SelectValue placeholder="역할" />
                 </SelectTrigger>
