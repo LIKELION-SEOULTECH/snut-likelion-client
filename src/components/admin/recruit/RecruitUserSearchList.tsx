@@ -1,6 +1,8 @@
 import type { UserData } from "@/types/recruit";
+import { useNavigate } from "react-router-dom";
 
 export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {
+    const navigate = useNavigate();
     return (
         <div>
             <div className="text-sm mb-4">
@@ -21,6 +23,7 @@ export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {
                     {data.map((member, index) => (
                         <div
                             key={member.id}
+                            onClick={() => navigate(`/admin/recruit/result/user/${member.id}`)}
                             className={`flex h-[66px] items-center font-medium ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
                         >
                             <span className="flex-[1] pl-[30px] text-left">{member.id}</span>

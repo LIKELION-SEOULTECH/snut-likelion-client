@@ -19,7 +19,9 @@ export const ROUTES = {
     ADMIN_MEMBER: "/admin/member",
     ADMIN_RECRUIT: "/admin/recruit",
     ADMIN_RECRUIT_MANAGER: "/admin/recruit/manager",
+    ADMIN_RECRUIT_MANAGER_DETAIL: "/admin/recruit/result/manager/:id",
     ADMIN_RECRUIT_USER: "/admin/recruit/user",
+    ADMIN_RECRUIT_USER_DETAIL: "/admin/recruit/result/user/:id",
     ADMIN_APPLY_MANAGER: "/admin/apply-manager",
     ADMIN_APPLY_USER: "/admin/apply-user"
 } as const;

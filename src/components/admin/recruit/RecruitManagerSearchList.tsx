@@ -1,3 +1,4 @@
+import { RecruitManagerItem } from "./RecruitManagerItem";
 import type { ManagerData } from "@/types/recruit";
 
 export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
@@ -20,18 +21,7 @@ export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
                 {/* 리스트 content */}
                 <div>
                     {data.map((member, index) => (
-                        <div
-                            key={member.id}
-                            className={`flex h-[66px] items-center font-medium ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
-                        >
-                            <span className="flex-[1] pl-[30px] text-left">{member.id}</span>
-                            <span className="flex-[1] text-left">{member.name}</span>
-                            <span className="flex-[3.5] text-left">{member.email}</span>
-                            <span className="flex-[1] text-left">{member.department}</span>
-                            <span className="flex-[1] text-left">{member.part}</span>
-                            <span className="flex-[1.5] text-left">{member.applyDate}</span>
-                            <span className="flex-[1] text-left">{member.result}</span>
-                        </div>
+                        <RecruitManagerItem key={member.id} member={member} index={index} />
                     ))}
                 </div>
             </div>
