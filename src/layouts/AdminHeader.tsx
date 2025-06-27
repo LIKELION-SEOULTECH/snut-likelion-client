@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import BackBtn from "@/assets/admin/back-btn.svg?react";
 
 interface AdminHeaderProps {
     userName: string;
@@ -7,7 +8,7 @@ interface AdminHeaderProps {
 export const AdminHeader = ({ userName }: AdminHeaderProps) => {
     const location = useLocation();
     const path = location.pathname;
-
+    const navigate = useNavigate();
     const getHeaderText = () => {
         if (path === "/admin") return `${userName}님, 안녕하세요!`;
         if (path.startsWith("/admin/member")) return "멤버 관리";
@@ -15,12 +16,46 @@ export const AdminHeader = ({ userName }: AdminHeaderProps) => {
         if (path.startsWith("/admin/blog")) return "블로그 관리";
         if (path.startsWith("/admin/project")) return "프로젝트 관리";
         if (path.startsWith("/admin/recruit")) return "모집 관리";
+        if (path.startsWith("/admin/apply-manager")) return "운영진 질문";
+        if (path.startsWith("/admin/apply-user")) return "아기사자 질문";
         return "";
     };
 
+    const showSaveButtons =
+        path.startsWith("/admin/apply-user") || path.startsWith("/admin/apply-manager");
+
     return (
-        <div className="flex h-19 items-center px-10 bg-white">
-            <div className="text-2xl font-bold">{getHeaderText()}</div>
+        <div
+            className={`${showSaveButtons ? "px-0" : "px-10"} flex h-19 items-center justify-between bg-white`}
+        >
+            <div className="h-full flex flex-row">
+                {showSaveButtons && (
+                    <>
+                        <div
+                            className="flex items-center mx-[26px] cursor-pointer"
+                            onClick={() => {
+                                navigate("/admin/recruit");
+                            }}
+                        >
+                            <BackBtn />
+                        </div>
+                        <div className="h-full w-[1px] bg-[#D9D9D9] mr-6"></div>
+                    </>
+                )}
+
+                <div
+                    className={`flex ${showSaveButtons ? "text-[20px]" : "text-2xl"} font-bold items-center`}
+                >
+                    {getHeaderText()}
+                </div>
+            </div>
+            {showSaveButtons && (
+                <div className="flex flex-row text-sm font-medium gap-[9px]">
+                    <button className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700] mr-[40px]">
+                        지원하기
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
