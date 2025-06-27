@@ -4,6 +4,7 @@ import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { dummyNoticeData } from "@/constants/admin/dummyNoticeData";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const AdminNoticePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +15,7 @@ export const AdminNoticePage = () => {
 
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const filteredData = dummyNoticeData.filter(
         (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
@@ -37,11 +39,6 @@ export const AdminNoticePage = () => {
         );
     };
 
-    const handleToggleDeleteMode = () => {
-        setShowCheckboxes((prev) => !prev);
-        setSelectedIds([]); // 삭제모드 초기화
-    };
-
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
@@ -53,8 +50,20 @@ export const AdminNoticePage = () => {
         }
     };
 
+    const handleClickDelete = () => {
+        if (showCheckboxes) {
+            if (selectedIds.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
+            setShowDeleteConfirm(true); // ✅ 모달 띄우기
+        } else {
+            setShowCheckboxes(true); // 삭제 모드 진입
+        }
+    };
+
     return (
-        <AdminLayout onToggleDeleteMode={handleToggleDeleteMode} isDeleteMode={showCheckboxes}>
+        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
             <div className="mt-12 mb-7">
                 <NoticeSearchTool onSearch={handleSearch} />
             </div>
@@ -72,6 +81,37 @@ export const AdminNoticePage = () => {
                     onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
+            {showDeleteConfirm && (
+                <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                    <DialogContent className="flex flex-col justify-center w-[390px] p-7 rounded-[8px] gap-2 [&>button.absolute]:hidden">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold text-center">
+                                게시물 삭제
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="text-center text-sm font-medium">
+                            게시물이 영구적으로 삭제되며, 다시 복구할 수 없습니다.
+                        </div>
+                        <div className="flex h-11 justify-end gap-2 mt-4">
+                            <button
+                                onClick={() => {
+                                    // ✅ 여기에 실제 삭제 로직 추가
+                                    setShowDeleteConfirm(false);
+                                }}
+                                className="flex-1 h-full border border-[#ff7700] text-black rounded-sm"
+                            >
+                                삭제하기
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="flex-1 h-full bg-[#FF7700] text-white rounded-sm"
+                            >
+                                아니요
+                            </button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
         </AdminLayout>
     );
 };
