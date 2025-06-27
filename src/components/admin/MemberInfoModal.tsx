@@ -14,10 +14,11 @@ import { useState, useEffect } from "react";
 interface MemberInfoModalProps {
     open: boolean;
     onClose: () => void;
+    onDeleteClick: () => void;
     member: Member | null;
 }
 
-export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps) => {
+export const MemberInfoModal = ({ open, onClose, onDeleteClick, member }: MemberInfoModalProps) => {
     const [generation, setGeneration] = useState("");
     const [part, setPart] = useState("");
     const [role, setRole] = useState<"아기사자" | "운영진">("아기사자");
@@ -128,7 +129,10 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
 
                     {/* 버튼 */}
                     <div className="flex flex-row h-11 gap-2 font-medium mt-4">
-                        <button className="w-[170px] border border-[#FF7700] rounded-sm">
+                        <button
+                            className="w-[170px] border border-[#FF7700] rounded-sm"
+                            onClick={onDeleteClick}
+                        >
                             삭제하기
                         </button>
                         <button className="w-[170px] bg-[#FF7700] text-white rounded-sm">
