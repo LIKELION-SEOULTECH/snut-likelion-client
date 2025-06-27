@@ -4,6 +4,7 @@ import { ProjectSearchTool } from "@/components/admin/project/ProjectSearchTool"
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { dummyProjectData } from "@/constants/admin/dummyProjectData";
+import { ProjectDeleteConfirmDialog } from "@/components/admin/project/ProjectDeleteConfirmModal";
 
 export const AdminProjectPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,6 +16,8 @@ export const AdminProjectPage = () => {
 
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const filteredData = dummyProjectData.filter(
         (project) =>
@@ -39,11 +42,6 @@ export const AdminProjectPage = () => {
         );
     };
 
-    const handleToggleDeleteMode = () => {
-        setShowCheckboxes((prev) => !prev);
-        setSelectedIds([]); // 삭제모드 초기화
-    };
-
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
@@ -55,8 +53,19 @@ export const AdminProjectPage = () => {
         }
     };
 
+    const handleClickDelete = () => {
+        if (showCheckboxes) {
+            if (selectedIds.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
+            setShowDeleteConfirm(true); // ✅ 모달 띄우기
+        } else {
+            setShowCheckboxes(true); // 삭제 모드 진입
+        }
+    };
     return (
-        <AdminLayout onToggleDeleteMode={handleToggleDeleteMode} isDeleteMode={showCheckboxes}>
+        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
             <div className="mt-12 mb-7">
                 <ProjectSearchTool onSearch={handleSearch} />
             </div>
@@ -74,6 +83,13 @@ export const AdminProjectPage = () => {
                     onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
+            {showDeleteConfirm && (
+                <ProjectDeleteConfirmDialog
+                    open={showDeleteConfirm}
+                    onClose={() => setShowDeleteConfirm(false)}
+                    onDelete={handleClickDelete}
+                />
+            )}
         </AdminLayout>
     );
 };
