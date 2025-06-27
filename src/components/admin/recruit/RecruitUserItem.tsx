@@ -7,14 +7,14 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import type { ManagerData } from "@/types/recruit";
+import type { UserData } from "@/types/recruit";
 import { cn } from "@/libs/cn";
 interface RecruitManagerItemProps {
-    member: ManagerData;
+    member: UserData;
     index: number;
 }
 
-export const RecruitManagerItem = ({ member, index }: RecruitManagerItemProps) => {
+export const RecruitUserItem = ({ member, index }: RecruitManagerItemProps) => {
     const navigate = useNavigate();
     const [result, setResult] = useState<string>(member.result ?? "");
 
@@ -27,24 +27,21 @@ export const RecruitManagerItem = ({ member, index }: RecruitManagerItemProps) =
         <div
             onClick={() => navigate(`/admin/recruit/result/manager/${member.id}`)}
             className={cn(
-                "grid grid-cols-[60px_100px_1fr_120px_120px_120px_100px] h-[66px] items-center font-medium px-6 cursor-pointer",
+                "grid grid-cols-[60px_100px_1fr_120px_120px_100px] h-[66px] items-center font-medium px-6 cursor-pointer",
                 index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"
             )}
         >
             <span className="pl-[6px]">{member.id}</span>
             <span>{member.name}</span>
             <span>{member.email}</span>
-            <span>{member.department}</span>
             <span>{member.part}</span>
             <span>{member.applyDate}</span>
-            <span
-                onClick={(e) => e.stopPropagation()} // Select 클릭 시 페이지 이동 방지
-            >
+            <span onClick={(e) => e.stopPropagation()}>
                 <Select value={result} onValueChange={handleChange}>
                     <SelectTrigger
                         isArrow={false}
                         className={cn(
-                            "h-8 w-[90px] border-none shadow-none focus:ring-0 p-0 text-sm appearance-none bg-transparent pr-0 focus:outline-none focus:border-none",
+                            "h-8 border-none shadow-none focus:ring-0 px-[9px] py-[7px] text-sm appearance-none bg-transparent focus:outline-none focus:border-none hover:bg-[#ECECEC]",
                             result === "합격" && "text-[#ff7700]"
                         )}
                     >

@@ -1,8 +1,7 @@
 import type { UserData } from "@/types/recruit";
-import { useNavigate } from "react-router-dom";
+import { RecruitUserItem } from "./RecruitUserItem";
 
 export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {
-    const navigate = useNavigate();
     return (
         <div>
             <div className="text-sm mb-4">
@@ -10,29 +9,19 @@ export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {
             </div>
             <div className="w-full text-sm rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
-                <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA]">
-                    <span className="flex-[1] text-left pl-[30px]">No</span>
-                    <span className="flex-[1] text-left">이름</span>
-                    <span className="flex-[4] text-left">이메일</span>
-                    <span className="flex-[1.5] text-left">파트</span>
-                    <span className="flex-[1.5] text-left">지원날짜</span>
-                    <span className="flex-[1.5] text-left">결과</span>
+                <div className="grid grid-cols-[60px_100px_1fr_120px_120px_100px] h-10 items-center text-[#666666] font-medium bg-[#FAFAFA] px-6">
+                    <span>No</span>
+                    <span>이름</span>
+                    <span>이메일</span>
+                    <span>파트</span>
+                    <span>지원날짜</span>
+                    <span className="px-[9px]">결과</span>
                 </div>
+
                 {/* 리스트 content */}
                 <div>
                     {data.map((member, index) => (
-                        <div
-                            key={member.id}
-                            onClick={() => navigate(`/admin/recruit/result/user/${member.id}`)}
-                            className={`flex h-[66px] items-center font-medium ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
-                        >
-                            <span className="flex-[1] pl-[30px] text-left">{member.id}</span>
-                            <span className="flex-[1] text-left">{member.name}</span>
-                            <span className="flex-[4] text-left">{member.email}</span>
-                            <span className="flex-[1.5] text-left">{member.part}</span>
-                            <span className="flex-[1.5] text-left">{member.applyDate}</span>
-                            <span className="flex-[1.5] text-left">{member.result}</span>
-                        </div>
+                        <RecruitUserItem key={member.id} member={member} index={index} />
                     ))}
                 </div>
             </div>
