@@ -4,8 +4,11 @@ import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { dummyBlogData } from "@/constants/admin/dummyBlogData";
+import { BlogDeleteConfirmDialog } from "@/components/admin/blog/BlogDeleteConfirmDialog";
 
 export const AdminBlogPage = () => {
+    // const [blogs, setBlogs] = useState(dummyBlogData);
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
@@ -14,6 +17,7 @@ export const AdminBlogPage = () => {
 
     const [showCheckboxes, setShowCheckboxes] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const filteredData = dummyBlogData.filter(
         (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
@@ -37,11 +41,6 @@ export const AdminBlogPage = () => {
         );
     };
 
-    const handleToggleDeleteMode = () => {
-        setShowCheckboxes((prev) => !prev);
-        setSelectedIds([]); // 삭제모드 초기화
-    };
-
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
@@ -53,8 +52,20 @@ export const AdminBlogPage = () => {
         }
     };
 
+    const handleClickDelete = () => {
+        if (showCheckboxes) {
+            if (selectedIds.length === 0) {
+                alert("삭제할 항목을 선택해주세요.");
+                return;
+            }
+            setShowDeleteConfirm(true); // ✅ 모달 띄우기
+        } else {
+            setShowCheckboxes(true); // 삭제 모드 진입
+        }
+    };
+
     return (
-        <AdminLayout onToggleDeleteMode={handleToggleDeleteMode} isDeleteMode={showCheckboxes}>
+        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
             <div className="mt-12 mb-7">
                 <NoticeSearchTool onSearch={handleSearch} />
             </div>
@@ -72,6 +83,13 @@ export const AdminBlogPage = () => {
                     onPageChange={(page) => setCurrentPage(page)}
                 />
             </div>
+            {showDeleteConfirm && (
+                <BlogDeleteConfirmDialog
+                    open={showDeleteConfirm}
+                    onClose={() => setShowDeleteConfirm(false)}
+                    onDelete={handleClickDelete}
+                />
+            )}
         </AdminLayout>
     );
 };
