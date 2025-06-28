@@ -2,16 +2,28 @@ import { useState } from "react";
 import { RecruitFormStep1 } from "@/components/Recruit/RecruitFormStep1";
 import { RecruitFormStep2 } from "@/components/Recruit/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/Recruit/RecruitFormHeader";
+import { Footer } from "@/layouts/Footer";
 
 interface RecruitFormProps {
     isManeger: boolean;
 }
-
+export interface FormDataType {
+    part: string;
+    departmentType: string;
+    name: string;
+    major: string;
+    studentId: string;
+    grade: number;
+    inSchool: boolean;
+    portfolio: File | null;
+    answers: { questionId: number; answer: string }[];
+    mobileNumber: string;
+}
 export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const [step, setStep] = useState(1);
 
     // 지원서
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormDataType>({
         part: "", // 파트
         departmentType: "", // 운영진 부서
         name: "",
@@ -21,7 +33,8 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         inSchool: true,
         // isPersonalInfoConsent: false, -> 뺄수도 있음
         portfolio: null as File | null,
-        answers: [] as { questionId: number; answer: string }[]
+        answers: [] as { questionId: number; answer: string }[],
+        mobileNumber: ""
     });
 
     // 파트. 부서 행들러
@@ -36,9 +49,16 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const isValid = isManeger ? !!formData.part && !!formData.departmentType : !!formData.part;
 
     return (
-        <div>
-            <RecruitFormHeader isManeger={isManeger} onNext={handleNext} isValid={isValid} />
-            <div>
+        <div
+            className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "h-screen " : "min-h-screen"}`}
+        >
+            <RecruitFormHeader
+                isManeger={isManeger}
+                onNext={handleNext}
+                isValid={isValid}
+                step={step}
+            />
+            <div className="flex-1 flex overflow-y-auto">
                 {step === 1 && (
                     <RecruitFormStep1
                         isManeger={isManeger}
@@ -48,8 +68,9 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                         onNext={handleNext}
                     />
                 )}
-                {step === 2 && <RecruitFormStep2 />}
+                {step === 2 && <RecruitFormStep2 formData={formData} setFormData={setFormData} />}
             </div>
+            <Footer />
         </div>
     );
 };
