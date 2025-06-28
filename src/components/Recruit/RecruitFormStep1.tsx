@@ -1,5 +1,4 @@
 import { Footer } from "@/layouts/Footer";
-import { useNavigate } from "react-router-dom";
 
 interface RecruitFormStep1Props {
     isManeger: boolean;
@@ -31,12 +30,8 @@ export const RecruitFormStep1 = ({
     isManeger,
     selectedPart,
     selectedDepartment,
-    onSelect,
-    onNext
+    onSelect
 }: RecruitFormStep1Props) => {
-    const isValid = isManeger ? selectedPart && selectedDepartment : selectedPart;
-    const navigate = useNavigate();
-
     const defaultStyle = {
         border: "1px solid #3A3A3A",
         background: `linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), 
@@ -48,42 +43,6 @@ export const RecruitFormStep1 = ({
     };
     return (
         <div className="flex flex-col min-h-screen w-full bg-[#1B1B1B] text-white">
-            <div className="w-full h-24 bg-black flex justify-between items-center px-[110px] relative">
-                {/* 나가기  */}
-                <button
-                    onClick={() => {
-                        const confirmLeave = confirm(
-                            "선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?"
-                        );
-                        if (confirmLeave) {
-                            const target = isManeger
-                                ? "/recruitments/maneger"
-                                : "/recruitments/member";
-                            navigate(target);
-                        }
-                    }}
-                    className="bg-[#2D2D2D] text-[#A7A7A7] font-bold px-4 py-2 rounded-full"
-                >
-                    ← 나가기
-                </button>
-
-                <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
-
-                {/* 다음 버튼 */}
-                <button
-                    onClick={() => {
-                        if (!isValid) {
-                            alert("모든 항목을 선택해주세요.");
-                            return;
-                        }
-                        onNext();
-                    }}
-                    className="bg-[#F70] text-white font-bold px-4 py-2 rounded-full"
-                >
-                    다음
-                </button>
-            </div>
-
             <div className="flex-1 flex flex-col items-center justify-center px-[110px] w-full">
                 {/* 파트 선택 */}
                 <h2 className="text-[32px] font-bold mb-10 self-start">파트 선택</h2>
