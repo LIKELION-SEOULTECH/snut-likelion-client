@@ -1,5 +1,3 @@
-import { Footer } from "@/layouts/Footer";
-
 interface RecruitFormStep1Props {
     isManeger: boolean;
     selectedPart: string;
@@ -42,59 +40,60 @@ export const RecruitFormStep1 = ({
         background: `#6B3200`
     };
     return (
-        <div className="flex flex-col min-h-screen w-full bg-[#1B1B1B] text-white">
-            <div className="flex-1 flex flex-col items-center justify-center px-[110px] w-full">
-                {/* 파트 선택 */}
-                <h2 className="text-[32px] font-bold mb-10 self-start">파트 선택</h2>
-                <div className="grid grid-cols-5 gap-4 mb-[120px]">
-                    {PARTS.map((part) => (
-                        <button
-                            style={selectedPart === part.ko ? selectedStyle : defaultStyle}
-                            key={part.ko}
-                            onClick={() => onSelect("part", part.ko)}
-                            className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[230px] h-[128px]
+        <div className="flex flex-col flex-1 w-full bg-[#1B1B1B] text-white ">
+            <div className="flex-1 flex flex-col items-center justify-center px-[112px] pt-[32px] ">
+                <div className="w-full flex flex-col items-center gap-[60px]">
+                    <div className="w-full">
+                        {/* 파트 선택 */}
+                        <h2 className="text-[32px] font-bold mb-10 self-start">파트 선택</h2>
+                        <div className="grid grid-cols-5 gap-4 ">
+                            {PARTS.map((part) => (
+                                <button
+                                    style={selectedPart === part.ko ? selectedStyle : defaultStyle}
+                                    key={part.ko}
+                                    onClick={() => onSelect("part", part.ko)}
+                                    className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[230px] h-[128px]
                                 border-[1px] flex flex-col items-start justify-center text-left
                                 ${selectedPart === part.ko ? "bg-[#6B3200] border-[#F70]" : ""}`}
-                        >
-                            <span>{part.ko}</span>
-                            <span className="text-[20px] font-medium text-[#A7A7A7]">
-                                {part.en}
-                            </span>
-                        </button>
-                    ))}
-                </div>
-
-                {/* 부서 선택 (운영진) */}
-                {isManeger && (
-                    <div className="w-full">
-                        <h2 className="text-[32px] font-bold mb-10">운영 분야 선택</h2>
-                        <div className="grid grid-cols-3 gap-4">
-                            {DEPARTMENTS.map((dept) => (
-                                <button
-                                    style={
-                                        selectedDepartment === dept.ko
-                                            ? selectedStyle
-                                            : defaultStyle
-                                    }
-                                    key={dept.ko}
-                                    onClick={() => onSelect("departmentType", dept.ko)}
-                                    className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[394px] h-[128px]
-                                        border-[1px] flex flex-col items-start justify-center text-left`}
                                 >
-                                    <span>{dept.ko}</span>
+                                    <span>{part.ko}</span>
                                     <span className="text-[20px] font-medium text-[#A7A7A7]">
-                                        {dept.en}
+                                        {part.en}
                                     </span>
                                 </button>
                             ))}
                         </div>
                     </div>
-                )}
+                    {/* 부서 선택 (운영진) */}
+                    {isManeger && (
+                        <div className="w-full">
+                            <h2 className="text-[32px] font-bold mb-10">운영 분야 선택</h2>
+                            <div className="grid grid-cols-3 gap-4">
+                                {DEPARTMENTS.map((dept) => (
+                                    <button
+                                        style={
+                                            selectedDepartment === dept.ko
+                                                ? selectedStyle
+                                                : defaultStyle
+                                        }
+                                        key={dept.ko}
+                                        onClick={() => onSelect("departmentType", dept.ko)}
+                                        className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[394px] h-[128px]
+                                        border-[1px] flex flex-col items-start justify-center text-left`}
+                                    >
+                                        <span>{dept.ko}</span>
+                                        <span className="text-[20px] font-medium text-[#A7A7A7]">
+                                            {dept.en}
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <div className="bg-[#1B1B1B]">
-                <Footer />
-            </div>
+            {/* <Footer /> */}
         </div>
     );
 };
