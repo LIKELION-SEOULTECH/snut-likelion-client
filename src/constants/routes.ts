@@ -13,7 +13,9 @@ export const ROUTES = {
     BLOG_CONTENT: "/blog-content/:id",
 
     NEWS: "/news",
-    NEWS_CONTENT: "/news-content/:id"
+    NEWS_CONTENT: "/news-content/:id",
+
+    MYPAGE: "/mypage"
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
