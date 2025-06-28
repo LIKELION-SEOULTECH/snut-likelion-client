@@ -17,17 +17,28 @@ export const AnswerBox = ({ questions, onChange }: AnswerBoxProps) => {
             {/* 여기 수정 필요 ->  백엔 연동하면서 ~~질문 이렇게 */}
             <h4 className="text-[32px] text-[#FFF] font-bold mb-10">질문</h4>
             <FormBox>
-                {questions.map((q) => (
-                    <div key={q.questionId} className="mb-10 w-[850px]">
-                        <p className="mb-6 font-bold">{q.label}</p>
-                        <textarea
-                            className="w-full h-24 p-2 text-black placeholder-[#A7A7A7] bg-[#fff] rounded"
-                            value={q.answer}
-                            placeholder="편하고 솔직하게 답변해주세요 :-)"
-                            onChange={(e) => onChange(q.questionId, e.target.value)}
-                        />
-                    </div>
-                ))}
+                {questions.map((q, idx) => {
+                    const currentLength = q.answer.length;
+                    const isLastQ = idx === questions.length - 1;
+                    return (
+                        <div
+                            key={q.questionId}
+                            className={` w-[850px] text-4 relative  ${!isLastQ ? "mb-[40px]" : ""} font-medium`}
+                        >
+                            <p className="mb-6 ">{q.label}</p>
+                            <textarea
+                                className="w-full h-24 p-2 text-black placeholder-[#A7A7A7] bg-[#fff] rounded"
+                                value={q.answer}
+                                placeholder="편하고 솔직하게 답변해주세요 :-)"
+                                onChange={(e) => onChange(q.questionId, e.target.value)}
+                                maxLength={500}
+                            />
+                            <div className="absolute bottom-[10px] right-4 font-medium text-[#A7A7A7]">
+                                {currentLength}/500
+                            </div>
+                        </div>
+                    );
+                })}
             </FormBox>
         </div>
     );
