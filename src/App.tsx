@@ -25,6 +25,9 @@ import { AdminMemberPage } from "./pages/AdminMember";
 import { AdminNoticePage } from "./pages/AdminNotice";
 import { AdminProjectPage } from "./pages/AdminProject";
 
+import { AdminProjectEditPage } from "./pages/AdminProjectEdit";
+import { AdminProjectCreatePage } from "./pages/AdminProjectCreate";
+
 function App() {
     return (
         <BrowserRouter>
@@ -52,6 +55,9 @@ function App() {
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
                 <Route path={ROUTES.ADMIN_NOTICE} element={<AdminNoticePage />} />
                 <Route path={ROUTES.ADMIN_PROJECT} element={<AdminProjectPage />} />
+
+                <Route path={ROUTES.ADMIN_PROJECT_CREATE} element={<AdminProjectCreatePage />} />
+                <Route path={ROUTES.ADMIN_PROJECT_EDIT} element={<AdminProjectEditPage />} />
             </Routes>
         </BrowserRouter>
     );

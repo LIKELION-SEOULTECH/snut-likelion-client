@@ -1,5 +1,5 @@
 import type { Project } from "@/types/project";
-
+import { useNavigate } from "react-router-dom";
 interface ProjectSearchItemProps {
     project: Project;
     index: number;
@@ -15,6 +15,11 @@ export const ProjectSearchItem = ({
     selected,
     onToggleSelect
 }: ProjectSearchItemProps) => {
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        navigate(`/admin/project/edit/${project.id}`);
+    };
     return (
         <div
             className={`relative flex h-[66px] items-center font-medium ${
@@ -37,7 +42,7 @@ export const ProjectSearchItem = ({
                 </span>
             )}
             <span className="flex-[0.7] pl-[30px] text-left">{project.id}</span>
-            <span className="flex-[4] text-left">
+            <span className="flex-[4] text-left cursor-pointer" onClick={handleNavigate}>
                 <div className="flex justify-between items-center pr-14">
                     <span>{project.title}</span>
                 </div>

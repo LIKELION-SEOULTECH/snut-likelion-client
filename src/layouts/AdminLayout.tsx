@@ -3,12 +3,14 @@ import { AdminHeader } from "./AdminHeader";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
+    isFormValid?: boolean;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
 }
 
 export default function AdminLayout({
     children,
+    isFormValid,
     onToggleDeleteMode,
     isDeleteMode
 }: AdminLayoutProps) {
@@ -22,6 +24,7 @@ export default function AdminLayout({
             <div className="flex flex-col w-full">
                 <AdminHeader
                     userName="전민경"
+                    isFormValid={isFormValid}
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
                 />
