@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Notice } from "@/types/notice";
 import EllipsisVertical from "@/assets/admin/ellipsis-vertical.svg?react";
 
@@ -20,10 +21,15 @@ export const NoticeSearchItem = ({
     const [openPopup, setOpenPopup] = useState(false);
     const [isFixed, setIsFixed] = useState(notice.isFixed);
     const popupRef = useRef<HTMLDivElement | null>(null);
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        navigate(`/admin/notice/${notice.id}`);
+    };
 
     const togglePopup = () => setOpenPopup((prev) => !prev);
     const handleFixClick = () => {
-        setIsFixed(true); // 실제 API 연동 필요 시 여기에 요청 추가
+        setIsFixed((prev) => !prev);
         setOpenPopup(false);
     };
 
@@ -59,7 +65,7 @@ export const NoticeSearchItem = ({
             )}
             <span className="flex-[0.7] pl-[30px] text-left">{notice.id}</span>
             <span className="flex-[0.7] text-left">{notice.tag}</span>
-            <span className="flex-[4] text-left">
+            <span className="flex-[4] text-left cursor-pointer" onClick={handleNavigate}>
                 <div className="flex justify-between items-center pr-14">
                     <span>{notice.title}</span>
                     {isFixed && <span className="text-[#FF7700]">고정</span>}

@@ -7,3 +7,10 @@ export interface ProjectData {
     stack: string[];
     image: string;
 }
+export interface Project {
+    id: number;
+    title: string;
+    gen: string;
+    type: string;
+    createdAt: string;
+}
