@@ -12,7 +12,7 @@ export const AdminRecruitPage = () => {
                     <div className="flex h-11 justify-between items-center">
                         <div className="font-semibold text-xl">아기사자 지원서 관리</div>
                         <button
-                            className="h-full px-[31px] bg-[#ff7700] text-white text-sm font-medium rounded-sm"
+                            className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"
                             onClick={() => {
                                 navigate(ROUTES.ADMIN_APPLY_USER);
                             }}
@@ -26,7 +26,7 @@ export const AdminRecruitPage = () => {
                     <div className="flex h-11 justify-between items-center">
                         <div className="font-semibold text-xl">운영진 지원서 관리</div>
                         <button
-                            className="h-full px-[31px] bg-[#ff7700] text-white text-sm font-medium rounded-sm"
+                            className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"
                             onClick={() => {
                                 navigate(ROUTES.ADMIN_APPLY_MANAGER);
                             }}

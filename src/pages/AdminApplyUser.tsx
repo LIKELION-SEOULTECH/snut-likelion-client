@@ -1,10 +1,11 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { UserApplyForm } from "@/components/admin/apply/ApplyForm";
+import { ApplyDateForm } from "@/components/admin/apply/ApplyDateForm";
 
 export const AdminApplyUserPage = () => {
     return (
         <AdminLayout>
-            <div className="mt-12 mb-7">서류 접수 : 2025/3/5 ~3/7</div>
+            <ApplyDateForm />
             <UserApplyForm />
         </AdminLayout>
     );
