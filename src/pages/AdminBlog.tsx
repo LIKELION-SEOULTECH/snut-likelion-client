@@ -1,9 +1,10 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { BlogSearchList } from "@/components/admin/blog/BlogSearchList";
 import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyBlogData } from "@/constants/admin/dummyBlogData";
+import { useQuery } from "@tanstack/react-query";
+import { fetchBlogList } from "@/apis/blog";
 import { BlogDeleteConfirmDialog } from "@/components/admin/blog/BlogDeleteConfirmDialog";
 
 export const AdminBlogPage = () => {
@@ -19,13 +20,28 @@ export const AdminBlogPage = () => {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const filteredData = dummyBlogData.filter(
-        (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
-    );
+    const { data: official = [] } = useQuery({
+        queryKey: ["blogs", "official"],
+        queryFn: () => fetchBlogList("OFFICIAL", 0).then((res) => res.data.content)
+    });
+
+    const { data: unofficial = [] } = useQuery({
+        queryKey: ["blogs", "unofficial"],
+        queryFn: () => fetchBlogList("UNOFFICIAL", 0).then((res) => res.data.content)
+    });
+
+    const combinedData = useMemo(() => {
+        const all = [...official, ...unofficial];
+        return all
+            .filter(
+                (item) => filters.keyword.trim() === "" || item.writer.includes(filters.keyword)
+            )
+            .sort((a, b) => b.id - a.id); // 최신순 정렬
+    }, [official, unofficial, filters]);
 
     // 현재 페이지에 해당하는 데이터
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const currentPageData = filteredData.slice(
+    const totalPages = Math.ceil(combinedData.length / itemsPerPage);
+    const currentPageData = combinedData.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );

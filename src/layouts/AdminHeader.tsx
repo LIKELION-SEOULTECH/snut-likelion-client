@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AdminHeaderProps {
     userName: string;
@@ -7,6 +7,7 @@ interface AdminHeaderProps {
 }
 
 export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: AdminHeaderProps) => {
+    const navigate = useNavigate();
     const location = useLocation();
     const path = location.pathname;
 
@@ -86,7 +87,10 @@ export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: Admi
                     >
                         삭제
                     </button>
-                    <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    <button
+                        className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                        onClick={() => navigate("/admin/blog/create")}
+                    >
                         업로드
                     </button>
                 </>
