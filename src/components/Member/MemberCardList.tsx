@@ -1,9 +1,9 @@
-import type { MemberInfo } from "@/constants/mockMemberData";
 import { MemberCard } from "./MemberCard";
 import { Link } from "react-router-dom";
+import type { MemberResponse } from "@/types/members";
 
 interface MemberCardProps {
-    MemberData: MemberInfo[];
+    MemberData: MemberResponse[];
 }
 export const MemberCardList = ({ MemberData }: MemberCardProps) => {
     return (
