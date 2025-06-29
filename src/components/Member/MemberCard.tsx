@@ -35,7 +35,7 @@ export const MemberCard = ({
                 <div className="w-[218px] h-[216px] overflow-hidden ">
                     <img className="w-full h-full object-contain" src={imageSrc} alt={name} />
                 </div>
-                <div className="flex flex-col pt-[28px]  text-center gap-[15px]">
+                <div className="flex flex-col pt-[28px]      text-center gap-[15px]">
                     <span className="text-[16px] text-[#7F7F7F] font-medium my-0">
                         {partMap[part] ?? part}
                     </span>
