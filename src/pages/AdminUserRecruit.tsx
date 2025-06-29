@@ -9,6 +9,7 @@ export const AdminUserRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
+        result: "",
         part: ""
     });
     const handleSearch = (newFilters: typeof filters) => {

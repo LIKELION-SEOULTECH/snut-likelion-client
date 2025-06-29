@@ -5,11 +5,13 @@ import { Pagination } from "@/components/common/Pagination";
 import { dummyManagerData } from "@/constants/admin/dummyManagerData";
 import { RecruitManagerSearchTool } from "@/components/admin/recruit/RecruitManagerSearchTool";
 import { RecruitManagerSearchList } from "@/components/admin/recruit/RecruitManagerSearchList";
+import type { ManagerData } from "@/types/recruit";
 
 export const AdminManagerRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
+        result: "",
         department: "",
         part: ""
     });
@@ -22,8 +24,9 @@ export const AdminManagerRecruitPage = () => {
     const filteredData = dummyManagerData.filter(
         (manager) =>
             (filters.department === "" || manager.department === filters.department) &&
+            (filters.result === "" || manager.result === filters.result) &&
             (filters.part === "" || manager.part === filters.part)
-    );
+    ) as ManagerData[];
 
     // 현재 페이지에 해당하는 데이터
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);

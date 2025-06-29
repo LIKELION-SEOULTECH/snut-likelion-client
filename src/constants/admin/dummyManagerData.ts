@@ -15,7 +15,7 @@ export const dummyManagerData = [
         department: "홍보부",
         part: "디자인",
         applyDate: "2025-03-08",
-        result: "합격"
+        result: "제출"
     },
     {
         id: 3,
@@ -42,7 +42,7 @@ export const dummyManagerData = [
         department: "운영부",
         part: "백엔드",
         applyDate: "2025-03-08",
-        result: "합격"
+        result: "불합격"
     },
     {
         id: 6,
@@ -51,7 +51,7 @@ export const dummyManagerData = [
         department: "운영부",
         part: "프론트엔드",
         applyDate: "2025-03-08",
-        result: "불합격"
+        result: "서류 합격"
     },
     {
         id: 7,

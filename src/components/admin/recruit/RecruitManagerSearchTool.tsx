@@ -9,23 +9,57 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface MemberSearchToolProps {
-    onSearch: (filters: { department: string; part: string }) => void;
+    onSearch: (filters: { result: string; department: string; part: string }) => void;
 }
 
 export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) => {
+    const [result, setResult] = useState("");
     const [part, setPart] = useState("");
     const [department, setDepartment] = useState("");
 
     const handleSearch = () => {
-        onSearch({ department, part });
+        onSearch({ result, department, part });
     };
 
     return (
         <div className="h-11 flex flex-row gap-2 items-center justify-between">
             <div className="flex flex-row gap-[6px]">
+                {/* result */}
+                <Select value={result} onValueChange={setResult}>
+                    <SelectTrigger className="w-[135px] rounded-sm bg-white !h-11 data-[placeholder]:text-black">
+                        <SelectValue placeholder="결과별" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-sm w-[135px] min-w-0">
+                        <SelectItem
+                            value="제출"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            제출
+                        </SelectItem>
+                        <SelectItem
+                            value="불합격"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            불합격
+                        </SelectItem>
+                        <SelectItem
+                            value="서류 합격"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            서류 합격
+                        </SelectItem>
+                        <SelectItem
+                            value="합격"
+                            className="whitespace-nowrap data-[state=checked]:font-bold"
+                        >
+                            합격
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+
                 {/* Role */}
                 <Select value={department} onValueChange={setDepartment}>
-                    <SelectTrigger className="w-[93px] rounded-sm bg-white !h-full data-[placeholder]:text-black">
+                    <SelectTrigger className="w-[93px] rounded-sm bg-white !h-11 data-[placeholder]:text-black">
                         <SelectValue placeholder="부서별" />
                     </SelectTrigger>
                     <SelectContent className="rounded-sm w-[93px] min-w-0">
@@ -50,7 +84,7 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
                     </SelectContent>
                 </Select>
                 <Select value={part} onValueChange={setPart}>
-                    <SelectTrigger className="w-[135px] bg-white rounded-sm !h-full data-[placeholder]:text-black whitespace-nowrap">
+                    <SelectTrigger className="w-[135px] bg-white rounded-sm !h-11 data-[placeholder]:text-black whitespace-nowrap">
                         <SelectValue placeholder="파트별" />
                     </SelectTrigger>
                     <SelectContent className="rounded-sm w-[135px] min-w-0">
