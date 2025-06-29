@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Blog } from "@/types/blog";
 
 interface BlogSearchItemProps {
@@ -15,6 +16,12 @@ export const BlogSearchItem = ({
     selected,
     onToggleSelect
 }: BlogSearchItemProps) => {
+    const navigate = useNavigate();
+
+    const handleRowClick = () => {
+        navigate(`/admin/blog/edit/${blog.id}`);
+    };
+
     return (
         <div
             className={`relative flex h-[66px] items-center font-medium ${
@@ -38,7 +45,7 @@ export const BlogSearchItem = ({
             )}
             <span className="flex-[0.6] pl-[30px] text-left">{blog.id}</span>
             <span className="flex-[1] text-left">{blog.tag}</span>
-            <span className="flex-[4] text-left">
+            <span className="flex-[4] text-left cursor-pointer" onClick={handleRowClick}>
                 <div className="flex justify-between items-center pr-14">
                     <span>{blog.title}</span>
                 </div>

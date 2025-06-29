@@ -24,6 +24,10 @@ import { AdminPage } from "./pages/Admin";
 import { AdminMemberPage } from "./pages/AdminMember";
 import { AdminNoticePage } from "./pages/AdminNotice";
 import { AdminBlogPage } from "./pages/AdminBlog";
+
+import { AdminBlogCreatePage } from "./pages/AdminBlogCreate";
+import { AdminBlogEditPage } from "./pages/AdminBlogEdit";
+
 function App() {
     return (
         <BrowserRouter>
@@ -51,6 +55,8 @@ function App() {
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
                 <Route path={ROUTES.ADMIN_NOTICE} element={<AdminNoticePage />} />
                 <Route path={ROUTES.ADMIN_BLOG} element={<AdminBlogPage />} />
+                <Route path={ROUTES.ADMIN_BLOG_CREATE} element={<AdminBlogCreatePage />} />
+                <Route path={ROUTES.ADMIN_BLOG_EDIT} element={<AdminBlogEditPage />} />
             </Routes>
         </BrowserRouter>
     );
