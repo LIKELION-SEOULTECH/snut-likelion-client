@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { AdminMenuBar } from "./AdminMenuBar";
@@ -31,7 +32,7 @@ const extensions = [
     }),
 
     TextAlign.configure({
-        types: ["heading", "paragraph"],
+        types: ["heading", "paragraph", "blockquote"],
         defaultAlignment: "left"
     })
 ];
@@ -48,8 +49,21 @@ const AdminTextEditor = ({ content, setContent }: TextEditorProps) => {
 
         onUpdate({ editor }) {
             setContent(editor.getHTML());
+            console.log(editor.getHTML());
         }
     });
+
+    useEffect(() => {
+        if (!editor) return;
+
+        // editor 초기 렌더 이후, 외부 content와 다르면 setContent
+        const currentHTML = editor.getHTML();
+        const shouldUpdate = content && currentHTML !== content;
+
+        if (shouldUpdate) {
+            editor.commands.setContent(content, false);
+        }
+    }, [editor, content]); // ✅ 꼭 둘 다 넣어야 함
 
     return (
         <div className="flex flex-col">

@@ -19,12 +19,12 @@ export const NoticeSearchItem = ({
     onToggleSelect
 }: NoticeItemProps) => {
     const [openPopup, setOpenPopup] = useState(false);
-    const [isFixed, setIsFixed] = useState(notice.isFixed);
+    const [isFixed, setIsFixed] = useState(notice.pinned);
     const popupRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate();
 
     const handleNavigate = () => {
-        navigate(`/admin/notice/${notice.id}`);
+        navigate(`/admin/notice/${notice.noticeId}`);
     };
 
     const togglePopup = () => setOpenPopup((prev) => !prev);
@@ -54,25 +54,30 @@ export const NoticeSearchItem = ({
                     <input
                         type="checkbox"
                         checked={selected}
-                        onChange={() => onToggleSelect(notice.id)}
+                        onChange={() => onToggleSelect(notice.noticeId)}
                         className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
                         checked:bg-[#FF7700] checked:border-transparent 
                         checked:after:content-['✓'] checked:after:text-white 
                         checked:after:text-[16px] checked:after:block 
-                        checked:after:text-center checked:after:leading-[1rem]"
+                        checked:after:text-center checked:after:leading-[1rem] 
+                        flex items-center justify-center align-middle"
                     />
                 </span>
             )}
-            <span className="flex-[0.7] pl-[30px] text-left">{notice.id}</span>
-            <span className="flex-[0.7] text-left">{notice.tag}</span>
+            <span className="flex-[0.7] pl-[30px] text-left">{notice.noticeId}</span>
+            <span className="flex-[0.7] text-left">공지</span>
+            {/* <span className="flex-[0.7] text-left">{notice.tag}</span> */}
             <span className="flex-[4] text-left cursor-pointer" onClick={handleNavigate}>
                 <div className="flex justify-between items-center pr-14">
                     <span>{notice.title}</span>
                     {isFixed && <span className="text-[#FF7700]">고정</span>}
                 </div>
             </span>
-            <span className="flex-[1] text-left">{notice.writer}</span>
-            <span className="flex-[1.5] text-left">{notice.createdAt}</span>
+            {/* <span className="flex-[1] text-left">{notice.writer}</span> */}
+            <span className="flex-[1] text-left">김혜준</span>
+            <span className="flex-[1.5] text-left">
+                {new Date(notice.createdAt).toISOString().slice(0, 10)}
+            </span>
             <button className="absolute right-6 cursor-pointer" onClick={togglePopup}>
                 <EllipsisVertical />
             </button>

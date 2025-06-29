@@ -5,12 +5,14 @@ interface AdminLayoutProps {
     children: React.ReactNode;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
+    onUploadClick?: () => void;
 }
 
 export default function AdminLayout({
     children,
     onToggleDeleteMode,
-    isDeleteMode
+    isDeleteMode,
+    onUploadClick
 }: AdminLayoutProps) {
     return (
         <div className="flex w-full">
@@ -24,6 +26,7 @@ export default function AdminLayout({
                     userName="전민경"
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
+                    onUploadClick={onUploadClick}
                 />
                 {/* Main content */}
                 <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>

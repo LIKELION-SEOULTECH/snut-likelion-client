@@ -1,12 +1,34 @@
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
+import { useQuery } from "@tanstack/react-query";
+import { fetchNoticeById } from "@/apis/notice";
+import { updateNotice } from "@/apis/notice";
+import type { Editor } from "@tiptap/react";
+
 export const AdminNoticeEditPage = () => {
-    const [content, setContent] = useState(
-        "<h1>멋냥냥단 귀여워</h1><p>전라북도 군산 명월동에서 진행된 <맥심골목> 프로모션을 위해 우리는 오프라인과 온라인 경험을 이어줄 아이디어가 필요했고, 맥심골목을 방문한 사용자들이 9개의 주요 지정 장소를 돌아다니며 디지털 스탬프를 수집하고 빙고를 완성하는 참여형 이벤트를 기획했습니다. 지정된 장소마다 특별히 제작된 디지털 스탬프를 비치해두고 이는 사용자의 <맥심 마이 포인트>앱을 통해 작동하도록 특별히 설계되었습니다.</p>"
-    );
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const [title, setTitle] = useState(""); // 제목 상태
+
+    const [content, setContent] = useState("");
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const editorRef = useRef<Editor | null>(null);
+
+    const { data: notice } = useQuery({
+        queryKey: ["notice", id],
+        queryFn: () => fetchNoticeById(Number(id)),
+        enabled: !!id
+    });
+
+    useEffect(() => {
+        if (notice) {
+            setTitle(notice.title);
+            setContent(notice.content);
+        }
+    }, [notice]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -36,12 +58,30 @@ export const AdminNoticeEditPage = () => {
 
     const totalSizeMB = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0).toFixed(2);
 
+    const handleUpdate = async () => {
+        if (!id || !editorRef.current) return;
+
+        const htmlContent = editorRef.current.getHTML(); // ✅ 최신 HTML 직접 가져오기
+
+        await updateNotice(Number(id), {
+            title,
+            content: htmlContent,
+            pinned: true
+        });
+
+        navigate("/admin/notice");
+    }; // patch 수정 필요
+
     return (
-        <AdminLayout>
+        <AdminLayout onUploadClick={handleUpdate}>
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
-                    <input className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm" />
+                    <input
+                        className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>

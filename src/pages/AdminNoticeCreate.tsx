@@ -1,7 +1,14 @@
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
+import { createNotice } from "@/apis/notice";
+import { useNavigate } from "react-router-dom";
+
 export const AdminNoticeCreatePage = () => {
+    const navigate = useNavigate();
+    const isPinned = true; // 임의값
+
+    const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,12 +41,41 @@ export const AdminNoticeCreatePage = () => {
 
     const totalSizeMB = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0).toFixed(2);
 
+    // 실제 업로드 로직
+    const handleUpload = async () => {
+        if (!title.trim()) {
+            alert("제목을 입력해주세요.");
+            return;
+        }
+        if (!content.trim()) {
+            alert("내용을 입력해주세요.");
+            return;
+        }
+
+        try {
+            await createNotice({
+                title,
+                content,
+                pinned: isPinned
+            });
+            console.log("공지사항 등록");
+            navigate("/admin/notice");
+        } catch (error) {
+            console.error(error);
+            console.log("공지사항 등록에 실패했습니다.");
+        }
+    };
+
     return (
-        <AdminLayout>
+        <AdminLayout onUploadClick={handleUpload}>
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
-                    <input className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm" />
+                    <input
+                        className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>

@@ -52,11 +52,11 @@ export const NoticeSearchList = ({
                 <div>
                     {data.map((notice, index) => (
                         <NoticeSearchItem
-                            key={notice.id}
+                            key={notice.noticeId}
                             notice={notice}
                             index={index}
                             showCheckboxes={showCheckboxes}
-                            selected={selectedIds.includes(notice.id)}
+                            selected={selectedIds.includes(notice.noticeId)}
                             onToggleSelect={onToggleSelect}
                         />
                     ))}

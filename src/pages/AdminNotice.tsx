@@ -2,11 +2,24 @@ import AdminLayout from "@/layouts/AdminLayout";
 import { NoticeSearchList } from "@/components/admin/notice/NoticeSearchList";
 import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllNotices } from "@/apis/notice";
+import { deleteNotice } from "@/apis/notice";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyNoticeData } from "@/constants/admin/dummyNoticeData";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+// import { dummyNoticeData } from "@/constants/admin/dummyNoticeData";
+import { useQueryClient } from "@tanstack/react-query"; // ✅ 캐시 무효화용
+
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@/components/ui/dialog";
 
 export const AdminNoticePage = () => {
+    const queryClient = useQueryClient(); // 캐시 무효화 객체
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
@@ -17,9 +30,18 @@ export const AdminNoticePage = () => {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const filteredData = dummyNoticeData.filter(
-        (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
+    const { data = [] } = useQuery({
+        queryKey: ["notices"],
+        queryFn: fetchAllNotices
+    });
+
+    const filteredData = data.filter(
+        (notice) => filters.keyword.trim() === "" || notice.title.includes(filters.keyword)
     );
+
+    // const filteredData = dummyNoticeData.filter(
+    //     (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
+    // );
 
     // 현재 페이지에 해당하는 데이터
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -42,7 +64,7 @@ export const AdminNoticePage = () => {
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
-            const allIds = currentPageData.map((item) => item.id);
+            const allIds = currentPageData.map((item) => item.noticeId);
             setSelectedIds(allIds);
         } else {
             // 전체 해제
@@ -61,6 +83,27 @@ export const AdminNoticePage = () => {
             setShowCheckboxes(true); // 삭제 모드 진입
         }
     };
+
+    const handleConfirmDelete = async () => {
+        try {
+            console.log("삭제 시작");
+            // 여러 개 삭제
+            await Promise.all(selectedIds.map((id) => deleteNotice(id)));
+
+            alert("삭제가 완료되었습니다.");
+
+            // 상태 초기화
+            setShowDeleteConfirm(false);
+            setSelectedIds([]);
+            setShowCheckboxes(false);
+
+            // 공지사항 목록 다시 불러오기
+            queryClient.invalidateQueries({ queryKey: ["notices"] });
+        } catch (error) {
+            console.error("삭제 중 오류 발생:", error);
+            alert("삭제에 실패했습니다.");
+        }
+    }; // delete 수정 필요
 
     return (
         <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
@@ -92,12 +135,10 @@ export const AdminNoticePage = () => {
                         <div className="text-center text-sm font-medium">
                             게시물이 영구적으로 삭제되며, 다시 복구할 수 없습니다.
                         </div>
-                        <div className="flex h-11 justify-end gap-2 mt-4">
+                        <DialogFooter className="flex h-11 justify-end gap-2 mt-4">
                             <button
-                                onClick={() => {
-                                    // ✅ 여기에 실제 삭제 로직 추가
-                                    setShowDeleteConfirm(false);
-                                }}
+                                type="button"
+                                onClick={handleConfirmDelete}
                                 className="flex-1 h-full border border-[#ff7700] text-black rounded-sm"
                             >
                                 삭제하기
@@ -108,7 +149,7 @@ export const AdminNoticePage = () => {
                             >
                                 아니요
                             </button>
-                        </div>
+                        </DialogFooter>
                     </DialogContent>
                 </Dialog>
             )}

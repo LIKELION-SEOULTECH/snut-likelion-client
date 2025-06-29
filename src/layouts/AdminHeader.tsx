@@ -1,14 +1,25 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AdminHeaderProps {
     userName: string;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
+    onUploadClick?: () => void;
 }
 
-export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: AdminHeaderProps) => {
+export const AdminHeader = ({
+    userName,
+    onToggleDeleteMode,
+    isDeleteMode,
+    onUploadClick
+}: AdminHeaderProps) => {
+    const navigate = useNavigate();
     const location = useLocation();
     const path = location.pathname;
+
+    // 정규식으로 noticeId 추출
+    const match = path.match(/\/admin\/notice\/(\d+)/);
+    const noticeId = match?.[1]; // 추출된 ID (예: '4')
 
     const getHeaderText = () => {
         if (path === "/admin") return `${userName}님, 안녕하세요!`;
@@ -33,7 +44,10 @@ export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: Admi
     const renderButtons = () => {
         if (path === "/admin/notice/create") {
             return (
-                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                <button
+                    className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    onClick={onUploadClick}
+                >
                     업로드
                 </button>
             );
@@ -41,7 +55,10 @@ export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: Admi
 
         if (path.includes("/edit")) {
             return (
-                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                <button
+                    className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    onClick={onUploadClick}
+                >
                     수정하기
                 </button>
             );
@@ -53,7 +70,16 @@ export const AdminHeader = ({ userName, onToggleDeleteMode, isDeleteMode }: Admi
                     <button className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]">
                         삭제
                     </button>
-                    <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    <button
+                        className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                        onClick={() => {
+                            if (noticeId) {
+                                navigate(`/admin/notice/edit/${noticeId}`);
+                            } else {
+                                alert("공지사항 ID가 없습니다.");
+                            }
+                        }}
+                    >
                         수정
                     </button>
                 </>
