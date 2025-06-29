@@ -20,6 +20,8 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 import { MyPage } from "./pages/MyPage";
+import { MyPageEdit } from "./pages/MyPageEdit";
+import { PasswordChange } from "./pages/PasswordChange";
 
 function App() {
     return (
@@ -45,6 +47,8 @@ function App() {
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
                 <Route path={ROUTES.MYPAGE} element={<MyPage />} />
+                <Route path={ROUTES.MYPAGE_EDIT} element={<MyPageEdit />} />
+                <Route path={ROUTES.MYPAGE_PASSWORD_CHANGE} element={<PasswordChange />} />
             </Routes>
         </BrowserRouter>
     );
