@@ -30,12 +30,12 @@ export const register = async (payload: {
 
 // 이메일 인증 코드 전송
 export const sendVerificationCode = async (email: string) => {
-    const res = await axiosInstance.post(`/auth/email/send?email=${encodeURIComponent(email)}`);
+    const res = await axiosInstance.post(`/auth/email/send`, { email });
     return res.data;
 };
 
 // 이메일 인증 코드 확인
 export const verifyEmailCode = async (email: string, code: string) => {
-    const res = await axiosInstance.post(`/auth/email/certify?email=${email}&code=${code}`);
+    const res = await axiosInstance.post(`/auth/email/certify`, { email, code });
     return res.data;
 };
