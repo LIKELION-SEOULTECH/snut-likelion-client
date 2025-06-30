@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "./Input";
+import { sendPasswordResetCode } from "@/apis/auth";
 
 export const PasswordResetForm = () => {
     const [email, setEmail] = useState("");
@@ -7,7 +8,7 @@ export const PasswordResetForm = () => {
     const [errors, setErrors] = useState({
         email: ""
     });
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const newErrors = {
             email: email ? "" : "이메일을 입력해주세요."
@@ -17,6 +18,13 @@ export const PasswordResetForm = () => {
 
         const hasError = Object.values(newErrors).some((v) => v !== "");
         if (hasError) return;
+
+        try {
+            await sendPasswordResetCode(email);
+            console.log("메일을 보냈습니다.");
+        } catch (err) {
+            console.error("메일 발송 실패:", err);
+        }
     };
     return (
         <form className="text-white pt-[105px] pb-0 w-[599px] " onSubmit={handleSubmit}>
