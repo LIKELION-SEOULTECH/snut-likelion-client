@@ -3,16 +3,18 @@ import { AdminHeader } from "./AdminHeader";
 
 interface AdminLayoutProps {
     children: React.ReactNode;
+    isFormValid?: boolean;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
-    onUploadClick?: () => void;
+    onSubmit?: () => void;
 }
 
 export default function AdminLayout({
     children,
+    isFormValid,
     onToggleDeleteMode,
     isDeleteMode,
-    onUploadClick
+    onSubmit
 }: AdminLayoutProps) {
     return (
         <div className="flex w-full">
@@ -23,9 +25,10 @@ export default function AdminLayout({
 
             <div className="flex flex-col w-full">
                 <AdminHeader
+                    isFormValid={isFormValid}
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
-                    onUploadClick={onUploadClick}
+                    onSubmit={onSubmit}
                 />
                 {/* Main content */}
                 <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>

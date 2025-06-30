@@ -1,23 +1,21 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface AdminHeaderProps {
+    isFormValid?: boolean;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
-    onUploadClick?: () => void;
+    onSubmit?: () => void;
 }
 
 export const AdminHeader = ({
+    isFormValid,
     onToggleDeleteMode,
     isDeleteMode,
-    onUploadClick
+    onSubmit
 }: AdminHeaderProps) => {
     const navigate = useNavigate();
     const location = useLocation();
     const path = location.pathname;
-
-    // 정규식으로 noticeId 추출
-    const match = path.match(/\/admin\/notice\/(\d+)/);
-    const noticeId = match?.[1]; // 추출된 ID (예: '4')
 
     const getHeaderText = () => {
         if (path.startsWith("/admin/member")) return "멤버 관리";
@@ -28,7 +26,12 @@ export const AdminHeader = ({
             return "소식 관리";
         }
         if (path.startsWith("/admin/blog")) return "블로그 관리";
-        if (path.startsWith("/admin/project")) return "프로젝트 관리";
+
+        if (path.startsWith("/admin/project")) {
+            if (path.startsWith("/admin/project/create")) return "프로젝트 업로드";
+            if (path.includes("/edit")) return "프로젝트 수정";
+            return "프로젝트 관리";
+        }
         if (path.startsWith("/admin/recruit")) return "모집 관리";
         return "";
     };
@@ -43,20 +46,42 @@ export const AdminHeader = ({
             return (
                 <button
                     className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
-                    onClick={onUploadClick}
+                    onClick={onSubmit}
                 >
                     업로드
                 </button>
             );
         }
 
-        if (path.includes("/edit")) {
+        if (path === "/admin/project/create") {
+            return (
+                <button
+                    className={`w-[161px] h-11 text-white rounded-sm ${
+                        isFormValid ? "bg-[#ff7700]" : "bg-[#E0E0E0] cursor-not-allowed"
+                    }`}
+                    disabled={!isFormValid}
+                    onClick={onSubmit}
+                >
+                    업로드
+                </button>
+            );
+        }
+
+        if (path.includes("/notice/edit")) {
+            return (
+                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    수정하기
+                </button>
+            );
+        }
+
+        if (path.includes("/project/edit")) {
             return (
                 <button
                     className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
-                    onClick={onUploadClick}
+                    onClick={onSubmit}
                 >
-                    수정하기
+                    수정
                 </button>
             );
         }
@@ -64,22 +89,10 @@ export const AdminHeader = ({
         if (/\d+$/.test(path) || path.includes("/detail")) {
             return (
                 <>
-                    <button
-                        className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]"
-                        onClick={onToggleDeleteMode}
-                    >
+                    <button className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]">
                         삭제
                     </button>
-                    <button
-                        className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
-                        onClick={() => {
-                            if (noticeId) {
-                                navigate(`/admin/notice/edit/${noticeId}`);
-                            } else {
-                                alert("공지사항 ID가 없습니다.");
-                            }
-                        }}
-                    >
+                    <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
                         수정
                     </button>
                 </>
@@ -108,9 +121,7 @@ export const AdminHeader = ({
                     </button>
                     <button
                         className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
-                        onClick={() => {
-                            navigate("/admin/notice/create");
-                        }}
+                        onClick={() => navigate("/admin/project/create")}
                     >
                         업로드
                     </button>
@@ -120,6 +131,7 @@ export const AdminHeader = ({
 
         return null;
     };
+
     return (
         <div className="flex h-19 items-center px-10 bg-white justify-between">
             <div className="text-2xl font-bold">{getHeaderText()}</div>

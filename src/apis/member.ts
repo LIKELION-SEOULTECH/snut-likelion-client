@@ -1,5 +1,28 @@
-import type { MemberListResponse } from "@/types/member";
 import axiosInstance from "./axiosInstace";
+import type { MemberListResponse } from "@/types/member";
+
+export interface UpdateProfileRequest {
+    name?: string;
+    phoneNumber?: string;
+    email?: string;
+}
+
+export interface MemberQueryParams {
+    generation?: number;
+    role?: string;
+}
+
+// ✅ 유저 정보 수정
+export const updateMemberInfo = (memberId: number, data: UpdateProfileRequest) => {
+    return axiosInstance.patch(`/members/${memberId}`, data);
+};
+
+// ✅ 멤버 검색 (키워드)
+export const searchMembers = (keyword: string) => {
+    return axiosInstance.get("/members/search", {
+        params: { keyword }
+    });
+};
 
 // 멤버 리스트 조회 (검색 포함)
 export const fetchMemberList = async (params?: {

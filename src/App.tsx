@@ -22,6 +22,11 @@ import { MemberDetailPage } from "./pages/MemberDetailPage";
 
 import { AdminMemberPage } from "./pages/AdminMember";
 import { AdminNoticePage } from "./pages/AdminNotice";
+import { AdminProjectPage } from "./pages/AdminProject";
+
+import { AdminProjectEditPage } from "./pages/AdminProjectEdit";
+import { AdminProjectCreatePage } from "./pages/AdminProjectCreate";
+
 import { AdminNoticeDetailPage } from "./pages/AdminNoticeDetail";
 import { AdminNoticeCreatePage } from "./pages/AdminNoticeCreate";
 import { AdminNoticeEditPage } from "./pages/AdminNoticeEdit";
@@ -50,6 +55,10 @@ function App() {
 
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
                 <Route path={ROUTES.ADMIN_NOTICE} element={<AdminNoticePage />} />
+                <Route path={ROUTES.ADMIN_PROJECT} element={<AdminProjectPage />} />
+
+                <Route path={ROUTES.ADMIN_PROJECT_CREATE} element={<AdminProjectCreatePage />} />
+                <Route path={ROUTES.ADMIN_PROJECT_EDIT} element={<AdminProjectEditPage />} />
                 <Route path={ROUTES.ADMIN_NOTICE_DETAIL} element={<AdminNoticeDetailPage />} />
                 <Route path={ROUTES.ADMIN_NOTICE_CREATE} element={<AdminNoticeCreatePage />} />
                 <Route path={ROUTES.ADMIN_NOTICE_EDIT} element={<AdminNoticeEditPage />} />

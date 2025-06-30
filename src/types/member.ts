@@ -12,3 +12,11 @@ export interface MemberListResponse {
     totalElements: number;
     totalPages: number;
 }
+
+export interface MemberSearchResponse {
+    id: number;
+    name: string;
+    generation: string;
+    part: string;
+    role: string;
+}

@@ -1,5 +1,5 @@
 import type { Project } from "@/types/project";
-
+import { useNavigate } from "react-router-dom";
 interface ProjectSearchItemProps {
     project: Project;
     index: number;
@@ -15,6 +15,11 @@ export const ProjectSearchItem = ({
     selected,
     onToggleSelect
 }: ProjectSearchItemProps) => {
+    const navigate = useNavigate();
+
+    const handleNavigate = () => {
+        navigate(`/admin/project/edit/${project.id}`);
+    };
     return (
         <div
             className={`relative flex h-[66px] items-center font-medium ${
@@ -37,14 +42,14 @@ export const ProjectSearchItem = ({
                 </span>
             )}
             <span className="flex-[0.7] pl-[30px] text-left">{project.id}</span>
-            <span className="flex-[4] text-left">
+            <span className="flex-[4] text-left cursor-pointer" onClick={handleNavigate}>
                 <div className="flex justify-between items-center pr-14">
-                    <span>{project.title}</span>
+                    <span>{project.name}</span>
                 </div>
             </span>
-            <span className="flex-[0.7] text-left">{project.gen}</span>
-            <span className="flex-[1] text-left">{project.type}</span>
-            <span className="flex-[1.5] text-left">{project.createdAt}</span>
+            <span className="flex-[0.7] text-left">{project.generation}기</span>
+            <span className="flex-[1] text-left">아이디어톤</span>
+            <span className="flex-[1.5] text-left">2022-08-07</span>
         </div>
     );
 };
