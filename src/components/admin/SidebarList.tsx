@@ -9,7 +9,7 @@ export const SidebarList = () => {
 
     const menuItems = [
         { name: "멤버 관리", path: "/admin/member" },
-        { name: "소식 관리", path: "/admin/news" },
+        { name: "소식 관리", path: "/admin/notice" },
         { name: "블로그 관리", path: "/admin/blog" },
         { name: "프로젝트 관리", path: "/admin/project" }
     ];

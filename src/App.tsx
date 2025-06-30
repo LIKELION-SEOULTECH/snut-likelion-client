@@ -21,6 +21,10 @@ import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
 
 import { AdminMemberPage } from "./pages/AdminMember";
+import { AdminNoticePage } from "./pages/AdminNotice";
+import { AdminNoticeDetailPage } from "./pages/AdminNoticeDetail";
+import { AdminNoticeCreatePage } from "./pages/AdminNoticeCreate";
+import { AdminNoticeEditPage } from "./pages/AdminNoticeEdit";
 function App() {
     return (
         <BrowserRouter>
@@ -45,6 +49,10 @@ function App() {
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
+                <Route path={ROUTES.ADMIN_NOTICE} element={<AdminNoticePage />} />
+                <Route path={ROUTES.ADMIN_NOTICE_DETAIL} element={<AdminNoticeDetailPage />} />
+                <Route path={ROUTES.ADMIN_NOTICE_CREATE} element={<AdminNoticeCreatePage />} />
+                <Route path={ROUTES.ADMIN_NOTICE_EDIT} element={<AdminNoticeEditPage />} />
             </Routes>
         </BrowserRouter>
     );

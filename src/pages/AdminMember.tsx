@@ -1,6 +1,6 @@
 import AdminLayout from "@/layouts/AdminLayout";
-import { MemberSearchList } from "@/components/admin/MemberSearchList";
-import { MemberSearchTool } from "@/components/admin/MemberSearchTool";
+import { MemberSearchList } from "@/components/admin/member/MemberSearchList";
+import { MemberSearchTool } from "@/components/admin/member/MemberSearchTool";
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { fetchMemberList } from "@/apis/member";

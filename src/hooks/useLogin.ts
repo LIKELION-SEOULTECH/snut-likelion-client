@@ -13,8 +13,8 @@ export const useLogin = () => {
 
     const { mutate: loginMutate, isPending } = useMutation({
         mutationFn: () => login(email, password),
-        onSuccess: () => {
-            console.log("로그인 성공");
+        onSuccess: (data) => {
+            console.log("로그인 성공", data); // ✅ 로그인 성공 응답 출력
             navigate("/");
         },
         onError: (err) => {
