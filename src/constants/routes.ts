@@ -17,9 +17,21 @@ export const ROUTES = {
     NEWS: "/news",
     NEWS_CONTENT: "/news-content/:id",
 
+
     MYPAGE: "/mypage",
     MYPAGE_EDIT: "/mypage-edit",
-    MYPAGE_PASSWORD_CHANGE: "/PasswordChange"
+    MYPAGE_PASSWORD_CHANGE: "/PasswordChange",
+
+
+    RECRUIT_MEMBER: "/recruitments/member",
+    RECRUIT_MANEGER: "/recruitments/maneger",
+    RECRUIT_FORM_MANEGER: "/recruitform/maneger",
+    RECRUIT_FORM_MEMBER: "/recruitform/member",
+
+    ADMIN: "/admin",
+    ADMIN_MEMBER: "/admin/member"
+
+
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
