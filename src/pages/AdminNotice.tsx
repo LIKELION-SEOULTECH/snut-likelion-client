@@ -39,10 +39,6 @@ export const AdminNoticePage = () => {
         (notice) => filters.keyword.trim() === "" || notice.title.includes(filters.keyword)
     );
 
-    // const filteredData = dummyNoticeData.filter(
-    //     (notice) => filters.keyword.trim() === "" || notice.writer.includes(filters.keyword)
-    // );
-
     // 현재 페이지에 해당하는 데이터
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const currentPageData = filteredData.slice(

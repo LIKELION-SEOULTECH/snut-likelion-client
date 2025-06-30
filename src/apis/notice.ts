@@ -28,7 +28,9 @@ export const updateNotice = async (
     noticeId: number,
     update: { title: string; content: string; pinned: boolean }
 ) => {
+    console.log("notice 수정 시작");
     const res = await axiosInstance.patch(`/notices/${noticeId}`, update);
+    console.log(res.data);
     return res.data;
 };
 

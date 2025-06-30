@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { AdminMenuBar } from "./AdminMenuBar";
 import Blockquote from "@tiptap/extension-blockquote";
@@ -9,10 +9,11 @@ import { CustomImage } from "@/extensions/customImage";
 import Mention from "@tiptap/extension-mention";
 import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
+import { forwardRef, useImperativeHandle } from "react";
 
-interface TextEditorProps {
+interface Props {
     content: string;
-    setContent: (text: string) => void;
+    setContent: (val: string) => void;
 }
 
 const extensions = [
@@ -37,7 +38,7 @@ const extensions = [
     })
 ];
 
-const AdminTextEditor = ({ content, setContent }: TextEditorProps) => {
+const AdminTextEditor = forwardRef<Editor | null, Props>(({ content, setContent }, ref) => {
     const editor = useEditor({
         extensions,
         content,
@@ -53,17 +54,14 @@ const AdminTextEditor = ({ content, setContent }: TextEditorProps) => {
         }
     });
 
+    useImperativeHandle(ref, () => editor!, [editor]);
+
     useEffect(() => {
-        if (!editor) return;
-
-        // editor 초기 렌더 이후, 외부 content와 다르면 setContent
-        const currentHTML = editor.getHTML();
-        const shouldUpdate = content && currentHTML !== content;
-
-        if (shouldUpdate) {
+        if (editor && content !== editor.getHTML()) {
             editor.commands.setContent(content, false);
         }
-    }, [editor, content]); // ✅ 꼭 둘 다 넣어야 함
+    }, [content, editor]);
+    if (!editor) return;
 
     return (
         <div className="flex flex-col">
@@ -71,6 +69,6 @@ const AdminTextEditor = ({ content, setContent }: TextEditorProps) => {
             <EditorContent editor={editor} />
         </div>
     );
-};
+});
 
 export default AdminTextEditor;

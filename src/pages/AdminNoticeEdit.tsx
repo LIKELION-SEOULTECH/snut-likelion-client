@@ -10,6 +10,7 @@ import type { Editor } from "@tiptap/react";
 export const AdminNoticeEditPage = () => {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
+
     const [title, setTitle] = useState(""); // 제목 상태
 
     const [content, setContent] = useState("");
@@ -59,9 +60,11 @@ export const AdminNoticeEditPage = () => {
     const totalSizeMB = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0).toFixed(2);
 
     const handleUpdate = async () => {
+        console.log("클릭!");
+        console.log(editorRef.current);
         if (!id || !editorRef.current) return;
 
-        const htmlContent = editorRef.current.getHTML(); // ✅ 최신 HTML 직접 가져오기
+        const htmlContent = editorRef.current.getHTML();
 
         await updateNotice(Number(id), {
             title,
@@ -86,7 +89,11 @@ export const AdminNoticeEditPage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor content={content} setContent={setContent} />
+                        <AdminTextEditor
+                            ref={editorRef} // ✅ 이 부분 추가
+                            content={content}
+                            setContent={setContent}
+                        />
                     </div>
                 </div>
                 {/* 첨부파일 */}

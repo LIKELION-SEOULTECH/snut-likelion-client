@@ -67,7 +67,10 @@ export const AdminHeader = ({
         if (/\d+$/.test(path) || path.includes("/detail")) {
             return (
                 <>
-                    <button className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]">
+                    <button
+                        className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]"
+                        onClick={onToggleDeleteMode}
+                    >
                         삭제
                     </button>
                     <button
@@ -106,7 +109,12 @@ export const AdminHeader = ({
                     >
                         삭제
                     </button>
-                    <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    <button
+                        className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                        onClick={() => {
+                            navigate("/admin/notice/create");
+                        }}
+                    >
                         업로드
                     </button>
                 </>
