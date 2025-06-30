@@ -33,4 +33,5 @@ export interface MemberDetailResponse {
         name: "GITHUB" | "NOTION" | "BEHANCE" | "BLOG" | "INSTAGRAM" | "OTHER";
         url: string;
     }[];
+    stacks: string[];
 }

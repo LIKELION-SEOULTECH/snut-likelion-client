@@ -15,7 +15,7 @@ const partMap: Record<string, string> = {
     FRONTEND: "프론트엔드",
     DESIGN: "디자인",
     AI: "인공지능",
-    PM: "기획"
+    PLANNING: "기획"
 };
 
 export const MemberCard = ({

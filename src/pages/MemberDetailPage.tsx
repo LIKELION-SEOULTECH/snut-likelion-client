@@ -26,7 +26,7 @@ const partMap: Record<string, string> = {
     FRONTEND: "front-end",
     DESIGN: "designer",
     AI: "A.I",
-    PM: "planner"
+    PLANNING: "planner"
 };
 
 export const MemberDetailPage = () => {
@@ -140,28 +140,28 @@ export const MemberDetailPage = () => {
                                             />
                                         )}
                                     </div>
-                                    <h1 className="text-[50px] text-[#fff] font-bold pb-10">
+                                    <h1 className="text-[50px] my-0 text-[#fff] font-bold pb-10">
                                         {member.name}
                                     </h1>
-                                    <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
-                                        {member.intro}
-                                    </div>
-                                    <div className="text-[#C4C4C4] text-[20px] pb-[32px] 	font-light">
-                                        {member.description}
+                                    <div className="min-h-[200px]">
+                                        <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
+                                            {member.intro}
+                                        </div>
+                                        <div className="text-[#C4C4C4] text-[20px] pb-[32px] 	font-light">
+                                            {member.description}
+                                        </div>
                                     </div>
 
-                                    {/* ******기술스텍추가필요!!! ******/}
-                                    <div className="flex gap-[8px] pb-40">
-                                        <SmallBtn tag={"백엔드"} shape={"square"} />
-                                        <SmallBtn tag={"기술스텍"} shape={"square"} />
-                                        <SmallBtn tag={"뭐있는지"} shape={"square"} />
-                                        <SmallBtn tag={"모름"} shape={"square"} />
+                                    <div className="flex gap-[8px] pb-30 flex-wrap">
+                                        {member.stacks?.map((stack, index) => (
+                                            <SmallBtn key={index} tag={stack} shape="square" />
+                                        ))}
                                     </div>
                                 </div>
                                 {/* 중간 */}
                                 {/* ******플젝도 연결해야함 *******/}
                                 <div className="flex flex-col">
-                                    <h1 className="text-[32px] font-bold pb-[32px]">
+                                    <h1 className="text-[32px] my-0 text-[#fff] font-bold pb-[32px]">
                                         참여한 프로젝트
                                     </h1>
                                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
