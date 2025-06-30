@@ -14,7 +14,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </aside>
 
             <div className="flex flex-col w-full">
-                <AdminHeader userName="전민경" />
+                <AdminHeader />
                 {/* Main content */}
                 <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>
             </div>

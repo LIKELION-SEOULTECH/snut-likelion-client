@@ -1,15 +1,14 @@
 import { useLocation } from "react-router-dom";
 
-interface AdminHeaderProps {
-    userName: string;
-}
+// interface AdminHeaderProps {
+//     userName: string;
+// }
 
-export const AdminHeader = ({ userName }: AdminHeaderProps) => {
+export const AdminHeader = () => {
     const location = useLocation();
     const path = location.pathname;
 
     const getHeaderText = () => {
-        if (path === "/admin") return `${userName}님, 안녕하세요!`;
         if (path.startsWith("/admin/member")) return "멤버 관리";
         if (path.startsWith("/admin/notice")) return "소식 관리";
         if (path.startsWith("/admin/blog")) return "블로그 관리";
