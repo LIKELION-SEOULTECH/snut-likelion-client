@@ -20,15 +20,26 @@ export const fetchLionInfo = async (
     return res.data.data;
 };
 
-// 내 정보 수정
-
+// 내 정보 수정 : patch
 export const updateMyProfile = async (memberId: number, data: FormData) => {
     const token = localStorage.getItem("accessToken");
 
-    return await axiosInstance.patch(`/api/v1/members/${memberId}`, data, {
+    return await axiosInstance.patch(`/members/${memberId}`, data, {
         headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data"
+        }
+    });
+};
+
+// 회원 탈퇴 : delete
+
+export const deleteMyAccount = async (memberId: number) => {
+    const token = localStorage.getItem("accessToken");
+
+    return await axiosInstance.delete(`/members/${memberId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     });
 };
