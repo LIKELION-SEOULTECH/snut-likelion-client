@@ -204,7 +204,7 @@ export const AdminProjectEditPage = () => {
         formData.append("name", name);
         formData.append("intro", intro);
         formData.append("description", projectDescription);
-        formData.append("generation", String(Number(generation)));
+        formData.append("generation", generation);
         formData.append("category", convertCategoryToEnum(type));
 
         if (webUrl) formData.append("websiteUrl", webUrl);
@@ -214,24 +214,21 @@ export const AdminProjectEditPage = () => {
         // ✅ tags 전체 전달 (replace 방식)
         tags.forEach((tag) => formData.append("tags", tag));
 
-        const retrospectionBlob = new Blob(
-            [
-                JSON.stringify(
-                    retros
-                        .filter((r) => r.memberId !== null)
-                        .map((r) => ({
-                            memberId: r.memberId,
-                            content: r.comment
-                        }))
-                )
-            ],
-            { type: "application/json" }
+        // ✅ retrospections JSON으로 전달
+        formData.append(
+            "retrospections",
+            JSON.stringify(
+                retros
+                    .filter((r) => r.memberId !== null)
+                    .map((r) => ({
+                        memberId: r.memberId,
+                        content: r.comment
+                    }))
+            )
         );
 
-        formData.append("retrospections", retrospectionBlob);
-
-        images.forEach((img, idx) => {
-            console.log(`Image[${idx}] instanceof File`, img instanceof File); // true여야 함
+        // ✅ newImages 추가만 가능
+        images.forEach((img) => {
             formData.append("newImages", img);
         });
 
