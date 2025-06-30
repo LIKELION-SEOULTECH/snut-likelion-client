@@ -7,11 +7,39 @@ export interface ProjectData {
     stack: string[];
     image: string;
 }
-
 export interface Project {
     id: number;
-    title: string;
-    gen: string; // 예: "13기"
-    type: string; // 예: "아이디어톤", "데모데이", "중앙 해커톤"
-    createdAt: string; // ISO 날짜 형식: "YYYY-MM-DD"
+    name: string;
+    description: string;
+    generation: number;
+    tags: string[];
+    category: "IDEATHON" | "HACKATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
+    thumbnailUrl: string;
+}
+
+export type ProjectCategory = "IDEATHON" | "HACKATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
+
+export interface RetrospectionResponse {
+    id: number;
+    content: string;
+    writer: {
+        id: number;
+        name: string;
+        part: string;
+    };
+}
+
+export interface ProjectDetailResponse {
+    id: number;
+    name: string;
+    intro: string;
+    description: string;
+    generation: number;
+    websiteUrl: string;
+    playstoreUrl: string | null;
+    appstoreUrl: string | null;
+    tags: string[];
+    members: { id: number; username: string }[];
+    category: string; // "장기 프로젝트", "아이디어톤" 등
+    imageUrls: string[];
 }

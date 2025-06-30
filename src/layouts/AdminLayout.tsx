@@ -6,13 +6,15 @@ interface AdminLayoutProps {
     isFormValid?: boolean;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
+    onSubmit?: () => void;
 }
 
 export default function AdminLayout({
     children,
     isFormValid,
     onToggleDeleteMode,
-    isDeleteMode
+    isDeleteMode,
+    onSubmit
 }: AdminLayoutProps) {
     return (
         <div className="flex w-full">
@@ -27,6 +29,7 @@ export default function AdminLayout({
                     isFormValid={isFormValid}
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
+                    onSubmit={onSubmit}
                 />
                 {/* Main content */}
                 <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>

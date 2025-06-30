@@ -1,13 +1,16 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { ProjectSearchList } from "@/components/admin/project/ProjectSearchList";
 import { ProjectSearchTool } from "@/components/admin/project/ProjectSearchTool";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyProjectData } from "@/constants/admin/dummyProjectData";
+import { fetchAllProjects } from "@/apis/project";
+import type { Project } from "@/types/project";
+import { deleteMultipleProjects } from "@/apis/project";
 import { ProjectDeleteConfirmDialog } from "@/components/admin/project/ProjectDeleteConfirmModal";
 
 export const AdminProjectPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
+    const [allProjects, setAllProjects] = useState<Project[]>([]);
     const itemsPerPage = 8; // 한 페이지에 보여줄 개수
     const [filters, setFilters] = useState({
         generation: "",
@@ -19,10 +22,22 @@ export const AdminProjectPage = () => {
 
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const filteredData = dummyProjectData.filter(
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchAllProjects(); // ✅ await로 데이터 수신
+                setAllProjects(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const filteredData = allProjects.filter(
         (project) =>
-            (filters.generation === "" || project.gen === filters.generation) &&
-            (filters.keyword.trim() === "" || project.title.includes(filters.keyword))
+            (filters.generation === "" || project.generation === Number(filters.generation)) &&
+            (filters.keyword.trim() === "" || project.name.includes(filters.keyword))
     );
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
@@ -64,6 +79,21 @@ export const AdminProjectPage = () => {
             setShowCheckboxes(true); // 삭제 모드 진입
         }
     };
+
+    const handleConfirmDelete = async () => {
+        try {
+            await deleteMultipleProjects(selectedIds);
+
+            setAllProjects((prev) => prev.filter((p) => !selectedIds.includes(p.id)));
+            setSelectedIds([]);
+            setShowDeleteConfirm(false);
+            setShowCheckboxes(false);
+            alert("삭제가 완료되었습니다.");
+        } catch (err) {
+            console.error(err);
+            alert("삭제에 실패했습니다.");
+        }
+    };
     return (
         <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
             <div className="mt-12 mb-7">
@@ -87,7 +117,7 @@ export const AdminProjectPage = () => {
                 <ProjectDeleteConfirmDialog
                     open={showDeleteConfirm}
                     onClose={() => setShowDeleteConfirm(false)}
-                    onDelete={handleClickDelete}
+                    onDelete={handleConfirmDelete}
                 />
             )}
         </AdminLayout>

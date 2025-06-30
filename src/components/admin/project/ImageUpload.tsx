@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import ImageUploadIcon from "@/assets/admin/image-upload.svg?react";
@@ -12,11 +12,25 @@ interface ImageItem {
 
 interface ImageUploadProps {
     onImagesChange: (files: File[]) => void;
+    initialUrls?: string[]; // 추가
 }
 
-export const ImageUpload = ({ onImagesChange }: ImageUploadProps) => {
+export const ImageUpload = ({ onImagesChange, initialUrls = [] }: ImageUploadProps) => {
     const [images, setImages] = useState<ImageItem[]>([]);
     const inputRef = useRef<HTMLInputElement | null>(null);
+
+    useEffect(() => {
+        if (initialUrls.length > 0) {
+            const initialImageItems: ImageItem[] = initialUrls.map((url) => ({
+                id: crypto.randomUUID(),
+                url,
+                file: new File([], "existing-image-from-server", { type: "image/*" }) // dummy File
+            }));
+
+            setImages(initialImageItems);
+            onImagesChange(initialImageItems.map((img) => img.file));
+        }
+    }, [initialUrls, onImagesChange]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
