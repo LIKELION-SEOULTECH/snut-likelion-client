@@ -1,7 +1,14 @@
 export interface Member {
     id: number;
-    name: string;
+    username: string;
     generation: string;
     part: string;
     role: string;
+}
+export interface MemberListResponse {
+    content: Member[];
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
 }

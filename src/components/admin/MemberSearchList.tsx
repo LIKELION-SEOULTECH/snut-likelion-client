@@ -1,8 +1,18 @@
 import { useState } from "react";
 import type { Member } from "@/types/member";
 import { MemberInfoModal } from "./MemberInfoModal";
-
-export const MemberSearchList = ({ data }: { data: Member[] }) => {
+interface MemberSearchListProps {
+    data: Member[];
+    totalElement: number;
+    currentPage: number;
+    itemsPerPage: number;
+}
+export const MemberSearchList = ({
+    data,
+    totalElement,
+    currentPage,
+    itemsPerPage
+}: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -14,7 +24,7 @@ export const MemberSearchList = ({ data }: { data: Member[] }) => {
     return (
         <div>
             <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{data.length}</span>
+                검색결과 <span className="text-orange-400">{totalElement}</span>
             </div>
             <div className="w-full text-sm rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
@@ -27,15 +37,17 @@ export const MemberSearchList = ({ data }: { data: Member[] }) => {
                 </div>
                 {/* 리스트 content */}
                 <div>
-                    {data.map((member, index) => (
+                    {data?.map((member, index) => (
                         <div
                             key={member.id}
                             onClick={() => handleClick(member)}
                             className={`flex h-[66px] items-center font-medium ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
                         >
-                            <span className="flex-[1] pl-[30px] text-left">{member.id}</span>
-                            <span className="flex-[4] text-left">{member.name}</span>
-                            <span className="flex-[1.5] text-left">{member.generation}</span>
+                            <span className="flex-[1] pl-[30px] text-left">
+                                {(currentPage - 1) * itemsPerPage + index + 1}
+                            </span>
+                            <span className="flex-[4] text-left">{member.username}</span>
+                            <span className="flex-[1.5] text-left">{member.generation}기</span>
                             <span className="flex-[1.5] text-left">{member.part}</span>
                             <span className="flex-[1.5] text-left">{member.role}</span>
                         </div>
