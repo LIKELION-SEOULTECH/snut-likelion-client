@@ -7,7 +7,7 @@ export const fetchMyMemberInfo = async (): Promise<MemberDetailResponse> => {
     return res.data.data;
 };
 
-// 사자 정보.. : get
+// 디테일 사자 정보.. 기수[].플젝[]... : get
 export const fetchLionInfo = async (
     memberId: number,
     generation: number
@@ -18,4 +18,17 @@ export const fetchLionInfo = async (
         }
     });
     return res.data.data;
+};
+
+// 내 정보 수정
+
+export const updateMyProfile = async (memberId: number, data: FormData) => {
+    const token = localStorage.getItem("accessToken");
+
+    return await axiosInstance.patch(`/api/v1/members/${memberId}`, data, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
+        }
+    });
 };

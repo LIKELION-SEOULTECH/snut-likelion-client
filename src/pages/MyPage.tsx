@@ -74,9 +74,13 @@ export const MyPage = () => {
                     background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
                 }}
             >
-                <div className="font-extrabold text-7xl my-[85px]">
-                    My Page<span className="text-[#FF7700] ">.</span>
-                </div>
+                {isGuest ? (
+                    <div className="font-extrabold text-7xl my-[85px]">
+                        My Page<span className="text-[#FF7700] ">.</span>
+                    </div>
+                ) : (
+                    <span className="my-[85px]"></span>
+                )}
 
                 <div className="px-[112px] w-full flex  gap-[120px]">
                     {/* 왼쪽 - 사진*/}
@@ -91,7 +95,12 @@ export const MyPage = () => {
                         )}
                         {/* 왼쪽 - 탭 */}
                         <div className="w-[291px] h-[306px] ">
-                            <MyPageTab isGuest={isGuest} />
+                            <MyPageTab
+                                isGuest={isGuest}
+                                member={member}
+                                lionInfo={lionInfo}
+                                selectedGeneration={selectedGeneration}
+                            />
                         </div>
                     </div>
                     {/* 오른쪽 */}

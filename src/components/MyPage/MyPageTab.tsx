@@ -1,7 +1,20 @@
+import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const MyPageTab = ({ isGuest = false }: { isGuest?: boolean }) => {
+interface MyPageTabProps {
+    isGuest?: boolean;
+    member?: MemberDetailResponse;
+    lionInfo?: LionInfoDetailsResponse;
+    selectedGeneration?: number | null;
+}
+
+export const MyPageTab = ({
+    isGuest = false,
+    member,
+    lionInfo,
+    selectedGeneration
+}: MyPageTabProps) => {
     const [activeTab, setActiveTab] = useState<string | null>(isGuest ? "계정설정" : null);
     const [isAccountOpen, setIsAccountOpen] = useState(isGuest);
     const navigate = useNavigate();
@@ -14,8 +27,15 @@ export const MyPageTab = ({ isGuest = false }: { isGuest?: boolean }) => {
         }
 
         setActiveTab(tab);
-
-        if (tab === "프로필 수정") navigate("/mypage-edit");
+        if (tab === "프로필 수정") {
+            navigate("/mypage-edit", {
+                state: {
+                    member,
+                    lionInfo,
+                    selectedGeneration
+                }
+            });
+        }
         if (tab === "비밀번호 변경") navigate("/PasswordChange");
     };
 
@@ -42,6 +62,7 @@ export const MyPageTab = ({ isGuest = false }: { isGuest?: boolean }) => {
                 gap: "8px"
             }}
         >
+            {/* 프로필 수정 버튼 */}
             {!isGuest && (
                 <button
                     onClick={() => toggleTab("프로필 수정")}
@@ -51,13 +72,14 @@ export const MyPageTab = ({ isGuest = false }: { isGuest?: boolean }) => {
                 </button>
             )}
 
+            {/* 계정설정 탭 */}
             <button
                 onClick={() => toggleTab("계정설정")}
                 className={`${baseBtnClass} ${isAnyAccountTabActive ? "bg-[#404040]" : ""}`}
             >
                 계정설정
             </button>
-
+            {/* 아래버튼 */}
             {(isGuest || isAccountOpen) && (
                 <>
                     <button
