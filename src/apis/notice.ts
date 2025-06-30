@@ -9,7 +9,10 @@ export const getAllNotices = () => {
 };
 
 export const getNoticeById = (noticeId: number) => {
-    return axiosInstance.get(`/notices/${noticeId}`);
+    return axiosInstance.get(`/notices/${noticeId}`).then((res) => {
+        console.log("📦 getNoticeById response:", res);
+        return res;
+    });
 };
 
 export const updateNotice = (noticeId: number, data: { title?: string; content?: string }) => {

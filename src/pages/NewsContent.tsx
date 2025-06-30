@@ -13,16 +13,14 @@ export const NewsContentPage = () => {
 
     // {noticeId: 1, title: 'test1', content: 'test2', updatedAt: '2025-06-22T23:22:37.556363'} currentData.data 예시
     const {
-        data: currentData,
+        data: notice,
         isLoading,
         isError
     } = useQuery({
         queryKey: ["notice", noticeId],
-        queryFn: () => getNoticeById(noticeId).then((res) => res.data),
+        queryFn: () => getNoticeById(noticeId).then((res) => res.data.data),
         enabled: !!noticeId
     });
-    console.log("notice data", currentData.data);
-    const notice = currentData.data;
 
     // 이전 글 조회
     const { data: prevData } = useQuery({
@@ -53,11 +51,12 @@ export const NewsContentPage = () => {
                         {notice.pinned ? "공지" : "일반"}
                     </div>
                     <div className="font-bold text-[50px] mt-5">{notice.title}</div>
-                    <div className="text-xl text-[#666666] font-light leading-[150%] mt-[37px] mb-18">
-                        {formatDate(notice.updatedAt)}
+                    <div className="flex flex-row gap-5 text-xl text-[#666666] font-light leading-[150%] mt-[37px] mb-18">
+                        <span className="text-black">작성자</span>
+                        <span>{formatDate(notice.updatedAt)}</span>
                     </div>
                 </section>
-                <PostContent />
+                <PostContent content={notice.content} />
                 <section className="w-full mt-30">
                     <PostNavigator
                         prev={
