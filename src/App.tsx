@@ -19,6 +19,8 @@ import ProjectDetailPage from "./pages/ProjectDetail";
 
 import { MemberPage } from "./pages/Member";
 import { MemberDetailPage } from "./pages/MemberDetailPage";
+import { Recruit } from "./pages/Recruit";
+import { RecruitForm } from "./pages/RecruitForm";
 
 import { AdminPage } from "./pages/Admin";
 import { AdminMemberPage } from "./pages/AdminMember";
@@ -45,8 +47,21 @@ function App() {
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
+
+                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isManeger={false} />} />
+                <Route path={ROUTES.RECRUIT_MANEGER} element={<Recruit isManeger={true} />} />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MANEGER}
+                    element={<RecruitForm isManeger={true} />}
+                />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MEMBER}
+                    element={<RecruitForm isManeger={false} />}
+                />
+
                 <Route path={ROUTES.ADMIN} element={<AdminPage />} />
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
+
             </Routes>
         </BrowserRouter>
     );
