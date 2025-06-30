@@ -1,4 +1,4 @@
-import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
+import NoticeTextEditor from "@/components/text-editor/NoticeTextEditor";
 import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import { createNotice } from "@/apis/notice";
@@ -80,7 +80,7 @@ export const AdminNoticeCreatePage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor content={content} setContent={setContent} />
+                        <NoticeTextEditor content={content} setContent={setContent} />
                     </div>
                 </div>
                 {/* 첨부파일 */}

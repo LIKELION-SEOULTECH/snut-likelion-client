@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface AdminHeaderProps {
-    userName: string;
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
     onUploadClick?: () => void;

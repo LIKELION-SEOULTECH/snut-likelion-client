@@ -23,7 +23,6 @@ export default function AdminLayout({
 
             <div className="flex flex-col w-full">
                 <AdminHeader
-                    userName="전민경"
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
                     onUploadClick={onUploadClick}

@@ -5,7 +5,7 @@ import { AdminMenuBar } from "./AdminMenuBar";
 import Blockquote from "@tiptap/extension-blockquote";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Image from "@tiptap/extension-image";
-import { CustomImage } from "@/extensions/customImage";
+import { NoticeCustomImage } from "@/extensions/noticeCustomImage";
 import Mention from "@tiptap/extension-mention";
 import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
@@ -23,7 +23,7 @@ const extensions = [
     Image.configure({
         allowBase64: false
     }),
-    CustomImage,
+    NoticeCustomImage,
 
     Mention.configure({
         suggestion: mentionSuggestionOptions,
@@ -38,7 +38,7 @@ const extensions = [
     })
 ];
 
-const AdminTextEditor = forwardRef<Editor | null, Props>(({ content, setContent }, ref) => {
+const NoticeTextEditor = forwardRef<Editor | null, Props>(({ content, setContent }, ref) => {
     const editor = useEditor({
         extensions,
         content,
@@ -71,4 +71,4 @@ const AdminTextEditor = forwardRef<Editor | null, Props>(({ content, setContent 
     );
 });
 
-export default AdminTextEditor;
+export default NoticeTextEditor;

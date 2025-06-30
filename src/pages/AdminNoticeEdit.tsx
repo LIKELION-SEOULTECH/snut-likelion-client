@@ -1,4 +1,4 @@
-import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
+import NoticeTextEditor from "@/components/text-editor/NoticeTextEditor";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
@@ -89,7 +89,7 @@ export const AdminNoticeEditPage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor
+                        <NoticeTextEditor
                             ref={editorRef} // ✅ 이 부분 추가
                             content={content}
                             setContent={setContent}
