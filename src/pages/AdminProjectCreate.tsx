@@ -12,6 +12,7 @@ import { ImageUpload } from "@/components/admin/project/ImageUpload";
 import { searchMembers } from "@/apis/member";
 import type { Member } from "@/types/member";
 import { createProject } from "@/apis/project";
+import { useNavigate } from "react-router-dom";
 interface Retro {
     memberId: number | null;
     memberName: string; // UI에 보여줄 이름
@@ -22,6 +23,7 @@ interface Retro {
 }
 
 export const AdminProjectCreatePage = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [intro, setIntro] = useState("");
     const [images, setImages] = useState<File[]>([]);
@@ -141,7 +143,7 @@ export const AdminProjectCreatePage = () => {
         formData.append("intro", intro);
         formData.append("description", projectDescription);
         formData.append("generation", String(Number(generation))); // 반드시 문자열로 변환
-        formData.append("category", convertCategoryToEnum(type));
+        formData.append("category", type);
 
         // optional한 URL들은 비어있지 않을 때만 추가
         if (webUrl) formData.append("websiteUrl", webUrl);
@@ -164,7 +166,6 @@ export const AdminProjectCreatePage = () => {
             formData.append("images", img);
         });
 
-        // 디버깅: 실제 formData 내용 확인
         for (const pair of formData.entries()) {
             console.log(pair[0], pair[1]);
         }
@@ -173,26 +174,10 @@ export const AdminProjectCreatePage = () => {
             await createProject(formData);
             console.log("성공");
 
-            // TODO: 라우터 이동 등
+            navigate("/admin/project");
         } catch (err) {
             console.error(err);
             alert("프로젝트 생성 실패");
-        }
-    };
-
-    // "아이디어톤" -> "IDEATHON" 등으로 변환하는 함수
-    const convertCategoryToEnum = (type: string): string => {
-        switch (type) {
-            case "아이디어톤":
-                return "IDEATHON";
-            case "해커톤":
-                return "HACKATHON";
-            case "데모데이":
-                return "DEMO_DAY";
-            case "장기 프로젝트":
-                return "LONG_TERM_PROJECT";
-            default:
-                return "IDEATHON";
         }
     };
 
@@ -218,16 +203,16 @@ export const AdminProjectCreatePage = () => {
                             <SelectValue placeholder="구분" />
                         </SelectTrigger>
                         <SelectContent className="rounded-sm w-[162px] border-[#C4C4C4] min-w-0">
-                            <SelectItem value="아이디어톤" className="w-[162px] px-4 py-3">
+                            <SelectItem value="IDEATHON" className="w-[162px] px-4 py-3">
                                 아이디어톤
                             </SelectItem>
-                            <SelectItem value="해커톤" className="w-[162px] px-4 py-3">
+                            <SelectItem value="HACKATHON" className="w-[162px] px-4 py-3">
                                 해커톤
                             </SelectItem>
-                            <SelectItem value="데모데이" className="w-[162px] px-4 py-3">
+                            <SelectItem value="DEMO_DAY" className="w-[162px] px-4 py-3">
                                 데모데이
                             </SelectItem>
-                            <SelectItem value="장기 프로젝트" className="w-[162px] px-4 py-3">
+                            <SelectItem value="LONG_TERM_PROJECT" className="w-[162px] px-4 py-3">
                                 장기프로젝트
                             </SelectItem>
                         </SelectContent>
