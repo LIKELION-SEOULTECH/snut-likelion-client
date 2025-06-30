@@ -3,7 +3,9 @@ export const ROUTES = {
     LOGIN: "/login",
     PASSWORDRESET: "/PasswordReset",
     REGISTER: "/register",
+
     PROJECT: "/project",
+    PROJECT_NEW: "/project-new",
 
     MEMBER: "/member",
     MEMBER_DETAIL: "/members/:id",

@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-export const StackInput = () => {
+interface StackInputColor {
+    color: "white-gray" | "dark-gray";
+}
+
+export const StackInput = ({ color }: StackInputColor) => {
     const [inputValue, setInputValue] = useState("");
     const [tags, setTags] = useState<string[]>([]);
 
@@ -30,10 +34,10 @@ export const StackInput = () => {
             {tags.map((tag) => (
                 <div
                     key={tag}
-                    className="flex items-center bg-[#404040] text-white rounded-[4px] px-3 py-1 text-semibold mr-2"
+                    className={`flex items-center rounded-[4px] px-3 py-1 text-semibold mr-2 ${color == "dark-gray" ? "bg-[#404040] text-white" : "bg-[#ECECEC] text-black"}`}
                 >
                     {tag}
-                    <button className="ml-2 text-white " onClick={() => removeTag(tag)}>
+                    <button className="ml-2 " onClick={() => removeTag(tag)}>
                         ×
                     </button>
                 </div>

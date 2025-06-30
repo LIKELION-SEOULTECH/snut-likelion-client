@@ -22,6 +22,7 @@ import { MemberDetailPage } from "./pages/MemberDetailPage";
 import { MyPage } from "./pages/MyPage";
 import { MyPageEdit } from "./pages/MyPageEdit";
 import { PasswordChange } from "./pages/PasswordChange";
+import { NewProjectPage } from "./pages/NewProjectPage";
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
 
                 <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
                 <Route path="/project/:id" element={<ProjectDetailPage />} />
+                <Route path={ROUTES.PROJECT_NEW} element={<NewProjectPage />} />
 
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />

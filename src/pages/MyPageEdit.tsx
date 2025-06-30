@@ -124,7 +124,7 @@ export const MyPageEdit = () => {
                         </div>
                         <div className="flex">
                             <label className="w-[126px] flex align-center mt-3">기술 스택</label>
-                            <StackInput />
+                            <StackInput color="dark-gray" />
                         </div>
                         <div className="flex ">
                             <label className="w-[126px] flex align-center mt-3">
