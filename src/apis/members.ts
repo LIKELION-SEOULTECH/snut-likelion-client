@@ -43,3 +43,10 @@ export const deleteMyAccount = async (memberId: number) => {
         }
     });
 };
+
+// 멤버 검색 : get
+export const fetchMemberList = async ({ keyword }: { keyword: string }) => {
+    return axiosInstance.get(`/members/search`, {
+        params: { keyword }
+    });
+};

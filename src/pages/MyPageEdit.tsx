@@ -201,9 +201,9 @@ export const MyPageEdit = () => {
                         <div className="flex">
                             <label className="w-[126px] flex align-center mt-3">기수</label>
                             <input
-                                value={selectedGeneration}
+                                value={`${selectedGeneration}기`}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -211,7 +211,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={lionInfo.part}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -219,7 +219,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={member.name}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded  rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* <div className="flex">
@@ -231,7 +231,10 @@ export const MyPageEdit = () => {
                             />
                         </div> */}
                         <div className="flex">
-                            <label className="w-[126px] flex align-center mt-3">한줄 소개</label>
+                            <label className="w-[126px] flex align-center mt-3">
+                                한줄 소개
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                            </label>
                             <input
                                 onChange={(e) => setIntro(e.target.value)}
                                 value={intro}
@@ -240,7 +243,10 @@ export const MyPageEdit = () => {
                             />
                         </div>
                         <div className="flex">
-                            <label className="w-[126px] flex align-center mt-3">소개</label>
+                            <label className="w-[126px] flex align-center mt-3">
+                                소개
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                            </label>
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}

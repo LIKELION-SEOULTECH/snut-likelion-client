@@ -55,3 +55,12 @@ export interface LionInfoDetailsResponse {
     part: "기획" | "디자인" | "프론트엔드" | "백엔드" | "AI";
     projects: ParticipatingProject[];
 }
+
+// 멤버 검색
+export interface MemberSearch {
+    id: number;
+    name: string;
+    part: "기획" | "디자인" | "프론트엔드" | "백엔드" | "AI";
+    generation: number;
+    profileImageUrl: string;
+}
