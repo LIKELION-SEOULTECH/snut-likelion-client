@@ -1,14 +1,13 @@
-const generations = ["전체", "13기", "12기", "11기"];
-
 type Props = {
     selected: string;
     onSelect: (generation: string) => void;
+    tabs: string[];
 };
 
-export default function GenerationTabs({ selected, onSelect }: Props) {
+export default function GenerationTabs({ selected, onSelect, tabs }: Props) {
     return (
         <div className="flex gap-7 px-[21px] py-3 font-medium">
-            {generations.map((gen) => (
+            {tabs.map((gen) => (
                 <button
                     key={gen}
                     onClick={() => onSelect(gen)}
