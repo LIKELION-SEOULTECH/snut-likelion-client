@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Member } from "@/types/member";
+import type { Member } from "@/types/members";
 import { MemberInfoModal } from "./MemberInfoModal";
 
 export const MemberSearchList = ({ data }: { data: Member[] }) => {

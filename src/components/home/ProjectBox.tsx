@@ -8,7 +8,7 @@ interface ProjectBoxProps {
     description: string;
     generation: number;
     category: ProjectCategory;
-    tags: string[];
+    // tags: string[];
     thumbnailUrl: string;
     rounded?: string;
 }
@@ -35,12 +35,10 @@ export const ProjectBox = ({
                     // 웹 부분꺼임(지우지마유)
                     src={thumbnailUrl}
                     alt={name}
-                    className="w-full h-full object-cover rounded-[16px]"
-
                     //**** 모바일 부분 ***//
                     //   src={image}
                     //   alt={title}
-                    //   className="w-full h-full object-cover rounded-[9.6px] sm:rounded-[16px]"
+                    className="w-full h-full object-cover rounded-[9.6px] sm:rounded-[16px]"
                     //
                 />
                 {/* hover했을때 */}
