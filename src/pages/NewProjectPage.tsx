@@ -3,10 +3,30 @@ import { NewImageDrop } from "@/components/project/NewImageDrop";
 import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsInput";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axiosInstance from "@/apis/axiosInstance";
+
+import axios from "axios";
+import { DropDwon } from "@/components/MyPage/DropDown";
 
 export const NewProjectPage = () => {
     const navigate = useNavigate();
-    const [images, setImages] = useState<string[]>([]);
+
+    const [selectedGen, setSelectedGen] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+
+    const [name, setName] = useState("");
+    const [intro, setIntro] = useState("");
+    const [description, setDescription] = useState("");
+
+    const [tags, setTags] = useState<string[]>([]);
+
+    const [websiteUrl, setWebsiteUrl] = useState("");
+    const [playstoreUrl, setPlaystoreUrl] = useState("");
+    const [appstoreUrl, setAppstoreUrl] = useState("");
+
+    const [retrospections, setRetrospections] = useState([{ memberId: 0, content: "" }]);
+
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
 
     const handleLeave = () => {
         const confirmLeave = confirm("선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?");
@@ -16,9 +36,56 @@ export const NewProjectPage = () => {
         }
     };
 
-    const handleSubmit = () => {
-        alert("수정 되었습니다 !");
-        //****채워야한다.......****//
+    const handleSubmit = async () => {
+        // 필수 입력 유효성 검사
+        if (!name || !intro || !description || !selectedGen || !selectedCategory) {
+            alert("모든 필수 항목을 작성해주세요.");
+            return;
+        }
+
+        // 회고가 하나라도 있어야 하고, 그 내용도 입력되어야 함
+        const validRetrospections = retrospections.filter(
+            (r) => r.memberId !== 0 && r.content.trim() !== ""
+        );
+        if (validRetrospections.length === 0) {
+            alert("회고를 한 줄 이상 작성해주세요.");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("name", name);
+            formData.append("intro", intro);
+            formData.append("description", description);
+            formData.append("category", selectedCategory);
+            if (websiteUrl) formData.append("websiteUrl", websiteUrl);
+            if (playstoreUrl) formData.append("playstoreUrl", playstoreUrl);
+            if (appstoreUrl) formData.append("appstoreUrl", appstoreUrl);
+            formData.append("generation", String(selectedGen));
+            formData.append("tags", JSON.stringify(tags));
+
+            imageFiles.forEach((file) => formData.append("images", file));
+            retrospections.forEach((retro, idx) => {
+                formData.append(`retrospections[${idx}].memberId`, String(retro.memberId));
+                formData.append(`retrospections[${idx}].content`, retro.content);
+            });
+
+            await axiosInstance.post("/projects", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            alert("프로젝트가 성공적으로 업로드되었습니다!");
+            navigate("/projects");
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error(error.response?.data?.message || error.message);
+            } else {
+                console.error("알 수 없는 오류 발생", error);
+            }
+            alert("업로드 중 오류가 발생했습니다.");
+        }
     };
 
     return (
@@ -70,31 +137,46 @@ export const NewProjectPage = () => {
                     {/* 박스 안 */}
                     <div className="text-[14px]  flex flex-col gap-[32px] pr-[331px] font-normal">
                         {/* 기수. 구분 */}
-                        <div className="flex gap-2 pl-[205px]">
-                            <select className="py-3 px-4 w-[86px] bg-white text-[#47484B] font-normal border border-[#C4C4C4] rounded-[4px] ">
-                                <option value="">기수</option>
-                                <option>13기</option>
-                                <option>12기</option>
-                            </select>
-                            <select className="py-3 px-4 w-[162px] bg-white text-[#47484B] font-normal border border-[#C4C4C4] rounded-[4px] ">
-                                <option value="">구분</option>
-                                <option>아이디어톤</option>
-                                <option>중앙해커톤</option>
-                                <option>데모데이</option>
-                            </select>
+                        <div className="flex gap-4 ml-[126px]">
+                            {/* 기수  */}
+                            <DropDwon
+                                label="기수"
+                                options={["11", "12", "13", "14"]}
+                                selected={selectedGen}
+                                setSelected={setSelectedGen}
+                            />
+
+                            {/* 구분  */}
+                            <DropDwon
+                                label="구분"
+                                options={["아이디어톤", "중앙해커톤", "데모데이", "장기프로젝트"]}
+                                selected={selectedCategory}
+                                setSelected={setSelectedCategory}
+                            />
                         </div>
                         {/* 제목 */}
                         <div className="flex">
-                            <label className="w-[126px] flex align-center mt-3 ">제목</label>
+                            <label className="w-[126px] flex align-center mt-3 ">
+                                제목
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                            </label>
+
                             <input
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 placeholder="제목"
                                 className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 활동소개 */}
                         <div className="flex">
-                            <label className="w-[126px] flex align-center mt-3">활동소개</label>
+                            <label className="w-[126px] flex align-center mt-3">
+                                활동소개
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                            </label>
                             <input
+                                value={intro}
+                                onChange={(e) => setIntro(e.target.value)}
                                 placeholder="활동소개"
                                 className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
@@ -103,24 +185,34 @@ export const NewProjectPage = () => {
                         <div className="flex">
                             <label className="w-[126px] flex align-center mt-3">
                                 프로젝트 설명
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
                             </label>
                             <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                                 placeholder="프로젝트 설명"
                                 className="py-3 px-4  h-[140px] flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 기술 스택 */}
                         <div className="flex">
-                            <label className="w-[126px] flex align-center mt-3">기술 스택</label>
-                            <StackInput color="white-gray" />
+                            <label className="w-[126px] flex align-center mt-3">
+                                기술 스택
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                            </label>
+                            <StackInput value={tags} onChange={setTags} color="white-gray" />
                         </div>
                         {/* 프로젝트 회고 */}
                         <div className="flex ">
                             <label className="w-[126px] flex align-center mt-3">
                                 프로젝트 회고
+                                <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
                             </label>
                             <div className="flex flex-1 flex-col gap-3">
-                                <NewRetrospectionsInput />
+                                <NewRetrospectionsInput
+                                    value={retrospections}
+                                    onChange={setRetrospections}
+                                />
                             </div>
                         </div>
                         {/* 링크 */}
@@ -132,6 +224,8 @@ export const NewProjectPage = () => {
                                         Link
                                     </div>
                                     <input
+                                        value={websiteUrl}
+                                        onChange={(e) => setWebsiteUrl(e.target.value)}
                                         placeholder="https://"
                                         className="py-3 px-4 flex flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
                                     />
@@ -141,6 +235,8 @@ export const NewProjectPage = () => {
                                         Ios
                                     </div>
                                     <input
+                                        value={appstoreUrl}
+                                        onChange={(e) => setAppstoreUrl(e.target.value)}
                                         placeholder="https://"
                                         className="py-3 px-4 flex flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
                                     />
@@ -150,6 +246,8 @@ export const NewProjectPage = () => {
                                         Android
                                     </div>
                                     <input
+                                        value={playstoreUrl}
+                                        onChange={(e) => setPlaystoreUrl(e.target.value)}
                                         placeholder="https://"
                                         className="py-3 px-4 flex flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
                                     />
@@ -159,14 +257,22 @@ export const NewProjectPage = () => {
                         {/* img */}
                         <div className="flex">
                             <label className="w-[126px] flex flex-col align-center mt-3">
-                                이미지 첨부 <br />
+                                <div className="flex my-0 py-0">
+                                    이미지 첨부
+                                    <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
+                                </div>
                                 (순서대로)
                                 <br />
                                 <span className="text-xs text-[#999] mt-2 ml-1">
-                                    {images.length}/50
+                                    {imageFiles.length}/50
                                 </span>
                             </label>
-                            <NewImageDrop images={images} setImages={setImages} />
+                            <NewImageDrop
+                                imageFiles={imageFiles}
+                                onChange={(files: File[]) => {
+                                    setImageFiles(files);
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

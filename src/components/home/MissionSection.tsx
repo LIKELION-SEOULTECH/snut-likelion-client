@@ -1,4 +1,4 @@
-import Sample from "@/assets/home/sample.png";
+import home_main from "@/assets/home/home_main.jpg";
 
 export const MissionSection = () => {
     const values = [
@@ -56,7 +56,7 @@ export const MissionSection = () => {
             </div>
             {/* picture + 멋대 과기대 */}
             <div className="mt-15 relative w-[95vw] sm:min-w-[1200px] mx-auto">
-                <img src={Sample} alt="소개 이미지" className="w-full object-cover" />
+                <img src={home_main} alt="소개 이미지" className="w-full object-cover" />
 
                 <div className="absolute -bottom-10 sm:-bottom-43 right-4 sm:-right-3 z-10 pr-5 sm:pr-10">
                     <div className="text-xl sm:text-[clamp(4.9rem,6.5vw,5rem)] font-bold text-white leading-[1.4] tracking-[-0.02em] overflow-x-hidden whitespace-nowrap">
