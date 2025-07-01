@@ -12,6 +12,7 @@ export const LoginPage = () => {
             <div className="w-full h-[150px] px-28 bg-[#1B1B1B]">
                 <QuoteCardList />
             </div>
+            console.log(email, password);
         </PageLayout>
     );
 };

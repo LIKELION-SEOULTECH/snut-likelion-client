@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface StackInputColor {
+    value: string[];
+    onChange: (newStacks: string[]) => void;
     color: "white-gray" | "dark-gray";
 }
 
-export const StackInput = ({ color }: StackInputColor) => {
+export const StackInput = ({ value, onChange, color }: StackInputColor) => {
     const [inputValue, setInputValue] = useState("");
     const [tags, setTags] = useState<string[]>([]);
+
+    //기존거
+    useEffect(() => {
+        if (value.length > 0) {
+            setTags(value);
+        }
+    }, [value]);
+
+    // 바뀐거 ?
+    useEffect(() => {
+        onChange(tags);
+    }, [tags, onChange]);
 
     const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if ((e.key === "Enter" || e.key === "," || e.key === " ") && inputValue.trim()) {

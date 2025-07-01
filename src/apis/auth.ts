@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstace";
+import axiosInstance from "./axiosInstance";
 import { setAccessToken, setRefreshToken } from "@/utils/token";
 
 // 로그인
