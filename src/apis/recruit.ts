@@ -1,4 +1,13 @@
 import axiosInstance from "./axiosInstace";
+import type { Question } from "./apply";
+export interface Recruitment {
+    id: number;
+    title: string;
+    content: string;
+    recruitmentType: "MEMBER" | "MANAGER";
+    startDate: string;
+    endDate: string;
+}
 
 export interface CreateRecruitmentRequest {
     generation: number;
@@ -15,10 +24,14 @@ export interface UpdateRecruitmentRequest {
 }
 
 export interface UpdateQuestionRequest {
-    text: string | null;
-    questionType: "SHORT" | "LONG" | "RADIO_BUTTON" | null;
-    part: "PLANNING" | "DESIGN" | "FRONTEND" | "BACKEND" | "AI" | null;
-    departmentType: "OPERATION" | "ACADEMIC" | "MARKETING" | null;
+    id?: number;
+    text: string;
+    questionType: string;
+    questionTarget: string;
+    order: number;
+    part?: string;
+    departmentType?: string;
+    buttonList?: string[];
 }
 
 export const createRecruitment = (data: CreateRecruitmentRequest) => {
@@ -37,18 +50,24 @@ export const getRecruitmentQuestions = (recId: number) => {
     return axiosInstance.get(`/admin/recruitments/${recId}/questions`);
 };
 
-export const updateRecruitmentQuestions = (recId: number, data: UpdateQuestionRequest[]) => {
-    return axiosInstance.put(`/admin/recruitments/${recId}/questions`, data);
-};
-
-export const getApplicationsByRecruitment = (recId: number) => {
-    return axiosInstance.get(`/admin/recruitments/${recId}/applications`);
+export const updateQuestionsByRecruitment = async (
+    recId: number,
+    payload: UpdateQuestionRequest[]
+) => {
+    return axiosInstance.put(`/api/v1/admin/recruitments/${recId}/questions`, payload);
 };
 
 export const getApplicationDetail = (appId: number) => {
     return axiosInstance.get(`/admin/applications/${appId}`);
 };
 
-export const getRecruitmentByType = (type: "MEMBER" | "MANAGER") => {
-    return axiosInstance.get(`/recruitments?recruitmentType=${type}`).then((res) => res.data);
+export const getRecruitmentByType = async (type: "MEMBER" | "MANAGER") => {
+    const res = await axiosInstance.get(`/recruitments?recruitmentType=${type}`);
+    console.log(res.data);
+    return res.data;
+};
+
+export const getApplicationsByRecruitment = async (recruitmentId: number): Promise<Question[]> => {
+    const res = await axiosInstance.get(`/api/v1/admin/recruitments/${recruitmentId}/questions`);
+    return res.data;
 };
