@@ -1,4 +1,5 @@
-export const dummyMemberData = [
+import type { Member } from "@/types/members";
+export const dummyMemberData: Member[] = [
     { id: 1, name: "박진아", generation: "13기", part: "기획", role: "대표" },
     { id: 2, name: "박진아", generation: "13기", part: "디자인", role: "운영진" },
     { id: 3, name: "박진아", generation: "13기", part: "AI", role: "아기사자" },

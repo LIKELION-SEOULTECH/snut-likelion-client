@@ -12,9 +12,10 @@ export interface Member {
     name: string;
     part: string;
     role: string;
-    department: string;
-    generation: number;
+    department?: string;
+    generation: number | string;
 }
+
 // 멤버 응답 타입
 export interface MemberResponse {
     id: number;
