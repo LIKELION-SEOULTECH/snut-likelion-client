@@ -8,10 +8,12 @@ import { CustomImage } from "@/extensions/customImage";
 import Mention from "@tiptap/extension-mention";
 import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
+import type { Dispatch, SetStateAction } from "react";
 
 interface TextEditorProps {
     content: string;
     setContent: (text: string) => void;
+    setImages: Dispatch<SetStateAction<string[]>>; // ✅ 타입 정확히 지정
 }
 
 const extensions = [
@@ -39,7 +41,7 @@ const extensions = [
     })
 ];
 
-const TextEditor = ({ content, setContent }: TextEditorProps) => {
+const TextEditor = ({ content, setContent, setImages }: TextEditorProps) => {
     const editor = useEditor({
         extensions,
         content,
@@ -58,7 +60,7 @@ const TextEditor = ({ content, setContent }: TextEditorProps) => {
         <>
             <EditorContent editor={editor} />
             <div className="mt-[77px]">
-                <MenuBar editor={editor} />
+                <MenuBar editor={editor} setImages={setImages} />
             </div>
         </>
     );

@@ -12,16 +12,16 @@ import {
     SelectContent,
     SelectItem
 } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
 
 export const BlogPostPage = () => {
     const [type, setType] = useState<BlogCategory>("OFFICIAL");
     const [title, setTitle] = useState("");
     const [tags, setTags] = useState<number[]>([]);
+    const [images, setImages] = useState<string[]>([]);
 
-    const [content, setContent] = useState(
-        "<h1>멋냥냥단 귀여워</h1><p>전라북도 군산 명월동에서 진행된 <맥심골목> 프로모션을 위해 우리는 오프라인과 온라인 경험을 이어줄 아이디어가 필요했고, 맥심골목을 방문한 사용자들이 9개의 주요 지정 장소를 돌아다니며 디지털 스탬프를 수집하고 빙고를 완성하는 참여형 이벤트를 기획했습니다. 지정된 장소마다 특별히 제작된 디지털 스탬프를 비치해두고 이는 사용자의 <맥심 마이 포인트>앱을 통해 작동하도록 특별히 설계되었습니다.</p>"
-    );
-
+    const [content, setContent] = useState("");
+    const navigate = useNavigate();
     const isUploadEnabled = title.trim() !== "" && tags.length > 0 && content.trim() !== "";
 
     const handleSubmit = async (submit: boolean) => {
@@ -31,12 +31,12 @@ export const BlogPostPage = () => {
                     title,
                     contentHtml: content,
                     category: type,
-                    taggedMemberIds: [],
-                    images: []
+                    taggedMemberIds: tags,
+                    images
                 },
                 submit
             );
-            alert("블로그 업로드 완료!");
+            navigate("/blog");
         } catch (error) {
             console.error(error);
             alert("업로드 실패");
@@ -77,7 +77,7 @@ export const BlogPostPage = () => {
                 <div className="w-28 border-t-[4px] border-[#000000] mt-[36px] mb-[45px]" />
                 <TagEditor setTags={setTags} />
                 <div className="mt-25">
-                    <TextEditor content={content} setContent={setContent} />
+                    <TextEditor content={content} setContent={setContent} setImages={setImages} />
                 </div>
             </div>
         </PageLayout>

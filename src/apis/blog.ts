@@ -1,8 +1,37 @@
 import axiosInstance from "./axiosInstace";
 import type { CreateBlogRequest } from "@/types/blog";
 
-export const getBlogList = () => {
-    return axiosInstance.get("/blogs");
+export interface Blog {
+    postId: number;
+    title: string;
+    updatedAt: string;
+    thumbnailUrl: string;
+    type: string | null;
+}
+
+interface GetBlogParams {
+    page?: number; // 기본값 0
+    size?: number; // 기본값 12
+    category: "OFFICIAL" | "UNOFFICIAL";
+}
+
+export interface BlogListResponse {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    content: Blog[];
+}
+
+export const getBlogList = async (params: GetBlogParams): Promise<BlogListResponse> => {
+    const res = await axiosInstance.get("/blogs", {
+        params: {
+            page: params.page ?? 0,
+            size: params.size ?? 12,
+            category: params.category
+        }
+    });
+    return res.data.data;
 };
 
 export const getBlogById = (postId: number) => {
@@ -37,10 +66,12 @@ export const getMyPosts = () => {
 //     return axiosInstance.delete("/api/v1/blogs/drafts/me");
 // };
 
+// apis/blog.ts
 export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
 
-    const response = await axiosInstance.post("/blogs/images", formData);
-    return response.data.urls; // ✅ 서버 응답 구조에 따라 수정
+    const res = await axiosInstance.post("/blogs/images", formData);
+    console.log(res.data.data);
+    return res.data.data.urls; // ✅ 정확히 배열만 리턴
 };
