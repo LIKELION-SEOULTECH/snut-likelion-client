@@ -103,6 +103,15 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
                                     return copy;
                                 });
                             }}
+                            onBlur={() => {
+                                setTimeout(() => {
+                                    setShowSuggestions((prev) => {
+                                        const copy = [...prev];
+                                        copy[index] = false;
+                                        return copy;
+                                    });
+                                }, 100);
+                            }}
                             className="py-3 px-4 w-full bg-white text-[#47484B] font-normal border border-[#C4C4C4] rounded-[4px]"
                         />
                         {showSuggestions[index] && (
@@ -113,13 +122,14 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
                                         .map((member) => (
                                             <li
                                                 key={member.id}
-                                                onClick={() =>
+                                                onMouseDown={(e) => {
+                                                    e.preventDefault();
                                                     handleSelectMember(index, {
                                                         id: String(member.id),
                                                         name: member.name,
                                                         profileImageUrl: member.profileImageUrl
-                                                    })
-                                                }
+                                                    });
+                                                }}
                                                 className="px-4 py-2 hover:bg-[#f0f0f0] flex justify-center items-center cursor-pointer"
                                             >
                                                 <img
