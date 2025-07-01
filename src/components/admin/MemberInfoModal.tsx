@@ -8,7 +8,8 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import type { Member } from "@/types/member";
+import type { Member } from "@/types/members";
+
 import { useState, useEffect } from "react";
 
 interface MemberInfoModalProps {
@@ -25,7 +26,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
 
     useEffect(() => {
         if (member) {
-            setGeneration(member.generation);
+            setGeneration(member.generation.toString());
             setPart(member.part);
             setRole(member.role === "운영진" ? "운영진" : "아기사자");
             setDepartment("");

@@ -7,6 +7,14 @@ export interface PortfolioLink {
     url: string;
 }
 
+export interface Member {
+    id: number;
+    name: string;
+    part: string;
+    role: string;
+    department: string;
+    generation: number;
+}
 // 멤버 응답 타입
 export interface MemberResponse {
     id: number;

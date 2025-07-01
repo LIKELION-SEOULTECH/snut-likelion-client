@@ -1,7 +1,7 @@
-import { ProjectBox } from "@/components/home/ProjectBox";
+// import { ProjectBox } from "@/components/home/ProjectBox";
 import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/Member/SmallBtn";
-import { projectList } from "@/constants/home/projectList";
+// import { projectList } from "@/constants/home/projectList";
 
 import { ROUTES } from "@/constants/routes";
 import PageLayout from "@/layouts/PageLayout";
@@ -165,9 +165,9 @@ export const MemberDetailPage = () => {
                                         참여한 프로젝트
                                     </h1>
                                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
-                                        {projectList.map((project) => (
+                                        {/* {projectList.map((project) => (
                                             <ProjectBox key={project.id} {...project} />
-                                        ))}
+                                        ))} */}
                                     </div>
                                     <div className="flex gap-3 pb-8 flex-wrap">
                                         {member.portfolioLinks?.map((link) => (
