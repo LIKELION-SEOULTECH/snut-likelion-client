@@ -9,13 +9,13 @@ interface InterviewBox {
 export const InterviewBox = ({ title, content, name, role }: InterviewBox) => {
     return (
         <div
-            className="w-60 sm:w-[480px] h-71 sm:h-[488px] rounded-[24px] cursor-pointer text-white"
+            className="w-60 sm:w-[480px] h-71 sm:h-[488px] rounded-[9.6px] sm:rounded-[24px] cursor-pointer text-white"
             style={{
                 background: "linear-gradient(0deg, #2D2D2D, #2D2D2D)"
             }}
         >
             <div
-                className="flex flex-col w-full h-full rounded-[9.6px] sm:rounded-[24px] p-[28px] "
+                className="flex flex-col w-full h-full rounded-[9.6px] sm:rounded-[24px] p-4 sm:p-[28px] "
                 style={{
                     background:
                         "radial-gradient(86.25% 48.52% at 50% 100%, rgba(181, 84, 0, 0.2) 0%, rgba(181, 84, 0, 0) 100%"
