@@ -11,7 +11,7 @@ import {
 
 export const ManagerApplyForm = () => {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col mb-50">
             <BasicQuestionList />
             <CommonQuestionList />
             <PlanQuestionList />
@@ -31,7 +31,7 @@ export const ManagerApplyForm = () => {
 
 export const UserApplyForm = () => {
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col mb-50">
             <BasicQuestionList />
             <CommonQuestionList />
             <PlanQuestionList />

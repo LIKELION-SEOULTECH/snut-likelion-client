@@ -3,6 +3,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import { Input } from "@/components/ui/input";
 import { QuestionListHeader } from "./QuestionListHeader";
+import { Plus } from "lucide-react";
 import {
     Select,
     SelectTrigger,
@@ -16,6 +17,7 @@ interface Question {
     id: string;
     text: string;
     type: string;
+    options?: string[];
 }
 
 interface QuestionListProps {
@@ -47,13 +49,34 @@ export default function QuestionList({ title, questions, setQuestions }: Questio
         const newQuestion: Question = {
             id: Date.now().toString(),
             text: "",
-            type: "장문형"
+            type: "단답형"
         };
         setQuestions((prev) => [...prev, newQuestion]);
     };
 
     const handleDelete = (index: number) => {
         setQuestions((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleAddOption = (index: number) => {
+        const updated = [...questions];
+        const target = updated[index];
+
+        if (!target.options) {
+            target.options = [""];
+        } else {
+            target.options.push("");
+        }
+
+        setQuestions(updated);
+    };
+
+    const handleOptionChange = (qIndex: number, oIndex: number, value: string) => {
+        const updated = [...questions];
+        if (updated[qIndex].options) {
+            updated[qIndex].options![oIndex] = value;
+            setQuestions(updated);
+        }
     };
 
     return (
@@ -95,7 +118,7 @@ export default function QuestionList({ title, questions, setQuestions }: Questio
                                                                 </button>
                                                             )}
                                                         </div>
-                                                        <div className="w-full flex flex-row gap-[9px]">
+                                                        <div className="w-full flex flex-row gap-2">
                                                             <Input
                                                                 value={q.text}
                                                                 onChange={(e) => {
@@ -142,8 +165,32 @@ export default function QuestionList({ title, questions, setQuestions }: Questio
                                                         </div>
                                                         {/* 라디오 버튼 예시 */}
                                                         {q.type === "라디오 버튼" && (
-                                                            <div className="w-full">
-                                                                <input className="w-full h-11 border border-[#C4C4C4] rounded px-3 py-2 text-sm text-gray-500" />
+                                                            <div className="w-full flex flex-col gap-2">
+                                                                {q.options?.map((opt, optIndex) => (
+                                                                    <input
+                                                                        key={optIndex}
+                                                                        value={opt}
+                                                                        onChange={(e) =>
+                                                                            handleOptionChange(
+                                                                                index,
+                                                                                optIndex,
+                                                                                e.target.value
+                                                                            )
+                                                                        }
+                                                                        className="w-full h-11 border border-[#C4C4C4] rounded px-3 py-2 text-sm text-gray-500"
+                                                                        placeholder={`옵션 ${optIndex + 1}`}
+                                                                    />
+                                                                ))}
+                                                                <button
+                                                                    type="button"
+                                                                    className="w-[73px] h-[39px] flex flex-row items-center justify-center rounded-sm font-medium text-[#ff7700] border border-[#ff7700] gap-1 mt-2"
+                                                                    onClick={() =>
+                                                                        handleAddOption(index)
+                                                                    }
+                                                                >
+                                                                    <Plus size={20} />
+                                                                    추가
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </div>
