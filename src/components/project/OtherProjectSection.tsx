@@ -41,7 +41,7 @@ export const OtherProjectSection = ({
             <div className="text-[32px] font-bold leading-[130%] tracking-[-0.02]">
                 같은 기수 프로젝트
             </div>
-            <div ref={scrollRef} className="overflow-x-auto scrollbar-hide">
+            <div ref={scrollRef} className="overflow-x-auto scrollbar-hide w-[1216px]">
                 <div className="flex flex-row gap-4">
                     {sameGeneration.map((project) => (
                         <a

@@ -3,7 +3,7 @@ import type { ProjectData } from "@/types/project";
 import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 
-interface ProjectListProps {
+export interface ProjectListProps {
     projects: ProjectData[];
 }
 

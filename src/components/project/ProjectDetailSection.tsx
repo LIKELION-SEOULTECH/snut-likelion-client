@@ -8,7 +8,7 @@ export const ProjectDetailSection = ({ project }: { project: projectDetail }) =>
                     {project.generation}기
                 </div>
                 <div className="h-12 px-5 rounded-full text-2xl bg-[#F70] text-black font-bold flex items-center justify-center">
-                    {categoryMap[project.category]}
+                    {categoryMap[project.category] ?? project.category}
                 </div>
             </div>
             <div className="text-[50px] font-bold text-white mt-6"> {project.name}</div>

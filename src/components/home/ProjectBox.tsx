@@ -43,7 +43,7 @@ export const ProjectBox = ({
                             {generation}기
                         </span>
                         <span className="bg-[#C4C4C4] text-[#3A3A3A] px-3 py-1 rounded-full text-[16px] leading-[150%] font-medium">
-                            {categoryMap[category]}
+                            {categoryMap[category] ?? category}
                         </span>
                         {/* {Array.isArray(tags) &&
                             tags.map((tech: string, i: number) => (

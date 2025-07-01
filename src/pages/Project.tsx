@@ -21,28 +21,22 @@ export default function ProjectPage() {
 
     useEffect(() => {
         const fetchProjects = async () => {
-            try {
-                setLoading(true);
+            setLoading(true);
 
-                // 기수... 카테고리..
-                const params: { generation?: number; category?: string } = {};
+            // 기수... 카테고리..
+            const params: { generation?: number; category?: string } = {};
 
-                if (projectGeneration !== "전체") {
-                    params.generation = Number(projectGeneration.replace("기", ""));
-                }
-
-                if (projectCategory !== "전체") {
-                    params.category =
-                        projectCategory !== "전체" ? categoryMap[projectCategory] : undefined;
-                }
-                console.log("요청 params : ", params);
-                const data = await fetchAllProjects(params);
-                setProjects(data);
-            } catch (err) {
-                console.error("프로젝트 불러오기 실패!!! :", err);
-            } finally {
-                setLoading(false);
+            if (projectGeneration !== "전체") {
+                params.generation = Number(projectGeneration.replace("기", ""));
             }
+            if (projectCategory !== "전체") {
+                params.category =
+                    projectCategory !== "전체" ? categoryMap[projectCategory] : undefined;
+            }
+
+            const data = await fetchAllProjects(params);
+            setProjects(data);
+            setLoading(false);
         };
 
         fetchProjects();
