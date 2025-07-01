@@ -1,9 +1,13 @@
 // 포트폴리오 링크
-export type PortFolioLinkType = "GITHUB" | "NOTION" | "BEHANCE" | "BLOG" | "OTHER";
+export type PortFolioLinkType = "GITHUB" | "NOTION" | "BEHANCE" | "BLOG" | "INSTAGRAM" | "OTHER";
 
 // 포트폴리오 링크 상세
 export interface PortfolioLink {
     name: PortFolioLinkType;
+    url: string;
+}
+export interface SimplePortfolioLink {
+    name: string;
     url: string;
 }
 
@@ -27,6 +31,7 @@ export interface MemberDetailResponse {
     intro: string;
     description: string;
     role?: "string";
+    saying?: "string";
     email: string;
     generations: number[];
     portfolioLinks: {

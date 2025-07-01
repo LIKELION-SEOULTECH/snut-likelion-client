@@ -1,7 +1,11 @@
 import { PortfolioLinksInput } from "@/components/MyPage/PortfolioLinksInput";
 import { StackInput } from "@/components/MyPage/StackInput";
 import { useLocation, useNavigate } from "react-router-dom";
-import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
+import type {
+    LionInfoDetailsResponse,
+    MemberDetailResponse,
+    SimplePortfolioLink
+} from "@/types/member";
 import { useState } from "react";
 import { ImageCropper } from "@/components/MyPage/ImageCropper";
 import axiosInstance from "@/apis/axiosInstace";
@@ -20,16 +24,19 @@ export const MyPageEdit = () => {
 
     const [profileImage, setProfileImage] = useState<string>(member.profileImageUrl);
     const [rawImage, setRawImage] = useState<string | null>(null);
+    const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
 
-    const [stackList, setStackList] = useState<string[]>([]);
-    const [portfolioLinks, setPortfolioLinks] = useState<{ type: string; url: string }[]>([
-        { type: "", url: "" }
-    ]);
+    const [stackList, setStackList] = useState(member.stacks || []);
+    const [portfolioLinks, setPortfolioLinks] = useState<SimplePortfolioLink[]>(
+        member.portfolioLinks && member.portfolioLinks.length > 0
+            ? member.portfolioLinks.map(({ name, url }) => ({ name, url }))
+            : [{ name: "", url: "" }]
+    );
 
-    const [intro, setIntro] = useState("");
-    const [description, setDescription] = useState("");
-    const [quote, setQuote] = useState("");
-    const [email, setEmail] = useState("");
+    const [intro, setIntro] = useState(member.intro || "");
+    const [description, setDescription] = useState(member.description || "");
+    const [quote, setQuote] = useState(member.saying || "");
+    const [email, setEmail] = useState(member.email || "");
 
     const handleLeave = () => {
         const confirmLeave = confirm("선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?");
@@ -42,25 +49,24 @@ export const MyPageEdit = () => {
         const formData = new FormData();
 
         // 이미지
-        if (rawImage && !rawImage.startsWith("https://snut-likelion.s3")) {
-            const file = await fetch(rawImage)
-                .then((res) => res.blob())
-                .then((blob) => new File([blob], "profile.png", { type: "image/png" }));
-            formData.append("profileImage", file);
+
+        if (croppedImageFile) {
+            formData.append("profileImage", croppedImageFile);
         }
 
         formData.append("intro", intro);
         formData.append("description", description);
         formData.append("saying", quote);
+        formData.append("email", email);
 
         // formData.append("major", member.major || "");
 
         stackList.forEach((stack) => formData.append("stacks", stack));
-        portfolioLinks.forEach((link, index) => {
-            formData.append(`portfolioLink[${index}].name`, link.type);
-            formData.append(`portfolioLink[${index}].url`, link.url);
-        });
 
+        portfolioLinks.forEach((link, index) => {
+            formData.append(`portfolioLinks[${index}].name`, link.name);
+            formData.append(`portfolioLinks[${index}].url`, link.url);
+        });
         try {
             const response = await axiosInstance.patch(`/members/${member.id}`, formData, {
                 headers: {
@@ -69,6 +75,9 @@ export const MyPageEdit = () => {
             });
 
             console.log("PATCH 응답:", response);
+            for (const pair of formData.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
             alert("수정되었습니다!");
             navigate("/mypage");
         } catch (error) {
@@ -125,9 +134,23 @@ export const MyPageEdit = () => {
                         {rawImage && (
                             <ImageCropper
                                 image={rawImage}
-                                onCompleteCrop={(cropped) => {
-                                    setProfileImage(cropped);
+                                onCompleteCrop={(base64) => {
+                                    setProfileImage(base64); // UI에 보여줄 이미지
                                     setRawImage(null);
+
+                                    // base64 → File 변환
+                                    const base64Data = base64.split(",")[1];
+                                    const byteString = atob(base64Data);
+                                    const byteNumbers = new Array(byteString.length);
+                                    for (let i = 0; i < byteString.length; i++) {
+                                        byteNumbers[i] = byteString.charCodeAt(i);
+                                    }
+                                    const byteArray = new Uint8Array(byteNumbers);
+                                    const file = new File([byteArray], "profile.png", {
+                                        type: "image/png"
+                                    });
+
+                                    setCroppedImageFile(file); // 저장
                                 }}
                                 onCancel={() => setRawImage(null)}
                             />
@@ -140,13 +163,14 @@ export const MyPageEdit = () => {
                             />
                         )}
                         <input
+                            className="hidden"
                             type="file"
                             accept="image/png"
                             id="profile-upload"
                             onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
-                                    const maxSize = 50 * 1024 * 1024; // 50MB
+                                    const maxSize = 50 * 1024 * 1024;
                                     if (file.type !== "image/png") {
                                         alert("PNG 파일만 업로드 가능합니다!");
                                         return;
@@ -157,10 +181,9 @@ export const MyPageEdit = () => {
                                     }
 
                                     const imageUrl = URL.createObjectURL(file);
-                                    setRawImage(imageUrl); // 자르기
+                                    setRawImage(imageUrl); // 자르기용
                                 }
                             }}
-                            className="hidden"
                         />
                         <label
                             htmlFor="profile-upload"
