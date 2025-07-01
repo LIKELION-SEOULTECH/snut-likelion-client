@@ -1,29 +1,50 @@
+import { fetchMembers } from "@/apis/members";
 import CategoryTabs from "@/components/Member/CategoryTabs";
 import GenerationTabs from "@/components/Member/GenerationTabs";
 
 import { MemberCardList } from "@/components/Member/MemberCardList";
 import QuoteCardList from "@/components/project/QuoteCardList";
-import { mockMemberData } from "@/constants/mockMemberData";
-import PageLayout from "@/layouts/PageLayout";
-import { useState } from "react";
 
-const Allgenerations = ["13기", "12기", "11기"];
+import PageLayout from "@/layouts/PageLayout";
+import type { MemberResponse } from "@/types/members";
+import { useEffect, useState } from "react";
+
+const extractGenerations = (members: MemberResponse[]): string[] => {
+    const genSet = new Set<number>();
+    members.forEach((member) => genSet.add(member.generation));
+    const gens = Array.from(genSet).sort((a, b) => b - a);
+    return gens.map((g) => `${g}기`);
+};
+
 const MemberCategories = ["운영진", "아기사자"];
 
 export const MemberPage = () => {
     const [generation, setGeneration] = useState("13기");
+    const [generationList, setGenerationList] = useState<string[]>([]); // 전체 리스트
     const [category, setCategory] = useState("운영진");
-    const filteredMembers = mockMemberData.filter((member) => {
-        const matchGen = member.generation === generation;
-        let matchCat = true;
-        if (member.tag === "대표" && category === "운영진") {
-            matchCat = true;
-        } else {
-            matchCat = member.tag === category;
-        }
+    const [members, setMembers] = useState<MemberResponse[]>([]);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const genNumber = Number(generation.replace("기", ""));
+                const isManager = category === "운영진";
 
-        return matchGen && matchCat;
-    });
+                const data = await fetchMembers({
+                    generation: genNumber,
+                    isManager
+                });
+
+                setMembers(data);
+
+                const gens = extractGenerations(data);
+                setGenerationList(gens);
+            } catch (err) {
+                console.error("멤버 불러오기 실패:", err);
+            }
+        };
+
+        fetchData();
+    }, [generation, category]);
 
     return (
         <PageLayout>
@@ -37,7 +58,7 @@ export const MemberPage = () => {
                     LikeLion Member<span className="text-[#FF7700]">.</span>
                 </div>
                 <GenerationTabs
-                    generations={Allgenerations}
+                    generations={generationList}
                     selected={generation}
                     onSelect={setGeneration}
                 />
@@ -46,7 +67,7 @@ export const MemberPage = () => {
                     selected={category}
                     onSelect={setCategory}
                 />
-                <MemberCardList MemberData={filteredMembers} />
+                <MemberCardList MemberData={members} />
                 <QuoteCardList />
             </div>
         </PageLayout>
