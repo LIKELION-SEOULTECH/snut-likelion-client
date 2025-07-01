@@ -51,7 +51,7 @@ export default function ProjectPage() {
                 }}
             >
                 <div className="font-extrabold text-7xl mt-[85px] mb-18">
-                    Project Archive<span className="text-[#FF7700]">.</span>
+                    Project Archive<span className="text-[#FF7700] ">.</span>
                 </div>
                 <GenerationTabs selected={projectGeneration} onSelect={setprojectGeneration} />
                 <CategoryTabs selected={projectCategory} onSelect={setprojectCategory} />

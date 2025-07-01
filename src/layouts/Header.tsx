@@ -21,7 +21,7 @@ export const Header = ({ white = false }: HeaderProps) => {
 
     return (
         <div
-            className={`w-full h-24 flex flex-row justify-center relative ${
+            className={`w-full h-[54px] sm:h-24 flex flex-row justify-start px-4 sm:px-0 sm:justify-center relative ${
                 white
                     ? "bg-white/60 border-b border-[#ECECEC] backdrop-blur-[35px]"
                     : "bg-[#000000]"
@@ -29,14 +29,16 @@ export const Header = ({ white = false }: HeaderProps) => {
         >
             <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
 
-            <div className="flex justify-center items-center">
+            <div className="flex">
                 <div className="flex flex-row justify-center items-center gap-[267px]">
-                    <LikeLionLogo
-                        className="cursor-pointer"
-                        onClick={() => navigate(ROUTES.HOME)}
-                    />
+                    <div className="w-[38.12px] h-5 sm:w-[61px] sm:h-8">
+                        <LikeLionLogo
+                            className="cursor-pointer"
+                            onClick={() => navigate(ROUTES.HOME)}
+                        />
+                    </div>
 
-                    <div className="flex flex-row gap-[206px] items-center whitespace-nowrap">
+                    <div className="hidden sm:flex flex-row gap-[206px] sm:items-center whitespace-nowrap">
                         <div className="flex flex-row gap-22 text-16 font-medium items-center">
                             {navItems.map((item) => {
                                 const isActive = location.pathname === item.route;

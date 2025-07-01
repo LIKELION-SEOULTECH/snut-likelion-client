@@ -17,10 +17,12 @@ export const AuthLayout = ({
         >
             {/* 왼쪽 */}
             <div className={`${title === "로그인" ? "pr-[408px]" : "pr-[207px]"}  `}>
-                <div className="text-[22px] text-[#C4C4C4]">
-                    <p className="font-semibold">LIKELION</p>
-                    <span className="pr-2 font-light">With</span>
-                    <span className="font-semibold">SEOULTECH</span>
+                <div className="text-[22px] text-[#C4C4C4]  gap-[6px] flex flex-col">
+                    <p className="font-semibold mb-0">LIKELION</p>
+                    <div>
+                        <span className="pr-2 font-light">With</span>
+                        <span className="font-semibold">SEOULTECH</span>
+                    </div>
                 </div>
                 <div className="font-extrabold text-7xl mt-[41px] text-[#FFF]">
                     {title}
