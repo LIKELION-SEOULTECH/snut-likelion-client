@@ -3,7 +3,7 @@ import { NewImageDrop } from "@/components/project/NewImageDrop";
 import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsInput";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axiosInstance from "@/apis/axiosInstace";
+import axiosInstance from "@/apis/axiosInstance";
 
 import axios from "axios";
 import { DropDwon } from "@/components/MyPage/DropDown";

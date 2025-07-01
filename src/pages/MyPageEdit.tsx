@@ -8,7 +8,7 @@ import type {
 } from "@/types/member";
 import { useState } from "react";
 import { ImageCropper } from "@/components/MyPage/ImageCropper";
-import axiosInstance from "@/apis/axiosInstace";
+import axiosInstance from "@/apis/axiosInstance";
 
 export const MyPageEdit = () => {
     const navigate = useNavigate();
