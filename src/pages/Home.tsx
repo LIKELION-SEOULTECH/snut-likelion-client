@@ -20,7 +20,6 @@ import { ChatBotContainer } from "@/components/ChatBotContainer";
 
 import { NotificationModal } from "@/components/home/NotificationModal";
 
-//
 export default function HomePage() {
     //챗봇 버튼. 모집 모달
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -57,17 +56,17 @@ export default function HomePage() {
 
     return (
         <PageLayout>
-            <div className=" text-white  bg-[#1b1b1b] relative">
+            <div className=" text-white bg-[#1b1b1b] relative">
                 <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
                 <MainVisualSection onOpenModal={openModal} />
-                <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
-                <ChatbotBtn className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
+                <Donut className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 left-30 sm:left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
+                <ChatbotBtn className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
                 {/* chatbot #29*/}
                 <section
                     onClick={() => setIsChatOpen((prev) => !prev)}
-                    className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
+                    className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
                 >
                     {!isChatOpen ? (
                         <ChatbotBtn />

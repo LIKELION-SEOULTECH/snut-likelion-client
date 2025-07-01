@@ -7,6 +7,7 @@ export const ActivityDetailSection = () => {
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
     const [visibleRatios, setVisibleRatios] = useState<number[]>([]);
+    const maxHeight = window.innerWidth >= 640 ? 3280 : 2129;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,12 +42,12 @@ export const ActivityDetailSection = () => {
     }, []);
 
     return (
-        <section ref={sectionRef} className="text-white relative pb-[200px] bg-[#1b1b1b]">
+        <section ref={sectionRef} className="text-white relative pb-0 sm:pb-[200px] bg-[#1b1b1b]">
             {/* 태그 있는 선: 색변화 */}
             <div
-                className="w-[1.5px] absolute left-[179px] top-[10px] z-10 pointer-events-none"
+                className="w-[1.5px] absolute left-11 sm:left-[179px] top-[10px] z-10 pointer-events-none"
                 style={{
-                    height: `${scrollY < 150 ? 280 : Math.min(scrollY * 1.15 + 200, 3280)}px`,
+                    height: `${scrollY < 150 ? 280 : Math.min(scrollY * 1.15 + 200, maxHeight)}px`,
                     backgroundColor: "#FF7700",
                     maskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
                     WebkitMaskImage: "linear-gradient(to bottom, black 80%, transparent 100%)",
@@ -55,7 +56,7 @@ export const ActivityDetailSection = () => {
             />
 
             {/* 태그 있는 선: 기본 */}
-            <div className="w-[1.5px] h-[3280px] absolute left-[179px] top-[10px] z-0 bg-[#3A3A3A]" />
+            <div className="w-[1.5px] h-[2129px] sm:h-[3280px] absolute left-11 sm:left-[179px] top-[10px] z-0 bg-[#3A3A3A]" />
 
             {activityDetails.map((item, index) => (
                 <div

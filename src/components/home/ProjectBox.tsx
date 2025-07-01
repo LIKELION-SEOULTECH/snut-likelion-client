@@ -23,18 +23,18 @@ export const ProjectBox = ({
     const navigate = useNavigate();
 
     return (
-        <div className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px]">
+        <div className="relative text-[#ffffff] rounded-[16px]">
             <div
                 onClick={() => navigate(`/project/${id}`)}
-                className="relative w-[395px] h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer"
+                className="w-60 sm:w-[395px] h-[170px] sm:h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer"
             >
                 <img
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover rounded-[16px]"
+                    className="w-full h-full object-cover rounded-[9.6px] sm:rounded-[16px]"
                 />
                 {/* hover했을때 */}
-                <div className="absolute top-0 left-0 w-[395px] h-[286px] rounded-[12px] opacity-0 bg-[#00000099] hover:opacity-100 transition-opacity duration-300 flex flex-col p-[24px] backdrop-blur-[12px]">
+                <div className="hidden sm:flex absolute top-0 left-0 w-[395px] h-[286px] rounded-[12px] opacity-0 bg-[#00000099] hover:opacity-100 transition-opacity duration-300 flex-col p-[24px] backdrop-blur-[12px]">
                     {/* 상단: 기수.태그 */}
                     <div className="flex items-center gap-2 text-sm">
                         <span className="bg-[#C4C4C4] text-[#3A3A3A] px-3 py-1 rounded-full text-[16px] leading-[150%] font-medium">
