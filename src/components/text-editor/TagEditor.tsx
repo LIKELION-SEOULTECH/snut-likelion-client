@@ -20,7 +20,7 @@ const extensions = [
     })
 ];
 
-export function TagEditor({ setTags }: { setTags: (tags: string[]) => void }) {
+export function TagEditor({ setTags }: { setTags: (tags: number[]) => void }) {
     const editor = useEditor({
         extensions,
         content: "",
@@ -31,11 +31,14 @@ export function TagEditor({ setTags }: { setTags: (tags: string[]) => void }) {
         },
         onUpdate: ({ editor }) => {
             const json = editor.getJSON();
-            const newTags: string[] = [];
+            const newTags: number[] = [];
 
             const extractMentions = (node: JSONContent) => {
-                if (node.type === "mention" && node.attrs?.label) {
-                    newTags.push(node.attrs.label);
+                if (node.type === "mention" && node.attrs?.id !== undefined) {
+                    const id = Number(node.attrs.id);
+                    if (!isNaN(id)) {
+                        newTags.push(id);
+                    }
                 }
                 if (node.content) {
                     node.content.forEach(extractMentions);
@@ -43,7 +46,7 @@ export function TagEditor({ setTags }: { setTags: (tags: string[]) => void }) {
             };
 
             extractMentions(json);
-            setTags([...new Set(newTags)]); // 중복 제거
+            setTags([...new Set(newTags)]);
         }
     });
 

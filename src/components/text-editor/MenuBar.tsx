@@ -6,6 +6,7 @@ import ImageBtn from "@/assets/text-editor/image.svg?react";
 import OpenBtn from "@/assets/text-editor/open-btn.svg?react";
 import CloseBtn from "@/assets/text-editor/close-btn.svg?react";
 import { useState } from "react";
+import { uploadBlogImages } from "@/apis/blog";
 
 export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -13,13 +14,14 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
         return null;
     }
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            const imageUrl = reader.result as string;
+        try {
+            const urls = await uploadBlogImages([file]); // ✅ 서버에 업로드
+            const imageUrl = urls[0];
+
             editor
                 .chain()
                 .focus("end")
@@ -32,8 +34,11 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     }
                 })
                 .run();
-        };
-        reader.readAsDataURL(file);
+        } catch (err) {
+            console.error("이미지 업로드 실패", err);
+        } finally {
+            e.target.value = ""; // 같은 파일 업로드 다시 허용
+        }
     };
 
     return (

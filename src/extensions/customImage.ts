@@ -18,11 +18,26 @@ export const CustomImage = Node.create({
     },
 
     parseHTML() {
-        return [{ tag: "img[src]" }];
+        return [
+            {
+                tag: "img[src]",
+                getAttrs: (dom: HTMLElement) => ({
+                    src: dom.getAttribute("src"),
+                    alt: dom.getAttribute("alt"),
+                    isThumbnail: dom.getAttribute("data-thumbnail") === "true"
+                })
+            }
+        ];
     },
 
     renderHTML({ HTMLAttributes }) {
-        return ["img", mergeAttributes(HTMLAttributes)];
+        const { isThumbnail, ...rest } = HTMLAttributes;
+        return [
+            "img",
+            mergeAttributes(rest, {
+                "data-thumbnail": isThumbnail ? "true" : "false"
+            })
+        ];
     },
 
     addNodeView() {

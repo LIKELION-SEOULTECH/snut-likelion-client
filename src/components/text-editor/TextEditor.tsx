@@ -21,8 +21,11 @@ const extensions = [
     Image.configure({
         allowBase64: true
     }),
-    CustomImage,
-
+    CustomImage.configure({
+        onUpload: (url: string) => {
+            console.log("업로드된 이미지 URL:", url);
+        }
+    }),
     Mention.configure({
         suggestion: mentionSuggestionOptions,
         HTMLAttributes: {
