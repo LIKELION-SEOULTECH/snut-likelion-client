@@ -16,13 +16,13 @@ const getTagColor = (ratio: number) => {
 const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: ActivityItemProps) => {
     const opacity = 0.3 + 0.7 * visibleRatio;
     return (
-        <div className={`flex w-full px-8 mb-[400px] z-10`}>
+        <div className={`flex w-full px-[18px] sm:px-8 mb-30 sm:mb-[400px] z-10`}>
             <div className={`flex  ${tag !== "" ? "h-[540px]" : "h-[30px]"}`}>
                 {/* 태그 */}
-                <div className="flex flex-col items-center pl-[113px] z-10  ">
+                <div className="flex flex-col items-center pl-0 sm:pl-[113px] z-10  ">
                     {tag !== "" ? (
                         <div
-                            className="bg-[#FF7700] w-[71px] h-[44px] text-black text-[20px] font-bold rounded-full flex text-center justify-center items-center leading-[100%] z-10"
+                            className="bg-[#FF7700] w-13 sm:w-[71px] h-8 sm:h-[44px] text-black text-base sm:text-[20px] font-bold rounded-full flex text-center justify-center items-center leading-[100%] z-10"
                             style={{
                                 backgroundColor:
                                     tag === "정기" ? "#FF7700" : getTagColor(visibleRatio),
@@ -40,7 +40,7 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                         </div>
                     ) : (
                         <div
-                            className="bg-[#B55400] w-[17px] h-[17px] rounded-full ml-[26.5px] mr-[22px] mt-[15px] z-10 "
+                            className="bg-[#B55400] w-4 sm:w-[17px] h-4 sm:h-[17px] rounded-full ml-[20.5px] sm:ml-[26.5px] mr-[22px] mt-[15px] z-10 "
                             style={{
                                 backgroundColor: getTagColor(visibleRatio),
                                 transition: "background-color 0.3s",
@@ -52,7 +52,7 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                 </div>
 
                 <div
-                    className="pl-[34px]"
+                    className="pl-5 sm:pl-[34px]"
                     style={
                         tag === "정기"
                             ? {}
@@ -66,24 +66,26 @@ const ActivityItem = ({ tag, title, description, images, visibleRatio = 1 }: Act
                     {/* 텍스트 */}
                     <div className="flex items-start max-w-[1200px] mx-auto gap-8">
                         <div className="flex flex-col gap-3">
-                            <h3 className={`text-[32px] font-semibold text-white `}>{title}</h3>
-                            <p
-                                className={`text-[20px] whitespace-pre-line ${tag !== "" ? "text-[#C4C4C4]" : "text-[#B55400]"}`}
+                            <h3 className={`text-base sm:text-[32px] font-semibold text-white `}>
+                                {title}
+                            </h3>
+                            <div
+                                className={`text-sm sm:text-[20px] sm:whitespace-pre-line ${tag !== "" ? "text-[#C4C4C4]" : "text-[#B55400]"}`}
                             >
                                 {description}
-                            </p>
+                            </div>
                         </div>
                     </div>
 
                     {/* 이미지들 */}
                     {tag !== "" ? (
-                        <div className="flex justify-start gap-6 mt-12 max-w-[1200px] mx-auto ">
+                        <div className="flex flex-col sm:flex-row justify-start gap-3 sm:gap-6 mt-8 sm:mt-12 max-w-[1200px] mx-auto ">
                             {images.map((src, i) => (
                                 <img
                                     key={i}
                                     src={src}
                                     alt={`활동 이미지 ${i + 1}`}
-                                    className="rounded-xl w-[549px] h-[380px] object-cover"
+                                    className="rounded-xl w-[253px] sm:w-[549px] h-[170px] sm:h-[380px] object-cover"
                                 />
                             ))}
                         </div>

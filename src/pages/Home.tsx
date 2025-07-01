@@ -19,8 +19,8 @@ import ChatbotCloseBtn from "@/assets/home/ChatBotClose.svg?react";
 import { ChatBotContainer } from "@/components/ChatBotContainer";
 
 import { NotificationModal } from "@/components/home/NotificationModal";
+import { toast, Toaster } from "sonner";
 
-//
 export default function HomePage() {
     //챗봇 버튼. 모집 모달
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -29,10 +29,34 @@ export default function HomePage() {
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
+
+    const handleToastClick = () => {
+        toast("자세한 프로젝트 보기는 PC로만 가능합니다!", {
+            unstyled: true,
+            duration: 3000,
+            classNames: {
+                toast: "bg-[#333334cc] shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-[12px] text-white px-4 py-[10.5px] rounded-sm",
+                title: "text-white text-sm font-mediumt",
+                description: "text-red-400"
+            }
+        });
+    };
+
     useEffect(() => {
-        if (isModalOpen) {
+        const isDesktop = window.innerWidth >= 640; // Tailwind sm: 640px
+
+        if (isModalOpen && !isDesktop) {
             document.body.style.overflow = "hidden";
             document.documentElement.style.overflow = "hidden";
+            toast("모집지원은 PC로만 가능합니다!", {
+                unstyled: true,
+                duration: 3000,
+                classNames: {
+                    toast: "bg-[#333334cc] shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-[12px] text-white px-4 py-[10.5px] rounded-sm",
+                    title: "text-white text-sm font-mediumt",
+                    description: "text-red-400"
+                }
+            });
         } else {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
@@ -57,17 +81,18 @@ export default function HomePage() {
 
     return (
         <PageLayout>
-            <div className=" text-white  bg-[#1b1b1b] relative">
+            <Toaster position="bottom-center" />
+            <div className=" text-white bg-[#1b1b1b] relative">
                 <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
                 <MainVisualSection onOpenModal={openModal} />
-                <Donut className="absolute top-30 left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
-                <ChatbotBtn className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
+                <Donut className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 left-30 sm:left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
+                <ChatbotBtn className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
                 {/* chatbot #29*/}
                 <section
                     onClick={() => setIsChatOpen((prev) => !prev)}
-                    className="fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
+                    className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
                 >
                     {!isChatOpen ? (
                         <ChatbotBtn />
@@ -86,7 +111,7 @@ export default function HomePage() {
                         <ActivityDetailSection />
                     </div>
                 )}
-                <ProjectShowcaseSection />
+                <ProjectShowcaseSection handleClick={handleToastClick} />
                 <InterviewSection />
                 <FAQSection />
                 <BottomCTASection onOpenModal={openModal} />
