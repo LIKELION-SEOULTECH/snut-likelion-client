@@ -9,6 +9,17 @@ export interface Blog {
     type: string | null;
 }
 
+export interface BlogDetail {
+    postId: number;
+    title: string;
+    updatedAt: string;
+    contentHtml: string;
+    images: string[];
+    authorName: string;
+    category: "OFFICIAL" | "UNOFFICIAL";
+    taggedMemberNames: string[];
+}
+
 interface GetBlogParams {
     page?: number; // 기본값 0
     size?: number; // 기본값 12
