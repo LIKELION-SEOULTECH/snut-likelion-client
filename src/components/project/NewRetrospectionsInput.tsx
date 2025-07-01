@@ -5,11 +5,20 @@ interface Member {
     name: string;
 }
 
-export const NewRetrospectionsInput = () => {
-    const [retrospections, setRetrospections] = useState([{ memberId: "", url: "" }]);
+interface Retrospection {
+    memberId: number;
+    content: string;
+}
+
+interface Props {
+    value: Retrospection[];
+    onChange: (retros: Retrospection[]) => void;
+}
+
+export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
     const [members, setMembers] = useState<Member[]>([]);
-    const [searchText, setSearchText] = useState<string[]>([""]);
-    const [showSuggestions, setShowSuggestions] = useState<boolean[]>([false]);
+    const [searchText, setSearchText] = useState<string[]>(value.map(() => ""));
+    const [showSuggestions, setShowSuggestions] = useState<boolean[]>(value.map(() => false));
 
     useEffect(() => {
         const mockMembers: Member[] = [
@@ -21,12 +30,14 @@ export const NewRetrospectionsInput = () => {
         setMembers(mockMembers);
     }, []);
 
-    const handleChange = (index: number, key: "memberId" | "url", value: string) => {
-        const updated = [...retrospections];
-        updated[index][key] = value;
-        setRetrospections(updated);
+    const handleChange = (index: number, key: "memberId" | "content", fieldValue: string) => {
+        const updated: Retrospection[] = [...value];
+        updated[index] = {
+            ...updated[index],
+            [key]: key === "memberId" ? Number(fieldValue) : fieldValue
+        };
+        onChange(updated);
     };
-
     const handleSearchChange = (index: number, value: string) => {
         const updated = [...searchText];
         updated[index] = value;
@@ -49,26 +60,28 @@ export const NewRetrospectionsInput = () => {
     };
 
     const handleAdd = () => {
-        setRetrospections([...retrospections, { memberId: "", url: "" }]);
+        onChange([...value, { memberId: 0, content: "" }]);
         setSearchText([...searchText, ""]);
         setShowSuggestions([...showSuggestions, false]);
     };
 
     const handleRemove = (index: number) => {
-        const updated = [...retrospections];
-        const updatedSearch = [...searchText];
-        const updatedSuggestions = [...showSuggestions];
+        const updated = [...value];
         updated.splice(index, 1);
+        onChange(updated);
+
+        const updatedSearch = [...searchText];
         updatedSearch.splice(index, 1);
-        updatedSuggestions.splice(index, 1);
-        setRetrospections(updated);
         setSearchText(updatedSearch);
+
+        const updatedSuggestions = [...showSuggestions];
+        updatedSuggestions.splice(index, 1);
         setShowSuggestions(updatedSuggestions);
     };
 
     return (
         <div className="flex flex-1 flex-col gap-3">
-            {retrospections.map((item, index) => (
+            {value.map((item, index) => (
                 <div key={index} className="gap-2 flex flex-1 relative">
                     <div className="relative w-[92px]">
                         <input
@@ -95,13 +108,13 @@ export const NewRetrospectionsInput = () => {
                     </div>
 
                     <input
-                        value={item.url}
-                        onChange={(e) => handleChange(index, "url", e.target.value)}
+                        value={item.content}
+                        onChange={(e) => handleChange(index, "content", e.target.value)}
                         placeholder="회고"
                         className="py-3 px-4 flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
                     />
 
-                    {retrospections.length > 1 && index === retrospections.length - 1 && (
+                    {value.length > 1 && index === value.length - 1 && (
                         <button
                             onClick={() => handleRemove(index)}
                             className="w-[64px] text-[14px] border border-[#C4C4C4] rounded-[4px] text-[#666] bg-[#FFF]"
