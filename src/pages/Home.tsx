@@ -24,7 +24,6 @@ import { toast, Toaster } from "sonner";
 export default function HomePage() {
     //챗봇 버튼. 모집 모달
     const [isChatOpen, setIsChatOpen] = useState(false);
-
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
@@ -91,17 +90,16 @@ export default function HomePage() {
                 </div>
                 <MainVisualSection onOpenModal={openModal} />
                 <Donut className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 left-30 sm:left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
-                <ChatbotBtn className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer" />
+
                 {/* chatbot #29*/}
                 <section
                     onClick={() => setIsChatOpen((prev) => !prev)}
-                    className="hidden sm:block fixed bottom-16 right-28 z-50 transition-transform duration-300 hover:scale-120 cursor-pointer"
+                    className="hidden sm:block fixed bottom-16 right-28 z-50 cursor-pointer"
                 >
-                    {!isChatOpen ? (
-                        <ChatbotBtn />
-                    ) : (
-                        <ChatbotCloseBtn className="w-[92px] h-[92px]" />
-                    )}
+                    <ChatbotBtn className={`w-[72px] h-[72px] ${isChatOpen ? "hidden" : "flex"}`} />
+                    <ChatbotCloseBtn
+                        className={`w-[72px] h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
+                    />
                 </section>
                 <section className="fixed bottom-[166px] bg-white  rounded-[19.585px] right-[111px] z-10 ">
                     {isChatOpen ? <ChatBotContainer /> : null}
