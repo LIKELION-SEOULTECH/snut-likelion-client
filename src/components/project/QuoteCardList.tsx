@@ -35,7 +35,8 @@ export default function QuoteCardList() {
     const getVisualIndex = (i: number) => {
         return (i - activeIndex + quotes.length) % quotes.length;
     };
-    const combinedQuotes = [...sayings, ...quotes]; // API + 로컬 합치기
+    const combinedQuotes = [...(Array.isArray(sayings) ? sayings : []), ...quotes];
+    console.log("✅ combinedQuotes:", combinedQuotes);
 
     return (
         <div className="relative w-full h-[111px] mx-auto mb-8">
