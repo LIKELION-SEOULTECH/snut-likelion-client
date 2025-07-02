@@ -49,3 +49,9 @@ export const saveDraft = (data: { title: string; content: string }) => {
 export const deleteDraft = () => {
     return axiosInstance.delete("/blogs/drafts/me");
 };
+
+export const fetchAdminSingleBlog = async (postId: number) => {
+    const res = await axiosInstance.get(`/blogs/${postId}`);
+    console.log(res.data.data);
+    return res.data.data;
+};

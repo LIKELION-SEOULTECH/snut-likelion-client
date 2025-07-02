@@ -1,7 +1,7 @@
-import type { Blog } from "@/types/blog";
+import type { AdminBlog } from "@/types/blog";
 import { BlogSearchItem } from "./BlogSearchItem";
 interface BlogSearchListProps {
-    data: Blog[];
+    data: AdminBlog[];
     showCheckboxes: boolean;
     selectedIds: number[];
     onToggleSelect: (id: number) => void;
@@ -51,11 +51,11 @@ export const BlogSearchList = ({
                 <div>
                     {data.map((blog, index) => (
                         <BlogSearchItem
-                            key={blog.id}
+                            key={blog.postId}
                             blog={blog}
                             index={index}
                             showCheckboxes={showCheckboxes}
-                            selected={selectedIds.includes(blog.id)}
+                            selected={selectedIds.includes(blog.postId)}
                             onToggleSelect={onToggleSelect}
                         />
                     ))}

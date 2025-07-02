@@ -5,3 +5,11 @@ export interface Blog {
     writer: string;
     createdAt: string;
 }
+
+export interface AdminBlog {
+    postId: number;
+    tag: string;
+    title: string;
+    authorName: string;
+    updatedAt: string;
+}

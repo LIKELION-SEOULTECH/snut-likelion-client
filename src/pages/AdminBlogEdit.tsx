@@ -1,7 +1,10 @@
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import AdminTagEditor from "@/components/text-editor/AdminTagEditor";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAdminSingleBlog } from "@/apis/blog";
 
 import sample from "@/assets/home/sample.png";
 import sample1 from "@/assets/home/sample1.png";
@@ -13,23 +16,36 @@ type MentionSuggestion = {
 };
 
 export const AdminBlogEditPage = () => {
-    const [content, setContent] = useState(
-        "<h1>멋냥냥단 귀여워</h1><p>전라북도 군산 명월동에서 진행된 <맥심골목> 프로모션을 위해 우리는 오프라인과 온라인 경험을 이어줄 아이디어가 필요했고, 맥심골목을 방문한 사용자들이 9개의 주요 지정 장소를 돌아다니며 디지털 스탬프를 수집하고 빙고를 완성하는 참여형 이벤트를 기획했습니다. 지정된 장소마다 특별히 제작된 디지털 스탬프를 비치해두고 이는 사용자의 <맥심 마이 포인트>앱을 통해 작동하도록 특별히 설계되었습니다.</p>"
-    );
-    const [tags, setTags] = useState<MentionSuggestion[]>([
-        {
-            id: "0",
-            mentionLabel: "전민경",
-            avatarUrl: sample
-        },
-        {
-            id: "1",
-            mentionLabel: "박진아",
-            avatarUrl: sample1
-        }
-    ]);
+    const { id } = useParams<{ id: string }>();
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const [tags, setTags] = useState<MentionSuggestion[]>([]);
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const numericPostId = Number(id);
+
+    const { data: adminBlog } = useQuery({
+        queryKey: ["blog", numericPostId],
+        queryFn: () => fetchAdminSingleBlog(numericPostId),
+        enabled: !!numericPostId && !isNaN(numericPostId)
+    });
+
+    useEffect(() => {
+        if (adminBlog) {
+            setTitle(adminBlog.title);
+            setContent(adminBlog.contentHtml);
+
+            const tagData: MentionSuggestion[] =
+                adminBlog.taggedMemberNames?.map((tag: string, index: number) => ({
+                    id: `${index}`,
+                    mentionLabel: tag,
+                    avatarUrl: index % 2 === 0 ? sample : sample1
+                })) || [];
+
+            setTags(tagData);
+        }
+    }, [adminBlog]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -64,7 +80,11 @@ export const AdminBlogEditPage = () => {
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
-                    <input className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm" />
+                    <input
+                        className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
 
                 <div className="flex flex-row gap-[18px] items-center">
