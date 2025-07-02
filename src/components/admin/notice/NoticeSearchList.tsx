@@ -7,6 +7,7 @@ interface NoticeSearchListProps {
     selectedIds: number[];
     onToggleSelect: (id: number) => void;
     onToggleSelectAll?: (checked: boolean) => void;
+    length: number;
 }
 
 export const NoticeSearchList = ({
@@ -14,12 +15,13 @@ export const NoticeSearchList = ({
     showCheckboxes,
     selectedIds,
     onToggleSelect,
-    onToggleSelectAll
+    onToggleSelectAll,
+    length
 }: NoticeSearchListProps) => {
     return (
         <div>
             <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{data.length}</span>
+                검색결과 <span className="text-orange-400">{length}</span>
             </div>
 
             <div className="w-full text-sm rounded-sm overflow-hidden">

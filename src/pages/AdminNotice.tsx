@@ -1,12 +1,10 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { NoticeSearchList } from "@/components/admin/notice/NoticeSearchList";
 import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAllNotices } from "@/apis/notice";
+import { useState, useEffect } from "react";
 import { deleteNotice } from "@/apis/notice";
 import { Pagination } from "@/components/common/Pagination";
-// import { dummyNoticeData } from "@/constants/admin/dummyNoticeData";
+import { fetchAdminNotices } from "@/apis/notice";
 import { useQueryClient } from "@tanstack/react-query"; // ✅ 캐시 무효화용
 
 import {
@@ -16,8 +14,12 @@ import {
     DialogTitle,
     DialogFooter
 } from "@/components/ui/dialog";
+import type { AdminNotice } from "@/types/notice";
 
 export const AdminNoticePage = () => {
+    const [notices, setNotices] = useState<AdminNotice[]>([]);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalElements, setTotalElements] = useState(0);
     const queryClient = useQueryClient(); // 캐시 무효화 객체
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,25 +32,33 @@ export const AdminNoticePage = () => {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const { data = [] } = useQuery({
-        queryKey: ["notices"],
-        queryFn: fetchAllNotices
-    });
+    const fetchData = async () => {
+        try {
+            const res = await fetchAdminNotices({
+                keyword: filters.keyword,
+                page: currentPage - 1 // 0-based index
+            });
 
-    const filteredData = data.filter(
-        (notice) => filters.keyword.trim() === "" || notice.title.includes(filters.keyword)
-    );
+            setNotices(res.content);
+            setTotalPages(res.totalPages);
+            setTotalElements(res.totalElements);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-    // 현재 페이지에 해당하는 데이터
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const currentPageData = filteredData.slice(
+    useEffect(() => {
+        fetchData();
+    }, [currentPage, filters]);
+
+    const currentPageData = notices.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
-    const handleSearch = (newFilters: typeof filters) => {
+    const handleSearch = (newFilters: { keyword: string }) => {
         setFilters(newFilters);
-        setCurrentPage(1); // 검색하면 첫 페이지로 이동
+        setCurrentPage(1);
     };
 
     const toggleSelect = (id: number) => {
@@ -99,7 +109,7 @@ export const AdminNoticePage = () => {
             console.error("삭제 중 오류 발생:", error);
             alert("삭제에 실패했습니다.");
         }
-    }; // delete 수정 필요
+    };
 
     return (
         <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
@@ -107,11 +117,12 @@ export const AdminNoticePage = () => {
                 <NoticeSearchTool onSearch={handleSearch} />
             </div>
             <NoticeSearchList
-                data={currentPageData}
+                data={notices}
                 showCheckboxes={showCheckboxes}
                 selectedIds={selectedIds}
                 onToggleSelect={toggleSelect}
                 onToggleSelectAll={handleToggleSelectAll}
+                length={totalElements}
             />
             <div className="mb-[210px]">
                 <Pagination

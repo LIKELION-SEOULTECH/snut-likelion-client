@@ -53,6 +53,7 @@ export const AdminProjectPage = () => {
         setFilters(newFilters);
         setCurrentPage(1);
     };
+
     const toggleSelect = (id: number) => {
         setSelectedIds((prev) =>
             prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]

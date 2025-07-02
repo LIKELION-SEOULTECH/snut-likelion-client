@@ -121,7 +121,7 @@ export const AdminHeader = ({
                     </button>
                     <button
                         className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
-                        onClick={() => navigate("/admin/project/create")}
+                        onClick={() => navigate("create")}
                     >
                         업로드
                     </button>

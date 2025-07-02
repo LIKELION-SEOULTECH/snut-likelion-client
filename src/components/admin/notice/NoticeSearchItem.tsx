@@ -74,9 +74,9 @@ export const NoticeSearchItem = ({
                 </div>
             </span>
             {/* <span className="flex-[1] text-left">{notice.writer}</span> */}
-            <span className="flex-[1] text-left">김혜준</span>
+            <span className="flex-[1] text-left">고지완</span>
             <span className="flex-[1.5] text-left">
-                {new Date(notice.createdAt).toISOString().slice(0, 10)}
+                {new Date(notice.updatedAt).toISOString().slice(0, 10)}
             </span>
             <button className="absolute right-6 cursor-pointer" onClick={togglePopup}>
                 <EllipsisVertical />

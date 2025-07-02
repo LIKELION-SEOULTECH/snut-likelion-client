@@ -39,3 +39,12 @@ export const deleteNotice = async (noticeId: number) => {
     const res = await axiosInstance.delete(`/notices/${noticeId}`);
     return res.data;
 };
+
+// 어드민 공지사항 조회
+export const fetchAdminNotices = async (params?: { keyword?: string; page?: number }) => {
+    const res = await axiosInstance.get("/admin/notices", {
+        params
+    });
+    console.log(res.data.data);
+    return res.data.data;
+};
