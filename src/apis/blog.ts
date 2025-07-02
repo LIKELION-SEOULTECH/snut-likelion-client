@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-import type { CreateBlogRequest } from "@/types/blog";
+import type { CreateBlogRequest, MyBlogType } from "@/types/blog";
 
 export interface Blog {
     postId: number;
@@ -85,4 +85,18 @@ export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
     const res = await axiosInstance.post("/blogs/images", formData);
     console.log(res.data.data);
     return res.data.data.urls; // ✅ 정확히 배열만 리턴
+};
+
+// 마이페이지 : 블로그 조회 : get
+
+export const fetchMyBlogs = async (): Promise<MyBlogType[]> => {
+    const response = await axiosInstance.get("/blogs/me");
+    console.log("📦 내 블로그 API 응답:", response.data);
+
+    return response.data.data.content.map((blog: MyBlogType) => ({
+        postId: blog.postId,
+        title: blog.title,
+        updatedAt: blog.updatedAt,
+        blogCategory: blog.blogCategory ?? "UNOFFICIAL"
+    }));
 };

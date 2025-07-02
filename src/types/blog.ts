@@ -7,3 +7,10 @@ export interface CreateBlogRequest {
     taggedMemberIds?: number[];
     images: string[];
 }
+
+export interface MyBlogType {
+    postId: number;
+    title: string;
+    updatedAt: string;
+    blogCategory?: "OFFICIAL" | "UNOFFICIAL";
+}

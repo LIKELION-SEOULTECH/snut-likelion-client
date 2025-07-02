@@ -12,6 +12,10 @@ export const login = async (email: string, password: string) => {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
 
+    const payload = accessToken.split(".")[1];
+    const decoded = JSON.parse(atob(payload));
+    localStorage.setItem("userRole", decoded.role);
+
     return res.data;
 };
 
