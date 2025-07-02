@@ -8,6 +8,14 @@ import axiosInstance from "@/apis/axiosInstance";
 import axios from "axios";
 import { DropDwon } from "@/components/MyPage/DropDown";
 
+const categoryMap: Record<string, string> = {
+    전체: "",
+    중앙해커톤: "HACKATHON",
+    아이디어톤: "IDEATHON",
+    데모데이: "DEMO_DAY",
+    "장기 프로젝트": "LONG_TERM_PROJECT"
+};
+
 export const NewProjectPage = () => {
     const navigate = useNavigate();
 
@@ -48,7 +56,7 @@ export const NewProjectPage = () => {
             (r) => r.memberId !== 0 && r.content.trim() !== ""
         );
         if (validRetrospections.length === 0) {
-            alert("회고를 한 줄 이상 작성해주세요.");
+            alert("회고를 작성해주세요.");
             return;
         }
 
@@ -57,12 +65,15 @@ export const NewProjectPage = () => {
             formData.append("name", name);
             formData.append("intro", intro);
             formData.append("description", description);
-            formData.append("category", selectedCategory);
+            formData.append("category", categoryMap[selectedCategory]);
             if (websiteUrl) formData.append("websiteUrl", websiteUrl);
             if (playstoreUrl) formData.append("playstoreUrl", playstoreUrl);
             if (appstoreUrl) formData.append("appstoreUrl", appstoreUrl);
             formData.append("generation", String(selectedGen));
-            formData.append("tags", JSON.stringify(tags));
+            // formData.append("tags", JSON.stringify(tags));
+            tags.forEach((tag) => {
+                formData.append("tags", tag);
+            });
 
             imageFiles.forEach((file) => formData.append("images", file));
             retrospections.forEach((retro, idx) => {
@@ -77,12 +88,12 @@ export const NewProjectPage = () => {
             });
 
             alert("프로젝트가 성공적으로 업로드되었습니다!");
-            navigate("/projects");
+            navigate("/project");
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 console.error(error.response?.data?.message || error.message);
             } else {
-                console.error("알 수 없는 오류 발생", error);
+                console.error(error);
             }
             alert("업로드 중 오류가 발생했습니다.");
         }
@@ -141,7 +152,7 @@ export const NewProjectPage = () => {
                             {/* 기수  */}
                             <DropDwon
                                 label="기수"
-                                options={["11", "12", "13", "14"]}
+                                options={["12", "13"]}
                                 selected={selectedGen}
                                 setSelected={setSelectedGen}
                             />
@@ -149,7 +160,7 @@ export const NewProjectPage = () => {
                             {/* 구분  */}
                             <DropDwon
                                 label="구분"
-                                options={["아이디어톤", "중앙해커톤", "데모데이", "장기프로젝트"]}
+                                options={["아이디어톤", "중앙해커톤", "데모데이", "장기 프로젝트"]}
                                 selected={selectedCategory}
                                 setSelected={setSelectedCategory}
                             />
@@ -165,7 +176,7 @@ export const NewProjectPage = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="제목"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 활동소개 */}
@@ -178,7 +189,7 @@ export const NewProjectPage = () => {
                                 value={intro}
                                 onChange={(e) => setIntro(e.target.value)}
                                 placeholder="활동소개"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 프로젝트 설명 */}
@@ -191,7 +202,7 @@ export const NewProjectPage = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="프로젝트 설명"
-                                className="py-3 px-4  h-[140px] flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4  h-[140px] flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 기술 스택 */}

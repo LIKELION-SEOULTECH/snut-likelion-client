@@ -17,7 +17,7 @@ const Member_InfoData = [
     },
     { title: "최종 발표", date: "2025.03.16 (일)", note: "메일로 개별 발표" }
 ];
-const Maneger_InfoData = [
+const Manager_InfoData = [
     { title: "서류 접수", date: "2025.02.21 (금) ~ 03.05 (수)", note: "총 13일" },
     { title: "서류 발표", date: "2025.03.09 (일)", note: "메일로 개별 발표" },
     {
@@ -52,7 +52,7 @@ const Member_ScheduleData = [
         note: "* 불참시 수료 불가"
     }
 ];
-const Mangeger_ScheduleData = [
+const Manager_ScheduleData = [
     {
         title: "• 학교 자체 OT: 3/20 (목)",
         orangeText: "대면",
@@ -76,10 +76,10 @@ const Mangeger_ScheduleData = [
 ];
 
 interface RecruitProps {
-    isManeger?: boolean; // true면 운영진 모집
+    isManager?: boolean; // true면 운영진 모집
 }
 
-export const Recruit = ({ isManeger = false }: RecruitProps) => {
+export const Recruit = ({ isManager = false }: RecruitProps) => {
     const navigate = useNavigate();
 
     return (
@@ -108,7 +108,7 @@ export const Recruit = ({ isManeger = false }: RecruitProps) => {
                     <div className="flex-1 ">
                         <h4 className="text-[32px] text-white font-[700] mb-[44px]">모집 일정</h4>
                         <div className="w-[908px] flex flex-col gap-y-3 mb-[180px]">
-                            {(isManeger ? Maneger_InfoData : Member_InfoData).map((e) => (
+                            {(isManager ? Manager_InfoData : Member_InfoData).map((e) => (
                                 <div className="flex gap-x-4 w-full">
                                     <div className="w-[148px] text-center">
                                         <InfoBox text={e.title} centered={true} />
@@ -125,14 +125,14 @@ export const Recruit = ({ isManeger = false }: RecruitProps) => {
                                 text={
                                     <>
                                         <b>서울과학기술대학교 재학생 및 휴학생이면서</b>
-                                        {isManeger
+                                        {isManager
                                             ? " 차기 멋쟁이 사자처럼을 이끌어가고 싶으신 분"
                                             : " 아래 일정에 적극적으로 참여하실 수 있는 분"}
                                     </>
                                 }
                             />
                             <div className="py-[23px] bg-[#ECECEC] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex flex-col flex-1 leading-[180%]">
-                                {(isManeger ? Mangeger_ScheduleData : Member_ScheduleData).map(
+                                {(isManager ? Manager_ScheduleData : Member_ScheduleData).map(
                                     (item, idx) => (
                                         <div key={idx} className="mb-2">
                                             <span className="font-semibold">
@@ -151,9 +151,9 @@ export const Recruit = ({ isManeger = false }: RecruitProps) => {
                         </div>
                     </div>
                     <button
-                        className={`w-auto h-[71px] px-4 py-1 rounded-[250px] text-[24px] cursor-pointer bg-[#F70] text-black font-bold text-white px-10 py-5 align-center leading-[130%] font-pretendard`}
+                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer bg-[#F70] font-bold text-white px-10 py-5 align-center leading-[130%] font-pretendard`}
                         onClick={() => {
-                            const target = isManeger
+                            const target = isManager
                                 ? "/recruitform/maneger"
                                 : "/recruitform/member";
                             navigate(target);
@@ -172,7 +172,7 @@ export const Recruit = ({ isManeger = false }: RecruitProps) => {
                         <RoleList />
                     </div>
                 </div>
-                {isManeger ? (
+                {isManager ? (
                     <div>
                         <h4 className="text-[32px] mt-[180px] text-white font-[700] mb-[44px] mx-[112px] flex">
                             운영진 모집 분야

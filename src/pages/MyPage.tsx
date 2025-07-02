@@ -6,8 +6,6 @@ import PageLayout from "@/layouts/PageLayout";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { useEffect, useState } from "react";
 
-const isGuest = false;
-
 export const MyPage = () => {
     const [member, setMember] = useState<MemberDetailResponse | null>(null);
     const [lionInfo, setLionInfo] = useState<LionInfoDetailsResponse | null>(null);
@@ -65,6 +63,8 @@ export const MyPage = () => {
             </div>
         );
     }
+    // 기수로 게스트 ..
+    const isGuest = member.generations ? false : true;
 
     return (
         <PageLayout>

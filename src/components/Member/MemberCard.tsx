@@ -1,5 +1,4 @@
 import type { MemberResponse } from "@/types/members";
-import defaultImage from "@/assets/Member/MemberSample2.png";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -28,12 +27,16 @@ export const MemberCard = ({
     profileImageUrl,
     portfolioLinks
 }: MemberResponse) => {
-    const imageSrc = profileImageUrl || defaultImage;
+    const imageSrc = profileImageUrl;
     return (
         <div className="whitespace-pre-line leading-snug relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
             <div className="w-full h-full flex flex-col rounded-[16px] py-[36px] px-[28px]  z-1">
                 <div className="w-[218px] h-[216px] overflow-hidden ">
-                    <img className="w-full h-full object-contain" src={imageSrc} alt={name} />
+                    {imageSrc !== null ? (
+                        <img className="w-full h-full object-contain" src={imageSrc} alt={name} />
+                    ) : (
+                        <div className="w-full h-full bg-[#232323]"></div>
+                    )}
                 </div>
                 <div className="flex flex-col pt-[28px]      text-center gap-[15px]">
                     <span className="text-[16px] text-[#7F7F7F] font-medium my-0">

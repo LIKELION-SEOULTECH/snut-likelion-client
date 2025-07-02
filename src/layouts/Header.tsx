@@ -2,6 +2,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
 import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
 import { ROUTES } from "@/constants/routes";
+import { useEffect, useState } from "react";
+import { MyIcon } from "@/components/Header/MyIcon";
+import { fetchMyMemberInfo } from "@/apis/members";
 
 interface HeaderProps {
     white?: boolean;
@@ -10,6 +13,23 @@ interface HeaderProps {
 export const Header = ({ white = false }: HeaderProps) => {
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            const token = localStorage.getItem("accessToken");
+            setIsLoggedIn(!!token);
+
+            if (token) {
+                const res = await fetchMyMemberInfo();
+                setProfileImage(res.profileImageUrl);
+            }
+        };
+
+        loadProfile();
+    }, []);
 
     const navItems = [
         { name: "모집안내", route: ROUTES.HOME },
@@ -65,7 +85,22 @@ export const Header = ({ white = false }: HeaderProps) => {
                                 );
                             })}
                         </div>
-                        <LoginSignupBtn onClick={() => navigate(ROUTES.LOGIN)} />
+                        {isLoggedIn ? (
+                            <div className="flex  gap-4 items-center">
+                                <button
+                                    className="w-[109px] h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded rounded-[100px] cursor-pointer text-[14px] "
+                                    onClick={() => navigate(ROUTES.BLOG_POST)}
+                                >
+                                    블로그 글쓰기
+                                </button>
+                                <MyIcon
+                                    onClick={() => navigate(ROUTES.MYPAGE)}
+                                    profileImageUrl={profileImage}
+                                />
+                            </div>
+                        ) : (
+                            <LoginSignupBtn onClick={() => navigate(ROUTES.LOGIN)} />
+                        )}
                     </div>
                 </div>
             </div>

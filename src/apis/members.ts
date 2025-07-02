@@ -1,5 +1,5 @@
-import type { MemberDetailResponse, MemberResponse } from "@/types/members";
 import axiosInstance from "./axiosInstance";
+import type { MemberDetailResponse, MemberResponse } from "@/types/members";
 import type { LionInfoDetailsResponse } from "@/types/member";
 
 // 쿼리 파라미터 (기수, 운영진 여부)

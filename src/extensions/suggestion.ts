@@ -2,12 +2,11 @@ import type { MentionOptions } from "@tiptap/extension-mention";
 import { ReactRenderer } from "@tiptap/react";
 import tippy, { type Instance as TippyInstance } from "tippy.js";
 import SuggestionList, { type SuggestionListRef } from "@/components/text-editor/SuggestionList";
-import sample from "@/assets/home/sample.png";
-import sample1 from "@/assets/home/sample1.png";
-import sample2 from "@/assets/home/sample2.png";
+import { searchMembers } from "@/apis/member";
+import type { MemberSearchResponse } from "@/types/member";
 
 export type MentionSuggestion = {
-    id: string;
+    id: number;
     mentionLabel: string;
     avatarUrl: string;
 };
@@ -27,26 +26,21 @@ const DOM_RECT_FALLBACK: DOMRect = {
 };
 
 export const mentionSuggestionOptions: MentionOptions["suggestion"] = {
-    items: async ({ query }): Promise<MentionSuggestion[]> =>
-        Promise.resolve(
-            [
-                { name: "전민경", avatarUrl: sample },
-                { name: "박진아", avatarUrl: sample1 },
-                { name: "이예한", avatarUrl: sample2 },
-                { name: "노경인", avatarUrl: sample },
-                { name: "고지완", avatarUrl: sample1 },
-                { name: "박조아", avatarUrl: sample2 },
-                { name: "김성휘", avatarUrl: sample },
-                { name: "조한별", avatarUrl: sample1 },
-                { name: "임가영", avatarUrl: sample2 }
-            ]
-                .map((user, index) => ({
-                    mentionLabel: user.name,
-                    id: index.toString(),
-                    avatarUrl: user.avatarUrl
-                }))
-                .filter((item) => item.mentionLabel.toLowerCase().startsWith(query.toLowerCase()))
-        ),
+    items: async ({ query }): Promise<MentionSuggestion[]> => {
+        try {
+            const res = await searchMembers(query);
+            const members = res.data.data;
+
+            return members.map((member: MemberSearchResponse) => ({
+                id: member.id,
+                mentionLabel: member.name,
+                avatarUrl: member.profileImageUrl
+            }));
+        } catch (error) {
+            console.error("멤버 검색 실패:", error);
+            return [];
+        }
+    },
 
     render: () => {
         let component: ReactRenderer<SuggestionListRef> | undefined;

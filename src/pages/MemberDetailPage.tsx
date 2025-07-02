@@ -1,17 +1,17 @@
-// import { ProjectBox } from "@/components/home/ProjectBox";
+import { ProjectBox } from "@/components/home/ProjectBox";
 import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/Member/SmallBtn";
-// import { projectList } from "@/constants/home/projectList";
 
 import { ROUTES } from "@/constants/routes";
 import PageLayout from "@/layouts/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
 import { useEffect, useState } from "react";
-import { fetchMemberDetail } from "@/apis/members";
+import { fetchLionInfo, fetchMemberDetail } from "@/apis/members";
 import type { MemberDetailResponse, MemberResponse } from "@/types/members";
 
 import { useLocation } from "react-router-dom";
+import type { ParticipatingProject } from "@/types/member";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -36,45 +36,39 @@ export const MemberDetailPage = () => {
     const [member, setMember] = useState<(MemberDetailResponse & Partial<MemberResponse>) | null>(
         null
     );
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+
+    const [projects, setProjects] = useState<ParticipatingProject[]>([]);
 
     const location = useLocation();
     const fallbackData = location.state?.member;
 
     useEffect(() => {
         const getMember = async () => {
-            try {
-                const data = await fetchMemberDetail(Number(id));
-                setMember({
-                    ...data,
-                    ...fallbackData // 기수, 파트, 역할 데이터 보충해주기 ,,,,
-                });
-            } catch (err) {
-                console.error("멤버 조회 실패", err);
-                setError(true);
-
-                setMember(fallbackData ?? null); // fallback이라도 쓰기
-            } finally {
-                setLoading(false);
-            }
+            const data = await fetchMemberDetail(Number(id));
+            setMember({
+                ...data,
+                ...fallbackData // 기수, 파트, 역할 데이터 보충해주기 ,,,,
+            });
+            console.log(fallbackData);
         };
 
         if (id) getMember();
         console.log("Fallback data:", fallbackData);
     }, [id, fallbackData]);
 
-    if (loading) {
-        return (
-            <PageLayout>
-                <div className="text-white h-[80vh] flex justify-center items-center text-xl">
-                    불러오는 중...
-                </div>
-            </PageLayout>
-        );
-    }
+    useEffect(() => {
+        const loadProjects = async () => {
+            if (!id || !fallbackData?.generation) return;
 
-    if (error || !member) {
+            const lionInfo = await fetchLionInfo(Number(id), fallbackData.generation);
+            setProjects(lionInfo.projects ?? []);
+        };
+
+        loadProjects();
+    }, [id, fallbackData?.generation]);
+
+    if (!member) {
+        console.log(member);
         return (
             <PageLayout>
                 <div className="p-10 text-[#fff] h-[75vh] w-full flex justify-center items-center ">
@@ -158,16 +152,25 @@ export const MemberDetailPage = () => {
                                         ))}
                                     </div>
                                 </div>
-                                {/* 중간 */}
-                                {/* ******플젝도 연결해야함 *******/}
+
                                 <div className="flex flex-col">
                                     <h1 className="text-[32px] my-0 text-[#fff] font-bold pb-[32px]">
                                         참여한 프로젝트
                                     </h1>
                                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
-                                        {/* {projectList.map((project) => (
-                                            <ProjectBox key={project.id} {...project} />
-                                        ))} */}
+                                        {projects.length > 0 ? (
+                                            projects.map((project) => (
+                                                <ProjectBox
+                                                    key={project.id}
+                                                    generation={fallbackData.generation}
+                                                    {...project}
+                                                />
+                                            ))
+                                        ) : (
+                                            <div className="text-[#7F7F7F] text-lg col-span-2">
+                                                참여한 프로젝트가 없습니다.
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="flex gap-3 pb-8 flex-wrap">
                                         {member.portfolioLinks?.map((link) => (

@@ -6,34 +6,50 @@ import ImageBtn from "@/assets/text-editor/image.svg?react";
 import OpenBtn from "@/assets/text-editor/open-btn.svg?react";
 import CloseBtn from "@/assets/text-editor/close-btn.svg?react";
 import { useState } from "react";
+import { uploadBlogImages } from "@/apis/blog";
+import type { Dispatch, SetStateAction } from "react";
 
-export const MenuBar = ({ editor }: { editor: Editor | null }) => {
+export const MenuBar = ({
+    editor,
+    setImages
+}: {
+    editor: Editor | null;
+    setImages: Dispatch<SetStateAction<string[]>>; // ✅ 이걸로!
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     if (!editor) {
         return null;
     }
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            const imageUrl = reader.result as string;
-            editor
-                .chain()
-                .focus("end")
-                .insertContent({
-                    type: "customImage",
-                    attrs: {
-                        src: imageUrl,
-                        alt: "uploaded image",
-                        isThumbnail: false
-                    }
-                })
-                .run();
-        };
-        reader.readAsDataURL(file);
+        try {
+            const fileList = Array.from(files); // 여러 개 파일 배열로 변환
+            const urls = await uploadBlogImages(fileList); // 다중 업로드 요청
+            setImages((prev) => [...prev, ...urls]);
+
+            console.log(urls);
+            urls.forEach((imageUrl) => {
+                editor
+                    .chain()
+                    .focus("end")
+                    .insertContent({
+                        type: "customImage",
+                        attrs: {
+                            src: imageUrl,
+                            alt: "uploaded image",
+                            isThumbnail: false
+                        }
+                    })
+                    .run();
+            });
+        } catch (err) {
+            console.error("이미지 업로드 실패", err);
+        } finally {
+            e.target.value = "";
+        }
     };
 
     return (
