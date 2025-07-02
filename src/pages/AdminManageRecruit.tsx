@@ -6,7 +6,7 @@ import { dummyManagerData } from "@/constants/admin/dummyManagerData";
 import { RecruitManagerSearchTool } from "@/components/admin/recruit/RecruitManagerSearchTool";
 import { RecruitManagerSearchList } from "@/components/admin/recruit/RecruitManagerSearchList";
 import { getSubmittedApplications } from "@/apis/recruit";
-import type { ManagerData } from "@/types/recruit";
+import type { ManagerData } from "@/types/recruitment";
 
 export const AdminManagerRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);

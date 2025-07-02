@@ -9,7 +9,7 @@ export interface PortfolioLink {
 
 export interface Member {
     id: number;
-    name: string;
+    username: string;
     part: string;
     role: string;
     department?: string;

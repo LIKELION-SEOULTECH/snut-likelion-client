@@ -1,5 +1,5 @@
 import type { Project } from "@/types/project";
-import axiosInstance from "./axiosInstace";
+import axiosInstance from "./axiosInstance";
 
 export const createAdminProject = async (formData: FormData): Promise<void> => {
     console.log(formData);

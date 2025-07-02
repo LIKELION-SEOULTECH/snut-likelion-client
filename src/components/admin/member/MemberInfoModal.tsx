@@ -8,7 +8,7 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import type { Member } from "@/types/member";
+import type { Member } from "@/types/members";
 import { useState, useEffect } from "react";
 import { updateMember, deleteMember } from "@/apis/member";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ interface MemberInfoModalProps {
 export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps) => {
     const queryClient = useQueryClient();
 
-    const [generation, setGeneration] = useState("");
+    const [generation, setGeneration] = useState<string | number>("");
     const [part, setPart] = useState("");
     const [role, setRole] = useState("");
     const [department, setDepartment] = useState("");

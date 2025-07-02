@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstace";
+import axiosInstance from "./axiosInstance";
 import type { MemberListResponse } from "@/types/member";
 
 export interface UpdateProfileRequest {

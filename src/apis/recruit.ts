@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstace";
+import axiosInstance from "./axiosInstance";
 import type { Question } from "./apply";
 export interface Recruitment {
     id: number;
@@ -108,8 +108,6 @@ export const fetchQuestionsByRecruitment = async (recId: number | string) => {
     return res.data;
 };
 
-import axiosInstance from "./axiosInstance";
-
 interface SubscribeRequest {
     email: string;
     type: string;
@@ -118,12 +116,4 @@ interface SubscribeRequest {
 export const subscribeRecruitment = ({ email, type }: SubscribeRequest) => {
     const params = new URLSearchParams({ email, type: type }).toString();
     return axiosInstance.post(`/subscriptions?${params}`);
-};
-
-// 최신 모집 일정 조회
-export const fetchRecentRecruitment = async (type: string) => {
-    const response = await axiosInstance.get("/recruitments", {
-        params: { recruitmentType: type }
-    });
-    return response.data;
 };

@@ -1,4 +1,4 @@
-import type { UserData } from "@/types/recruit";
+import type { UserData } from "@/types/recruitment";
 import { RecruitUserItem } from "./RecruitUserItem";
 
 export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {

@@ -76,7 +76,7 @@ export const AdminNoticeEditPage = () => {
     }; // patch 수정 필요
 
     return (
-        <AdminLayout onUploadClick={handleUpdate}>
+        <AdminLayout onSubmit={handleUpdate}>
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
