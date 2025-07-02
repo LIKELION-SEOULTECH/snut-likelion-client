@@ -20,10 +20,20 @@ const quotes = [
 
 export default function QuoteCardList() {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [combinedQuotes, setCombinedQuotes] = useState(quotes);
+
     const { data: sayings } = useQuery({
         queryKey: ["saying"],
         queryFn: fetchSaying
     });
+
+    useEffect(() => {
+        if (Array.isArray(sayings)) {
+            const updated = [...sayings, ...quotes];
+            setCombinedQuotes(updated);
+            console.log("✅ sayings 포함 combinedQuotes:", updated);
+        }
+    }, [sayings]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -33,9 +43,9 @@ export default function QuoteCardList() {
     }, []);
 
     const getVisualIndex = (i: number) => {
-        return (i - activeIndex + quotes.length) % quotes.length;
+        return (i - activeIndex + combinedQuotes.length) % combinedQuotes.length;
     };
-    const combinedQuotes = [...(Array.isArray(sayings) ? sayings : []), ...quotes];
+
     console.log("✅ combinedQuotes:", combinedQuotes);
 
     return (
