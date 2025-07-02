@@ -1,5 +1,5 @@
 import { RecruitManagerItem } from "./RecruitManagerItem";
-import type { ManagerData } from "@/types/recruit";
+import type { ManagerData } from "@/types/recruitment";
 
 export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
     return (
