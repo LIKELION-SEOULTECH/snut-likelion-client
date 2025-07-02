@@ -5,10 +5,11 @@ import type { ProjectCategory } from "@/types/project";
 interface ProjectBoxProps {
     id: number;
     name: string;
-    description: string;
-    generation: number;
-    category: ProjectCategory;
-    // tags: string[];
+    description?: string;
+    generation?: number;
+    category?: ProjectCategory;
+    tags?: string[];
+
     thumbnailUrl: string;
     rounded?: string;
 }
@@ -48,9 +49,11 @@ export const ProjectBox = ({
                         <span className="bg-[#C4C4C4] text-[#3A3A3A] px-3 py-1 rounded-full text-[16px] leading-[150%] font-medium">
                             {generation}기
                         </span>
-                        <span className="bg-[#C4C4C4] text-[#3A3A3A] px-3 py-1 rounded-full text-[16px] leading-[150%] font-medium">
-                            {categoryMap[category] ?? category}
-                        </span>
+                        {category !== undefined ? (
+                            <span className="bg-[#C4C4C4] text-[#3A3A3A] px-3 py-1 rounded-full text-[16px] leading-[150%] font-medium">
+                                {categoryMap[category] ?? category}
+                            </span>
+                        ) : null}
                         {/* {Array.isArray(tags) &&
                             tags.map((tech: string, i: number) => (
                                 <span

@@ -28,7 +28,7 @@ export default function ProjectPage() {
             try {
                 const all = await fetchAllProjects({});
                 const genList = Array.from(new Set(all.map((p) => `${p.generation}기`))).sort(
-                    (a, b) => Number(a.replace("기", "")) - Number(b.replace("기", ""))
+                    (a, b) => Number(b.replace("기", "")) - Number(a.replace("기", ""))
                 );
 
                 setGenerations(["전체", ...genList]);

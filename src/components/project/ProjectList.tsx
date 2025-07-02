@@ -25,7 +25,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-4 mt-12 w-[1216px]">
+            <div className="grid grid-cols-3 gap-4 mt-12 cursor-pointer w-[1216px]">
                 {currentProjects.map((project) => (
                     <ProjectBox key={project.id} {...project} />
                 ))}

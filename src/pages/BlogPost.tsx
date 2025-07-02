@@ -3,8 +3,11 @@ import PageLayout from "@/layouts/PageLayout";
 import { ChevronDown } from "lucide-react";
 import TextEditor from "@/components/text-editor/TextEditor";
 import TagEditor from "@/components/text-editor/TagEditor";
+import { useNavigate } from "react-router-dom";
 
 export const BlogPostPage = () => {
+    const navigate = useNavigate();
+
     const [type, setType] = useState("세션 이야기");
     const [title, setTitle] = useState("");
     const [tags, setTags] = useState<string[]>([]);
@@ -14,8 +17,18 @@ export const BlogPostPage = () => {
 
     const isUploadEnabled = title.trim() !== "" && tags.length > 0 && content.trim() !== "";
 
+    //나가기
+    const handleExit = () => {
+        navigate(-1);
+    };
+
     return (
-        <PageLayout white={true} isPost={true} isUploadEnabled={isUploadEnabled}>
+        <PageLayout
+            white={true}
+            isPost={true}
+            isUploadEnabled={isUploadEnabled}
+            onExit={handleExit}
+        >
             <div className="flex flex-col px-[215px] pt-20 pb-100">
                 <div className="w-50 relative">
                     <select

@@ -6,6 +6,7 @@ import { fetchLionInfo } from "@/apis/members";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
+import { ProjectBox } from "../home/ProjectBox";
 
 const partMap = {
     프론트엔드: "front-end",
@@ -43,14 +44,9 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
 
     useEffect(() => {
         const loadLionInfo = async () => {
-            try {
-                const lionData = await fetchLionInfo(member.id, selectedGeneration);
-                setLionInfo(lionData);
-            } catch (e) {
-                console.error(" 정보 조회 실패", e);
-            } finally {
-                setLoading(false);
-            }
+            const lionData = await fetchLionInfo(member.id, selectedGeneration);
+            setLionInfo(lionData);
+            setLoading(false);
         };
 
         loadLionInfo();
@@ -140,9 +136,17 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                         </span>
                     </div>
                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
-                        {/* lionInfo.projects?.map((project) => (
-                            <ProjectBox key={project.id} {...project} />
-                        )) */}
+                        {lionInfo.projects?.map((project) => (
+                            <ProjectBox
+                                key={project.id}
+                                generation={selectedGeneration}
+                                {...{
+                                    id: project.id,
+                                    name: project.name,
+                                    thumbnailUrl: project.thumbnailUrl
+                                }}
+                            />
+                        ))}
                     </div>
 
                     <div className="flex justify-between">
