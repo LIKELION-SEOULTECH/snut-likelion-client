@@ -47,17 +47,8 @@ export const MemberDetailPage = () => {
             const data = await fetchMemberDetail(Number(id));
             setMember({
                 ...data,
-                ...fallbackData, // 기수, 파트, 역할 데이터 보충해주기 ,,,,
-                generations: data.generations ?? [fallbackData?.generation]
+                ...fallbackData // 기수, 파트, 역할 데이터 보충해주기 ,,,,
             });
-            setMember(
-                fallbackData
-                    ? {
-                          ...fallbackData,
-                          generations: [fallbackData.generation]
-                      }
-                    : null
-            );
             console.log(fallbackData);
         };
 
@@ -76,8 +67,8 @@ export const MemberDetailPage = () => {
         loadProjects();
     }, [id, fallbackData?.generation]);
 
-    console.log(member);
     if (!member) {
+        console.log(member);
         return (
             <PageLayout>
                 <div className="p-10 text-[#fff] h-[75vh] w-full flex justify-center items-center ">
