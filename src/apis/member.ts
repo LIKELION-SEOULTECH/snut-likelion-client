@@ -27,9 +27,10 @@ export const searchMembers = (keyword: string) => {
 // 멤버 리스트 조회 (검색 포함)
 export const fetchMemberList = async (params?: {
     generation?: number;
-    name?: string;
     role?: string;
     size?: number;
+    keyword?: string;
+    page?: number;
 }): Promise<MemberListResponse> => {
     const res = await axiosInstance.get("/admin/members", { params });
     return res.data.data;
@@ -41,7 +42,7 @@ export const updateMember = async (
     data: {
         generation: number;
         part: string;
-        role: "ROLE_USER" | "ROLE_ADMIN";
+        role: string;
         department: string | null;
         username: string;
     }

@@ -24,7 +24,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
 
     const [generation, setGeneration] = useState("");
     const [part, setPart] = useState("");
-    const [role, setRole] = useState<"ROLE_USER" | "ROLE_ADMIN">("ROLE_USER");
+    const [role, setRole] = useState("");
     const [department, setDepartment] = useState("");
 
     const partToEnumValue = (part: string): string => {
@@ -48,7 +48,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
         if (member) {
             setGeneration(member.generation);
             setPart(partToEnumValue(member.part));
-            setRole(member.role === "ROLE_ADMIN" ? "ROLE_ADMIN" : "ROLE_USER");
+            setRole(member.role);
             setDepartment("");
         }
     }, [member]);
@@ -147,8 +147,9 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                     <div className="h-11 flex items-center gap-[35px]">
                         <span className="text-sm font-semibold text-[#666666]">역할</span>
                         <RadioGroup
-                            value={role}
-                            onValueChange={(val: "ROLE_USER" | "ROLE_ADMIN") => {
+                            value={role === "ROLE_ADMIN" ? "ROLE_MANAGER" : role}
+                            onValueChange={(val: "ROLE_USER" | "ROLE_MANAGER") => {
+                                if (role === "ROLE_ADMIN") return;
                                 setRole(val);
                                 if (val === "ROLE_USER") setDepartment("");
                             }}
@@ -166,11 +167,11 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <RadioGroupItem
-                                    value="ROLE_ADMIN"
-                                    id="role-admin"
+                                    value="ROLE_MANAGER"
+                                    id="role-manager"
                                     className="text-[#ff7700] [&_svg]:fill-[#ff7700]"
                                 />
-                                <label htmlFor="role-admin" className="text-sm">
+                                <label htmlFor="role-manager" className="text-sm">
                                     운영진
                                 </label>
                             </div>

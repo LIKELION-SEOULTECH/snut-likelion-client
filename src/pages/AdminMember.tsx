@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // 한 페이지에 보여줄 개수
+    const itemsPerPage = 8;
     const [filters, setFilters] = useState({
         generation: "all",
         part: "all",
@@ -18,7 +18,7 @@ export const AdminMemberPage = () => {
 
     const handleSearch = (newFilters: typeof filters) => {
         setFilters(newFilters);
-        setCurrentPage(1); // 필터 변경 시 첫 페이지로 초기화
+        setCurrentPage(1);
     };
 
     const { data, isLoading, isError } = useQuery({
@@ -30,13 +30,13 @@ export const AdminMemberPage = () => {
                 role?: string;
                 keyword?: string;
                 page: number;
-                size: number;
             } = {
-                page: currentPage - 1,
-                size: itemsPerPage
+                page: currentPage - 1
             };
 
-            if (filters.generation !== "all") queryParams.generation = Number(filters.generation);
+            if (filters.generation !== "all" && filters.generation !== "") {
+                queryParams.generation = Number(filters.generation);
+            }
             if (filters.part !== "all") queryParams.part = filters.part;
             if (filters.role !== "all") queryParams.role = filters.role;
             if (filters.keyword.trim() !== "") queryParams.keyword = filters.keyword;

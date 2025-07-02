@@ -6,6 +6,7 @@ interface ProjectSearchListProps {
     selectedIds: number[];
     onToggleSelect: (id: number) => void;
     onToggleSelectAll?: (checked: boolean) => void;
+    length: number;
 }
 
 export const ProjectSearchList = ({
@@ -13,12 +14,13 @@ export const ProjectSearchList = ({
     showCheckboxes,
     selectedIds,
     onToggleSelect,
-    onToggleSelectAll
+    onToggleSelectAll,
+    length
 }: ProjectSearchListProps) => {
     return (
         <div>
             <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{data.length}</span>
+                검색결과 <span className="text-orange-400">{length}</span>
             </div>
 
             <div className="w-full text-sm rounded-sm overflow-hidden">
@@ -44,7 +46,7 @@ export const ProjectSearchList = ({
                     <span className="flex-[4] text-left">제목</span>
                     <span className="flex-[0.7] text-left">기수</span>
                     <span className="flex-[1] text-left">구분</span>
-                    <span className="flex-[1.5] text-left">등록일</span>
+                    <span className="flex-[1] text-left">등록일</span>
                 </div>
 
                 {/* 리스트 content */}

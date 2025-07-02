@@ -15,6 +15,7 @@ export interface Project {
     tags: string[];
     category: "IDEATHON" | "HACKATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
     thumbnailUrl: string;
+    createAt?: string;
 }
 
 export type ProjectCategory = "IDEATHON" | "HACKATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
@@ -42,4 +43,10 @@ export interface ProjectDetailResponse {
     members: { id: number; username: string }[];
     category: string; // "장기 프로젝트", "아이디어톤" 등
     imageUrls: string[];
+}
+
+export interface GetProjectListParams {
+    generation?: string;
+    type?: string;
+    keyword?: string;
 }

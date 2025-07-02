@@ -1,4 +1,3 @@
-// import type { CreateProjectRequest } from "@/types/project";
 import type { Project } from "@/types/project";
 import axiosInstance from "./axiosInstace";
 
@@ -54,4 +53,17 @@ export const deleteRetrospection = (projectId: number, retrospectionId: number) 
 // 프로젝트 이미지 단건 삭제
 export const deleteProjectImage = (projectId: number) => {
     return axiosInstance.delete(`/api/v1/projects/${projectId}/images`);
+};
+
+// admin 프로젝트 조회
+export const fetchAdminProjects = async (params?: {
+    generation?: string;
+    keyword?: string;
+    page?: number;
+}) => {
+    const res = await axiosInstance.get("/admin/projects", {
+        params
+    });
+    console.log(res.data.data);
+    return res.data.data;
 };
