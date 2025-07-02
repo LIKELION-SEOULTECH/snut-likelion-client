@@ -11,6 +11,8 @@ export const RegisterForm = () => {
         phoneNumber,
         codeSent,
         errors,
+        timer,
+        verificationStatus,
         setUsername,
         setEmail,
         setVerificationCode,
@@ -52,24 +54,33 @@ export const RegisterForm = () => {
                         backgroundColor: email ? "#666666" : "#2D2D2D",
                         color: email ? "white" : "#666666"
                     }}
-                    disabled={!email}
+                    disabled={!email || timer > 0}
                     onClick={handleSendVerificationCode}
                 >
-                    인증코드 전송
+                    {timer > 0
+                        ? `${Math.floor(timer / 60)} : ${String(timer % 60).padStart(2, "0")}`
+                        : "인증코드 전송"}
                 </button>
             </div>
 
             <div className="flex flex-row gap-4">
-                <Input
-                    label="인증코드"
-                    placeholder="Verification code"
-                    value={verificationCode}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setVerificationCode(e.target.value)
-                    }
-                    error={""}
-                    disabled={!codeSent}
-                />
+                <div className="flex flex-col flex-1">
+                    <Input
+                        label="인증코드"
+                        placeholder="Verification code"
+                        value={verificationCode}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setVerificationCode(e.target.value)
+                        }
+                        error={""}
+                        disabled={!codeSent}
+                    />
+
+                    <p className="text-green-400 text-sm pl-2 pt-1 h-1 ">
+                        {verificationStatus === "success" && "인증이 완료되었습니다"}
+                        {verificationStatus === "fail" && "유효하지 않은 인증코드 입니다"}
+                    </p>
+                </div>
                 <button
                     type="button"
                     className={`w-[173px] h-14 text-xl font-medium rounded-lg mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}

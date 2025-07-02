@@ -1,11 +1,29 @@
 import { ReactTyped } from "react-typed";
 import mainBg from "@/assets/home/main-bg.png";
 
-type Props = {
+export const MainVisualSection = ({
+    onOpenModal,
+    buttonType
+}: {
     onOpenModal: () => void;
-};
+    buttonType: "MANAGER_NOTIFY" | "MANAGER_APPLY" | "MEMBER_NOTIFY" | "MEMBER_APPLY" | null;
+}) => {
+    const renderButtonText = () => {
+        switch (buttonType) {
+            case "MANAGER_NOTIFY":
+                return "14기 모집 알림 받기 →";
+            case "MANAGER_APPLY":
+                return "14기 운영진 지원하기 →";
+            case "MEMBER_NOTIFY":
+                return "14기 모집 알림 받기 →";
+            case "MEMBER_APPLY":
+                return "14기 아기사자 지원하기 →";
+            default:
+                return null;
+        }
+    };
+    const text = renderButtonText();
 
-export const MainVisualSection = ({ onOpenModal }: Props) => {
     return (
         <div className="relative w-full overflow-hidden pl-[37px] sm:pl-[110px] text-white">
             {/* 배경화면 */}
@@ -61,7 +79,7 @@ export const MainVisualSection = ({ onOpenModal }: Props) => {
                     className="h-10 sm:h-18 bg-[#ff7700] text-base sm:text-[25px] font-bold rounded-[250px] mt-8 sm:mt-[54px] mb-[154px] sm:mb-[134px] px-5 sm:px-12 leading-[130%] tracking-[-0.02em] cursor-pointer"
                     onClick={onOpenModal}
                 >
-                    14기 모집 알림 받기 →
+                    {text ? text : "14기 모집 알림 받기 →"}
                 </button>
             </div>
         </div>

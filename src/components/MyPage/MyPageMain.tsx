@@ -52,6 +52,7 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
         loadLionInfo();
     }, [member.id, selectedGeneration]);
 
+    console.log(lionInfo);
     if (loading || !lionInfo) {
         return (
             <div className="text-white h-[60vh] flex justify-center items-center text-xl">
@@ -136,10 +137,10 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                         </span>
                     </div>
                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
-                        {lionInfo.projects?.map((project) => (
+                        {lionInfo.projects?.reverse().map((project) => (
                             <ProjectBox
-                                key={project.id}
                                 generation={selectedGeneration}
+                                key={project.id}
                                 {...{
                                     id: project.id,
                                     name: project.name,

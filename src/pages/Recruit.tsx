@@ -1,90 +1,115 @@
+// src/components/Recruit.tsx
+import { useEffect, useState } from "react";
 import PageLayout from "@/layouts/PageLayout";
 import joinUs from "@/assets/Recruit/JoinUs.jpg";
-
-import { ManegerRoleLIst, RoleList } from "@/components/home/RoleList";
 import { InfoBox } from "@/components/Recruit/InfoBox";
+import { ManegerRoleLIst, RoleList } from "@/components/home/RoleList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNavigate } from "react-router-dom";
-
-// 모집일정 //
-const Member_InfoData = [
-    { title: "서류 접수", date: "2025.02.21 (금) ~ 03.05 (수)", note: "총 13일" },
-    { title: "서류 발표", date: "2025.03.09 (일)", note: "메일로 개별 발표" },
-    {
-        title: "면접",
-        date: "2025.03.11 (화) ~ 03.13 (목)",
-        note: "개별 안내되는 일정에 따라 대면 진행"
-    },
-    { title: "최종 발표", date: "2025.03.16 (일)", note: "메일로 개별 발표" }
-];
-const Manager_InfoData = [
-    { title: "서류 접수", date: "2025.02.21 (금) ~ 03.05 (수)", note: "총 13일" },
-    { title: "서류 발표", date: "2025.03.09 (일)", note: "메일로 개별 발표" },
-    {
-        title: "면접",
-        date: "2025.03.11 (화) ~ 03.13 (목)",
-        note: "개별 안내되는 일정에 따라 대면 진행"
-    },
-    { title: "최종 발표", date: "2025.03.16 (일)", note: "메일로 개별 발표" }
-];
-
-//지원자격 및 모집 대상
-
-const Member_ScheduleData = [
-    {
-        title: "• 학교 자체 OT: 3/20 (목)",
-        orangeText: "대면",
-        note: "* 불참 시 수료 불가"
-    },
-    {
-        title: "• 전체 OT: 3/26 (수)",
-        orangeText: "비대면",
-        note: "* 불참 시 수료 불가"
-    },
-    {
-        title: "• 정기 세션: 3월 ~ 12월",
-        orangeText: "매주 목요일 2시간 가량 대면",
-        note: "* 2회 불참 시 수료 불가"
-    },
-    {
-        title: "• 중앙 해커톤",
-        orangeText: "무박 2일",
-        note: "* 불참시 수료 불가"
-    }
-];
-const Manager_ScheduleData = [
-    {
-        title: "• 학교 자체 OT: 3/20 (목)",
-        orangeText: "대면",
-        note: "* 불참 시 수료 불가"
-    },
-    {
-        title: "• 전체 OT: 3/26 (수)",
-        orangeText: "비대면",
-        note: "* 불참 시 수료 불가"
-    },
-    {
-        title: "• 정기 세션: 3월 ~ 12월",
-        orangeText: "매주 목요일 2시간 가량 대면",
-        note: "* 2회 불참 시 수료 불가"
-    },
-    {
-        title: "• 중앙 해커톤",
-        orangeText: "무박 2일",
-        note: "* 불참시 수료 불가"
-    }
-];
+import { fetchRecentRecruitment } from "@/apis/recruit";
+import { NotificationModal } from "@/components/home/NotificationModal";
 
 interface RecruitProps {
-    isManager?: boolean; // true면 운영진 모집
+    isManager?: boolean;
 }
 
+interface Schedule {
+    generation: number;
+    openDate: string;
+    closeDate: string;
+}
+
+const weekdayMap = ["일", "월", "화", "수", "목", "금", "토"];
+function formatDate(dateStr: string, includeYear = true) {
+    const d = new Date(dateStr);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const wd = weekdayMap[d.getDay()];
+    if (includeYear) {
+        return `${y}.${m}.${day} (${wd})`;
+    }
+    return `${m}.${day} (${wd})`;
+}
+
+function formatRange(open: string, close: string) {
+    return `${formatDate(open, true)} ~ ${formatDate(close, false)}`;
+}
 export const Recruit = ({ isManager = false }: RecruitProps) => {
     const navigate = useNavigate();
+
+    // 모집 일정 가져오기
+    const [schedule, setSchedule] = useState<Schedule | null>(null);
+    const [isApplyOpen, setIsApplyOpen] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        const type = isManager ? "MANAGER" : "MEMBER";
+        fetchRecentRecruitment(type)
+            .then((res) => {
+                const { generation, openDate, closeDate } = res.data;
+                setSchedule({ generation, openDate, closeDate });
+
+                const now = new Date();
+                const open = new Date(openDate);
+                const close = new Date(closeDate);
+                setIsApplyOpen(open <= now && now <= close);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }, [isManager]);
+
+    function addDays(dateStr: string, days: number): string {
+        const d = new Date(dateStr);
+        d.setDate(d.getDate() + days);
+        return d.toISOString();
+    }
+
+    // 버튼 클릭 -  기간 ㄴㄴ? 모달띄우기...
+    const handleApplyClick = () => {
+        if (!schedule) return;
+        if (isApplyOpen) {
+            // 기간 → 지원 폼
+            navigate(isManager ? "/recruitform/manager" : "/recruitform/member");
+        } else {
+            // 기간 ㄴㄴ → 모달 띄우기
+            setShowModal(true);
+        }
+    };
+
+    // InfoData: 동적 첫 항목 + 나머지 static
+    const infoData = schedule
+        ? [
+              {
+                  title: "서류 접수",
+                  date: formatRange(schedule.openDate, schedule.closeDate),
+                  note: `총 ${Math.ceil(
+                      (new Date(schedule.closeDate).getTime() -
+                          new Date(schedule.openDate).getTime()) /
+                          (1000 * 60 * 60 * 24)
+                  )}일`
+              },
+              {
+                  title: "서류 발표",
+                  date: formatDate(addDays(schedule.closeDate, 7), true),
+                  note: "메일로 개별 발표"
+              },
+              {
+                  title: "면접",
+                  date: "2025.03.11 (화) ~ 03.13 (목)",
+                  note: "개별 안내되는 일정에 따라 대면 진행"
+              },
+              { title: "최종 발표", date: "2025.03.16 (일)", note: "메일로 개별 발표" }
+          ]
+        : [];
+
+    const scheduleData = isManager ? Manager_ScheduleData : Member_ScheduleData;
 
     return (
         <PageLayout>
             <div className="w-full flex flex-col  bg-[#1B1B1B]">
+                {/* Top Visual */}
                 <div className="w-full h-[261px] relative mb-[120px] ">
                     <img
                         src={joinUs}
@@ -104,12 +129,14 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                         </div>
                     </div>
                 </div>
+
+                {/* 모집 일정 + 지원 버튼 */}
                 <div className="mb-[180px] mx-[112px] flex">
                     <div className="flex-1 ">
                         <h4 className="text-[32px] text-white font-[700] mb-[44px]">모집 일정</h4>
                         <div className="w-[908px] flex flex-col gap-y-3 mb-[180px]">
-                            {(isManager ? Manager_InfoData : Member_InfoData).map((e) => (
-                                <div className="flex gap-x-4 w-full">
+                            {infoData.map((e, i) => (
+                                <div key={i} className="flex gap-x-4 w-full">
                                     <div className="w-[148px] text-center">
                                         <InfoBox text={e.title} centered={true} />
                                     </div>
@@ -117,6 +144,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                                 </div>
                             ))}
                         </div>
+
                         <h4 className="text-[32px] text-white font-[700] mb-[44px]">
                             지원 자격 및 모집 대상
                         </h4>
@@ -131,63 +159,86 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                                     </>
                                 }
                             />
-                            <div className="py-[23px] bg-[#ECECEC] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex flex-col flex-1 leading-[180%]">
-                                {(isManager ? Manager_ScheduleData : Member_ScheduleData).map(
-                                    (item, idx) => (
-                                        <div key={idx} className="mb-2">
-                                            <span className="font-semibold">
-                                                {item.title}{" "}
-                                                <span className="text-[#f70]">
-                                                    {item.orangeText}
-                                                </span>
-                                            </span>
-                                            <div className="text-[#666] pl-4 font-medium">
-                                                {item.note}
-                                            </div>
+                            <div className="py-[23px] bg-[#ECECEC] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex flex-col flex-1 leading-[180%] ">
+                                {scheduleData.map((item, idx) => (
+                                    <div key={idx} className="mb-2">
+                                        <span className="font-semibold">
+                                            {item.title}{" "}
+                                            <span className="text-[#f70]">{item.orangeText}</span>
+                                        </span>
+                                        <div className="text-[#666] pl-4 font-medium">
+                                            {item.note}
                                         </div>
-                                    )
-                                )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
+
+                    {/* 지원하기 버튼 */}
                     <button
-                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer bg-[#F70] font-bold text-white px-10 py-5 align-center leading-[130%] font-pretendard`}
-                        onClick={() => {
-                            const target = isManager
-                                ? "/recruitform/maneger"
-                                : "/recruitform/member";
-                            navigate(target);
-                        }}
+                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer font-bold  px-10 py-5 align-center leading-[130%] font-pretendard ${isApplyOpen ? " bg-[#F70] text-white" : "bg-[#3A3A3A] text-[#666]"}`}
+                        onClick={handleApplyClick}
                     >
                         지원하기 →
                     </button>
                 </div>
 
-                {/* 모집파트부터 아래 */}
+                {/* 모집 파트 */}
                 <h4 className="text-[32px] text-white font-[700] mb-[44px] mx-[112px] flex">
                     파트 모집 분야
                 </h4>
-                <div className="relative flex flex-col items-center">
+                <div className="relative flex flex-col items-center ">
                     <div className="relative z-5 text-white">
                         <RoleList />
                     </div>
                 </div>
-                {isManager ? (
-                    <div>
+                {isManager && (
+                    <>
                         <h4 className="text-[32px] mt-[180px] text-white font-[700] mb-[44px] mx-[112px] flex">
                             운영진 모집 분야
                         </h4>
-                        <div className="relative flex flex-col items-center">
+                        <div className="relative flex flex-col items-center ">
                             <div className="relative z-5 text-white">
                                 <ManegerRoleLIst />
                             </div>
                         </div>
-                    </div>
-                ) : null}
+                    </>
+                )}
+
+                {/* Quote */}
                 <div className="w-full h-[150px] mt-[320px] px-28 bg-[#1B1B1B]">
                     <QuoteCardList />
                 </div>
+
+                {/* 모달 */}
+                {showModal && schedule && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                        <NotificationModal
+                            onClose={() => setShowModal(false)}
+                            type={isManager ? "MANAGER" : "MEMBER"}
+                        />
+                    </div>
+                )}
             </div>
         </PageLayout>
     );
 };
+
+// 샘플... 임시..
+
+const Member_ScheduleData = [
+    {
+        title: "• 학교 자체 OT: 3/20 (목)",
+        orangeText: "대면",
+        note: "* 불참 시 수료 불가"
+    },
+    { title: "• 전체 OT: 3/26 (수)", orangeText: "비대면", note: "* 불참 시 수료 불가" },
+    {
+        title: "• 정기 세션: 3월 ~ 12월",
+        orangeText: "매주 목요일 2시간 가량 대면",
+        note: "* 2회 불참 시 수료 불가"
+    },
+    { title: "• 중앙 해커톤", orangeText: "무박 2일", note: "* 불참시 수료 불가" }
+];
+const Manager_ScheduleData = Member_ScheduleData;

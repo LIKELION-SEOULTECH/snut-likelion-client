@@ -1,3 +1,4 @@
+import { ROUTES } from "@/constants/routes";
 import { useNavigate } from "react-router-dom";
 
 interface RecruitFormHeaderProps {
@@ -25,6 +26,7 @@ export const RecruitFormHeader = ({ isManeger, onNext, isValid, step }: RecruitF
 
     const handleSubmit = () => {
         alert("지원서가 제출되었습니다!");
+        navigate(ROUTES.MYPAGE);
         //****채워야한다.......****//
     };
     return (

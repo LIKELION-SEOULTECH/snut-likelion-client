@@ -91,7 +91,7 @@ export const ChatBotContainer = () => {
     //채팅입력
     const [input, setInput] = useState("");
 
-    const handleSend = (msg: string) => {
+    const handleSend = async (msg: string) => {
         if (!msg.trim()) return;
 
         const userMsg: ChatMessage = {
@@ -108,14 +108,42 @@ export const ChatBotContainer = () => {
         setMessages((prev) => [...prev, userMsg, loadingMsg]);
         setInput("");
 
-        setTimeout(() => {
-            const botMsg: ChatMessage = {
-                id: Date.now() + 2,
-                role: "bot",
-                message: "임시 답변입니다 :)"
-            };
-            setMessages((prev) => [...prev.filter((msg) => msg.role !== "loading"), botMsg]);
-        }, 1200);
+        setTimeout(async () => {
+            try {
+                const res = await fetch("http://ai.maruhxn.store:8000/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ text: msg })
+                });
+
+                const data = await res.json();
+                const { response } = data;
+
+                const botMsg: ChatMessage = {
+                    id: Date.now() + 2,
+                    role: "bot",
+                    message: (
+                        <div>
+                            <p className="mb-1">
+                                {response || "죄송해요! 답변을 찾지 못했어요 😥"}
+                            </p>
+                        </div>
+                    )
+                };
+
+                setMessages((prev) => [...prev.filter((m) => m.role !== "loading"), botMsg]);
+            } catch (error) {
+                const botMsg: ChatMessage = {
+                    id: Date.now() + 2,
+                    role: "bot",
+                    message: "오류가 발생했어요. 다시 시도해주세요 🙏"
+                };
+                setMessages((prev) => [...prev.filter((m) => m.role !== "loading"), botMsg]);
+                console.log(error);
+            }
+        }, 1000);
     };
 
     return (

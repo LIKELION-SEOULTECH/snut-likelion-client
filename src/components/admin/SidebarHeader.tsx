@@ -7,7 +7,7 @@ export const SidebarHeader = () => {
     return (
         <div
             className="flex items-center gap-[9px] h-20 px-10 cursor-pointer"
-            onClick={() => navigate(ROUTES.ADMIN)}
+            onClick={() => navigate(ROUTES.ADMIN_MEMBER)}
         >
             <Logo />
             <span className="text-white text-[28px] font-medium pr-[38px]">Admin</span>

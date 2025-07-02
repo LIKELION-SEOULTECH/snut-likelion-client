@@ -4,7 +4,8 @@ import { getAccessToken } from "@/utils/token";
 // axios 인스턴스 생성
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
-    withCredentials: true
+    withCredentials: true,
+    headers: { "Content-Type": "application/json" }
 });
 
 // 요청 인터셉터 추가
@@ -29,7 +30,7 @@ axiosInstance.interceptors.request.use((config) => {
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
-
 export default axiosInstance;

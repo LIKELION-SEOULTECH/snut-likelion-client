@@ -159,13 +159,15 @@ export const MemberDetailPage = () => {
                                     </h1>
                                     <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
                                         {projects.length > 0 ? (
-                                            projects.map((project) => (
-                                                <ProjectBox
-                                                    key={project.id}
-                                                    generation={fallbackData.generation}
-                                                    {...project}
-                                                />
-                                            ))
+                                            projects
+                                                .reverse()
+                                                .map((project) => (
+                                                    <ProjectBox
+                                                        key={project.id}
+                                                        generation={fallbackData.generation}
+                                                        {...project}
+                                                    />
+                                                ))
                                         ) : (
                                             <div className="text-[#7F7F7F] text-lg col-span-2">
                                                 참여한 프로젝트가 없습니다.

@@ -20,11 +20,18 @@ export const Header = ({ white = false }: HeaderProps) => {
     useEffect(() => {
         const loadProfile = async () => {
             const token = localStorage.getItem("accessToken");
-            setIsLoggedIn(!!token);
+            const role = localStorage.getItem("userRole");
 
-            if (token) {
+            // 토큰이 없거나, 게스트라면 API 호출x
+            const guest = role === "ROLE_GUEST";
+            setIsLoggedIn(!!token);
+            if (!token || guest) return;
+
+            try {
                 const res = await fetchMyMemberInfo();
                 setProfileImage(res.profileImageUrl);
+            } catch (err) {
+                console.warn("Header: fetchMyMemberInfo 실패", err);
             }
         };
 

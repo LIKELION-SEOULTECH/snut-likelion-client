@@ -11,7 +11,7 @@ export const MyIcon = ({ onClick, profileImageUrl }: MyIconProps) => {
             onClick={onClick}
             className="w-[33px] h-[33px] rounded-full overflow-hidden cursor-pointer"
         >
-            {profileImageUrl !== null ? (
+            {profileImageUrl?.startsWith("https://snut-likelion") ? (
                 <img src={profileImageUrl} alt="mypage" className="w-full h-full object-cover" />
             ) : (
                 <img src={SamplePrf} alt="mypage" className="w-full h-full object-cover" />

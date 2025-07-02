@@ -26,7 +26,7 @@ export default function ProjectList({ projects }: ProjectListProps) {
     return (
         <>
             <div className="grid grid-cols-3 gap-4 mt-12 cursor-pointer w-[1216px]">
-                {currentProjects.map((project) => (
+                {currentProjects.reverse().map((project) => (
                     <ProjectBox key={project.id} {...project} />
                 ))}
             </div>
