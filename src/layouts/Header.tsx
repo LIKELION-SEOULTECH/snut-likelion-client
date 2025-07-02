@@ -61,8 +61,10 @@ export const Header = ({ white = false }: HeaderProps) => {
                     <div className="hidden sm:flex flex-row gap-[206px] sm:items-center whitespace-nowrap">
                         <div className="flex flex-row gap-22 text-16 font-medium items-center">
                             {navItems.map((item) => {
-                                const isActive = location.pathname === item.route;
-
+                                const isActive =
+                                    item.route === "/"
+                                        ? location.pathname === "/"
+                                        : location.pathname.startsWith(item.route);
                                 return (
                                     <div
                                         key={item.name}
