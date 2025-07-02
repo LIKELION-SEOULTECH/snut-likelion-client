@@ -1,17 +1,19 @@
+import type { MyApplicationsResponse, RecruitmentResponse } from "@/types/recruit";
 import axiosInstance from "./axiosInstance";
-import type { RecruitmentResponse } from "@/types/recruit";
-// export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
-//     const res = await axiosInstance.get("/applications/me");
-//     return res.data;
-// };
 
-export const fetchRecruitmentsByType = async (
-    type: "MEMBER" | "MANAGER"
-): Promise<RecruitmentResponse[]> => {
-    const res = await axiosInstance.get("/recruitments", {
-        params: { recruitmentType: type }
-    });
+export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
+    const res = await axiosInstance.get("/applications/me");
+    console.log(res);
     return res.data;
+};
+
+export const fetchRecruitments = async (
+    recruitmentType: "MEMBER" | "MANAGER"
+): Promise<RecruitmentResponse[]> => {
+    const { data } = await axiosInstance.get<RecruitmentResponse[]>("/recruitments", {
+        params: { recruitmentType }
+    });
+    return data;
 };
 
 export const typeMap = {
