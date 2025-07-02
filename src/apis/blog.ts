@@ -91,7 +91,6 @@ export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
 
 export const fetchMyBlogs = async (): Promise<MyBlogType[]> => {
     const response = await axiosInstance.get("/blogs/me");
-    console.log("📦 내 블로그 API 응답:", response.data);
 
     return response.data.data.content.map((blog: MyBlogType) => ({
         postId: blog.postId,

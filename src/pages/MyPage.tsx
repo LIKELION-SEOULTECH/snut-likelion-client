@@ -6,7 +6,7 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import PageLayout from "@/layouts/PageLayout";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import type { MyApplicationsResponse } from "@/types/Recruit";
-import { fetchMyApplications } from "@/apis/Recuit";
+
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
 
@@ -27,20 +27,20 @@ export const MyPage = () => {
     }, []);
 
     //role-guest일 때 : 지원서
-    useEffect(() => {
-        const loadApplications = async () => {
-            if (!isGuest) return;
-            try {
-                const res = await fetchMyApplications();
-                setApplications(res);
-                console.log(res);
-            } catch (err) {
-                console.error("지원서 불러오기 실패", err);
-                setApplications([]); // 실패 시도 비워줌
-            }
-        };
-        loadApplications();
-    }, [isGuest]);
+    // useEffect(() => {
+    //     const loadApplications = async () => {
+    //         if (!isGuest) return;
+    //         try {
+    //             const res = await fetchMyApplications();
+    //             setApplications(res);
+    //             console.log(res);
+    //         } catch (err) {
+    //             console.error("지원서 불러오기 실패", err);
+    //             setApplications([]); // 실패 시도 비워줌
+    //         }
+    //     };
+    //     loadApplications();
+    // }, [isGuest]);
 
     //멤버 정보
     useEffect(() => {
@@ -146,7 +146,7 @@ export const MyPage = () => {
                                     <span
                                         className="text-[20px] underline text-[#7F7F7F] cursor-pointer"
                                         //여기 수정해야함... 운영진... 그리고 수정하기
-                                        onClick={() => navigate(ROUTES.RECRUIT_FORM_MEMBER)}
+                                        onClick={() => navigate(ROUTES.RECRUIT_MEMBER)}
                                     >
                                         {applications.length === 0 ? "지원하기" : "수정하기"}
                                     </span>
