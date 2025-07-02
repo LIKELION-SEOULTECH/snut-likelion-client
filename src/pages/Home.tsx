@@ -9,6 +9,7 @@ import { MainVisualSection } from "@/components/home/MainVisualSection";
 import { MissionSection } from "@/components/home/MissionSection";
 
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageLayout from "@/layouts/PageLayout";
 
 import Donut from "@/assets/home/donut.svg?react";
@@ -20,13 +21,22 @@ import { ChatBotContainer } from "@/components/ChatBotContainer";
 
 import { NotificationModal } from "@/components/home/NotificationModal";
 import { toast, Toaster } from "sonner";
+import { fetchRecentRecruitment } from "@/apis/recruit";
+
+type VisualButtonType =
+    | "MANAGER_NOTIFY"
+    | "MANAGER_APPLY"
+    | "MEMBER_NOTIFY"
+    | "MEMBER_APPLY"
+    | null;
 
 export default function HomePage() {
     //챗봇 버튼. 모집 모달
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [recruitType, setRecruitType] = useState("");
+    const navigate = useNavigate();
 
-    const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
 
     const handleToastClick = () => {
@@ -42,7 +52,7 @@ export default function HomePage() {
     };
 
     useEffect(() => {
-        const isDesktop = window.innerWidth >= 640; // Tailwind sm: 640px
+        const isDesktop = window.innerWidth >= 640;
 
         if (isModalOpen && !isDesktop) {
             document.body.style.overflow = "hidden";
@@ -67,6 +77,53 @@ export default function HomePage() {
         };
     }, [isModalOpen]);
 
+    // 모집 일정 조회
+    const [buttonType, setButtonType] = useState<VisualButtonType>(null);
+
+    useEffect(() => {
+        const fetchRecruitments = async () => {
+            try {
+                const [memberRes, managerRes] = await Promise.all([
+                    fetchRecentRecruitment("MEMBER"),
+                    fetchRecentRecruitment("MANAGER")
+                ]);
+
+                const now = new Date();
+                const managerOpen = new Date(managerRes.data.openDate);
+                const managerClose = new Date(managerRes.data.closeDate);
+                const memberOpen = new Date(memberRes.data.openDate);
+                const memberClose = new Date(memberRes.data.closeDate);
+
+                const visualType = getVisualButtonType(
+                    now,
+                    managerOpen,
+                    managerClose,
+                    memberOpen,
+                    memberClose
+                );
+                setButtonType(visualType);
+            } catch (error) {
+                console.error("❌ 모집 일정 조회 실패:", error);
+            }
+        };
+
+        fetchRecruitments();
+    }, []);
+
+    const getVisualButtonType = (
+        now: Date,
+        managerOpen: Date,
+        managerClose: Date,
+        memberOpen: Date,
+        memberClose: Date
+    ): VisualButtonType => {
+        if (now < managerOpen) return "MANAGER_NOTIFY";
+        if (now >= managerOpen && now <= managerClose) return "MANAGER_APPLY";
+        if (now > managerClose && now < memberOpen) return "MEMBER_NOTIFY";
+        if (now >= memberOpen && now <= memberClose) return "MEMBER_APPLY";
+        return null;
+    };
+
     //activityDetailSection 상세보기버튼
     const [showDetail, setShowDetail] = useState(false);
     const detailRef = useRef<HTMLDivElement | null>(null);
@@ -78,6 +135,27 @@ export default function HomePage() {
         }, 50);
     };
 
+    const openModal = () => {
+        switch (buttonType) {
+            case "MANAGER_NOTIFY":
+                setIsModalOpen(true);
+                setRecruitType("MANAGER");
+                break;
+            case "MANAGER_APPLY":
+                navigate("/apply/manager");
+                break;
+            case "MEMBER_NOTIFY":
+                setIsModalOpen(true);
+                setRecruitType("MEMBER");
+                break;
+            case "MEMBER_APPLY":
+                navigate("/apply/member");
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <PageLayout>
             <Toaster position="bottom-center" />
@@ -85,7 +163,7 @@ export default function HomePage() {
                 <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
-                <MainVisualSection onOpenModal={openModal} />
+                <MainVisualSection onOpenModal={openModal} buttonType={buttonType} />
                 <Donut className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 left-30 sm:left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
 
                 {/* chatbot #29*/}
@@ -117,7 +195,7 @@ export default function HomePage() {
                 <BottomCTASection onOpenModal={openModal} />
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                        <NotificationModal onClose={closeModal} />
+                        <NotificationModal onClose={closeModal} type={recruitType} />
                     </div>
                 )}
             </div>
