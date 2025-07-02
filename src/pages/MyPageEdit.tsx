@@ -187,7 +187,7 @@ export const MyPageEdit = () => {
                         />
                         <label
                             htmlFor="profile-upload"
-                            className="mt-5 bg-[#7F7F7F] text-[13px] rounded rounded-[4px] py-[14px] w-full font-normal text-center cursor-pointer"
+                            className="mt-5 bg-[#7F7F7F] text-[13px] rounded-[4px] py-[14px] w-full font-normal text-center cursor-pointer"
                         >
                             사진 수정하기
                         </label>
@@ -203,7 +203,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={`${selectedGeneration}기`}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-whiterounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -211,7 +211,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={lionInfo.part}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -219,7 +219,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={member.name}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded  rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* <div className="flex">
@@ -239,7 +239,7 @@ export const MyPageEdit = () => {
                                 onChange={(e) => setIntro(e.target.value)}
                                 value={intro}
                                 placeholder="한줄 소개"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -251,7 +251,7 @@ export const MyPageEdit = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="소개"
-                                className="py-3 px-4 h-[140px] flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 h-[140px] flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -279,7 +279,7 @@ export const MyPageEdit = () => {
                                 value={quote}
                                 onChange={(e) => setQuote(e.target.value)}
                                 placeholder="명언"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -288,7 +288,7 @@ export const MyPageEdit = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="메일"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                     </div>

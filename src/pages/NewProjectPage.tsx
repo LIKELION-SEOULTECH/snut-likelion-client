@@ -176,7 +176,7 @@ export const NewProjectPage = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="제목"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 활동소개 */}
@@ -189,7 +189,7 @@ export const NewProjectPage = () => {
                                 value={intro}
                                 onChange={(e) => setIntro(e.target.value)}
                                 placeholder="활동소개"
-                                className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 프로젝트 설명 */}
@@ -202,7 +202,7 @@ export const NewProjectPage = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="프로젝트 설명"
-                                className="py-3 px-4  h-[140px] flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4  h-[140px] flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* 기술 스택 */}

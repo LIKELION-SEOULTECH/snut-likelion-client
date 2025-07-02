@@ -28,7 +28,6 @@ import { NewProjectPage } from "./pages/NewProjectPage";
 import { Recruit } from "./pages/Recruit";
 import { RecruitForm } from "./pages/RecruitForm";
 
-
 import { AdminPage } from "./pages/Admin";
 import { AdminMemberPage } from "./pages/AdminMember";
 function App() {
@@ -55,15 +54,14 @@ function App() {
                 <Route path={ROUTES.MEMBER} element={<MemberPage />} />
                 <Route path={ROUTES.MEMBER_DETAIL} element={<MemberDetailPage />} />
 
-
                 <Route path={ROUTES.MYPAGE} element={<MyPage />} />
                 <Route path={ROUTES.MYPAGE_EDIT} element={<MyPageEdit />} />
                 <Route path={ROUTES.MYPAGE_PASSWORD_CHANGE} element={<PasswordChange />} />
 
-                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isManeger={false} />} />
-                <Route path={ROUTES.RECRUIT_MANEGER} element={<Recruit isManeger={true} />} />
+                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isManager={false} />} />
+                <Route path={ROUTES.RECRUIT_MANAGER} element={<Recruit isManager={true} />} />
                 <Route
-                    path={ROUTES.RECRUIT_FORM_MANEGER}
+                    path={ROUTES.RECRUIT_FORM_MANAGER}
                     element={<RecruitForm isManeger={true} />}
                 />
                 <Route
@@ -73,8 +71,6 @@ function App() {
 
                 <Route path={ROUTES.ADMIN} element={<AdminPage />} />
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
-
-
             </Routes>
         </BrowserRouter>
     );
