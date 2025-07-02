@@ -1,24 +1,29 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import QuoteDot from "@/assets//project/quote-dot.svg?react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSaying } from "@/apis/saying";
 
 const quotes = [
-    { text: "일찍 일어나는 새가 피곤하다", author: "전민경" },
+    { saying: "일찍 일어나는 새가 피곤하다", username: "전민경" },
     {
-        text: "리더에게 희생은 불가결한 요소이지만, 그걸 희생이라고 느끼는 순간, 리더의 자질이 상실된다.",
-        author: "Austin An"
+        saying: "리더에게 희생은 불가결한 요소이지만, 그걸 희생이라고 느끼는 순간, 리더의 자질이 상실된다.",
+        username: "Austin An"
     },
-    { text: "코드는 거짓말하지 않는다, 거짓말은 니가 하고 있다.", author: "정윤석" },
-    { text: "No 약자석. (3216번 버스 안, 78세 박순자 여사를 바라보며)", author: "안정후" },
-    { text: "하나부터 열까지, 모든 게 다 한 수 위.", author: "TOP" },
+    { saying: "코드는 거짓말하지 않는다, 거짓말은 니가 하고 있다.", username: "정윤석" },
+    { saying: "No 약자석. (3216번 버스 안, 78세 박순자 여사를 바라보며)", username: "안정후" },
     {
-        text: "올해라는 코스를 끝까지 완주해보도록 돕겠습니다. 아 물론 저는 부정출발 할 겁니다.",
-        author: "안정후"
+        saying: "올해라는 코스를 끝까지 완주해보도록 돕겠습니다. 아 물론 저는 부정출발 할 겁니다.",
+        username: "안정후"
     }
 ];
 
 export default function QuoteCardList() {
     const [activeIndex, setActiveIndex] = useState(0);
+    const { data: sayings } = useQuery({
+        queryKey: ["saying"],
+        queryFn: fetchSaying
+    });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -30,10 +35,11 @@ export default function QuoteCardList() {
     const getVisualIndex = (i: number) => {
         return (i - activeIndex + quotes.length) % quotes.length;
     };
+    const combinedQuotes = [...sayings, ...quotes]; // API + 로컬 합치기
 
     return (
         <div className="relative w-full h-[111px] mx-auto mb-8">
-            {quotes.map((quote, i) => {
+            {combinedQuotes.map((quote, i) => {
                 const vIndex = getVisualIndex(i);
                 const topOffset = vIndex * 16;
                 const scale = 1 - vIndex * 0.05;
@@ -61,8 +67,8 @@ export default function QuoteCardList() {
                             </div>
                         </div>
                         <div className="flex flex-row gap-3">
-                            <div className="font-medium">{quote.text}</div>
-                            <div className="text-base text-gray-400">- {quote.author}</div>
+                            <div className="font-medium">{quote.saying}</div>
+                            <div className="text-base text-[#666666]">- {quote.username}</div>
                         </div>
                     </motion.div>
                 );
