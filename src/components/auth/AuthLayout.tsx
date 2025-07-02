@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SmallBtn } from "../Member/SmallBtn";
+import { ROUTES } from "@/constants/routes";
 
 export const AuthLayout = ({
     title = "로그인",
@@ -8,6 +9,8 @@ export const AuthLayout = ({
     title: string;
     children: React.ReactNode;
 }) => {
+    const navigate = useNavigate();
+
     return (
         <div
             className="w-full flex h-auto pt-[98px] pb-[177px] pl-[110px] pr-[113px]"
@@ -28,10 +31,15 @@ export const AuthLayout = ({
                     {title}
                     <span className="text-[#FF7700]">.</span>
                 </div>
-                {title !== "로그인" && (
-                    <Link to="/login" className="pt-[72px] flex">
+                {title == "비밀번호 찾기" && (
+                    <div onClick={() => navigate(ROUTES.LOGIN)} className="pt-[72px] flex">
                         <SmallBtn tag="← 로그인 화면으로" shape="round" />
-                    </Link>
+                    </div>
+                )}
+                {title == "비밀번호 변경" && (
+                    <div onClick={() => navigate(-1)} className="pt-[72px] flex">
+                        <SmallBtn tag="← 마이페이지로" shape="round" />
+                    </div>
                 )}
             </div>
             {/* 오른쪽 */}

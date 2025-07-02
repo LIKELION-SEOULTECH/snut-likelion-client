@@ -64,7 +64,7 @@ export const MyPage = () => {
         );
     }
     // 기수로 게스트 ..
-    const isGuest = !member.generations ? false : true;
+    const isGuest = member.generations ? false : true;
 
     return (
         <PageLayout>
