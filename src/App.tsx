@@ -28,8 +28,29 @@ import { NewProjectPage } from "./pages/NewProjectPage";
 import { Recruit } from "./pages/Recruit";
 import { RecruitForm } from "./pages/RecruitForm";
 
-import { AdminPage } from "./pages/Admin";
 import { AdminMemberPage } from "./pages/AdminMember";
+import { AdminNoticePage } from "./pages/AdminNotice";
+import { AdminProjectPage } from "./pages/AdminProject";
+
+import { AdminProjectEditPage } from "./pages/AdminProjectEdit";
+import { AdminProjectCreatePage } from "./pages/AdminProjectCreate";
+
+import { AdminNoticeDetailPage } from "./pages/AdminNoticeDetail";
+import { AdminNoticeCreatePage } from "./pages/AdminNoticeCreate";
+import { AdminNoticeEditPage } from "./pages/AdminNoticeEdit";
+import { AdminBlogPage } from "./pages/AdminBlog";
+
+import { AdminBlogCreatePage } from "./pages/AdminBlogCreate";
+import { AdminBlogEditPage } from "./pages/AdminBlogEdit";
+
+import { AdminRecruitPage } from "./pages/AdminRecruit";
+import { AdminUserRecruitPage } from "./pages/AdminUserRecruit";
+import { AdminManagerRecruitPage } from "./pages/AdminManageRecruit";
+import { AdminManagerRecruitDetailPage } from "./pages/ApplyManagerDetail";
+import { AdminUsererRecruitDetailPage } from "./pages/ApplyUserDetail";
+import { AdminApplyUserPage } from "./pages/AdminApplyUser";
+import { AdminApplyManagerPage } from "./pages/AdminApplyManager";
+
 function App() {
     return (
         <BrowserRouter>
@@ -69,8 +90,34 @@ function App() {
                     element={<RecruitForm isManeger={false} />}
                 />
 
-                <Route path={ROUTES.ADMIN} element={<AdminPage />} />
                 <Route path={ROUTES.ADMIN_MEMBER} element={<AdminMemberPage />} />
+                <Route path={ROUTES.ADMIN_NOTICE} element={<AdminNoticePage />} />
+
+                <Route path={ROUTES.ADMIN_PROJECT} element={<AdminProjectPage />} />
+                <Route path={ROUTES.ADMIN_PROJECT_CREATE} element={<AdminProjectCreatePage />} />
+                <Route path={ROUTES.ADMIN_PROJECT_EDIT} element={<AdminProjectEditPage />} />
+
+                <Route path={ROUTES.ADMIN_NOTICE_DETAIL} element={<AdminNoticeDetailPage />} />
+                <Route path={ROUTES.ADMIN_NOTICE_CREATE} element={<AdminNoticeCreatePage />} />
+                <Route path={ROUTES.ADMIN_NOTICE_EDIT} element={<AdminNoticeEditPage />} />
+
+                <Route path={ROUTES.ADMIN_BLOG} element={<AdminBlogPage />} />
+                <Route path={ROUTES.ADMIN_BLOG_CREATE} element={<AdminBlogCreatePage />} />
+                <Route path={ROUTES.ADMIN_BLOG_EDIT} element={<AdminBlogEditPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT} element={<AdminRecruitPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_MANAGER} element={<AdminApplyManagerPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_USER} element={<AdminApplyUserPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_USER} element={<AdminUserRecruitPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
+                <Route
+                    path={ROUTES.ADMIN_RECRUIT_MANAGER_DETAIL}
+                    element={<AdminManagerRecruitDetailPage />}
+                />
+                <Route
+                    path={ROUTES.ADMIN_RECRUIT_USER_DETAIL}
+                    element={<AdminUsererRecruitDetailPage />}
+                />
             </Routes>
         </BrowserRouter>
     );

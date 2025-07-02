@@ -1,3 +1,4 @@
+import type { Member } from "./members";
 // 포트폴리오 링크
 export type PortFolioLinkType = "GITHUB" | "NOTION" | "BEHANCE" | "BLOG" | "INSTAGRAM" | "OTHER";
 
@@ -13,6 +14,21 @@ export interface SimplePortfolioLink {
 
 // 멤버 응답 타입
 export interface MemberResponse {
+    id: number;
+    username: string;
+    generation: string;
+    part: string;
+    role: string;
+}
+export interface MemberListResponse {
+    content: Member[];
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+}
+
+export interface MemberSearchResponse {
     id: number;
     name: string;
     profileImageUrl: string;
@@ -68,7 +84,7 @@ export interface MemberSearch {
 export interface MemberSearchResponse {
     id: number;
     name: string;
-    part: "기획" | "디자인" | "프론트엔드" | "백엔드" | "AI";
+    part: string;
     generation: number;
     profileImageUrl: string;
     data?: string;
