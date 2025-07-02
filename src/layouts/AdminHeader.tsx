@@ -14,6 +14,7 @@ export const AdminHeader = ({
     onSubmit
 }: AdminHeaderProps) => {
     const navigate = useNavigate();
+
     const location = useLocation();
     const path = location.pathname;
 
@@ -32,6 +33,13 @@ export const AdminHeader = ({
             if (path.includes("/edit")) return "프로젝트 수정";
             return "프로젝트 관리";
         }
+        if (path.startsWith("/admin/notice")) return "소식 관리";
+        if (path.startsWith("/admin/blog")) {
+            if (path === "/admin/blog/create") return "블로그 등록하기";
+            if (path.includes("/edit")) return "블로그 수정하기";
+            return "블로그 관리";
+        }
+        if (path.startsWith("/admin/project")) return "프로젝트 관리";
         if (path.startsWith("/admin/recruit")) return "모집 관리";
         return "";
     };
@@ -75,6 +83,14 @@ export const AdminHeader = ({
             );
         }
 
+        if (path === "/admin/blog/create") {
+            return (
+                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    등록하기
+                </button>
+            );
+        }
+
         if (path.includes("/project/edit")) {
             return (
                 <button
@@ -82,6 +98,14 @@ export const AdminHeader = ({
                     onClick={onSubmit}
                 >
                     수정
+                </button>
+            );
+        }
+
+        if (path.includes("/edit")) {
+            return (
+                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    수정하기
                 </button>
             );
         }
