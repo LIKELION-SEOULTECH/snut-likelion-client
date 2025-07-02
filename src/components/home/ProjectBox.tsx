@@ -9,7 +9,6 @@ interface ProjectBoxProps {
     generation?: number;
     category?: ProjectCategory;
     tags?: string[];
-
     thumbnailUrl: string;
     rounded?: string;
 }

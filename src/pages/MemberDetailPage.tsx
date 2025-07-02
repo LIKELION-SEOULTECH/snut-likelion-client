@@ -159,8 +159,7 @@ export const MemberDetailPage = () => {
                                         ))}
                                     </div>
                                 </div>
-                                {/* 중간 */}
-                                {/* ******플젝도 연결해야함 *******/}
+
                                 <div className="flex flex-col">
                                     <h1 className="text-[32px] my-0 text-[#fff] font-bold pb-[32px]">
                                         참여한 프로젝트
