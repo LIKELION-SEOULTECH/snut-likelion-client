@@ -33,7 +33,6 @@ export interface RecruitmentResponse {
     openDate: string;
     closeDate: string;
 }
-
 export const typeMap = {
     아기사자: "MEMBER",
     운영진: "MANAGER"
