@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 interface ProjectReminderSectionProps {
     projectId: number;
+    projectGen: number;
 }
 
-export const ProjectReminderSection = ({ projectId }: ProjectReminderSectionProps) => {
+export const ProjectReminderSection = ({ projectId, projectGen }: ProjectReminderSectionProps) => {
     const [retrospections, setRetrospections] = useState<RetrospectionResponse[]>([]);
     const navigate = useNavigate();
 
@@ -38,7 +39,16 @@ export const ProjectReminderSection = ({ projectId }: ProjectReminderSectionProp
                         name={item.writer.name}
                         part={item.writer.part}
                         content={item.content}
-                        onClick={() => navigate(`/members/${item.writer.id}`)}
+                        onClick={() => {
+                            navigate(`/members/${item.writer.id}`, {
+                                state: {
+                                    member: {
+                                        generation: projectGen,
+                                        id: item.writer.id
+                                    }
+                                }
+                            });
+                        }}
                     />
                 ))}
             </div>

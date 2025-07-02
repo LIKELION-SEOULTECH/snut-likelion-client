@@ -106,7 +106,10 @@ export default function ProjectDetailPage() {
                         </section>
 
                         <section className="flex flex-col">
-                            <ProjectReminderSection projectId={data.id} />
+                            <ProjectReminderSection
+                                projectId={data.id}
+                                projectGen={data.generation}
+                            />
                         </section>
 
                         <section className="flex flex-col">

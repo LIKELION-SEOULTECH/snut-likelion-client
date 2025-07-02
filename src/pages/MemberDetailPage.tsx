@@ -44,16 +44,21 @@ export const MemberDetailPage = () => {
 
     useEffect(() => {
         const getMember = async () => {
-            try {
-                const data = await fetchMemberDetail(Number(id));
-                setMember({
-                    ...data,
-                    ...fallbackData // 기수, 파트, 역할 데이터 보충해주기 ,,,,
-                });
-            } catch (err) {
-                console.error("멤버 조회 실패", err);
-                setMember(fallbackData ?? null);
-            }
+            const data = await fetchMemberDetail(Number(id));
+            setMember({
+                ...data,
+                ...fallbackData, // 기수, 파트, 역할 데이터 보충해주기 ,,,,
+                generations: data.generations ?? [fallbackData?.generation]
+            });
+            setMember(
+                fallbackData
+                    ? {
+                          ...fallbackData,
+                          generations: [fallbackData.generation]
+                      }
+                    : null
+            );
+            console.log(fallbackData);
         };
 
         if (id) getMember();
@@ -64,17 +69,14 @@ export const MemberDetailPage = () => {
         const loadProjects = async () => {
             if (!id || !fallbackData?.generation) return;
 
-            try {
-                const lionInfo = await fetchLionInfo(Number(id), fallbackData.generation);
-                setProjects(lionInfo.projects ?? []);
-            } catch (e) {
-                console.error("라이언 정보 불러오기 실패", e);
-            }
+            const lionInfo = await fetchLionInfo(Number(id), fallbackData.generation);
+            setProjects(lionInfo.projects ?? []);
         };
 
         loadProjects();
     }, [id, fallbackData?.generation]);
 
+    console.log(member);
     if (!member) {
         return (
             <PageLayout>
