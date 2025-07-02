@@ -9,7 +9,7 @@ export type SuggestionListRef = {
 };
 
 interface MentionNodeAttrs {
-    id: string | null;
+    id: number | null;
     label?: string | null;
     avatarUrl?: string | null;
 }
