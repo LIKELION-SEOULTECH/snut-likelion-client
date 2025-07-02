@@ -35,6 +35,14 @@ import { AdminBlogPage } from "./pages/AdminBlog";
 import { AdminBlogCreatePage } from "./pages/AdminBlogCreate";
 import { AdminBlogEditPage } from "./pages/AdminBlogEdit";
 
+import { AdminRecruitPage } from "./pages/AdminRecruit";
+import { AdminUserRecruitPage } from "./pages/AdminUserRecruit";
+import { AdminManagerRecruitPage } from "./pages/AdminManageRecruit";
+import { AdminManagerRecruitDetailPage } from "./pages/ApplyManagerDetail";
+import { AdminUsererRecruitDetailPage } from "./pages/ApplyUserDetail";
+import { AdminApplyUserPage } from "./pages/AdminApplyUser";
+import { AdminApplyManagerPage } from "./pages/AdminApplyManager";
+
 function App() {
     return (
         <BrowserRouter>
@@ -72,6 +80,20 @@ function App() {
                 <Route path={ROUTES.ADMIN_BLOG} element={<AdminBlogPage />} />
                 <Route path={ROUTES.ADMIN_BLOG_CREATE} element={<AdminBlogCreatePage />} />
                 <Route path={ROUTES.ADMIN_BLOG_EDIT} element={<AdminBlogEditPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT} element={<AdminRecruitPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_MANAGER} element={<AdminApplyManagerPage />} />
+                <Route path={ROUTES.ADMIN_APPLY_USER} element={<AdminApplyUserPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_USER} element={<AdminUserRecruitPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
+                <Route path={ROUTES.ADMIN_RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
+                <Route
+                    path={ROUTES.ADMIN_RECRUIT_MANAGER_DETAIL}
+                    element={<AdminManagerRecruitDetailPage />}
+                />
+                <Route
+                    path={ROUTES.ADMIN_RECRUIT_USER_DETAIL}
+                    element={<AdminUsererRecruitDetailPage />}
+                />
             </Routes>
         </BrowserRouter>
     );

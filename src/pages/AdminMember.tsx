@@ -10,9 +10,9 @@ export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
     const [filters, setFilters] = useState({
-        generation: "all",
-        part: "all",
-        role: "all",
+        generation: "",
+        part: "",
+        role: "",
         keyword: ""
     });
 

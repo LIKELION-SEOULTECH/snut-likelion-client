@@ -47,7 +47,9 @@ const TextEditor = ({ content, setContent }: TextEditorProps) => {
         },
 
         onUpdate({ editor }) {
-            setContent(editor.getHTML());
+            const html = editor.getHTML();
+            setContent(html);
+            console.log("Editor content:", html); // ✅ 여기서 출력
         }
     });
 

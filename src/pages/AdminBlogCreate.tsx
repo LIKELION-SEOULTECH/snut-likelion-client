@@ -1,11 +1,18 @@
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
-// import AdminTagEditor from "@/components/text-editor/AdminTagEditor";
+import AdminTagEditor from "@/components/text-editor/AdminTagEditor";
+type MentionSuggestion = {
+    id: string;
+    mentionLabel: string;
+    avatarUrl: string;
+};
 
 export const AdminBlogCreatePage = () => {
     const [content, setContent] = useState("");
+    const [tags, setTags] = useState<MentionSuggestion[]>([]);
     const [files, setFiles] = useState<File[]>([]);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +52,9 @@ export const AdminBlogCreatePage = () => {
                 </div>
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">태그</span>
-                    {/* <AdminTagEditor /> */}
+                    <div className="flex-1">
+                        <AdminTagEditor tags={tags} setTags={setTags} />
+                    </div>{" "}
                 </div>
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>

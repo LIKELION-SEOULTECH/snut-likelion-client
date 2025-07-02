@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const SidebarList = () => {
+    const navigate = useNavigate();
     const [isRecruitOpen, setIsRecruitOpen] = useState(false);
 
     const toggleRecruit = () => setIsRecruitOpen((prev) => !prev);
@@ -29,25 +30,29 @@ export const SidebarList = () => {
             ))}
 
             {/* 모집 관리 */}
-            <div
-                className="h-[69px] px-10 py-[25px] cursor-pointer flex items-center justify-between"
-                onClick={toggleRecruit}
-            >
-                <span>모집 관리</span>
+            <div className="h-[69px] px-10 py-[25px] cursor-pointer flex items-center justify-between">
+                <span
+                    onClick={() => {
+                        navigate("/admin/recruit");
+                    }}
+                >
+                    모집 관리
+                </span>
                 <ChevronDown
                     className={`w-4 h-4 transition-transform ${isRecruitOpen ? "rotate-180" : ""}`}
+                    onClick={toggleRecruit}
                 />
             </div>
             {isRecruitOpen && (
                 <div className="flex flex-col">
                     <NavLink
-                        to="/admin/recruit/apply"
+                        to="/admin/recruit/manager"
                         className="h-[69px] px-10 py-[25px] hover:text-white"
                     >
                         운영진 모집
                     </NavLink>
                     <NavLink
-                        to="/admin/recruit/result"
+                        to="/admin/recruit/user"
                         className="h-[69px] px-10 py-[25px] hover:text-white"
                     >
                         아기사자 모집

@@ -26,6 +26,8 @@ export const AdminHeader = ({
             if (/\d+$/.test(path) || path.includes("/detail")) return "소식 상세";
             return "소식 관리";
         }
+        if (path.startsWith("/admin/blog/create")) return "블로그 등록하기";
+        if (path.startsWith("/admin/blog/edit")) return "블로그 수정하기";
         if (path.startsWith("/admin/blog")) return "블로그 관리";
 
         if (path.startsWith("/admin/project")) {
@@ -40,7 +42,14 @@ export const AdminHeader = ({
             return "블로그 관리";
         }
         if (path.startsWith("/admin/project")) return "프로젝트 관리";
+        if (path.startsWith("/admin/recruit/result/user")) return "아기사자 지원서";
+        if (path.startsWith("/admin/recruit/result/manager")) return "운영진 지원서";
+        if (path.startsWith("/admin/recruit/user")) return "아기사자 모집";
+        if (path.startsWith("/admin/recruit/manager")) return "운영진 모집";
         if (path.startsWith("/admin/recruit")) return "모집 관리";
+        if (path.startsWith("/admin/apply-manager")) return "운영진 질문";
+        if (path.startsWith("/admin/apply-user")) return "아기사자 질문";
+
         return "";
     };
 

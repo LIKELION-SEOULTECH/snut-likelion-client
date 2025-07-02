@@ -16,6 +16,7 @@ import { useQueryClient, useMutation } from "@tanstack/react-query";
 interface MemberInfoModalProps {
     open: boolean;
     onClose: () => void;
+    onDeleteClick: () => void;
     member: Member | null;
 }
 

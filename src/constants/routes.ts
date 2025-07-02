@@ -25,11 +25,19 @@ export const ROUTES = {
     ADMIN_PROJECT: "/admin/project",
     ADMIN_PROJECT_CREATE: "/admin/project/create",
     ADMIN_PROJECT_EDIT: "/admin/project/edit/:id",
-    ADMIN_NOTICE: "/admin/notice",
-    ADMIN_BLOG: "/admin/blog",
 
+    ADMIN_BLOG: "/admin/blog",
     ADMIN_BLOG_CREATE: "/admin/blog/create",
-    ADMIN_BLOG_EDIT: "/admin/blog/edit/:id"
+    ADMIN_BLOG_EDIT: "/admin/blog/edit/:id",
+
+    ADMIN_RECRUIT: "/admin/recruit",
+    ADMIN_RECRUIT_MANAGER: "/admin/recruit/manager",
+    ADMIN_RECRUIT_MANAGER_DETAIL: "/admin/recruit/result/manager/:id",
+    ADMIN_RECRUIT_USER: "/admin/recruit/user",
+    ADMIN_RECRUIT_USER_DETAIL: "/admin/recruit/result/user/:id",
+
+    ADMIN_APPLY_MANAGER: "/admin/apply-manager",
+    ADMIN_APPLY_USER: "/admin/apply-user"
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;
