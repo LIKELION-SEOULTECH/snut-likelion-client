@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import type { UserData } from "@/types/recruit";
+import type { UserData } from "@/types/recruitment";
 import { cn } from "@/libs/cn";
 interface RecruitManagerItemProps {
     member: UserData;
