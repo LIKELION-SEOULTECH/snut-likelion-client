@@ -56,7 +56,10 @@ export const NewsContentPage = () => {
                         <span>{formatDate(notice.updatedAt)}</span>
                     </div>
                 </section>
-                <PostContent content={notice.content} />
+                <div className="w-full">
+                    <PostContent content={notice.content} />
+                </div>
+
                 <section className="w-full mt-30">
                     <PostNavigator
                         prev={
