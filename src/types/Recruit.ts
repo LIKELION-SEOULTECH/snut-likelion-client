@@ -29,10 +29,11 @@ export type RecruitmentType = "아기사자" | "운영진";
 export interface RecruitmentResponse {
     id: number;
     generation: number;
-    recruitmentType: RecruitmentType; // "아기사자" | "운영진"
+    recruitmentType: "아기사자" | "운영진"; //?"아기사자" | "운영진";
     openDate: string;
     closeDate: string;
 }
+
 export const typeMap = {
     아기사자: "MEMBER",
     운영진: "MANAGER"
