@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstace";
+import axiosInstance from "./axiosInstance";
 import type { Notice } from "@/types/notice";
 
 // 공지사항 작성

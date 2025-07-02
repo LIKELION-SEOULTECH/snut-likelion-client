@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import type { Member } from "@/types/member";
+import type { Member } from "@/types/members";
 import { MemberInfoModal } from "./MemberInfoModal";
 interface MemberSearchListProps {
     data: Member[];

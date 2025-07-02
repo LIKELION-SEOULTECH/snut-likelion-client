@@ -24,5 +24,6 @@ export interface AdminNotice {
 export interface UpdateNoticePayload {
     title: string;
     content: string;
+    pinned: boolean; // ✅ 이거 추가
     type?: string;
 }
