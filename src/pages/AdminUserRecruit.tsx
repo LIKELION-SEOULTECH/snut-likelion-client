@@ -1,9 +1,10 @@
 import AdminLayout from "@/layouts/AdminLayout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { dummyUserData } from "@/constants/admin/dummyUserData";
 import { RecruitUserSearchTool } from "@/components/admin/recruit/RecruitUserSearchTool";
 import { RecruitUserSearchList } from "@/components/admin/recruit/RecruitUserSearchList";
+import { getSubmittedApplications } from "@/apis/recruit";
 
 export const AdminUserRecruitPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +28,24 @@ export const AdminUserRecruitPage = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getSubmittedApplications({
+                    recId: 1,
+                    page: 0,
+                    part: filters.part,
+                    status: filters.result
+                });
+                console.log("지원자 목록:", data);
+            } catch (err) {
+                console.error("지원자 목록 불러오기 실패", err);
+            }
+        };
+
+        fetchData();
+    }, [filters, currentPage]);
 
     return (
         <AdminLayout>

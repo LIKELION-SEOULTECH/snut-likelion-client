@@ -6,8 +6,23 @@ const initialQuestions = [
     { id: "2", text: "공통 질문 보통 뭐 있어요? 대충 써놓을게요", type: "장문형" }
 ];
 
-export const CommonQuestionList = () => {
+export const CommonQuestionList = ({
+    recId,
+    onSave
+}: {
+    recId: number;
+    onSave?: (fn: () => void) => void;
+}) => {
     const [questions, setQuestions] = useState(initialQuestions);
 
-    return <QuestionList title="공통질문" questions={questions} setQuestions={setQuestions} />;
+    return (
+        <QuestionList
+            title="공통질문"
+            questions={questions}
+            setQuestions={setQuestions}
+            recId={recId}
+            onSave={onSave}
+            questionTarget="COMMON"
+        />
+    );
 };

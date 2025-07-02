@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import GripHorizontal from "@/assets/admin/grip-horizontal.svg?react";
 import AddQuestionBtn from "@/assets/admin/add-question-btn.svg?react";
+import { updateQuestions } from "@/apis/recruit";
 interface Question {
     id: string;
     text: string;
@@ -24,10 +25,30 @@ interface QuestionListProps {
     title: string;
     questions: Question[];
     setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+    recId: number;
+    part?: string;
+    questionTarget: string;
+    departmentType?: string;
+    onSave?: (fn: () => void) => void;
 }
 
-export default function QuestionList({ title, questions, setQuestions }: QuestionListProps) {
+export default function QuestionList({
+    title,
+    questions,
+    setQuestions,
+    recId,
+    part,
+    questionTarget,
+    onSave,
+    departmentType
+}: QuestionListProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    useEffect(() => {
+        if (onSave) {
+            onSave(handleSave); // 상위 컴포넌트에서 이 save 함수를 등록함
+        }
+    }, [questions]);
 
     const handleToggleCollapse = () => {
         setIsCollapsed((prev) => !prev);
@@ -76,6 +97,27 @@ export default function QuestionList({ title, questions, setQuestions }: Questio
         if (updated[qIndex].options) {
             updated[qIndex].options![oIndex] = value;
             setQuestions(updated);
+        }
+    };
+
+    const handleSave = async () => {
+        const payload = questions.map((q, index) => ({
+            text: q.text,
+            questionType:
+                q.type === "단답형" ? "SHORT" : q.type === "장문형" ? "LONG" : "RADIO_BUTTON",
+            questionTarget,
+            order: index + 1,
+            part: questionTarget === "PART" ? part : undefined,
+            departmentType: questionTarget === "DEPARTMENT" ? departmentType : undefined,
+            buttonList: q.type === "라디오 버튼" ? (q.options ?? []) : undefined
+        }));
+
+        try {
+            await updateQuestions(recId, payload);
+            alert("질문 저장 완료!");
+        } catch (error) {
+            console.error("질문 저장 실패:", error);
+            alert("질문 저장 실패");
         }
     };
 

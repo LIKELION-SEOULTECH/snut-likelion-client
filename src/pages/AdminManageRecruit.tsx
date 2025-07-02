@@ -1,10 +1,11 @@
 import AdminLayout from "@/layouts/AdminLayout";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { dummyManagerData } from "@/constants/admin/dummyManagerData";
 import { RecruitManagerSearchTool } from "@/components/admin/recruit/RecruitManagerSearchTool";
 import { RecruitManagerSearchList } from "@/components/admin/recruit/RecruitManagerSearchList";
+import { getSubmittedApplications } from "@/apis/recruit";
 import type { ManagerData } from "@/types/recruit";
 
 export const AdminManagerRecruitPage = () => {
@@ -34,6 +35,24 @@ export const AdminManagerRecruitPage = () => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getSubmittedApplications({
+                    recId: 2,
+                    page: 0,
+                    part: filters.part,
+                    status: filters.result
+                });
+                console.log("지원자 목록:", data);
+            } catch (err) {
+                console.error("지원자 목록 불러오기 실패", err);
+            }
+        };
+
+        fetchData();
+    }, [filters, currentPage]);
 
     return (
         <AdminLayout>

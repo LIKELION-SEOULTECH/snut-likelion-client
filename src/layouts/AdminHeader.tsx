@@ -3,9 +3,10 @@ import BackBtn from "@/assets/admin/back-btn.svg?react";
 
 interface AdminHeaderProps {
     userName: string;
+    onSubmit?: () => void;
 }
 
-export const AdminHeader = ({ userName }: AdminHeaderProps) => {
+export const AdminHeader = ({ userName, onSubmit }: AdminHeaderProps) => {
     const location = useLocation();
     const path = location.pathname;
     const navigate = useNavigate();
@@ -63,15 +64,18 @@ export const AdminHeader = ({ userName }: AdminHeaderProps) => {
             </div>
             {showSaveButtons && (
                 <div className="flex flex-row text-sm font-medium">
-                    <button className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700] mr-[40px]">
+                    <button
+                        className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700] mr-[40px]"
+                        onClick={onSubmit}
+                    >
                         지원하기
                     </button>
                 </div>
             )}
             {showDownloadButtons && (
                 <div className="flex flex-row text-sm font-medium">
-                    <button className="w-[206px] h-11 text-white rounded-sm bg-[#ff7700]">
-                        지원서 일괄 다운로드 받기
+                    <button className="w-[114px] h-11 text-white rounded-sm bg-[#ff7700]">
+                        합격관리
                     </button>
                 </div>
             )}

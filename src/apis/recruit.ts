@@ -34,6 +34,14 @@ export interface UpdateQuestionRequest {
     buttonList?: string[];
 }
 
+// 최신 모집일정 조회
+export const fetchRecentRecruitment = async (recruitmentType: string) => {
+    const res = await axiosInstance.get("/recruitments", {
+        params: { recruitmentType }
+    });
+    return res.data;
+};
+
 export const createRecruitment = (data: CreateRecruitmentRequest) => {
     return axiosInstance.post("/admin/recruitments", data);
 };
@@ -50,11 +58,13 @@ export const getRecruitmentQuestions = (recId: number) => {
     return axiosInstance.get(`/admin/recruitments/${recId}/questions`);
 };
 
-export const updateQuestionsByRecruitment = async (
-    recId: number,
-    payload: UpdateQuestionRequest[]
-) => {
-    return axiosInstance.put(`/api/v1/admin/recruitments/${recId}/questions`, payload);
+// 지원서 질문 업데이터
+export const updateQuestions = async (recId: number, questions: UpdateQuestionRequest[]) => {
+    const response = await axiosInstance.put(
+        `/api/v1/admin/recruitments/${recId}/questions`,
+        questions
+    );
+    return response.data;
 };
 
 export const getApplicationDetail = (appId: number) => {
@@ -69,5 +79,31 @@ export const getRecruitmentByType = async (type: "MEMBER" | "MANAGER") => {
 
 export const getApplicationsByRecruitment = async (recruitmentId: number): Promise<Question[]> => {
     const res = await axiosInstance.get(`/api/v1/admin/recruitments/${recruitmentId}/questions`);
+    return res.data;
+};
+
+// 특정 모집에 대한 지원서 조회
+export const getSubmittedApplications = async ({
+    recId,
+    page = 0,
+    part,
+    department,
+    status
+}: {
+    recId: number;
+    page?: number;
+    part?: string;
+    department?: string;
+    status?: string;
+}) => {
+    const res = await axiosInstance.get(`/admin/recruitments/${recId}/applications`, {
+        params: { page, part, department, status }
+    });
+    return res.data;
+};
+
+// 특정 모집에 대한 질문 조회
+export const fetchQuestionsByRecruitment = async (recId: number | string) => {
+    const res = await axiosInstance.get(`/admin/recruitments/${recId}/questions`);
     return res.data;
 };

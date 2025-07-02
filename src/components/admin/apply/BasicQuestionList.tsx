@@ -10,8 +10,23 @@ const initialQuestions = [
     { id: "6", text: "학적 상태", type: "단답형" }
 ];
 
-export const BasicQuestionList = () => {
+export const BasicQuestionList = ({
+    recId,
+    onSave
+}: {
+    recId: number;
+    onSave?: (fn: () => void) => void;
+}) => {
     const [questions, setQuestions] = useState(initialQuestions);
 
-    return <QuestionList title="기본 질문" questions={questions} setQuestions={setQuestions} />;
+    return (
+        <QuestionList
+            title="기본 질문"
+            questions={questions}
+            setQuestions={setQuestions}
+            recId={recId}
+            questionTarget="COMMON"
+            onSave={onSave}
+        />
+    );
 };

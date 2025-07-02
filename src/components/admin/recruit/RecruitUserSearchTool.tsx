@@ -100,9 +100,9 @@ export const RecruitUserSearchTool = ({ onSearch }: MemberSearchToolProps) => {
             {/* Search Button */}
             <Button
                 onClick={handleSearch}
-                className="w-[161px] text-sm bg-[#404040] text-white !h-full rounded-sm"
+                className="w-52 text-sm bg-[#404040] text-white !h-full rounded-sm"
             >
-                검색하기
+                지원서 일괄 다운로드 받기
             </Button>
         </div>
     );
