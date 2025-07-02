@@ -5,7 +5,7 @@ import { MyPageTab } from "@/components/MyPage/MyPageTab";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import PageLayout from "@/layouts/PageLayout";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
-import type { MyApplicationsResponse } from "@/types/Recruit";
+// import type { MyApplicationsResponse } from "@/types/Recruit";
 
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/constants/routes";
@@ -19,7 +19,7 @@ export const MyPage = () => {
     const navigate = useNavigate();
 
     //지원서 내꺼
-    const [applications, setApplications] = useState<MyApplicationsResponse[]>([]);
+    // const [applications, setApplications] = useState<MyApplicationsResponse[]>([]);
 
     useEffect(() => {
         const role = localStorage.getItem("userRole");
@@ -148,14 +148,15 @@ export const MyPage = () => {
                                         //여기 수정해야함... 운영진... 그리고 수정하기
                                         onClick={() => navigate(ROUTES.RECRUIT_MEMBER)}
                                     >
-                                        {applications.length === 0 ? "지원하기" : "수정하기"}
+                                        지원하기
+                                        {/* {applications.length === 0 ? "지원하기" : "수정하기"} */}
                                     </span>
                                 </div>
-                                {applications.length === 0 ? (
-                                    <div className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px]">
-                                        아직 작성한 지원서가 없습니다.
-                                    </div>
-                                ) : (
+                                {/* {applications.length === 0 ? ( */}
+                                <div className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px]">
+                                    아직 작성한 지원서가 없습니다.
+                                </div>
+                                {/* ) : (
                                     applications.map((app) => (
                                         <div
                                             key={app.id}
@@ -166,7 +167,7 @@ export const MyPage = () => {
                                                 : `[아기사자] ${app.part} 파트 지원서`}
                                         </div>
                                     ))
-                                )}
+                                )} */}
                             </>
                         )}
                     </div>
