@@ -1,6 +1,5 @@
-import type { RecruitmentResponse } from "@/types/Recruit";
 import axiosInstance from "./axiosInstance";
-
+import type { RecruitmentResponse } from "@/types/recruit";
 // export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
 //     const res = await axiosInstance.get("/applications/me");
 //     return res.data;
