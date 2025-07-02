@@ -1,9 +1,10 @@
 interface PostHeaderProps {
     isUploadEnabled: boolean;
+    onSubmit: () => void;
     onClick: () => void;
 }
 
-export const PostHeader = ({ isUploadEnabled, onClick }: PostHeaderProps) => {
+export const PostHeader = ({ isUploadEnabled, onSubmit, onClick }: PostHeaderProps) => {
     return (
         <div className="w-full h-24 flex flex-row items-center px-28 shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
             <div className="w-full h-11 flex flex-row justify-between">
@@ -30,6 +31,7 @@ export const PostHeader = ({ isUploadEnabled, onClick }: PostHeaderProps) => {
                                 : "text-white bg-[#FFC08A] cursor-not-allowed"
                         }`}
                         disabled={!isUploadEnabled}
+                        onClick={onSubmit}
                     >
                         업로드
                     </button>

@@ -8,6 +8,7 @@ interface PageLayoutProps {
     white?: boolean;
     isPost?: boolean;
     isUploadEnabled?: boolean;
+    onSubmit?: () => void;
     onExit?: () => void;
 }
 
@@ -16,6 +17,7 @@ export default function PageLayout({
     white = false,
     isPost = false,
     isUploadEnabled = false,
+    onSubmit,
     onExit
 }: PageLayoutProps) {
     useEffect(() => {
@@ -36,7 +38,11 @@ export default function PageLayout({
     return (
         <>
             {isPost ? (
-                <PostHeader isUploadEnabled={isUploadEnabled} onClick={() => onExit?.()} />
+                <PostHeader
+                    isUploadEnabled={isUploadEnabled}
+                    onSubmit={onSubmit!}
+                    onClick={() => onExit?.()}
+                />
             ) : (
                 <Header white={white} />
             )}

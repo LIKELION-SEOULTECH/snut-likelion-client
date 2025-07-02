@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 interface PostNavigatorProps {
     prev?: { title: string; href: string };
@@ -6,6 +6,15 @@ interface PostNavigatorProps {
 }
 
 export const PostNavigator = ({ prev, next }: PostNavigatorProps) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleGoToList = () => {
+        if (location.pathname.includes("blog-content")) {
+            navigate("/blog");
+        }
+    };
+
     return (
         <div className="w-full text-xl text-[#404040]">
             <div className="border-t-[2px] border-[#7F7F7F]" />
@@ -28,7 +37,10 @@ export const PostNavigator = ({ prev, next }: PostNavigatorProps) => {
                 </Link>
             )}
             <div className="w-full flex justify-end">
-                <button className="px-4 py-[10px] bg-[#A7A7A7] text-white text-base rounded-full mt-[55px] cursor-pointer">
+                <button
+                    className="px-4 py-[10px] bg-[#A7A7A7] text-white text-base rounded-full mt-[55px] cursor-pointer"
+                    onClick={handleGoToList}
+                >
                     목록 →
                 </button>
             </div>

@@ -1,30 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BlogTypeTabs from "@/components/blog/BlogTypeTabs";
 import PageLayout from "@/layouts/PageLayout";
-import { mockBlogList } from "@/constants/blog/mockBlogList";
 import { BlogCardList } from "@/components/blog/BlogCardList";
 import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
+import { getBlogList } from "@/apis/blog";
+import type { Blog } from "@/apis/blog";
 
-type BlogType = "세션 이야기" | "프로젝트 회고" | "전체";
-
-const PAGE_SIZE = 12;
+type BlogType = "세션 이야기" | "프로젝트 회고";
 
 export const BlogPage = () => {
-    const [blogType, setBlogType] = useState<BlogType>("전체");
+    const [blogType, setBlogType] = useState<BlogType>("세션 이야기");
     const [page, setPage] = useState(1);
+    const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [totalPages, setTotalPages] = useState(1);
+
+    // useEffect(() => {
+    //     const checkEndpoints = async () => {
+    //         try {
+    //             const chatbotRes = await fetch("http://ai.maruhxn.store:8000/");
+    //             const chatbotData = await chatbotRes.text();
+    //             console.log("✅ 챗봇 응답:", chatbotData);
+    //         } catch (error) {
+    //             console.error("❌ 챗봇 API 연결 실패:", error);
+    //         }
+
+    //         try {
+    //             const summaryRes = await fetch("http://ai.maruhxn.store:8001/summarize");
+    //             const summaryData = await summaryRes.text();
+    //             console.log("✅ 요약 응답:", summaryData);
+    //         } catch (error) {
+    //             console.error("❌ 요약 API 연결 실패:", error);
+    //         }
+    //     };
+
+    //     checkEndpoints();
+    // }, []);
+
+    useEffect(() => {
+        const category: "OFFICIAL" | "UNOFFICIAL" =
+            blogType === "세션 이야기" ? "OFFICIAL" : "UNOFFICIAL";
+        console.log("📌 blogType 변경:", blogType);
+
+        const fetchBlogs = async (page: number, category: "OFFICIAL" | "UNOFFICIAL") => {
+            try {
+                const data = await getBlogList({
+                    page: page - 1, // 페이지는 0부터 시작 (백엔드 기준)
+                    size: 12,
+                    category
+                });
+                console.log("✅ API 응답:", data);
+                setBlogs(data.content); // content만 저장
+                setTotalPages(data.totalPages); // 전체 페이지 수도 저장
+            } catch (error) {
+                console.error("블로그 목록 불러오기 실패:", error);
+            }
+        };
+
+        fetchBlogs(page, category); // ✅ 인자를 객체로 구성해서 넘기기
+    }, [blogType, page]); // ✅ page도 의존성에 추가
 
     const handleTabSelect = (type: BlogType) => {
         setPage(1);
-        setBlogType((prev) => (prev === type ? "전체" : type));
+        setBlogType((prev) => (prev === type ? "세션 이야기" : type));
     };
-
-    const filteredBlogs =
-        blogType === "전체" ? mockBlogList : mockBlogList.filter((blog) => blog.type === blogType);
-
-    const totalPages = Math.ceil(filteredBlogs.length / PAGE_SIZE);
-
-    const paginatedBlogs = filteredBlogs.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
     return (
         <PageLayout white={true}>
@@ -33,7 +72,7 @@ export const BlogPage = () => {
                     Blog<span className="text-[#FF7700]">.</span>
                 </div>
                 <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} />
-                <BlogCardList blogs={paginatedBlogs} />
+                <BlogCardList blogs={Array.isArray(blogs) ? blogs : []} />
                 <div>
                     <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
                 </div>
