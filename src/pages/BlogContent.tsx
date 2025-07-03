@@ -24,7 +24,7 @@ export const BlogContentPage = () => {
                 const currentId = Number(id);
 
                 const res = await getBlogById(Number(id));
-                console.log("✅ 블로그 상세 데이터:", res.data.data);
+
                 setBlog(res.data.data);
 
                 if (currentId > 1) {

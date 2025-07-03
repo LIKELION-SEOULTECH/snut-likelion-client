@@ -54,7 +54,7 @@ const TextEditor = ({ content, setContent, setImages }: TextEditorProps) => {
         onUpdate({ editor }) {
             const html = editor.getHTML();
             setContent(html);
-            console.log("Editor content:", html); // ✅ 여기서 출력
+            console.log("Editor content:", html);
         }
     });
 

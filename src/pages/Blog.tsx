@@ -15,28 +15,6 @@ export const BlogPage = () => {
     const [blogs, setBlogs] = useState<Blog[]>([]);
     const [totalPages, setTotalPages] = useState(1);
 
-    // useEffect(() => {
-    //     const checkEndpoints = async () => {
-    //         try {
-    //             const chatbotRes = await fetch("http://ai.maruhxn.store:8000/");
-    //             const chatbotData = await chatbotRes.text();
-    //             console.log("✅ 챗봇 응답:", chatbotData);
-    //         } catch (error) {
-    //             console.error("❌ 챗봇 API 연결 실패:", error);
-    //         }
-
-    //         try {
-    //             const summaryRes = await fetch("http://ai.maruhxn.store:8001/summarize");
-    //             const summaryData = await summaryRes.text();
-    //             console.log("✅ 요약 응답:", summaryData);
-    //         } catch (error) {
-    //             console.error("❌ 요약 API 연결 실패:", error);
-    //         }
-    //     };
-
-    //     checkEndpoints();
-    // }, []);
-
     useEffect(() => {
         const category: "OFFICIAL" | "UNOFFICIAL" =
             blogType === "세션 이야기" ? "OFFICIAL" : "UNOFFICIAL";
