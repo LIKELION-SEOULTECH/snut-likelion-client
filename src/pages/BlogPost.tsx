@@ -67,7 +67,7 @@ export const BlogPostPage = () => {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="OFFICIAL">세션 이야기</SelectItem>
-                            <SelectItem value="UNOFFICIAL">프로젝트 회고</SelectItem>
+                            <SelectItem value="UNOFFICIAL">아기사자 이야기</SelectItem>
                         </SelectContent>
                     </Select>
 

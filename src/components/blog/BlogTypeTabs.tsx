@@ -1,4 +1,4 @@
-const blogTypes = ["세션 이야기", "프로젝트 회고"] as const;
+const blogTypes = ["세션 이야기", "아기사자 이야기"] as const;
 
 type BlogType = (typeof blogTypes)[number] | "세션 이야기";
 
