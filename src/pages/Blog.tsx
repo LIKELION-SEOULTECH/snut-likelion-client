@@ -7,7 +7,7 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { getBlogList } from "@/apis/blog";
 import type { Blog } from "@/apis/blog";
 
-type BlogType = "세션 이야기" | "프로젝트 회고";
+type BlogType = "세션 이야기" | "아기사자 이야기";
 
 export const BlogPage = () => {
     const [blogType, setBlogType] = useState<BlogType>("세션 이야기");
