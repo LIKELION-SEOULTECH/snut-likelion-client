@@ -10,6 +10,20 @@ interface RecruitFormStep2Props {
     loading: boolean;
     isManeger: boolean;
 }
+// 변환 맵
+const PART_ID_TO_KO: Record<string, string> = {
+    PLANNING: "기획자",
+    DESIGN: "디자이너",
+    FRONTEND: "프론트엔드",
+    BACKEND: "백엔드",
+    AI: "인공지능"
+};
+
+const DEPT_ID_TO_KO: Record<string, string> = {
+    ACADEMIC: "학술부",
+    MARKETING: "홍보부",
+    OPERATION: "운영부"
+};
 
 export const RecruitFormStep2 = ({
     formData,
@@ -29,16 +43,15 @@ export const RecruitFormStep2 = ({
 
     // 파트 질문
     const partQs = questions
-        .filter((q) => q.questionTarget === "파트 질문" && q.part === formData.part)
+        .filter((q) => q.questionTarget === "파트 질문" && q.part === PART_ID_TO_KO[formData.part])
         .sort((a, b) => a.orderNum - b.orderNum);
 
-    // 부서 질문
     const deptQs = isManeger
         ? questions
               .filter(
                   (q) =>
                       q.questionTarget === "부서 질문" &&
-                      q.departmentType === formData.departmentType
+                      q.departmentType === DEPT_ID_TO_KO[formData.departmentType]
               )
               .sort((a, b) => a.orderNum - b.orderNum)
         : [];
@@ -85,7 +98,9 @@ export const RecruitFormStep2 = ({
             {/* 파트 질문 */}
             {partQs.length > 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold">{formData.part} 질문</h4>
+                    <h4 className="text-[32px] text-white font-bold">
+                        {PART_ID_TO_KO[formData.part]} 질문
+                    </h4>
                     <AnswerBox questions={toItems(partQs)} onChange={handleAnswerChange} />
                 </>
             )}
@@ -94,7 +109,7 @@ export const RecruitFormStep2 = ({
             {isManeger && deptQs.length > 0 && (
                 <>
                     <h4 className="text-[32px] text-white font-bold">
-                        {formData.departmentType} 질문
+                        {DEPT_ID_TO_KO[formData.departmentType]} 질문
                     </h4>
                     <AnswerBox questions={toItems(deptQs)} onChange={handleAnswerChange} />
                 </>

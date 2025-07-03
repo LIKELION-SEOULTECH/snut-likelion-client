@@ -7,22 +7,37 @@ interface RecruitFormStep1Props {
 }
 
 const PARTS = [
-    { ko: "기획자", en: "Planner" },
-    { ko: "디자이너", en: "Designer" },
-    { ko: "프론트엔드", en: "Front-end" },
-    { ko: "백엔드", en: "Back-end" },
-    { ko: "인공지능", en: "A.I" }
+    { ko: "기획자", en: "Planner", id: "PLANNING" },
+    { ko: "디자이너", en: "Designer", id: "DESIGN" },
+    { ko: "프론트엔드", en: "Front-end", id: "FRONTEND" },
+    { ko: "백엔드", en: "Back-end", id: "BACKEND" },
+    { ko: "인공지능", en: "A.I", id: "AI" }
 ];
 
 // const DEPARTMENTS = ["학술부", "홍보부", "운영부"];
 const DEPARTMENTS = [
-    { ko: "학술부", en: "Academic Department" },
-    { ko: "홍보부", en: "Public Relations Department" },
+    { ko: "학술부", en: "Academic Department", id: "ACADEMIC" },
+    { ko: "홍보부", en: "Public Relations Department", id: "MARKETING" },
     {
         ko: "운영부",
-        en: "Operations Department"
+        en: "Operations Department",
+        id: "OPERATION"
     }
 ];
+
+// const PARTS = [
+//     { ko: "기획자", en: "PLANNING" },
+//     { ko: "디자이너", en: "DESIGN" },
+//     { ko: "프론트엔드", en: "FRONTEND" },
+//     { ko: "백엔드", en: "BACKEND" },
+//     { ko: "인공지능", en: "AI" }
+// ];
+
+// const DEPARTMENTS = [
+//     { ko: "학술부", en: "ACADEMIC" },
+//     { ko: "홍보부", en: "MARKETING" },
+//     { ko: "운영부", en: "OPERATION" }
+// ];
 
 export const RecruitFormStep1 = ({
     isManeger,
@@ -49,12 +64,12 @@ export const RecruitFormStep1 = ({
                         <div className="grid grid-cols-5 gap-4 ">
                             {PARTS.map((part) => (
                                 <button
-                                    style={selectedPart === part.ko ? selectedStyle : defaultStyle}
-                                    key={part.ko}
-                                    onClick={() => onSelect("part", part.ko)}
+                                    style={selectedPart === part.id ? selectedStyle : defaultStyle}
+                                    key={part.id}
+                                    onClick={() => onSelect("part", part.id)}
                                     className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[230px] h-[128px]
                                 border-[1px] flex flex-col items-start justify-center text-left
-                                ${selectedPart === part.ko ? "bg-[#6B3200] border-[#F70]" : ""}`}
+                                ${selectedPart === part.id ? "bg-[#6B3200] border-[#F70]" : ""}`}
                                 >
                                     <span>{part.ko}</span>
                                     <span className="text-[20px] font-medium text-[#A7A7A7]">
@@ -72,12 +87,12 @@ export const RecruitFormStep1 = ({
                                 {DEPARTMENTS.map((dept) => (
                                     <button
                                         style={
-                                            selectedDepartment === dept.ko
+                                            selectedDepartment === dept.id
                                                 ? selectedStyle
                                                 : defaultStyle
                                         }
-                                        key={dept.ko}
-                                        onClick={() => onSelect("departmentType", dept.ko)}
+                                        key={dept.id}
+                                        onClick={() => onSelect("departmentType", dept.id)}
                                         className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[394px] h-[128px]
                                         border-[1px] flex flex-col items-start justify-center text-left`}
                                     >
