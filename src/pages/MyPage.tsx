@@ -169,6 +169,11 @@ export const MyPage = () => {
                                 />
                             </div>
                         )}
+                        {!isGuest && !member?.profileImageUrl ? (
+                            <div className="w-[291px] h-[281px] flex overflow-hidden mb-[54px]">
+                                <div className="w-full h-full border-1"></div>
+                            </div>
+                        ) : null}{" "}
                         <div className="w-[291px] h-[306px]">
                             <MyPageTab
                                 isGuest={!!isGuest}

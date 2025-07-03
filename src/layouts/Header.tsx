@@ -5,6 +5,7 @@ import { ROUTES } from "@/constants/routes";
 import { useEffect, useState } from "react";
 import { MyIcon } from "@/components/Header/MyIcon";
 import { fetchMyMemberInfo } from "@/apis/members";
+import { fetchRecentRecruitment } from "@/apis/recruit";
 
 interface HeaderProps {
     white?: boolean;
@@ -16,6 +17,7 @@ export const Header = ({ white = false }: HeaderProps) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+    const [isGuest, setIsGuest] = useState<boolean | null>(null);
 
     useEffect(() => {
         const loadProfile = async () => {
@@ -25,6 +27,7 @@ export const Header = ({ white = false }: HeaderProps) => {
             // 토큰이 없거나, 게스트라면 API 호출x
             const guest = role === "ROLE_GUEST";
             setIsLoggedIn(!!token);
+            setIsGuest(guest);
             if (!token || guest) return;
 
             try {
@@ -45,6 +48,61 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "멤버", route: ROUTES.MEMBER },
         { name: "소식", route: ROUTES.NEWS }
     ];
+
+    const handleGuestRecruit = async () => {
+        try {
+            // MEMBER, MANAGER 모집일정
+            const [memberRes, managerRes] = await Promise.all([
+                fetchRecentRecruitment("MEMBER"),
+                fetchRecentRecruitment("MANAGER")
+            ]);
+
+            const now = new Date();
+            const mOpen = new Date(managerRes.data.openDate);
+            const mClose = new Date(managerRes.data.closeDate);
+            const uOpen = new Date(memberRes.data.openDate);
+            const uClose = new Date(memberRes.data.closeDate);
+
+            // 기간
+            console.log(
+                `[운영진] ${managerRes.data.generation}기 → open: ${mOpen.toLocaleString()}, close: ${mClose.toLocaleString()}`
+            );
+            console.log(
+                `[멤버]     ${memberRes.data.generation}기 → open: ${uOpen.toLocaleString()}, close: ${uClose.toLocaleString()}`
+            );
+
+            // 운영진 지원 가능
+            if (mOpen <= now && now <= mClose) {
+                navigate(ROUTES.RECRUIT_MANAGER);
+                return;
+            }
+            // 멤버 지원 가능 기간
+            if (uOpen <= now && now <= uClose) {
+                navigate(ROUTES.RECRUIT_MEMBER);
+                return;
+            }
+
+            // 지원기간 ㄴㄴ
+            const upcoming: Array<{ type: "MANAGER" | "MEMBER"; open: Date }> = [];
+            if (mOpen > now) upcoming.push({ type: "MANAGER", open: mOpen });
+            if (uOpen > now) upcoming.push({ type: "MEMBER", open: uOpen });
+
+            if (upcoming.length > 0) {
+                // openDate 기준  → 가장 가까운 기간에 모집인곳
+                upcoming.sort((a, b) => a.open.getTime() - b.open.getTime());
+                const next = upcoming[0];
+                if (next.type === "MANAGER") {
+                    navigate(ROUTES.RECRUIT_MANAGER);
+                } else {
+                    navigate(ROUTES.RECRUIT_MEMBER);
+                }
+                return;
+            }
+            navigate(ROUTES.RECRUIT_MEMBER);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <div
@@ -98,9 +156,13 @@ export const Header = ({ white = false }: HeaderProps) => {
                             <div className="flex  gap-4 items-center">
                                 <button
                                     className="w-[109px] h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded rounded-[100px] cursor-pointer text-[14px] "
-                                    onClick={() => navigate(ROUTES.BLOG_POST)}
+                                    onClick={
+                                        !isGuest
+                                            ? () => navigate(ROUTES.BLOG_POST)
+                                            : handleGuestRecruit
+                                    }
                                 >
-                                    블로그 글쓰기
+                                    {!isGuest ? "블로그 글쓰기" : "지원하기"}
                                 </button>
                                 <MyIcon
                                     onClick={() => navigate(ROUTES.MYPAGE)}

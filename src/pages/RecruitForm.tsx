@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RecruitFormStep1 } from "@/components/Recruit/RecruitFormStep1";
 import { RecruitFormStep2 } from "@/components/Recruit/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/Recruit/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
+// import type { QuestionResponse } from "@/types/Recruits";
+import { fetchRecentRecruitment } from "@/apis/recruit";
+import type { QuestionResponse } from "@/types/Recruits";
+import { fetchQuestions } from "@/apis/recruitform";
+// import { fetchQuestions } from "@/apis/Recuit";
 
 interface RecruitFormProps {
     isManeger: boolean;
@@ -36,6 +41,34 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         answers: [] as { questionId: number; answer: string }[],
         mobileNumber: ""
     });
+    const [questions, setQuestions] = useState<QuestionResponse[]>([]);
+    const [loadingQuestions, setLoadingQuestions] = useState(false);
+
+    useEffect(() => {
+        if (step !== 2) return;
+        console.log("▶ Entering step 2, formData:", {
+            part: formData.part,
+            department: formData.departmentType
+        });
+
+        (async () => {
+            setLoadingQuestions(true);
+            try {
+                const recType = isManeger ? "MANAGER" : "MEMBER";
+                const recRes = await fetchRecentRecruitment(recType);
+
+                const qs = await fetchQuestions(recRes.data.id, {
+                    part: formData.part,
+                    department: isManeger ? formData.departmentType : undefined
+                });
+                setQuestions(qs);
+            } catch (e) {
+                console.error(e);
+            } finally {
+                setLoadingQuestions(false);
+            }
+        })();
+    }, [step, isManeger, formData.part, formData.departmentType]);
 
     // 파트. 부서 행들러
     const handleSelect = (field: "part" | "departmentType", value: string) => {
@@ -68,7 +101,15 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                         onNext={handleNext}
                     />
                 )}
-                {step === 2 && <RecruitFormStep2 formData={formData} setFormData={setFormData} />}
+                {step === 2 && (
+                    <RecruitFormStep2
+                        formData={formData}
+                        setFormData={setFormData}
+                        questions={questions}
+                        loading={loadingQuestions}
+                        isManeger={isManeger}
+                    />
+                )}
             </div>
             <Footer />
         </div>

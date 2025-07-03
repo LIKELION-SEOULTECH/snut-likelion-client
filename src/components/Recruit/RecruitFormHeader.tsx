@@ -14,7 +14,7 @@ export const RecruitFormHeader = ({ isManeger, onNext, isValid, step }: RecruitF
     const handleLeave = () => {
         const confirmLeave = confirm("선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?");
         if (confirmLeave) {
-            const target = isManeger ? "/recruitments/maneger" : "/recruitments/member";
+            const target = isManeger ? "/recruitments/manager" : "/recruitments/member";
             navigate(target);
         }
     };
