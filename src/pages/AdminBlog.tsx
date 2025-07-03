@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchBlogList } from "@/apis/blog";
 
 import { BlogDeleteConfirmDialog } from "@/components/admin/blog/BlogDeleteConfirmDialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteAdminBlogs } from "@/apis/blog";
 
 export const AdminBlogPage = () => {
     // const [blogs, setBlogs] = useState(dummyBlogData);
@@ -38,6 +40,22 @@ export const AdminBlogPage = () => {
             .sort((a, b) => b.id - a.id); // 최신순 정렬
     }, [official, unofficial, filters]);
 
+    const queryClient = useQueryClient();
+
+    const { mutate: deleteSelectedBlogs } = useMutation({
+        mutationFn: deleteAdminBlogs,
+        onSuccess: () => {
+            alert("삭제가 완료되었습니다.");
+            queryClient.invalidateQueries({ queryKey: ["blogs", "official"] });
+            queryClient.invalidateQueries({ queryKey: ["blogs", "unofficial"] });
+            setShowDeleteConfirm(false);
+            setSelectedIds([]);
+            setShowCheckboxes(false);
+        },
+        onError: () => {
+            alert("삭제에 실패했습니다.");
+        }
+    });
     // 현재 페이지에 해당하는 데이터
     const totalPages = Math.ceil(combinedData.length / itemsPerPage);
     const currentPageData = combinedData.slice(
@@ -73,10 +91,15 @@ export const AdminBlogPage = () => {
                 alert("삭제할 항목을 선택해주세요.");
                 return;
             }
-            setShowDeleteConfirm(true); // ✅ 모달 띄우기
+            setShowDeleteConfirm(true);
         } else {
             setShowCheckboxes(true); // 삭제 모드 진입
         }
+    };
+
+    const handleDeleteConfirm = () => {
+        console.log("삭제 시도:", selectedIds);
+        deleteSelectedBlogs(selectedIds);
     };
 
     return (
@@ -102,7 +125,7 @@ export const AdminBlogPage = () => {
                 <BlogDeleteConfirmDialog
                     open={showDeleteConfirm}
                     onClose={() => setShowDeleteConfirm(false)}
-                    onDelete={handleClickDelete}
+                    onDelete={handleDeleteConfirm}
                 />
             )}
         </AdminLayout>

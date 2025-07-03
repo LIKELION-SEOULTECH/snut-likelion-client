@@ -121,24 +121,16 @@ export const getMyPosts = () => {
     return axiosInstance.get("/blogs/me");
 };
 
-// export const getMyDraft = () => {
-//     return axiosInstance.get("/api/v1/blogs/drafts/me");
-// };
-
-// export const saveOrUpdateDraft = (data: any) => {
-//     return axiosInstance.post("/api/v1/blogs/drafts", data);
-// };
-
-// export const deleteDraft = () => {
-//     return axiosInstance.delete("/api/v1/blogs/drafts/me");
-// };
-
 // apis/blog.ts
 export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
 
-    const res = await axiosInstance.post("/blogs/images", formData);
+    const res = await axiosInstance.post("/blogs/images", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
     console.log(res.data.data);
     return res.data.data.urls; // ✅ 정확히 배열만 리턴
 };
@@ -154,4 +146,9 @@ export const fetchMyBlogs = async (): Promise<MyBlogType[]> => {
         updatedAt: blog.updatedAt,
         blogCategory: blog.blogCategory ?? "UNOFFICIAL"
     }));
+};
+
+// 어드민 블로그 삭제
+export const deleteAdminBlogs = async (ids: number[]) => {
+    await Promise.all(ids.map((id) => axiosInstance.delete(`/blogs/${id}`)));
 };
