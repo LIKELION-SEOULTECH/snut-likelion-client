@@ -38,3 +38,14 @@ export const typeMap = {
     아기사자: "MEMBER",
     운영진: "MANAGER"
 } as const;
+
+// 모집 폼
+export interface QuestionResponse {
+    id: number;
+    text: string;
+    quesitonTarget: string;
+    questionType: string;
+    part: string;
+    departmentType: string;
+    order: number; // 질문 순서
+}

@@ -9,7 +9,7 @@ type Props = {
 
 export default function BlogTypeTabs({ selected, onSelect }: Props) {
     return (
-        <div className="w-full flex gap-7 font-medium">
+        <div className="w-full flex gap-7 items-center justify-center font-medium">
             {blogTypes.map((type) => (
                 <button
                     key={type}

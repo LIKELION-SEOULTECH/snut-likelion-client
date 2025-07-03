@@ -9,7 +9,7 @@ export const PostHeader = ({ isUploadEnabled, onSubmit, onClick }: PostHeaderPro
         <div className="w-full h-24 flex flex-row items-center px-28 shadow-[0px_4px_20px_rgba(0,0,0,0.08)]">
             <div className="w-full h-11 flex flex-row justify-between">
                 <button
-                    className="w-[93px] h-full rounded-full bg-[#ECECEC] text-[#666666] font-medium px-4 cursor-pointer"
+                    className="w-[93px] h-full rounded-full bg-[#ECECEC] hover:bg-[#fff] text-[#666666] font-medium px-4 cursor-pointer"
                     onClick={onClick}
                 >
                     ← 나가기
