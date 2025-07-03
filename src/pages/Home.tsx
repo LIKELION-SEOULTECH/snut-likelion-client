@@ -22,6 +22,7 @@ import { ChatBotContainer } from "@/components/ChatBotContainer";
 import { NotificationModal } from "@/components/home/NotificationModal";
 import { toast, Toaster } from "sonner";
 import { fetchRecentRecruitment } from "@/apis/recruit";
+import { ROUTES } from "@/constants/routes";
 
 type VisualButtonType =
     | "MANAGER_NOTIFY"
@@ -142,14 +143,14 @@ export default function HomePage() {
                 setRecruitType("MANAGER");
                 break;
             case "MANAGER_APPLY":
-                navigate("/apply/manager");
+                navigate(ROUTES.RECRUIT_MANAGER);
                 break;
             case "MEMBER_NOTIFY":
                 setIsModalOpen(true);
                 setRecruitType("MEMBER");
                 break;
             case "MEMBER_APPLY":
-                navigate("/apply/member");
+                navigate(ROUTES.RECRUIT_FORM_MEMBER);
                 break;
             default:
                 break;
