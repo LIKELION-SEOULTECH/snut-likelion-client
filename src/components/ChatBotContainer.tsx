@@ -110,7 +110,7 @@ export const ChatBotContainer = () => {
 
         setTimeout(async () => {
             try {
-                const res = await fetch("http://ai.maruhxn.store:8000/chat", {
+                const res = await fetch(" https://ai.maruhxn.store/chat", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
