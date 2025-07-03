@@ -1,8 +1,7 @@
 import type { FormDataType } from "@/pages/RecruitForm";
-import type { QuestionResponse } from "@/types/Recruits";
 import { AnswerBox } from "./FormAnswerBox";
 import { FormUserInfoBox } from "./FormUserInfoBox";
-
+import type { QuestionResponse } from "@/apis/dummy";
 interface RecruitFormStep2Props {
     formData: FormDataType;
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
