@@ -97,10 +97,14 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
               },
               {
                   title: "면접",
-                  date: "2025.03.11 (화) ~ 03.13 (목)",
+                  date: `${formatDate(addDays(schedule.closeDate, 12))} ~ ${formatDate(addDays(schedule.closeDate, 16))}`,
                   note: "개별 안내되는 일정에 따라 대면 진행"
               },
-              { title: "최종 발표", date: "2025.03.16 (일)", note: "메일로 개별 발표" }
+              {
+                  title: "최종 발표",
+                  date: formatDate(addDays(schedule.closeDate, 20)),
+                  note: "메일로 개별 발표"
+              }
           ]
         : [];
 
