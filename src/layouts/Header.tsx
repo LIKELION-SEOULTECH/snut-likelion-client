@@ -119,7 +119,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                     <div className="w-[38.12px] h-5 sm:w-[61px] sm:h-8">
                         <LikeLionLogo
                             className="cursor-pointer"
-                            onClick={() => navigate(ROUTES.HOME)}
+                            onClick={() => navigate(ROUTES.ADMIN_MEMBER)}
                         />
                     </div>
 
