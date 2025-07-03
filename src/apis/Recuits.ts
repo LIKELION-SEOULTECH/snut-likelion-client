@@ -2,7 +2,7 @@ import type {
     MyApplicationsResponse,
     QuestionResponse,
     RecruitmentResponse
-} from "@/types/Recruit";
+} from "@/types/Recruits";
 import axiosInstance from "./axiosInstance";
 
 export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
@@ -39,9 +39,8 @@ export const fetchQuestions = async (
     recId: number,
     params: GetQuestionsParameter
 ): Promise<QuestionResponse[]> => {
-    const res = await axiosInstance.get<QuestionListResponse>(
-        `/admin/recruitments/${recId}/questions`,
-        { params }
-    );
+    const res = await axiosInstance.get<QuestionListResponse>(`/recruitments/${recId}/questions`, {
+        params
+    });
     return res.data.data;
 };

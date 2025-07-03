@@ -1,5 +1,5 @@
 import type { FormDataType } from "@/pages/RecruitForm";
-import type { QuestionResponse } from "@/types/Recruit";
+import type { QuestionResponse } from "@/types/Recruits";
 import { AnswerBox } from "./FormAnswerBox";
 import { FormUserInfoBox } from "./FormUserInfoBox";
 

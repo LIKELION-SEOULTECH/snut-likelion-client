@@ -3,7 +3,7 @@ import { RecruitFormStep1 } from "@/components/Recruit/RecruitFormStep1";
 import { RecruitFormStep2 } from "@/components/Recruit/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/Recruit/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
-import type { QuestionResponse } from "@/types/Recruit";
+import type { QuestionResponse } from "@/types/Recruits";
 import { fetchRecentRecruitment } from "@/apis/recruit";
 import { fetchQuestions } from "@/apis/Recuit";
 
