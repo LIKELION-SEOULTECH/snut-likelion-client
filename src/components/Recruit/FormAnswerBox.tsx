@@ -15,7 +15,7 @@ export const AnswerBox = ({ questions, onChange }: AnswerBoxProps) => {
     return (
         <div className="pb-[120px] ">
             {/* 여기 수정 필요 ->  백엔 연동하면서 ~~질문 이렇게 */}
-            <h4 className="text-[32px] text-[#FFF] font-bold mb-10">질문</h4>
+
             <FormBox>
                 {questions.map((q, idx) => {
                     const currentLength = q.answer.length;
