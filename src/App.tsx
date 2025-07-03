@@ -118,6 +118,16 @@ function App() {
                     path={ROUTES.ADMIN_RECRUIT_USER_DETAIL}
                     element={<AdminUsererRecruitDetailPage />}
                 />
+                <Route path={ROUTES.RECRUIT_MEMBER} element={<Recruit isManager={false} />} />
+                <Route path={ROUTES.RECRUIT_MANAGER} element={<Recruit isManager={true} />} />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MANAGER}
+                    element={<RecruitForm isManeger={true} />}
+                />
+                <Route
+                    path={ROUTES.RECRUIT_FORM_MEMBER}
+                    element={<RecruitForm isManeger={false} />}
+                />
             </Routes>
         </BrowserRouter>
     );
