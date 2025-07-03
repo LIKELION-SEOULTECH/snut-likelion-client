@@ -25,20 +25,23 @@ export const typeMap = {
     운영진: "MANAGER"
 } as const;
 
-//모집 질문 get
+//모집 질문
 export interface GetQuestionsParameter {
     part: string;
     department?: string;
+}
+export interface QuestionListResponse {
+    code: string;
+    message: string;
+    data: QuestionResponse[];
 }
 export const fetchQuestions = async (
     recId: number,
     params: GetQuestionsParameter
 ): Promise<QuestionResponse[]> => {
-    const { data } = await axiosInstance.get<QuestionResponse[]>(
+    const res = await axiosInstance.get<QuestionListResponse>(
         `/admin/recruitments/${recId}/questions`,
-        {
-            params
-        }
+        { params }
     );
-    return data;
+    return res.data.data;
 };

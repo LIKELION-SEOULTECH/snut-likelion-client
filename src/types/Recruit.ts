@@ -16,9 +16,9 @@ export interface MyApplicationsResponse {
     grade: number;
     isPersonalInfoConsent: boolean;
     portfolioName: string;
-    part: string; // enum이면 타입 따로 지정
-    departmentType: string; // enum이면 타입 따로 지정
-    status: string; // enum이면 타입 따로 지정
+    part: string;
+    departmentType: string;
+    status: string;
     answers: ApplicationAnswer[];
     submittedAt: string;
 }
@@ -43,9 +43,9 @@ export const typeMap = {
 export interface QuestionResponse {
     id: number;
     text: string;
-    quesitonTarget: string;
+    questionTarget: string;
     questionType: string;
-    part: string;
-    departmentType: string;
-    order: number; // 질문 순서
+    part?: string;
+    departmentType?: string;
+    orderNum: number;
 }

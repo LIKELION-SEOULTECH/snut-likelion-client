@@ -1,76 +1,104 @@
 import type { FormDataType } from "@/pages/RecruitForm";
+import type { QuestionResponse } from "@/types/Recruit";
 import { AnswerBox } from "./FormAnswerBox";
 import { FormUserInfoBox } from "./FormUserInfoBox";
 
 interface RecruitFormStep2Props {
     formData: FormDataType;
     setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
+    questions: QuestionResponse[];
+    loading: boolean;
+    isManeger: boolean;
 }
 
-export const RecruitFormStep2 = ({ formData, setFormData }: RecruitFormStep2Props) => {
-    return (
-        <div className="bg-[#1B1B1B] w-full h-auto pt-[72px] px-[112px]">
-            <div className=" mb-[120px] ">
-                <h4 className="text-[32px] text-[#FFF] font-bold mb-10">기본 질문</h4>
-                <FormUserInfoBox
-                    name={formData.name}
-                    major={formData.major}
-                    studentId={formData.studentId}
-                    inSchool={formData.inSchool}
-                    grade={formData.grade}
-                    mobileNumber={formData.mobileNumber}
-                    onChange={(field, value) =>
-                        setFormData((prev) => ({ ...prev, [field]: value }))
-                    }
-                />
-            </div>
+export const RecruitFormStep2 = ({
+    formData,
+    setFormData,
+    questions,
+    loading,
+    isManeger
+}: RecruitFormStep2Props) => {
+    if (loading) {
+        return <div className="text-white p-8">질문을 불러오는 중…</div>;
+    }
+    // 질문 내가 고른것만..
+    // 공통 질문
+    const commonQs = questions
+        .filter((q) => q.questionTarget === "공통 질문")
+        .sort((a, b) => a.orderNum - b.orderNum);
 
-            <AnswerBox
-                questions={[
-                    {
-                        questionId: 1,
-                        label: "1. 지원 동기는 무엇인가요?",
-                        answer: formData.answers.find((a) => a.questionId === 1)?.answer || ""
-                    },
-                    {
-                        questionId: 2,
-                        label: "2. 팀 프로젝트 경험이 있다면 공유해주세요.",
-                        answer: formData.answers.find((a) => a.questionId === 2)?.answer || ""
-                    }
-                ]}
-                onChange={(id, answer) =>
-                    setFormData((prev) => {
-                        const filtered = prev.answers.filter((a) => a.questionId !== id);
-                        return {
-                            ...prev,
-                            answers: [...filtered, { questionId: id, answer }]
-                        };
-                    })
-                }
+    // 파트 질문
+    const partQs = questions
+        .filter((q) => q.questionTarget === "파트 질문" && q.part === formData.part)
+        .sort((a, b) => a.orderNum - b.orderNum);
+
+    // 부서 질문
+    const deptQs = isManeger
+        ? questions
+              .filter(
+                  (q) =>
+                      q.questionTarget === "부서 질문" &&
+                      q.departmentType === formData.departmentType
+              )
+              .sort((a, b) => a.orderNum - b.orderNum)
+        : [];
+
+    const handleAnswerChange = (questionId: number, answer: string) => {
+        setFormData((prev) => {
+            const other = prev.answers.filter((a) => a.questionId !== questionId);
+            return {
+                ...prev,
+                answers: [...other, { questionId, answer }]
+            };
+        });
+    };
+
+    const toItems = (qs: QuestionResponse[]) =>
+        qs.map((q) => ({
+            questionId: q.id,
+            label: q.text,
+            answer: formData.answers.find((a) => a.questionId === q.id)?.answer || ""
+        }));
+
+    return (
+        <div className="bg-[#1B1B1B] w-full h-auto pt-[72px] px-[112px] space-y-12">
+            <h4 className="text-[32px] text-white font-bold">기본 질문</h4>
+
+            <FormUserInfoBox
+                name={formData.name}
+                major={formData.major}
+                studentId={formData.studentId}
+                inSchool={formData.inSchool}
+                grade={formData.grade}
+                mobileNumber={formData.mobileNumber}
+                onChange={(field, value) => setFormData((prev) => ({ ...prev, [field]: value }))}
             />
-            <AnswerBox
-                questions={[
-                    {
-                        questionId: 1,
-                        label: "1. 지원 동기는 무엇인가요?",
-                        answer: formData.answers.find((a) => a.questionId === 1)?.answer || ""
-                    },
-                    {
-                        questionId: 2,
-                        label: "2. 팀 프로젝트 경험이 있다면 공유해주세요.",
-                        answer: formData.answers.find((a) => a.questionId === 2)?.answer || ""
-                    }
-                ]}
-                onChange={(id, answer) =>
-                    setFormData((prev) => {
-                        const filtered = prev.answers.filter((a) => a.questionId !== id);
-                        return {
-                            ...prev,
-                            answers: [...filtered, { questionId: id, answer }]
-                        };
-                    })
-                }
-            />
+
+            {/* 공통 질문 */}
+            {commonQs.length > 0 && (
+                <>
+                    <h4 className="text-[32px] text-white font-bold mt-[150px]">공통 질문</h4>
+                    <AnswerBox questions={toItems(commonQs)} onChange={handleAnswerChange} />
+                </>
+            )}
+
+            {/* 파트 질문 */}
+            {partQs.length > 0 && (
+                <>
+                    <h4 className="text-[32px] text-white font-bold">{formData.part} 질문</h4>
+                    <AnswerBox questions={toItems(partQs)} onChange={handleAnswerChange} />
+                </>
+            )}
+
+            {/*  부서 질문 운영진꺼요*/}
+            {isManeger && deptQs.length > 0 && (
+                <>
+                    <h4 className="text-[32px] text-white font-bold">
+                        {formData.departmentType} 질문
+                    </h4>
+                    <AnswerBox questions={toItems(deptQs)} onChange={handleAnswerChange} />
+                </>
+            )}
         </div>
     );
 };
