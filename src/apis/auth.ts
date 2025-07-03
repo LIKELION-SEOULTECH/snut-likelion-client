@@ -43,3 +43,7 @@ export const verifyEmailCode = async (email: string, code: string) => {
     const res = await axiosInstance.post(`/auth/email/certify?email=${email}&code=${code}`);
     return res.data;
 };
+
+export const logout = () => {
+    return axiosInstance.post("/api/v1/auth/logout");
+};
