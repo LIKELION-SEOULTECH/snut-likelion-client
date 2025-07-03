@@ -21,10 +21,7 @@ const ImageComponent = ({ node, updateAttributes, editor }: NodeViewProps) => {
     };
 
     return (
-        <NodeViewWrapper
-            as="div"
-            className={`relative my-2 group w-fit`} // group으로 hover 제어
-        >
+        <NodeViewWrapper as="div" className={`relative my-2 group w-full`}>
             <button
                 className={`
                     absolute flex w-20 h-10 justify-center items-center text-base text-white text-center m-6 transition-opacity
@@ -40,7 +37,7 @@ const ImageComponent = ({ node, updateAttributes, editor }: NodeViewProps) => {
                 alt={alt}
                 onClick={handleClick}
                 onDragStart={(e) => e.preventDefault()}
-                className="max-w-xs cursor-pointer transition hover:ring-2 hover:ring-[#FF7700]"
+                className="w-full h-auto cursor-pointer transition hover:ring-2 hover:ring-[#FF7700] select-none"
             />
         </NodeViewWrapper>
     );

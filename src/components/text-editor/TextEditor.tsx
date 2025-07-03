@@ -28,7 +28,6 @@ const extensions = [
             console.log("업로드된 이미지 URL:", url);
         }
     }),
-
     Mention.configure({
         suggestion: mentionSuggestionOptions,
         HTMLAttributes: {
