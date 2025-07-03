@@ -5,7 +5,7 @@ import { RecruitFormHeader } from "@/components/Recruit/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
 // import type { QuestionResponse } from "@/types/Recruits";
 import { fetchRecentRecruitment } from "@/apis/recruit";
-import type { QuestionResponse } from "@/types/Recruits";
+import type { QuestionResponse } from "@/apis/dummy";
 import { fetchQuestions } from "@/apis/recruitform";
 // import { fetchQuestions } from "@/apis/Recuit";
 

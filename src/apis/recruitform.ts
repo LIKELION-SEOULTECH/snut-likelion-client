@@ -1,8 +1,4 @@
-import type {
-    MyApplicationsResponse,
-    QuestionResponse,
-    RecruitmentResponse
-} from "@/types/Recruits";
+import type { MyApplicationsResponse, QuestionResponse, RecruitmentResponse } from "./dummy";
 import axiosInstance from "./axiosInstance";
 
 export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
