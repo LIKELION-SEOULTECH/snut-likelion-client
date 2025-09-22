@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { ProjectReminderBox } from "./ProjectReminderBox";
 import type { RetrospectionResponse } from "@/types/project";
-import { fetchRetrospections } from "@/apis/projects";
+
 import { useNavigate } from "react-router-dom";
+import { getRetrospections } from "@/apis/main/project";
 
 interface ProjectReminderSectionProps {
     projectId: number;
@@ -16,7 +17,7 @@ export const ProjectReminderSection = ({ projectId, projectGen }: ProjectReminde
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await fetchRetrospections(projectId);
+                const data = await getRetrospections(projectId);
                 setRetrospections(data);
             } catch (err) {
                 console.error("회고 불러오기 실패:", err);

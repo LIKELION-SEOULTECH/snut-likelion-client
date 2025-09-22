@@ -13,7 +13,8 @@ import {
 } from "@/components/ui/select";
 import GripHorizontal from "@/assets/admin/grip-horizontal.svg?react";
 import AddQuestionBtn from "@/assets/admin/add-question-btn.svg?react";
-import { updateQuestions } from "@/apis/recruit";
+import { updateQuestions } from "@/apis/admin/recruitment";
+
 interface Question {
     id: string;
     text: string;

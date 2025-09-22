@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { OrangeBtn } from "@/components/Member/OrangeBtn";
-import { SmallBtn } from "@/components/Member/SmallBtn";
+import { OrangeBtn } from "@/components/member/OrangeBtn";
+import { SmallBtn } from "@/components/member/SmallBtn";
 import { MyBlog } from "./MyBlog";
-import { fetchLionInfo } from "@/apis/members";
+import { fetchLionInfo } from "@/apis/main/member";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 import { ProjectBox } from "../home/ProjectBox";
 
 const partMap = {

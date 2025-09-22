@@ -1,7 +1,7 @@
 import Input from "./Input";
 import { Link } from "react-router-dom";
 import { useLogin } from "@/hooks/useLogin";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 
 export const LoginForm = () => {
     const {

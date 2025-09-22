@@ -3,14 +3,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { ProjectBox } from "./ProjectBox";
 
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
 import type { ProjectData } from "@/types/project";
-import { fetchAllProjects } from "@/apis/projects";
 
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Autoplay } from "swiper/modules";
+import { fetchAllProjects } from "@/apis/main/project";
 interface ProjectShowcaseSectionProps {
     handleClick: () => void;
 }

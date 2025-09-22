@@ -1,6 +1,6 @@
 import Logo from "@/assets/Header/likelion_logo.svg?react"; // SVG 컴포넌트로 불러올 경우
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 
 export const SidebarHeader = () => {
     const navigate = useNavigate();

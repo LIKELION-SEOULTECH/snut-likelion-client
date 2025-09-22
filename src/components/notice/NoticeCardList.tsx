@@ -1,4 +1,4 @@
-import { NewsCardItem } from "./NewsCardItem";
+import { NoticeCardItem } from "./NoticeCardItem";
 
 interface News {
     id: number;
@@ -12,11 +12,11 @@ interface NewsCardListProps {
     newsList: News[];
 }
 
-export const NewsCardList = ({ newsList }: NewsCardListProps) => {
+export const NoticeCardList = ({ newsList }: NewsCardListProps) => {
     return (
         <div className="flex flex-col mt-18 w-[1217px] items-center border-t-2 border-[#2D2D2D]">
             {newsList.map((news: News) => (
-                <NewsCardItem
+                <NoticeCardItem
                     key={news.id}
                     id={news.id}
                     type={news.type}

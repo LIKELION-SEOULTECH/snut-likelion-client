@@ -1,4 +1,4 @@
-import { fetchMyBlogs } from "@/apis/blog";
+import { getMyBlog } from "@/apis/main/blog";
 import type { MyBlogType } from "@/types/blog";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ export const MyBlog = () => {
     useEffect(() => {
         const load = async () => {
             try {
-                const data = await fetchMyBlogs();
+                const data = await getMyBlog();
                 setBlogs(data);
             } catch (err) {
                 console.error("블로그 불러오기 실패", err);

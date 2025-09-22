@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import type { AdminBlog } from "@/types/blog";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAdminSingleBlog } from "@/apis/blog";
+import { getBlogDetail } from "@/apis/main/blog";
+
 interface BlogSearchItemProps {
     blog: AdminBlog;
     index: number;
@@ -25,7 +26,7 @@ export const BlogSearchItem = ({
 
     const { data: adminBlog } = useQuery({
         queryKey: ["blog", blog.postId],
-        queryFn: () => fetchAdminSingleBlog(blog.postId!),
+        queryFn: () => getBlogDetail(blog.postId!),
         enabled: !!blog.postId
     });
 

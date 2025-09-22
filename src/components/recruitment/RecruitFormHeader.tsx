@@ -1,4 +1,4 @@
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 import { useNavigate } from "react-router-dom";
 
 interface RecruitFormHeaderProps {

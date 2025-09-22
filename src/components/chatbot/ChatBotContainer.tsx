@@ -148,7 +148,7 @@ export const ChatBotContainer = () => {
 
     return (
         <div>
-            <div className="block w-[395px]  h-[626px] bg-[#fff] rounded-[19.585px] text-[#000] ">
+            <div className="block w-[395px]  h-[626px] bg-[#fff] rounded-[19.585px] text-[#000]">
                 <h4 className="flex h-[56px] text-[18px] w-full justify-center items-center font-semibold text-[#2D2D2D]">
                     멋쟁이 사자처럼 서울과학기술대학교
                 </h4>

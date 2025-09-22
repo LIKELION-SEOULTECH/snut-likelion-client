@@ -1,6 +1,6 @@
-import ArrowRight from "@/assets/news/arrow-right.svg?react";
+import ArrowRight from "@/assets/notice/arrow-right.svg?react";
 import { useNavigate } from "react-router-dom";
-interface NewsCardProps {
+interface NoticeCardProps {
     id: number;
     type: string;
     title: string;
@@ -8,7 +8,7 @@ interface NewsCardProps {
     isNew: boolean;
 }
 
-export const NewsCardItem = ({ id, type, title, date, isNew }: NewsCardProps) => {
+export const NoticeCardItem = ({ id, type, title, date, isNew }: NoticeCardProps) => {
     const typeColor = type === "공지" ? "#FF7700" : "#A7A7A7";
 
     const navigate = useNavigate();

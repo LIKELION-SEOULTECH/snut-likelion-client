@@ -1,5 +1,5 @@
-import { deleteMyAccount } from "@/apis/members";
-import { ROUTES } from "@/constants/routes";
+import { deleteMyAccount } from "@/apis/main/member";
+import { ROUTES } from "@/routes/routes";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

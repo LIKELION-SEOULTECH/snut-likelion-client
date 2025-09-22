@@ -1,4 +1,4 @@
-import type { FormDataType } from "@/pages/RecruitForm";
+import type { FormDataType } from "@/pages/main/RecruitForm";
 import { FormBox } from "./FormBox";
 
 interface FormUserInfoBoxProps {
