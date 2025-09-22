@@ -1,5 +1,18 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
 import { setAccessToken, setRefreshToken } from "@/utils/token";
+
+// 회원가입
+export const register = async (payload: {
+    email: string;
+    username: string;
+    password: string;
+    confirmPassword: string;
+    phoneNumber: string;
+    isEmailVerified: boolean;
+}) => {
+    const res = await axiosInstance.post("/auth/register", payload);
+    return res.data;
+};
 
 // 로그인
 export const login = async (email: string, password: string) => {
@@ -19,18 +32,12 @@ export const login = async (email: string, password: string) => {
     return res.data;
 };
 
-// 회원가입
-export const register = async (payload: {
-    email: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
-    phoneNumber: string;
-    isEmailVerified: boolean;
-}) => {
-    const res = await axiosInstance.post("/auth/register", payload);
-    return res.data;
+// 로그아웃
+export const logout = () => {
+    return axiosInstance.post("/auth/logout");
 };
+
+// 토큰 갱신
 
 // 이메일 인증 코드 전송
 export const sendVerificationCode = async (email: string) => {
@@ -44,6 +51,12 @@ export const verifyEmailCode = async (email: string, code: string) => {
     return res.data;
 };
 
-export const logout = () => {
-    return axiosInstance.post("/api/v1/auth/logout");
+// 비밀번호 찾기 코드 전송
+export const sendPwFindCode = async (email: string) => {
+    const res = await axiosInstance.post(`/auth/email/send?email=${encodeURIComponent(email)}`);
+    return res.data;
 };
+
+// 비밀번호 재설정
+
+// 비밀번호 변경

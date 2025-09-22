@@ -1,31 +1,14 @@
-import axiosInstance from "./axiosInstance";
+// 멤버 리스트 조회 (검색 포함)
+
 import type { MemberListResponse } from "@/types/member";
+import axiosInstance from "../axiosInstance";
 
-export interface UpdateProfileRequest {
-    name?: string;
-    phoneNumber?: string;
-    email?: string;
-}
+// 멤버 정보 수정
 
-export interface MemberQueryParams {
-    generation?: number;
-    role?: string;
-}
-
-// ✅ 유저 정보 수정
-export const updateMemberInfo = (memberId: number, data: UpdateProfileRequest) => {
-    return axiosInstance.patch(`/members/${memberId}`, data);
-};
-
-// ✅ 멤버 검색 (키워드)
-export const searchMembers = (keyword: string) => {
-    return axiosInstance.get("/members/search", {
-        params: { keyword }
-    });
-};
+// 특정 기수의 멤버 정보 삭제
 
 // 멤버 리스트 조회 (검색 포함)
-export const fetchMemberList = async (params?: {
+export const getAdminMemberSearchList = async (params?: {
     generation?: number;
     role?: string;
     size?: number;
