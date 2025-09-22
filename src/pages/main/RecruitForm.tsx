@@ -4,7 +4,7 @@ import { RecruitFormStep2 } from "@/components/recruitment/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/recruitment/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
 import { fetchQuestions, fetchRecentRecruitment } from "@/apis/main/recruitment";
-import type { QuestionResponse } from "@/types/recruits";
+import type { QuestionResponse } from "@/types/recruitment";
 
 interface RecruitFormProps {
     isManeger: boolean;

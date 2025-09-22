@@ -1,6 +1,10 @@
 import type { GetQuestionsParameter, QuestionListResponse } from "@/types/recruitment-form";
 import axiosInstance from "../axiosInstance";
-import type { MyApplicationsResponse, QuestionResponse, SubscribeRequest } from "@/types/recruits";
+import type {
+    MyApplicationsResponse,
+    QuestionResponse,
+    SubscribeRequest
+} from "@/types/recruitment";
 
 // 최신 모집일정 조회
 export const fetchRecentRecruitment = async (recruitmentType: string) => {

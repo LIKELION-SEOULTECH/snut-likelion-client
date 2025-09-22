@@ -1,4 +1,4 @@
-import { ROUTES } from "@/routes/routes";
+import { ADMIN } from "@/routes/routes";
 import AdminLayout from "@/layouts/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -41,7 +41,7 @@ export const AdminRecruitPage = () => {
                         <button
                             className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"
                             onClick={() => {
-                                navigate(ROUTES.ADMIN_APPLY_USER);
+                                navigate(ADMIN.APPLY_USER);
                             }}
                         >
                             작성하기
@@ -61,7 +61,7 @@ export const AdminRecruitPage = () => {
                         <button
                             className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"
                             onClick={() => {
-                                navigate(ROUTES.ADMIN_APPLY_MANAGER);
+                                navigate(ADMIN.APPLY_MANAGER);
                             }}
                         >
                             작성하기

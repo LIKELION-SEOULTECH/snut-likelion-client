@@ -1,7 +1,7 @@
 import type { FormDataType } from "@/pages/main/RecruitForm";
 import { AnswerBox } from "./FormAnswerBox";
 import { FormUserInfoBox } from "./FormUserInfoBox";
-import type { QuestionResponse } from "@/types/recruits";
+import type { QuestionResponse } from "@/types/recruitment";
 
 interface RecruitFormStep2Props {
     formData: FormDataType;

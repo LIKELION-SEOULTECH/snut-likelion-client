@@ -1,6 +1,6 @@
 // 모집 일정 생성
 
-import type { QuestionRequest, RecruitmentRequest } from "@/types/recruits";
+import type { QuestionRequest, RecruitmentRequest } from "@/types/recruitment";
 import axiosInstance from "../axiosInstance";
 import type { Question } from "@/types/apply";
 
