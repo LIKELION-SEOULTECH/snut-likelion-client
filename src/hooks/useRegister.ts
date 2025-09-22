@@ -1,9 +1,9 @@
 // src/hooks/useSignupForm.ts
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { register, sendVerificationCode, verifyEmailCode } from "@/apis/auth";
+import { register, sendVerificationCode, verifyEmailCode } from "@/apis/main/auth";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 
 export const useRegister = () => {
     const navigate = useNavigate();

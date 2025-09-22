@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchAllProjects } from "@/apis/projects";
+
 import type { ProjectData } from "@/types/project";
+import { fetchAllProjects } from "@/apis/main/project";
 
 export function useAllProjects() {
     const [allProjects, setAllProjects] = useState<ProjectData[]>([]);

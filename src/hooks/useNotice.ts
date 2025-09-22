@@ -6,7 +6,7 @@ import {
     getNoticeById,
     updateNotice,
     deleteNotice
-} from "@/apis/notice";
+} from "@/apis/main/notice";
 import type { UpdateNoticePayload } from "@/types/notice";
 
 // 전체 조회
