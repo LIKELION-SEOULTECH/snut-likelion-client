@@ -70,8 +70,10 @@ export const ADMIN = {
     APPLY_USER: "apply-user"
 } as const;
 
-// 헬퍼: 필요 시 상대 경로를 절대로 만들 때 사용
-export const adminPath = (subpath: string) => `${ROUTES.ADMIN_BASE}/${subpath}`;
+export const ADMIN_ABS = Object.fromEntries(
+    Object.entries(ADMIN).map(([k, v]) => [k, `${ROUTES.ADMIN_BASE}/${v}`])
+) as Record<keyof typeof ADMIN, string>;
+export const adminTo = (k: AdminKey) => `${ROUTES.ADMIN_BASE}/${ADMIN[k]}`;
 
 export type RouteKey = keyof typeof ROUTES;
 export type RoutePath = (typeof ROUTES)[RouteKey];

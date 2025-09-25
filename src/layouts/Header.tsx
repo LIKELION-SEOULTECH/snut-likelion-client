@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
 import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
-import { ADMIN, ROUTES } from "@/routes/routes";
+import { ADMIN_ABS, ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
 import { MyIcon } from "@/components/header/MyIcon";
 import { fetchMyMemberInfo } from "@/apis/main/member";
@@ -119,7 +119,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                     <div className="w-[38.12px] h-5 sm:w-[61px] sm:h-8">
                         <LikeLionLogo
                             className="cursor-pointer"
-                            onClick={() => navigate(ADMIN.MEMBER)}
+                            onClick={() => navigate(ADMIN_ABS.MEMBER)}
                         />
                     </div>
 
