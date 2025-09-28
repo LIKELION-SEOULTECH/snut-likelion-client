@@ -58,16 +58,16 @@ export const RecruitFormHeader = ({ isManeger, onNext, isValid, step }: RecruitF
                 ) : (
                     <>
                         <button
-                            onClick={handleTempSave}
-                            className="bg-[#000] text-[#A7A7A7] font-bold px-4 py-2 rounded-[120px] border-[1px] border-[#f70]"
-                        >
-                            임시저장
-                        </button>
-                        <button
                             onClick={handleSubmit}
-                            className="bg-[#F70] text-white font-bold px-4 py-2 rounded-[120px]"
+                            className="bg-[#000] text-[#f70] font-bold px-4 py-2 rounded-[120px] border-[1px] border-[#f70]"
                         >
                             작성완료
+                        </button>
+                        <button
+                            onClick={handleTempSave}
+                            className="bg-[#F70] text-white  font-bold px-4 py-2 rounded-[120px] border-[1px] border-[#f70]"
+                        >
+                            임시저장
                         </button>
                     </>
                 )}

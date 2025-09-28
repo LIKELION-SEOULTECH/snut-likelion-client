@@ -196,7 +196,9 @@ export const MyPage = () => {
                             // 게스트일 경우 지원서 섹션
                             <>
                                 <div className="flex justify-between mb-[29px]">
-                                    <h4 className="text-[32px] text-white font-bold">지원서</h4>
+                                    <h4 className="text-[32px] text-white font-bold">
+                                        내가 쓴 지원서
+                                    </h4>
                                     <span
                                         className="text-[20px] underline text-[#7F7F7F] cursor-pointer"
                                         onClick={handleGuestRecruit}

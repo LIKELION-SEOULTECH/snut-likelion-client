@@ -97,7 +97,7 @@ export const RecruitFormStep1 = ({
                                         border-[1px] flex flex-col items-start justify-center text-left`}
                                     >
                                         <span>{dept.ko}</span>
-                                        <span className="text-[20px] font-medium text-[#A7A7A7]">
+                                        <span className="text-[20px] font-medium text-[#fff]/60">
                                             {dept.en}
                                         </span>
                                     </button>

@@ -12,7 +12,7 @@ export const DropDwon = ({ label, options, selected, setSelected }: DropDownProp
 
     return (
         <div
-            className={`relative inline-block text-left border-1 border-[#C4C4C4] rounded-[4px] ${label === "기수" ? `w-[86px]` : `w-[162px]`} h-[44px]`}
+            className={`relative inline-block text-left border-1 border-[#C4C4C4] rounded-[4px] ${label === "기수" ? `w-[86px]` : `w-[120px]`} h-[44px]`}
         >
             <button
                 type="button"
