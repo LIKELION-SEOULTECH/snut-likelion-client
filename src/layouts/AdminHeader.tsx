@@ -46,9 +46,9 @@ export const AdminHeader = ({
         if (path.startsWith("/admin/recruit/result/manager")) return "운영진 지원서";
         if (path.startsWith("/admin/recruit/user")) return "아기사자 모집";
         if (path.startsWith("/admin/recruit/manager")) return "운영진 모집";
+        if (path.startsWith("/admin/recruit/apply-manager")) return "운영진 질문";
+        if (path.startsWith("/admin/recruit/apply-user")) return "아기사자 질문";
         if (path.startsWith("/admin/recruit")) return "모집 관리";
-        if (path.startsWith("/admin/apply-manager")) return "운영진 질문";
-        if (path.startsWith("/admin/apply-user")) return "아기사자 질문";
 
         return "";
     };
@@ -56,7 +56,8 @@ export const AdminHeader = ({
     const showButtons =
         path.startsWith("/admin/notice") ||
         path.startsWith("/admin/blog") ||
-        path.startsWith("/admin/project");
+        path.startsWith("/admin/project") ||
+        path.startsWith("/admin/recruit");
 
     const renderButtons = () => {
         if (path === "/admin/notice/create") {
@@ -70,6 +71,29 @@ export const AdminHeader = ({
             );
         }
 
+        // 운영진 질문 저장하기 버튼
+        if (path === "/admin/recruit/apply-manager") {
+            return (
+                <button
+                    className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    onClick={onSubmit}
+                >
+                    저장하기
+                </button>
+            );
+        }
+        // 멤버 질문 저장하기 버튼
+        if (path === "/admin/recruit/apply-user") {
+            return (
+                <button
+                    className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    onClick={onSubmit}
+                >
+                    저장하기
+                </button>
+            );
+        }
+        // 어드민 프로젝트 업로드 버튼
         if (path === "/admin/project/create") {
             return (
                 <button

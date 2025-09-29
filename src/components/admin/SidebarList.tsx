@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 export const SidebarList = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isRecruitOpen, setIsRecruitOpen] = useState(false);
 
-    const toggleRecruit = () => setIsRecruitOpen((prev) => !prev);
+    useEffect(() => {
+        if (location.pathname.startsWith("/admin/recruit")) {
+            setIsRecruitOpen(true);
+        } else {
+            setIsRecruitOpen(false);
+        }
+    }, [location.pathname]);
 
+    const toggleRecruit = () => setIsRecruitOpen((prev) => !prev);
     const menuItems = [
         { name: "멤버 관리", path: "/admin/member" },
         { name: "소식 관리", path: "/admin/notice" },
@@ -22,7 +30,7 @@ export const SidebarList = () => {
                     key={item.name}
                     to={item.path}
                     className={({ isActive }) =>
-                        `px-10 py-[25px] h-[69px] ${isActive ? "font-bold" : "font-medium"}`
+                        `flex items-center px-10 py-[25px] h-[69px] ${isActive ? "font-bold bg-[#404040]" : "font-medium"}`
                     }
                 >
                     {item.name}
@@ -30,14 +38,15 @@ export const SidebarList = () => {
             ))}
 
             {/* 모집 관리 */}
-            <div className="h-[69px] px-10 py-[25px] cursor-pointer flex items-center justify-between">
-                <span
-                    onClick={() => {
-                        navigate("/admin/recruit");
-                    }}
-                >
-                    모집 관리
-                </span>
+            <div
+                onClick={() => {
+                    navigate("/admin/recruit");
+                }}
+                className={`h-[69px] px-10 py-[25px] cursor-pointer flex items-center justify-between ${
+                    location.pathname === "/admin/recruit" ? "font-bold" : "font-medium"
+                } ${isRecruitOpen && "bg-[#404040]"}`}
+            >
+                <span>모집 관리</span>
                 <ChevronDown
                     className={`w-4 h-4 transition-transform ${isRecruitOpen ? "rotate-180" : ""}`}
                     onClick={toggleRecruit}
@@ -47,13 +56,21 @@ export const SidebarList = () => {
                 <div className="flex flex-col">
                     <NavLink
                         to="/admin/recruit/manager"
-                        className="h-[69px] px-10 py-[25px] hover:text-white"
+                        className={({ isActive }) =>
+                            `flex items-center h-[69px] px-10 py-[25px] hover:text-white ${
+                                isActive ? "font-bold bg-[#3A3A3A]" : "font-medium"
+                            } ${isRecruitOpen && "bg-[#3a3a3a]"}`
+                        }
                     >
                         운영진 모집
                     </NavLink>
                     <NavLink
                         to="/admin/recruit/user"
-                        className="h-[69px] px-10 py-[25px] hover:text-white"
+                        className={({ isActive }) =>
+                            `flex items-center h-[69px] px-10 py-[25px] hover:text-white ${
+                                isActive ? "font-bold" : "font-medium"
+                            } ${isRecruitOpen && "bg-[#3a3a3a]"}`
+                        }
                     >
                         아기사자 모집
                     </NavLink>

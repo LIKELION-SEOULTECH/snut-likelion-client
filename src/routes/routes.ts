@@ -66,8 +66,8 @@ export const ADMIN = {
     RECRUIT_USER: "recruit/user",
     RECRUIT_USER_DETAIL: "recruit/result/user/:id",
 
-    APPLY_MANAGER: "apply-manager",
-    APPLY_USER: "apply-user"
+    APPLY_MANAGER: "recruit/apply-manager",
+    APPLY_USER: "recruit/apply-user"
 } as const;
 
 export const ADMIN_ABS = Object.fromEntries(

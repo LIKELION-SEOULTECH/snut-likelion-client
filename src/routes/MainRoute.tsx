@@ -1,4 +1,3 @@
-// src/routes/MainRoutes.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
