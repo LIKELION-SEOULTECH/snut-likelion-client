@@ -10,7 +10,7 @@ export const SidebarHeader = () => {
             onClick={() => navigate(ADMIN_ABS.MEMBER)}
         >
             <Logo />
-            <span className="text-white text-[28px] font-medium pr-[38px]">Admin</span>
+            <span className="text-gray-0 medium-28 pr-[38px]">Admin</span>
         </div>
     );
 };

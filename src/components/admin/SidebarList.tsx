@@ -24,13 +24,13 @@ export const SidebarList = () => {
     ];
 
     return (
-        <nav className="flex flex-col  text-white text-base h-full">
+        <nav className="flex flex-col  text-gray-0 h-full">
             {menuItems.map((item) => (
                 <NavLink
                     key={item.name}
                     to={item.path}
                     className={({ isActive }) =>
-                        `flex items-center px-10 py-[25px] h-[69px] ${isActive ? "font-bold bg-[#404040]" : "font-medium"}`
+                        `flex items-center px-10 py-[25px] h-[69px] ${isActive ? "bold-16 bg-gray-600" : "medium-16"}`
                     }
                 >
                     {item.name}

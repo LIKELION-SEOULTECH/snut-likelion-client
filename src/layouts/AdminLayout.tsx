@@ -19,7 +19,7 @@ export default function AdminLayout({
     return (
         <div className="flex w-full">
             {/* Admin Sidebar */}
-            <aside className="h-100% bg-[#2D2D2D] text-white">
+            <aside className="h-100% bg-gray-700 text-white">
                 <Sidebar />
             </aside>
 
@@ -31,7 +31,7 @@ export default function AdminLayout({
                     onSubmit={onSubmit}
                 />
                 {/* Main content */}
-                <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>
+                <main className="flex-1 overflow-y-auto px-10 bg-gray-50">{children}</main>
             </div>
         </div>
     );

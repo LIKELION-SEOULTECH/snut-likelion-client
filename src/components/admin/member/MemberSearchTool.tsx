@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SearchIcon from "@/assets/admin/search-icon.svg?react";
 
 interface MemberSearchToolProps {
     onSearch: (filters: {
@@ -110,13 +111,18 @@ export const MemberSearchTool = ({ onSearch }: MemberSearchToolProps) => {
                 </SelectContent>
             </Select>
 
-            {/* Keyword Input */}
-            <Input
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="이름 검색"
-                className="w-[631px] bg-white !h-full rounded-sm"
-            />
+            <div className="relative flex-1 h-full">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <SearchIcon />
+                </div>
+                {/* Keyword Input */}
+                <Input
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="이름 검색"
+                    className="min-w-100 w-full bg-white !h-full rounded-sm pl-10"
+                />
+            </div>
 
             {/* Search Button */}
             <Button

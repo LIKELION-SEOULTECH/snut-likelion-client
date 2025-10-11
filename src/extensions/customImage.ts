@@ -13,21 +13,46 @@ export const CustomImage = Node.create({
         return {
             src: { default: null },
             alt: { default: null },
-            isThumbnail: { default: false }
+            isThumbnail: { default: false },
+
+            // ⬇️ 리사이즈용 속성
+            width: {
+                default: null as number | null,
+                parseHTML: (element) => {
+                    const fromData = element.getAttribute("data-width");
+                    if (fromData) return Number(fromData);
+                    const style = element.getAttribute("style") || "";
+                    const m = style.match(/width:\s*(\d+)px/);
+                    return m ? Number(m[1]) : null;
+                },
+                renderHTML: (attrs) =>
+                    attrs.width
+                        ? { "data-width": String(attrs.width), style: `width:${attrs.width}px;` }
+                        : {}
+            },
+            height: {
+                default: null as number | null,
+                parseHTML: (element) => {
+                    const fromData = element.getAttribute("data-height");
+                    if (fromData) return Number(fromData);
+                    const style = element.getAttribute("style") || "";
+                    const m = style.match(/height:\s*(\d+)px/);
+                    return m ? Number(m[1]) : null;
+                },
+                renderHTML: (attrs) =>
+                    attrs.height
+                        ? {
+                              "data-height": String(attrs.height),
+                              style: `${attrs.style ?? ""};height:${attrs.height}px;`
+                          }
+                        : {}
+            }
         };
     },
 
+    // 기본 Image와 충돌 피하려고 커스텀 데이터 속성으로 파싱
     parseHTML() {
-        return [
-            {
-                tag: "img[src]",
-                getAttrs: (dom: HTMLElement) => ({
-                    src: dom.getAttribute("src"),
-                    alt: dom.getAttribute("alt"),
-                    isThumbnail: dom.getAttribute("data-thumbnail") === "true"
-                })
-            }
-        ];
+        return [{ tag: 'img[data-custom-image="true"]' }];
     },
 
     renderHTML({ HTMLAttributes }) {
@@ -35,7 +60,11 @@ export const CustomImage = Node.create({
         return [
             "img",
             mergeAttributes(rest, {
-                "data-thumbnail": isThumbnail ? "true" : "false"
+                // 파서가 이 노드를 캐치하게 하는 플래그
+                "data-custom-image": "true",
+                "data-thumbnail": isThumbnail ? "true" : "false",
+                // 안전 가드
+                style: `${rest.style ?? ""};max-width:100%;height:auto;display:block;`
             })
         ];
     },

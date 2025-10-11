@@ -51,6 +51,11 @@ export const AdminMemberPage = () => {
             <div className="mt-12 mb-7">
                 <MemberSearchTool onSearch={handleSearch} />
             </div>
+
+            <div className="regular-14 mb-4">
+                검색결과 <span className="text-primary-500">{data?.totalElements || 0}</span>
+            </div>
+
             {isLoading ? (
                 <div className="text-center mt-10">불러오는 중...</div>
             ) : isError || !data ? (
@@ -59,7 +64,6 @@ export const AdminMemberPage = () => {
                 <>
                     <MemberSearchList
                         data={data.content}
-                        totalElement={data.totalElements}
                         currentPage={currentPage}
                         itemsPerPage={itemsPerPage}
                     />

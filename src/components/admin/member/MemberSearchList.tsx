@@ -4,16 +4,10 @@ import type { Member } from "@/types/members";
 import { MemberInfoModal } from "./MemberInfoModal";
 interface MemberSearchListProps {
     data: Member[];
-    totalElement: number;
     currentPage: number;
     itemsPerPage: number;
 }
-export const MemberSearchList = ({
-    data,
-    totalElement,
-    currentPage,
-    itemsPerPage
-}: MemberSearchListProps) => {
+export const MemberSearchList = ({ data, currentPage, itemsPerPage }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -25,12 +19,9 @@ export const MemberSearchList = ({
 
     return (
         <div>
-            <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{totalElement}</span>
-            </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
-                <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA]">
+                <div className="h-10 flex text-medium-14 items-center text-[#666666] font-medium bg-[#FAFAFA]">
                     <span className="flex-[1] text-left pl-[30px]">No</span>
                     <span className="flex-[4] text-left">이름</span>
                     <span className="flex-[1.5] text-left">기수</span>

@@ -1,4 +1,6 @@
+import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { useLocation, useNavigate } from "react-router-dom";
+import BackBtn from "@/assets/admin/back-btn.svg?react";
 
 interface AdminHeaderProps {
     isFormValid?: boolean;
@@ -13,6 +15,8 @@ export const AdminHeader = ({
     isDeleteMode,
     onSubmit
 }: AdminHeaderProps) => {
+    const { isManageMode, toggleManageMode } = useRecruitManageStore();
+
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -44,7 +48,9 @@ export const AdminHeader = ({
         if (path.startsWith("/admin/project")) return "프로젝트 관리";
         if (path.startsWith("/admin/recruit/result/user")) return "아기사자 지원서";
         if (path.startsWith("/admin/recruit/result/manager")) return "운영진 지원서";
+        if (path.startsWith("/admin/recruit/user") && isManageMode) return "아기사자 합격 관리";
         if (path.startsWith("/admin/recruit/user")) return "아기사자 모집";
+        if (path.startsWith("/admin/recruit/manager") && isManageMode) return "운영진 합격 관리";
         if (path.startsWith("/admin/recruit/manager")) return "운영진 모집";
         if (path.startsWith("/admin/recruit/apply-manager")) return "운영진 질문";
         if (path.startsWith("/admin/recruit/apply-user")) return "아기사자 질문";
@@ -58,6 +64,14 @@ export const AdminHeader = ({
         path.startsWith("/admin/blog") ||
         path.startsWith("/admin/project") ||
         path.startsWith("/admin/recruit");
+
+    // 뒤로가기 버튼 있는 경우
+    const showBackButton =
+        path.startsWith("/admin/blog/create") ||
+        path.startsWith("/admin/notice/create") ||
+        path.startsWith("/admin/project/create") ||
+        (path.startsWith("/admin/recruit/manager") && isManageMode) ||
+        (path.startsWith("/admin/recruit/user") && isManageMode);
 
     const renderButtons = () => {
         if (path === "/admin/notice/create") {
@@ -75,7 +89,7 @@ export const AdminHeader = ({
         if (path === "/admin/recruit/apply-manager") {
             return (
                 <button
-                    className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    className="w-[111px] h-11 text-gray-0 rounded-sm bg-primary-500"
                     onClick={onSubmit}
                 >
                     저장하기
@@ -86,19 +100,64 @@ export const AdminHeader = ({
         if (path === "/admin/recruit/apply-user") {
             return (
                 <button
-                    className="w-[111px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    className="w-[111px] h-11 text-gray-0 rounded-sm bg-primary-500"
                     onClick={onSubmit}
                 >
                     저장하기
                 </button>
             );
         }
+        // 운영진 모집 합격자 관리 버튼
+        if (path === "/admin/recruit/manager" && isManageMode) {
+            return (
+                <button
+                    className="w-[87px] h-11 text-gray-0 rounded-sm bg-primary-500"
+                    onClick={toggleManageMode}
+                >
+                    저장
+                </button>
+            );
+        }
+        // 아기사자 모집 합격자 관리 버튼
+        if (path === "/admin/recruit/user" && isManageMode) {
+            return (
+                <button
+                    className="w-[87px] h-11 text-gray-0 rounded-sm bg-primary-500"
+                    onClick={toggleManageMode}
+                >
+                    저장
+                </button>
+            );
+        }
+        // 운영진 모집 합격자 관리 버튼
+        if (path === "/admin/recruit/manager") {
+            return (
+                <button
+                    className="w-[114px] h-11 text-gray-0 rounded-sm bg-primary-500"
+                    onClick={toggleManageMode}
+                >
+                    합격 관리
+                </button>
+            );
+        }
+        // 아기사자 모집 합격자 관리 버튼
+        if (path === "/admin/recruit/user") {
+            return (
+                <button
+                    className="w-[114px] h-11 text-gray-0 rounded-sm bg-primary-500"
+                    onClick={toggleManageMode}
+                >
+                    합격 관리
+                </button>
+            );
+        }
+
         // 어드민 프로젝트 업로드 버튼
         if (path === "/admin/project/create") {
             return (
                 <button
-                    className={`w-[161px] h-11 text-white rounded-sm ${
-                        isFormValid ? "bg-[#ff7700]" : "bg-[#E0E0E0] cursor-not-allowed"
+                    className={`w-[161px] h-11 text-gray-0 rounded-sm ${
+                        isFormValid ? "bg-primary-500" : "bg-gray-100 cursor-not-allowed"
                     }`}
                     disabled={!isFormValid}
                     onClick={onSubmit}
@@ -110,7 +169,7 @@ export const AdminHeader = ({
 
         if (path.includes("/notice/edit")) {
             return (
-                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                <button className="w-[161px] h-11 text-gray-0 rounded-sm bg-primary-500">
                     수정하기
                 </button>
             );
@@ -118,7 +177,7 @@ export const AdminHeader = ({
 
         if (path === "/admin/blog/create") {
             return (
-                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                <button className="w-[161px] h-11 text-gray-0 rounded-sm bg-primary-500">
                     등록하기
                 </button>
             );
@@ -127,7 +186,7 @@ export const AdminHeader = ({
         if (path.includes("/project/edit")) {
             return (
                 <button
-                    className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    className="w-[161px] h-11 text-gray-0 rounded-sm bg-primary-500"
                     onClick={onSubmit}
                 >
                     수정
@@ -137,19 +196,20 @@ export const AdminHeader = ({
 
         if (path.includes("/edit")) {
             return (
-                <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                <button className="w-[161px] h-11 text-white rounded-sm bg-primary-500">
                     수정하기
                 </button>
             );
         }
 
+        // 소식 상세 페이지 버튼
         if (/\d+$/.test(path) || path.includes("/detail")) {
             return (
                 <>
-                    <button className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]">
+                    <button className="w-[161px] h-11 text-icon rounded-sm border border-primary-500">
                         삭제
                     </button>
-                    <button className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]">
+                    <button className="w-[161px] h-11 text-gray-0 rounded-sm bg-primary-500">
                         수정
                     </button>
                 </>
@@ -163,7 +223,7 @@ export const AdminHeader = ({
         ) {
             return isDeleteMode ? (
                 <button
-                    className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                    className="w-[161px] h-11 text-white rounded-sm bg-primary-500"
                     onClick={onToggleDeleteMode}
                 >
                     삭제
@@ -171,13 +231,13 @@ export const AdminHeader = ({
             ) : (
                 <>
                     <button
-                        className="w-[161px] h-11 text-[#464A4D] rounded-sm border border-[#ff7700]"
+                        className="w-[161px] h-11 text-icon rounded-sm border border-primary-500"
                         onClick={onToggleDeleteMode}
                     >
                         삭제
                     </button>
                     <button
-                        className="w-[161px] h-11 text-white rounded-sm bg-[#ff7700]"
+                        className="w-[161px] h-11 text-gray-0 rounded-sm bg-primary-500"
                         onClick={() => navigate("create")}
                     >
                         업로드
@@ -190,10 +250,28 @@ export const AdminHeader = ({
     };
 
     return (
-        <div className="flex h-19 items-center px-10 bg-white justify-between">
-            <div className="text-2xl font-bold">{getHeaderText()}</div>
-            {showButtons && (
-                <div className="flex flex-row text-sm font-medium gap-[9px]">{renderButtons()}</div>
+        <div>
+            {showBackButton ? (
+                <div className="flex flex-row h-19 bg-gray-0">
+                    <div className="w-19 h-full flex items-center justify-center border-r border-[#d9d9d9]">
+                        <BackBtn />
+                    </div>
+                    <div className="w-full flex h-full items-center px-6  justify-between">
+                        <div className="bold-20">{getHeaderText()}</div>
+                        {showButtons && (
+                            <div className="flex flex-row medium-14 gap-[9px] mr-4">
+                                {renderButtons()}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ) : (
+                <div className="flex h-19 items-center px-10 bg-gray-0 justify-between">
+                    <div className="bold-20">{getHeaderText()}</div>
+                    {showButtons && (
+                        <div className="flex flex-row medium-14 gap-[9px]">{renderButtons()}</div>
+                    )}
+                </div>
             )}
         </div>
     );

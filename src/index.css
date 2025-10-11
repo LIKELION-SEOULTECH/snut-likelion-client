@@ -117,6 +117,7 @@ button {
     --color-gray-900: #1b1b1b;
     --color-gray-800: #232323;
     --color-gray-700: #2d2d2d;
+    --color-gray-600: #3a3a3a;
     --color-gray-500: #404040;
     --color-gray-400: #666666;
     --color-gray-300: #7f7f7f;
@@ -130,6 +131,7 @@ button {
     --color-primary-300: #ffa454;
 
     --color-error: #ea3838;
+    --color-icon: #464a4d;
 }
 
 :root {

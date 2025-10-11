@@ -4,8 +4,13 @@ import { RecruitUserItem } from "./RecruitUserItem";
 export const RecruitUserSearchList = ({ data }: { data: UserData[] }) => {
     return (
         <div>
-            <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{data.length}</span>
+            <div className="flex flex-row regular-14 mb-4 text-gray-900 gap-7">
+                <div>
+                    전체 <span className="text-orange-400">{data.length}</span>
+                </div>
+                <div>
+                    합격 <span className="text-orange-400">{data.length}</span>
+                </div>
             </div>
             <div className="w-full text-sm rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}

@@ -7,12 +7,15 @@ import {
     SelectValue
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; department: string; part: string }) => void;
 }
 
 export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) => {
+    const { isManageMode } = useRecruitManageStore();
+
     const [result, setResult] = useState("");
     const [part, setPart] = useState("");
     const [department, setDepartment] = useState("");
@@ -26,10 +29,10 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
             <div className="flex flex-row gap-[6px]">
                 {/* result */}
                 <Select value={result} onValueChange={setResult}>
-                    <SelectTrigger className="w-[135px] rounded-sm bg-white !h-11 data-[placeholder]:text-black">
+                    <SelectTrigger className="w-[135px] rounded-sm bg-white !h-11 data-[placeholder]:text-black pl-4">
                         <SelectValue placeholder="결과별" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-sm w-[135px] min-w-0">
+                    <SelectContent className="rounded-sm w-[135px] min-w-0 pl-4">
                         <SelectItem
                             value="제출"
                             className="whitespace-nowrap data-[state=checked]:font-bold"
@@ -59,10 +62,10 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
 
                 {/* Role */}
                 <Select value={department} onValueChange={setDepartment}>
-                    <SelectTrigger className="w-[93px] rounded-sm bg-white !h-11 data-[placeholder]:text-black">
+                    <SelectTrigger className="w-[93px] rounded-sm bg-white !h-11 data-[placeholder]:text-black pl-4">
                         <SelectValue placeholder="부서별" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-sm w-[93px] min-w-0">
+                    <SelectContent className="rounded-sm w-[93px] min-w-0 pl-4">
                         <SelectItem
                             value="운영부"
                             className="whitespace-nowrap data-[state=checked]:font-bold"
@@ -84,10 +87,10 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
                     </SelectContent>
                 </Select>
                 <Select value={part} onValueChange={setPart}>
-                    <SelectTrigger className="w-[135px] bg-white rounded-sm !h-11 data-[placeholder]:text-black whitespace-nowrap">
+                    <SelectTrigger className="w-[135px] bg-white rounded-sm !h-11 data-[placeholder]:text-black whitespace-nowrap pl-4">
                         <SelectValue placeholder="파트별" />
                     </SelectTrigger>
-                    <SelectContent className="rounded-sm w-[135px] min-w-0">
+                    <SelectContent className="rounded-sm w-[135px] min-w-0 pl-4">
                         <SelectItem
                             value="프론트엔드"
                             className="whitespace-nowrap data-[state=checked]:font-bold"
@@ -121,13 +124,29 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
                     </SelectContent>
                 </Select>
             </div>
-            {/* Search Button */}
-            <Button
-                onClick={handleSearch}
-                className="w-52 text-sm bg-[#404040] text-white !h-full rounded-sm"
-            >
-                지원서 일괄 다운로드 받기
-            </Button>
+            {isManageMode ? (
+                <div className="h-full flex flex-row gap-3">
+                    <Button
+                        onClick={handleSearch}
+                        className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
+                    >
+                        불합격
+                    </Button>
+                    <Button
+                        onClick={handleSearch}
+                        className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
+                    >
+                        합격
+                    </Button>
+                </div>
+            ) : (
+                <Button
+                    onClick={handleSearch}
+                    className="w-[153px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
+                >
+                    지원서 다운로드
+                </Button>
+            )}
         </div>
     );
 };

@@ -44,7 +44,7 @@ const AdminTextEditor = forwardRef<Editor | null, Props>(({ content, setContent 
         content,
         editorProps: {
             attributes: {
-                class: "w-full min-h-[380px] px-4 py-3 rounded-sm border border-[#C4C4C4] text-sm leading-[150%] focus:outline-none"
+                class: "w-full min-h-[380px] px-4 py-3 rounded-sm border border-gray-100 text-sm leading-[150%] focus:outline-none"
             }
         },
 

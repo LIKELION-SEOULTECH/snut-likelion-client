@@ -11,10 +11,8 @@ import { getBlogList } from "@/apis/main/blog";
 import { deleteAdminBlogs } from "@/apis/admin/blog";
 
 export const AdminBlogPage = () => {
-    // const [blogs, setBlogs] = useState(dummyBlogData);
-
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // 한 페이지에 보여줄 개수
+    const itemsPerPage = 8;
     const [filters, setFilters] = useState({
         keyword: ""
     });

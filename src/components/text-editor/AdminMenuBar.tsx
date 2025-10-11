@@ -14,44 +14,34 @@ export const AdminMenuBar = ({ editor }: { editor: Editor }) => {
             const imageUrl = reader.result as string;
             editor
                 .chain()
-                .focus("end")
-                .insertContent({
-                    type: "customImage",
-                    attrs: {
-                        src: imageUrl,
-                        alt: "uploaded image",
-                        isThumbnail: false
-                    }
-                })
+                .focus()
+                .insertContent([
+                    {
+                        type: "customImage",
+                        attrs: {
+                            src: imageUrl,
+                            alt: "uploaded image",
+                            isThumbnail: false
+                        }
+                    },
+                    { type: "paragraph" }
+                ])
                 .run();
+            e.target.value = "";
         };
         reader.readAsDataURL(file);
     };
 
     return (
-        <div className="relative h-11 border border-[#C4C4C4] flex flex-row rounded-sm mb-2 bg-[#F5F5F5]">
+        <div className="relative h-11 border border-gray-100 flex flex-row rounded-sm mb-2 bg-gray-25">
             <button
-                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-[#C4C4C4]"
+                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-gray-100]"
                 aria-pressed={editor.isActive("heading", { level: 1 })}
                 onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             >
                 <AdminSubtitleBtn />
             </button>
-            <button
-                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-[#C4C4C4]"
-                aria-pressed={editor.isActive("black quote")}
-                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            >
-                <AdminBlockQuoteBtn />
-            </button>
-            <button
-                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-[#C4C4C4]"
-                aria-pressed={editor.isActive("horizontal")}
-                onClick={() => editor.chain().focus().setHorizontalRule().run()}
-            >
-                <AdminDividerBtn />
-            </button>
-            <label className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-[#C4C4C4]">
+            <label className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-gray-100">
                 <AdminImageBtn />
                 <input
                     type="file"
@@ -60,6 +50,20 @@ export const AdminMenuBar = ({ editor }: { editor: Editor }) => {
                     className="hidden"
                 />
             </label>
+            <button
+                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-gray-100"
+                aria-pressed={editor.isActive("horizontal")}
+                onClick={() => editor.chain().focus().setHorizontalRule().run()}
+            >
+                <AdminDividerBtn />
+            </button>
+            <button
+                className="h-11 w-10 flex items-center justify-center cursor-pointer border-r border-gray-100"
+                aria-pressed={editor.isActive("black quote")}
+                onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            >
+                <AdminBlockQuoteBtn />
+            </button>
         </div>
     );
 };
