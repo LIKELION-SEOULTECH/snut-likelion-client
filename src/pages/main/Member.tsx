@@ -1,8 +1,9 @@
 import { fetchMembers } from "@/apis/main/member";
-import CategoryTabs from "@/components/member/CategoryTabs";
-import GenerationTabs from "@/components/member/GenerationTabs";
+import CategoryTabs from "@/components/Member/CategoryTabs";
 
-import { MemberCardList } from "@/components/member/MemberCardList";
+import GenerationTabs from "@/components/Member/GenerationTabs";
+
+import { MemberCardList } from "@/components/Member/MemberCardList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 
 import PageLayout from "@/layouts/PageLayout";

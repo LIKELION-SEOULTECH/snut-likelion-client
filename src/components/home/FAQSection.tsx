@@ -18,7 +18,7 @@ export const FAQSection = () => {
             {FAQList.map((faq, index) => {
                 const isOpen = openIndex === index;
                 return (
-                    <div key={index} className="flex flex-col gap-2">
+                    <div key={index} className="flex flex-col gap-2 sm:gap-0">
                         {/* Q */}
                         <FAQBlock
                             tag="Q"
@@ -29,7 +29,7 @@ export const FAQSection = () => {
                         {/* A */}
                         <div
                             className={`overflow-hidden 
-                ${isOpen ? "transition-all duration-900 ease-out max-h-[500px] opacity-100 py-0 sm:py-[16px] pb-2 sm:pb-0" : "max-h-0 opacity-0 py-0"}`}
+                ${isOpen ? "transition-[max-height] duration-700 ease-in max-h-[500px] opacity-100 py-0 sm:py-[12px] pb-2 sm:pb-0" : "max-h-0 opacity-0 py-0"}`}
                         >
                             <FAQBlock tag="A" content={faq.A} />
                         </div>

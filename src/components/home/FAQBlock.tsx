@@ -24,7 +24,7 @@ export const FAQBlock = ({ tag, content, isOpen = false, onClick }: FAQBlockProp
                 <span
                     className={`whitespace-pre-wrap ${
                         tag === "A"
-                            ? "text-[#2D2D2D] mt-0 sm:mt-[2px]"
+                            ? "text-[#2D2D2D] mt-0 sm:mt-[0px]"
                             : "text-[#ECECEC] mt-0 sm:mt-[4px]"
                     }`}
                 >
