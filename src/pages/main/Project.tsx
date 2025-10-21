@@ -4,8 +4,7 @@ import GenerationTabs from "@/components/project/GenerationTabs";
 import PageLayout from "@/layouts/PageLayout";
 import ProjectList from "@/components/project/ProjectList";
 import QuoteCardList from "@/components/project/QuoteCardList";
-import type { ProjectData } from "@/types/project";
-import { fetchAllProjects } from "@/apis/main/project";
+import { useAllProjects } from "@/hooks/useAllProjects";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -18,48 +17,28 @@ const categoryMap: Record<string, string> = {
 export default function ProjectPage() {
     const [projectGeneration, setprojectGeneration] = useState("전체");
     const [projectCategory, setprojectCategory] = useState("전체");
-    const [projects, setProjects] = useState<ProjectData[]>([]);
     const [generations, setGenerations] = useState<string[]>([]);
-    const [loading, setLoading] = useState(false);
 
-    // 전체 프로젝트 - 탭할거
+    const { data: allProjectsData } = useAllProjects();
+
     useEffect(() => {
-        const fetchAll = async () => {
-            try {
-                const all = await fetchAllProjects();
-                const genList = Array.from(new Set(all.map((p) => `${p.generation}기`))).sort(
-                    (a, b) => Number(b.replace("기", "")) - Number(a.replace("기", ""))
-                );
+        if (allProjectsData) {
+            const genList = Array.from(new Set(allProjectsData.map((p) => `${p.generation}기`))).sort(
+                (a, b) => Number(b.replace("기", "")) - Number(a.replace("기", ""))
+            );
+            setGenerations(["전체", ...genList]);
+        }
+    }, [allProjectsData]);
 
-                setGenerations(["전체", ...genList]);
-            } catch (e) {
-                console.error("전체 프로젝트 로딩 실패", e);
-            }
-        };
+    const params: { generation?: number; category?: string } = {};
+    if (projectGeneration !== "전체") {
+        params.generation = Number(projectGeneration.replace("기", ""));
+    }
+    if (projectCategory !== "전체") {
+        params.category = categoryMap[projectCategory];
+    }
 
-        fetchAll();
-    }, []);
-
-    // 필터링 프로젝트 불러오기
-    useEffect(() => {
-        const fetchFiltered = async () => {
-            setLoading(true);
-            const params: { generation?: number; category?: string } = {};
-
-            if (projectGeneration !== "전체") {
-                params.generation = Number(projectGeneration.replace("기", ""));
-            }
-            if (projectCategory !== "전체") {
-                params.category = categoryMap[projectCategory];
-            }
-
-            const filtered = await fetchAllProjects(params);
-            setProjects(filtered);
-            setLoading(false);
-        };
-
-        fetchFiltered();
-    }, [projectGeneration, projectCategory]);
+    const { data: projects, isLoading, isError } = useAllProjects(params);
 
     return (
         <PageLayout>

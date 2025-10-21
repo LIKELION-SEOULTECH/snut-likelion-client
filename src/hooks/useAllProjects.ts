@@ -1,19 +1,10 @@
-import { useEffect, useState } from "react";
-
-import type { ProjectData } from "@/types/project";
+import { useQuery } from "@tanstack/react-query";
 import { fetchAllProjects } from "@/apis/main/project";
+import type { ProjectQueryParams, Project } from "@/types/project";
 
-export function useAllProjects() {
-    const [allProjects, setAllProjects] = useState<ProjectData[]>([]);
-
-    useEffect(() => {
-        const fetch = async () => {
-            const data = await fetchAllProjects();
-            setAllProjects(data);
-        };
-
-        fetch();
-    }, []);
-
-    return { allProjects };
-}
+export const useAllProjects = (params?: ProjectQueryParams) => {
+    return useQuery<Project[], Error>({
+        queryKey: ["allProjects", params],
+        queryFn: () => fetchAllProjects(params),
+    });
+};
