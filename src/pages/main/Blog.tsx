@@ -47,6 +47,9 @@ export const BlogPage = () => {
                 </div>
                 <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} />
                 <BlogCardList blogs={Array.isArray(blogs) ? blogs : []} />
+                <div className="mt-7 w-full">
+                    <MainSearchBar />
+                </div>
                 <div>
                     <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
                 </div>

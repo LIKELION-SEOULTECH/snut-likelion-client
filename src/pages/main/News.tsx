@@ -40,7 +40,11 @@ export const NewsPage = () => {
                     News<span className="text-[#FF7700]">.</span>
                 </div>
 
-                {/* 로딩 중/에러 후에도 뉴스 카드가 없으면 안내 메시지 */}
+                <div className="w-full flex justify-start ">
+                    <div className="w-[598px]">
+                        <MainSearchBar />
+                    </div>
+                </div>
                 {isLoading ? (
                     <div>로딩 중...</div>
                 ) : error ? (
