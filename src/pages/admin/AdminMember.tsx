@@ -6,37 +6,45 @@ import { Pagination } from "@/components/common/Pagination";
 
 import { useQuery } from "@tanstack/react-query";
 import { getAdminMemberSearchList } from "@/apis/admin/member";
+import { AdminMemberSkeleton } from "@/components/admin/member/MemberSkeleton";
+import type { MemberFilter } from "@/types/member";
 
 export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
-    const [filters, setFilters] = useState({
-        generation: "",
+    const [filters, setFilters] = useState<MemberFilter>({
+        generation: null,
         part: "",
         role: "",
         keyword: ""
     });
 
-    const handleSearch = (newFilters: typeof filters) => {
+    const handleSearch = (newFilters: MemberFilter) => {
         setFilters(newFilters);
         setCurrentPage(1);
     };
 
-    const { data, isLoading, isError } = useQuery({
+    const {
+        data: members,
+        isLoading,
+        isError
+    } = useQuery({
         queryKey: ["members", filters, currentPage],
         queryFn: async () => {
             const queryParams: {
-                generation?: number;
+                generation?: number | null;
                 part?: string;
                 role?: string;
                 keyword?: string;
                 page: number;
+                size: number;
             } = {
+                size: 8,
                 page: currentPage - 1
             };
 
-            if (filters.generation !== "all" && filters.generation !== "") {
-                queryParams.generation = Number(filters.generation);
+            if (filters.generation !== null) {
+                queryParams.generation = filters.generation;
             }
             if (filters.part !== "all") queryParams.part = filters.part;
             if (filters.role !== "all") queryParams.role = filters.role;
@@ -48,34 +56,35 @@ export const AdminMemberPage = () => {
 
     return (
         <AdminLayout>
-            <div className="mt-12 mb-7">
+            <div className="mt-12 mb-8">
                 <MemberSearchTool onSearch={handleSearch} />
             </div>
-
-            <div className="regular-14 mb-4">
-                검색결과 <span className="text-primary-500">{data?.totalElements || 0}</span>
+            <div>
+                {isLoading || isError || members?.content.length === 0 ? (
+                    <>
+                        <AdminMemberSkeleton isLoading={isLoading} />
+                    </>
+                ) : (
+                    <>
+                        {members && members?.content.length > 1 && (
+                            <>
+                                <MemberSearchList
+                                    data={members.content}
+                                    currentPage={currentPage}
+                                    itemsPerPage={itemsPerPage}
+                                />
+                                <div className="mb-[210px]">
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={members.totalPages}
+                                        onPageChange={(page) => setCurrentPage(page)}
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </>
+                )}
             </div>
-
-            {isLoading ? (
-                <div className="text-center mt-10">불러오는 중...</div>
-            ) : isError || !data ? (
-                <div className="text-center mt-10 text-red-500">데이터 로딩 실패</div>
-            ) : (
-                <>
-                    <MemberSearchList
-                        data={data.content}
-                        currentPage={currentPage}
-                        itemsPerPage={itemsPerPage}
-                    />
-                    <div className="mb-[210px]">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={data.totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    </div>
-                </>
-            )}
         </AdminLayout>
     );
 };
