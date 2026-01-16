@@ -1,23 +1,18 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { Member } from "@/types/members";
 import { useState, useEffect } from "react";
 
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { deleteMember, updateMember } from "@/apis/admin/member";
+import { CustomSelect } from "../common/custom-select";
+import { Switch } from "@/components/ui/switch";
+import { AlertCircle, CircleCheck, X } from "lucide-react";
+import { toast, Toaster } from "sonner";
 
 interface MemberInfoModalProps {
     open: boolean;
     onClose: () => void;
-    onDeleteClick: () => void;
     member: Member | null;
 }
 
@@ -28,6 +23,8 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
     const [part, setPart] = useState("");
     const [role, setRole] = useState("");
     const [department, setDepartment] = useState("");
+    const [authorization, setAuthorization] = useState(false);
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
 
     const partToEnumValue = (part: string): string => {
         switch (part) {
@@ -55,23 +52,48 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
         }
     }, [member]);
 
+    // 회원정보 수정
     const mutation = useMutation({
         mutationFn: () =>
             updateMember(member!.id, {
                 generation: Number(generation),
-                username: member!.username, // username 안 써도 되는 경우엔 제거 가능
+                username: member!.username,
                 part,
                 role,
                 department: role === "ROLE_ADMIN" ? department : null
+                // 권한 여부 추가
             }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["members"] });
-            console.log("회원 정보가 성공적으로 수정되었습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">회원정보가 저장되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             onClose();
         },
-        onError: (error) => {
-            console.error("회원 정보 수정 실패:", error);
-            alert("회원 정보 수정에 실패했습니다.");
+        onError: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <AlertCircle size={20} className="text-red-400" />
+                    <span className="text-sm font-medium">회원 수정에 실패했습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
         }
     });
 
@@ -93,129 +115,188 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
         mutation.mutate();
     };
 
-    const handleDelete = () => {
-        deleteMutation.mutate();
-    };
-
     if (!member) return null;
 
     return (
-        <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent
-                onOpenAutoFocus={(e) => e.preventDefault()}
-                className="w-[395px] p-5 rounded-[8px] gap-0"
-            >
-                <DialogHeader>
-                    <DialogTitle className="h-5 text-base font-semibold">회원정보</DialogTitle>
-                </DialogHeader>
-
-                <div className="flex flex-col gap-4 mt-10">
-                    {/* 이름 */}
-                    <div className="h-11 flex items-center gap-[35px]">
-                        <span className="text-sm font-semibold text-[#666666]">이름</span>
-                        <span className="flex h-full w-71 px-4 items-center rounded-sm border border-[#C4C4C4] text-sm">
-                            {member.username}
-                        </span>
-                    </div>
-
-                    {/* 기수 */}
-                    <div className="h-11 flex items-center gap-[35px]">
-                        <span className="text-sm font-semibold text-[#666666]">기수</span>
-                        <Input
-                            value={generation}
-                            onChange={(e) => setGeneration(e.target.value)}
-                            className="w-71 h-full rounded-sm border border-[#C4C4C4] text-sm focus-visible:ring-0"
-                        />
-                    </div>
-
-                    {/* 파트 */}
-                    <div className="h-11 flex items-center gap-[35px]">
-                        <span className="text-sm font-semibold text-[#666666]">파트</span>
-                        <Select value={part} onValueChange={setPart}>
-                            <SelectTrigger className="w-71 !h-full bg-white border border-[#c4c4c4]">
-                                <SelectValue placeholder="파트 선택" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="FRONTEND">프론트엔드</SelectItem>
-                                <SelectItem value="BACKEND">백엔드</SelectItem>
-                                <SelectItem value="DESIGN">디자인</SelectItem>
-                                <SelectItem value="PLANNING">기획</SelectItem>
-                                <SelectItem value="AI">AI</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    {/* 역할 */}
-                    <div className="h-11 flex items-center gap-[35px]">
-                        <span className="text-sm font-semibold text-[#666666]">역할</span>
-                        <RadioGroup
-                            value={role === "ROLE_ADMIN" ? "ROLE_MANAGER" : role}
-                            onValueChange={(val: "ROLE_USER" | "ROLE_MANAGER") => {
-                                if (role === "ROLE_ADMIN") return;
-                                setRole(val);
-                                if (val === "ROLE_USER") setDepartment("");
-                            }}
-                            className="flex gap-6"
-                        >
-                            <div className="flex items-center gap-1.5">
-                                <RadioGroupItem
-                                    value="ROLE_USER"
-                                    id="role-user"
-                                    className="text-[#ff7700] [&_svg]:fill-[#ff7700]"
-                                />
-                                <label htmlFor="role-baby" className="text-sm">
-                                    아기사자
-                                </label>
+        <>
+            <Toaster position="top-center" offset={{ top: 120, left: 80 }} />
+            <Dialog open={open} onOpenChange={onClose}>
+                <DialogContent
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    showCloseButton={false}
+                    className="w-[395px] p-5 rounded-[8px] gap-0"
+                >
+                    <DialogHeader>
+                        <DialogTitle className="h-5 text-base font-semibold">회원정보</DialogTitle>
+                    </DialogHeader>
+                    <button className="absolute top-5 right-5" onClick={onClose}>
+                        <X size={20} />
+                    </button>
+                    <div className="flex flex-col gap-4 px-1">
+                        <div className="flex flex-col gap-4 mt-10 mx-[1.5px]">
+                            {/* 이름 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">이름</span>
+                                <span className="flex flex-1 h-full px-4 items-center rounded-sm border border-[#C4C4C4] text-sm">
+                                    {member.username}
+                                </span>
                             </div>
-                            <div className="flex items-center gap-1.5">
-                                <RadioGroupItem
-                                    value="ROLE_MANAGER"
-                                    id="role-manager"
-                                    className="text-[#ff7700] [&_svg]:fill-[#ff7700]"
-                                />
-                                <label htmlFor="role-manager" className="text-sm">
-                                    운영진
-                                </label>
+
+                            {/* 기수 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">기수</span>
+                                <div className="flex-1">
+                                    <CustomSelect
+                                        value={generation}
+                                        onValueChange={setGeneration}
+                                        placeholder={"기수별"}
+                                        selectList={[
+                                            { label: "12기", value: 12 },
+                                            { label: "13기", value: 13 },
+                                            { label: "14기", value: 14 }
+                                        ]}
+                                    />
+                                </div>
                             </div>
-                        </RadioGroup>
-                    </div>
 
-                    {/* 부서 */}
-                    <div className="h-11 flex items-center gap-[35px]">
-                        <span className="text-sm font-semibold text-[#666666]">부서</span>
-                        <Select
-                            value={department}
-                            onValueChange={setDepartment}
-                            disabled={role === "ROLE_USER"}
-                        >
-                            <SelectTrigger className="w-71 !h-full bg-white disabled:opacity-50 border border-[#c4c4c4]">
-                                <SelectValue placeholder="-" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="OPERATION">운영부</SelectItem>
-                                <SelectItem value="MARKETING">홍보부</SelectItem>
-                                <SelectItem value="ACADEMIC">학술부</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                            {/* 파트 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">파트</span>
+                                <div className="flex-1">
+                                    <CustomSelect
+                                        value={part}
+                                        onValueChange={setPart}
+                                        placeholder={"파트 선택"}
+                                        selectList={[
+                                            { label: "전체", value: "all" },
+                                            { label: "기획", value: "PLANNING" },
+                                            { label: "디자인", value: "DESIGN" },
+                                            { label: "AI", value: "AI" },
+                                            { label: "프론트엔드", value: "FRONTEND" },
+                                            { label: "백엔드", value: "BACKEND" }
+                                        ]}
+                                    />
+                                </div>
+                            </div>
 
-                    {/* 버튼 */}
-                    <div className="flex flex-row h-11 gap-2 font-medium mt-4">
-                        <button
-                            className="w-[170px] border border-[#FF7700] rounded-sm"
-                            onClick={handleDelete}
-                        >
-                            삭제하기
-                        </button>
-                        <button
-                            className="w-[170px] bg-[#FF7700] text-white rounded-sm"
-                            onClick={handleUpdate}
-                        >
-                            저장하기
-                        </button>
+                            {/* 역할 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">역할</span>
+                                <RadioGroup
+                                    value={role === "ROLE_ADMIN" ? "ROLE_MANAGER" : role}
+                                    onValueChange={(val: "ROLE_USER" | "ROLE_MANAGER") => {
+                                        if (role === "ROLE_ADMIN") return;
+                                        setRole(val);
+                                        if (val === "ROLE_USER") setDepartment("");
+                                    }}
+                                    className="flex gap-6"
+                                >
+                                    <div className="flex items-center gap-1.5">
+                                        <RadioGroupItem
+                                            value="ROLE_USER"
+                                            id="role-user"
+                                            className="text-[#ff7700] [&_svg]:fill-[#ff7700]"
+                                        />
+                                        <label htmlFor="role-baby" className="text-sm">
+                                            아기사자
+                                        </label>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <RadioGroupItem
+                                            value="ROLE_MANAGER"
+                                            id="role-manager"
+                                            className="text-[#ff7700] [&_svg]:fill-[#ff7700]"
+                                        />
+                                        <label htmlFor="role-manager" className="text-sm">
+                                            운영진
+                                        </label>
+                                    </div>
+                                </RadioGroup>
+                            </div>
+
+                            {/* 부서 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">부서</span>
+                                <div className="flex-1">
+                                    <CustomSelect
+                                        value={department}
+                                        onValueChange={setDepartment}
+                                        placeholder={"-"}
+                                        selectList={[
+                                            { label: "운영부", value: "운영부" },
+                                            { label: "홍보부", value: "홍보부" },
+                                            { label: "학술부", value: "학술부" }
+                                        ]}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* 권한 */}
+                            <div className="h-11 flex items-center gap-[35px]">
+                                <span className="text-sm font-semibold text-[#666666]">권한</span>
+                                <div>
+                                    <Switch
+                                        id="authorization"
+                                        checked={authorization}
+                                        onCheckedChange={setAuthorization}
+                                        className="bg-gray-100 data-[state=checked]:bg-primary-500"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 버튼 */}
+                        <div className="flex flex-row h-11 gap-2 font-medium mt-4">
+                            <button
+                                className="w-[170px] border border-[#FF7700] rounded-sm"
+                                onClick={() => {
+                                    onClose();
+                                    setDeleteConfirm(true);
+                                }}
+                            >
+                                삭제하기
+                            </button>
+                            <button
+                                className="w-[170px] bg-[#FF7700] text-white rounded-sm"
+                                onClick={handleUpdate}
+                            >
+                                저장하기
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </DialogContent>
-        </Dialog>
+                </DialogContent>
+            </Dialog>
+            {/* 삭제 확인 모달 */}
+            {deleteConfirm && (
+                <Dialog open={deleteConfirm} onOpenChange={setDeleteConfirm}>
+                    <DialogContent className="flex flex-col justify-center w-[390px] p-7 rounded-[8px] gap-2 [&>button.absolute]:hidden">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold text-center">
+                                계정 삭제
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="text-center text-sm font-medium">
+                            모든 정보가 영구적으로 삭제되며, 다시 복구할 수 없습니다.
+                        </div>
+                        <div className="flex h-11 justify-end gap-2 mt-4">
+                            <button
+                                onClick={() => {
+                                    deleteMutation.mutate();
+                                }}
+                                className="flex-1 h-full border border-[#ff7700]  text-black rounded-sm"
+                            >
+                                삭제하기
+                            </button>
+                            <button
+                                onClick={() => setDeleteConfirm(false)}
+                                className="flex-1 h-full bg-[#FF7700] text-white rounded-sm"
+                            >
+                                아니요
+                            </button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
+        </>
     );
 };
