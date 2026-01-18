@@ -5,6 +5,8 @@ import { register, sendVerificationCode, verifyEmailCode } from "@/apis/main/aut
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
+const normalizePhoneNumber = (value: string) => value.replace(/[^0-9]/g, "");
+
 export const useRegister = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -44,7 +46,7 @@ export const useRegister = () => {
                 username,
                 password,
                 confirmPassword,
-                phoneNumber,
+                phoneNumber: normalizePhoneNumber(phoneNumber),
                 isEmailVerified
             }),
         onSuccess: (res) => {
