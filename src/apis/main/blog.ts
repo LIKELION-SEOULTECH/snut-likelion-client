@@ -43,9 +43,9 @@ export const deleteBlog = (postId: number) => {
 
 // 내가 쓴 글 불러오기
 export const getMyBlog = async () => {
-    const res = await axiosInstance.get(`/blogs/my`);
+    const res = await axiosInstance.get(`/blogs/me`);
     console.log(res.data.data);
-    return res.data.data;
+    return res.data.data.content;
 };
 
 // 임시저장 불러오기
