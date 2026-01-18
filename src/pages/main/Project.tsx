@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import CategoryTabs from "@/components/project/CategoryTabs";
 import GenerationTabs from "@/components/project/GenerationTabs";
 import PageLayout from "@/layouts/PageLayout";
 import ProjectList from "@/components/project/ProjectList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useAllProjects } from "@/hooks/useAllProjects";
+import { getGenerationListByYear } from "@/utils/getGenerationList";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -15,20 +16,12 @@ const categoryMap: Record<string, string> = {
 };
 
 export default function ProjectPage() {
+    const generationTabs = useMemo(() => {
+        const gens = getGenerationListByYear(2025, 13);
+        return ["전체", ...gens];
+    }, []);
     const [projectGeneration, setprojectGeneration] = useState("전체");
     const [projectCategory, setprojectCategory] = useState("전체");
-    const [generations, setGenerations] = useState<string[]>([]);
-
-    const { data: allProjectsData } = useAllProjects();
-
-    useEffect(() => {
-        if (allProjectsData) {
-            const genList = Array.from(new Set(allProjectsData.map((p) => `${p.generation}기`))).sort(
-                (a, b) => Number(b.replace("기", "")) - Number(a.replace("기", ""))
-            );
-            setGenerations(["전체", ...genList]);
-        }
-    }, [allProjectsData]);
 
     const params: { generation?: number; category?: string } = {};
     if (projectGeneration !== "전체") {
@@ -52,19 +45,20 @@ export default function ProjectPage() {
                     Project Archive<span className="text-[#FF7700] ">.</span>
                 </div>
 
-                {/* 전체 기수 탭 유지 */}
                 <GenerationTabs
                     selected={projectGeneration}
                     onSelect={setprojectGeneration}
-                    tabs={generations}
+                    tabs={generationTabs}
                 />
 
                 <CategoryTabs selected={projectCategory} onSelect={setprojectCategory} />
 
-                {loading ? (
+                {isLoading ? (
                     <div className="text-white mt-12">로딩 중...🦁</div>
+                ) : isError ? (
+                    <div className="text-white mt-12">프로젝트를 불러오는데 실패했습니다.</div>
                 ) : (
-                    <ProjectList projects={projects} />
+                    <ProjectList projects={projects || []} />
                 )}
 
                 <div className="w-full mt-24">
