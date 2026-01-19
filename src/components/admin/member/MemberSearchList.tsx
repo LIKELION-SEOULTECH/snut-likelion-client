@@ -32,7 +32,7 @@ export const MemberSearchList = ({ data, currentPage, itemsPerPage }: MemberSear
                         <div
                             key={member.id}
                             onClick={() => handleClick(member)}
-                            className={`flex h-[66px] items-center font-medium ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
+                            className={`flex h-[66px] items-center font-medium cursor-pointer ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
                         >
                             <span className="flex-[1] pl-[30px] text-left">
                                 {(currentPage - 1) * itemsPerPage + index + 1}

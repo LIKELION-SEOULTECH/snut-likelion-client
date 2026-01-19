@@ -66,7 +66,7 @@ export const AdminMemberPage = () => {
                     </>
                 ) : (
                     <>
-                        {members && members?.content.length > 1 && (
+                        {members && members?.content.length > 0 && (
                             <>
                                 <MemberSearchList
                                     data={members.content}

@@ -59,8 +59,9 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                 generation: Number(generation),
                 username: member!.username,
                 part,
-                role,
-                department: role === "ROLE_ADMIN" ? department : null
+                // role,
+                role: "ROLE_ADMIN",
+                department: role !== "ROLE_USER" ? department : null
                 // 권한 여부 추가
             }),
         onSuccess: () => {
@@ -168,7 +169,6 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                                         onValueChange={setPart}
                                         placeholder={"파트 선택"}
                                         selectList={[
-                                            { label: "전체", value: "all" },
                                             { label: "기획", value: "PLANNING" },
                                             { label: "디자인", value: "DESIGN" },
                                             { label: "AI", value: "AI" },
@@ -223,9 +223,9 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                                         onValueChange={setDepartment}
                                         placeholder={"-"}
                                         selectList={[
-                                            { label: "운영부", value: "운영부" },
-                                            { label: "홍보부", value: "홍보부" },
-                                            { label: "학술부", value: "학술부" }
+                                            { label: "운영부", value: "OPERATION" },
+                                            { label: "홍보부", value: "MARKETING" },
+                                            { label: "학술부", value: "ACADEMIC" }
                                         ]}
                                     />
                                 </div>
