@@ -8,7 +8,7 @@ import {
 
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
-import type { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 
 interface SelectOption<T extends string | number | null> {
     label: string;
@@ -54,7 +54,7 @@ export const CustomSelect = <T extends string | number | null>({
                     <SelectItem
                         key={item.value}
                         value={String(item.value)}
-                        className="h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                        className="h-9 w-3 min-w-[98%] px-4 data-[state=checked]:font-semibold cursor-pointer"
                     >
                         {item.label}
                     </SelectItem>

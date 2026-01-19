@@ -1,6 +1,7 @@
 import type { Notice } from "@/types/notice";
 
 import { NoticeSearchItem } from "./NoticeSearchItem";
+
 interface NoticeSearchListProps {
     data: Notice[];
     showCheckboxes: boolean;
@@ -26,9 +27,9 @@ export const NoticeSearchList = ({
 
             <div className="w-full text-sm rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
-                <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA]">
+                <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA] px-5">
                     {showCheckboxes && (
-                        <span className="flex items-center justify-center flex-[0.3] text-center pl-4">
+                        <span className="flex items-center justify-center flex-[1] text-center">
                             <input
                                 type="checkbox"
                                 className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
@@ -42,12 +43,9 @@ export const NoticeSearchList = ({
                             />
                         </span>
                     )}
-
-                    <span className="flex-[0.7] text-left pl-6 pr-[6px]">No</span>
-                    <span className="flex-[0.7] text-left">태그</span>
-                    <span className="flex-[4] text-left">제목</span>
-                    <span className="flex-[1] text-left">작성자</span>
-                    <span className="flex-[1.5] text-left">등록일</span>
+                    <span className="flex-[3.5] text-left pl-9 min-w-5">No</span>
+                    <span className="flex-[21.5] text-left">제목</span>
+                    <span className="flex-[2.7] text-left min-w-20">등록일</span>
                 </div>
 
                 {/* 리스트 content */}

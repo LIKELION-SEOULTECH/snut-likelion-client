@@ -1,26 +1,30 @@
-import NoticeTextEditor from "@/components/text-editor/NoticeTextEditor";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getNoticeById, updateNotice } from "@/apis/main/notice";
 import type { Editor } from "@tiptap/react";
+import { ADMIN_ABS } from "@/routes/routes";
+import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
+import { CustomSelect } from "@/components/admin/common/custom-select";
 
 export const AdminNoticeEditPage = () => {
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
+
     const { id } = useParams<{ id: string }>();
-
-    const [title, setTitle] = useState(""); // 제목 상태
-
+    const [type, setType] = useState("");
+    const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [files, setFiles] = useState<File[]>([]);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const editorRef = useRef<Editor | null>(null);
 
     const { data: notice } = useQuery({
         queryKey: ["notice", id],
-        queryFn: () => getNoticeById(Number(id)),
+        queryFn: () => getNoticeById(Number(id) || 1),
         enabled: !!id
     });
 
@@ -59,25 +63,66 @@ export const AdminNoticeEditPage = () => {
 
     const totalSizeMB = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0).toFixed(2);
 
-    const handleUpdate = async () => {
-        console.log("클릭!");
-        console.log(editorRef.current);
+    const isFormValid = type.trim() !== "" && content.trim() !== "" && title.trim() !== "";
+
+    const updateNoticeMutation = useMutation({
+        mutationFn: (payload: { title: string; content: string }) =>
+            updateNotice(Number(id), {
+                ...payload,
+                pinned: true
+            }),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["adminNotices"] });
+            queryClient.invalidateQueries({ queryKey: ["notice", id] });
+
+            navigate("/admin/notice");
+        },
+
+        onError: () => {
+            alert("공지 수정에 실패했습니다.");
+        }
+    });
+
+    const handleClickDelete = () => {
+        alert("삭제 로직 추가");
+    };
+
+    const handleUpdate = () => {
         if (!id || !editorRef.current) return;
 
         const htmlContent = editorRef.current.getHTML();
 
-        await updateNotice(Number(id), {
+        updateNoticeMutation.mutate({
             title,
-            content: htmlContent,
-            pinned: true
+            content: htmlContent
         });
+    };
 
-        navigate("/admin/notice");
-    }; // patch 수정 필요
+    const handleBackBtn = () => {
+        navigate(ADMIN_ABS.NOTICE);
+    };
 
     return (
-        <AdminLayout onSubmit={handleUpdate}>
+        <AdminLayout
+            isFormValid={isFormValid}
+            onSubmit={handleUpdate}
+            onDelete={handleClickDelete}
+            onClickBackBtn={handleBackBtn}
+        >
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
+                {/* 카테고리 입력 */}
+                <div className="flex flex-row h-11 items-center">
+                    <span className="min-w-[94px] medium-14 text-gray-400">카테고리</span>
+                    <div className="w-[99px]">
+                        <CustomSelect
+                            value={type}
+                            onValueChange={setType}
+                            placeholder="구분"
+                            selectList={[{ label: "공지", value: "NOTICE" }]}
+                        />
+                    </div>
+                </div>
                 <div className="flex flex-row gap-[18px] items-center">
                     <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
                     <input
@@ -89,11 +134,7 @@ export const AdminNoticeEditPage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <NoticeTextEditor
-                            ref={editorRef} // ✅ 이 부분 추가
-                            content={content}
-                            setContent={setContent}
-                        />
+                        <AdminTextEditor content={content} setContent={setContent} />
                     </div>
                 </div>
                 {/* 첨부파일 */}

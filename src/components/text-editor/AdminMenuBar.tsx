@@ -3,15 +3,23 @@ import AdminSubtitleBtn from "@/assets/text-editor/admin-subtitle.svg?react";
 import AdminBlockQuoteBtn from "@/assets/text-editor/admin-block-quote.svg?react";
 import AdminDividerBtn from "@/assets/text-editor/admin-divider.svg?react";
 import AdminImageBtn from "@/assets/text-editor/admin-image.svg?react";
+import { nanoid } from "nanoid";
+import type { RefObject } from "react";
 
-export const AdminMenuBar = ({ editor }: { editor: Editor }) => {
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+export const AdminMenuBar = ({
+    editor,
+    imageFileMap
+}: {
+    editor: Editor;
+    imageFileMap: RefObject<Record<string, File>>;
+}) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        Array.from(files).forEach((file) => {
+            const tempId = nanoid();
+            const previewUrl = URL.createObjectURL(file);
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            const imageUrl = reader.result as string;
             editor
                 .chain()
                 .focus()
@@ -19,17 +27,20 @@ export const AdminMenuBar = ({ editor }: { editor: Editor }) => {
                     {
                         type: "customImage",
                         attrs: {
-                            src: imageUrl,
-                            alt: "uploaded image",
-                            isThumbnail: false
+                            src: previewUrl,
+                            alt: file.name,
+                            isThumbnail: false,
+                            tempId
                         }
                     },
                     { type: "paragraph" }
                 ])
                 .run();
-            e.target.value = "";
-        };
-        reader.readAsDataURL(file);
+
+            imageFileMap.current[tempId] = file;
+        });
+
+        e.target.value = "";
     };
 
     return (

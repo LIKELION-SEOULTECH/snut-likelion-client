@@ -11,6 +11,7 @@ import {
     DialogTitle,
     DialogFooter
 } from "@/components/ui/dialog";
+import { ADMIN, ADMIN_ABS, ROUTES } from "@/routes/routes";
 export const AdminNoticeDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ export const AdminNoticeDetailPage = () => {
         try {
             await deleteNotice(Number(id));
             alert("삭제가 완료되었습니다.");
-            navigate("/admin/notice"); // 목록 페이지로 이동
+            navigate("/admin/notice");
         } catch (error) {
             console.error("삭제 중 오류 발생:", error);
             alert("삭제에 실패했습니다.");
@@ -36,7 +37,14 @@ export const AdminNoticeDetailPage = () => {
     };
 
     return (
-        <AdminLayout onToggleDeleteMode={() => setShowDeleteConfirm(true)}>
+        <AdminLayout
+            onDelete={() => setShowDeleteConfirm(true)}
+            onSubmit={() => {
+                if (!id) return;
+                navigate(`${ROUTES.ADMIN_BASE}/${ADMIN.NOTICE_EDIT.replace(":id", id)}`);
+            }}
+            onClickBackBtn={() => navigate(ADMIN_ABS.NOTICE)}
+        >
             {notice && (
                 <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12">
                     <div className="text-2xl font-bold text-[#FFA454] mb-5">공지</div>

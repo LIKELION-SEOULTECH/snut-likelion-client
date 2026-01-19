@@ -15,7 +15,7 @@ export const NoticeSearchTool = ({ onSearch }: NoticeSearchToolProps) => {
     };
 
     return (
-        <div className="h-11 flex flex-row gap-2 items-center">
+        <div className="h-11 flex flex-row gap-2 items-center min-w-200">
             <div className="relative flex-1 h-full">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2">
                     <SearchIcon />
@@ -25,7 +25,7 @@ export const NoticeSearchTool = ({ onSearch }: NoticeSearchToolProps) => {
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder="이름 검색"
-                    className="w-full bg-gray-0 !h-full rounded-sm pl-10"
+                    className="w-full bg-gray-0 !h-full rounded-sm pl-10 border-gray-100 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none"
                 />
             </div>
             {/* Search Button */}
