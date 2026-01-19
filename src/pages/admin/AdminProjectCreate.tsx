@@ -1,45 +1,37 @@
 import { useState } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
 
-import type { MemberSearchResponse } from "@/types/member";
-
 import { useNavigate } from "react-router-dom";
-import { getMemberSearchList } from "@/apis/main/member";
 import { createAdminProject } from "@/apis/admin/project";
-interface Retro {
-    memberId: number | null;
-    memberName: string; // UI에 보여줄 이름
-    comment: string;
-    query: string;
-    filtered: { id: number; name: string }[];
-    showDropdown: boolean;
-}
+import { StackInput } from "@/components/my-page/StackInput";
+import { ProjectCreateCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
+import { ADMIN_ABS } from "@/routes/routes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CustomSelect } from "@/components/admin/common/custom-select";
+import type { Retro } from "@/types/project";
+import { RetroRow } from "@/components/admin/project/RetroRow";
 
 export const AdminProjectCreatePage = () => {
+    const queryClient = useQueryClient();
+
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [intro, setIntro] = useState("");
     const [images, setImages] = useState<File[]>([]);
 
     const [generation, setGeneration] = useState("");
-    const [type, setType] = useState("");
+    const [category, setCategory] = useState("");
 
-    const [tagInput, setTagInput] = useState("");
     const [tags, setTags] = useState<string[]>([]);
 
     const [projectDescription, setProjectDescription] = useState("");
     const [webUrl, setWebUrl] = useState("");
     const [iosUrl, setIosUrl] = useState("");
     const [androidUrl, setAndroidUrl] = useState("");
+
+    const [showCreateCancelModal, setShowCreateCancelModal] = useState(false);
 
     const [retros, setRetros] = useState<Retro[]>([
         {
@@ -51,6 +43,14 @@ export const AdminProjectCreatePage = () => {
             showDropdown: false
         }
     ]);
+
+    const isDirty =
+        name.trim() !== "" ||
+        intro.trim() !== "" ||
+        projectDescription.trim() !== "" ||
+        images.length > 0 ||
+        tags.length > 0 ||
+        retros.some((r) => r.memberId !== null || r.comment.trim() !== "");
 
     const handleChangeRetro = <K extends keyof Retro>(index: number, field: K, value: Retro[K]) => {
         const updated = [...retros];
@@ -88,74 +88,50 @@ export const AdminProjectCreatePage = () => {
         ]);
     };
 
-    const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const input = e.target.value;
-        setTagInput(input);
-
-        // 띄어쓰기 기준으로 분리
-        const splitTags = input
-            .split(" ")
-            .map((tag) => tag.trim())
-            .filter((tag) => tag !== "");
-
-        setTags(splitTags);
+    const handleRemoveRetro = (index: number) => {
+        setRetros((prev) => prev.filter((_, i) => i !== index));
     };
 
     const isFormValid =
         generation.trim() !== "" &&
-        type.trim() !== "" &&
+        category.trim() !== "" &&
         name.trim() !== "" &&
         intro.trim() !== "" &&
         projectDescription.trim() !== "" &&
         retros.every((r) => r.memberId !== null && r.comment.trim() !== "") &&
-        images.length > 0;
+        images.length >= 0;
 
-    // 멤버 검색
-    const handleMemberInputChange = async (index: number, value: string) => {
-        try {
-            if (value.trim()) {
-                const res = await getMemberSearchList({ keyword: value.trim() });
-                const filtered = res.data.data.map((member: MemberSearchResponse) => ({
-                    id: member.id,
-                    name: member.name
-                }));
+    const createProjectMutation = useMutation({
+        mutationFn: (formData: FormData) => createAdminProject(formData),
 
-                setRetros((prev) =>
-                    prev.map((r, i) =>
-                        i === index
-                            ? {
-                                  ...r,
-                                  query: value,
-                                  filtered,
-                                  showDropdown: filtered.length > 0
-                              }
-                            : r
-                    )
-                );
-            }
-        } catch (err) {
-            console.error("멤버 검색 실패", err);
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["adminProjects"]
+            });
+
+            navigate(ADMIN_ABS.PROJECT);
+        },
+
+        onError: () => {
+            alert("프로젝트 생성 실패");
         }
-    };
+    });
 
-    const handleCreateProject = async () => {
+    const handleCreateProject = () => {
         const formData = new FormData();
 
         formData.append("name", name);
         formData.append("intro", intro);
         formData.append("description", projectDescription);
-        formData.append("generation", String(Number(generation))); // 반드시 문자열로 변환
-        formData.append("category", type);
+        formData.append("generation", String(Number(generation)));
+        formData.append("category", category);
 
-        // optional한 URL들은 비어있지 않을 때만 추가
         if (webUrl) formData.append("websiteUrl", webUrl);
         if (iosUrl) formData.append("appstoreUrl", iosUrl);
         if (androidUrl) formData.append("playstoreUrl", androidUrl);
 
-        // tags: 각 항목별로 append
         tags.forEach((tag) => formData.append("tags", tag));
 
-        // retrospections: 구조 분해해서 append
         retros.forEach((retro, index) => {
             if (retro.memberId !== null) {
                 formData.append(`retrospections[${index}].memberId`, String(retro.memberId));
@@ -163,62 +139,53 @@ export const AdminProjectCreatePage = () => {
             }
         });
 
-        // 이미지 첨부
         images.forEach((img) => {
             formData.append("images", img);
         });
 
-        for (const pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
-        }
+        createProjectMutation.mutate(formData);
+    };
 
-        try {
-            await createAdminProject(formData);
-            console.log("성공");
-
-            navigate("/admin/project");
-        } catch (err) {
-            console.error(err);
-            alert("프로젝트 생성 실패");
+    const handleBackBtn = () => {
+        if (!isDirty) {
+            navigate(ADMIN_ABS.PROJECT);
+        } else {
+            setShowCreateCancelModal(true);
         }
     };
 
     return (
-        <AdminLayout isFormValid={isFormValid} onSubmit={handleCreateProject}>
+        <AdminLayout
+            isFormValid={isFormValid}
+            onSubmit={handleCreateProject}
+            onClickBackBtn={handleBackBtn}
+        >
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm mb-12 pt-[22px] px-10 pb-10 gap-8">
                 <div className="flex flex-row items-center h-11 pl-[169px] gap-2">
-                    <Select value={generation} onValueChange={setGeneration}>
-                        <SelectTrigger className="w-[86px] !h-full bg-white rounded-sm px-4 py-3 border-[#C4C4C4] data-[placeholder]:text-black">
-                            <SelectValue placeholder="기수" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-sm w-[86px] border-[#C4C4C4] min-w-0">
-                            <SelectItem value="13" className="w-[86px] px-4 py-3">
-                                13기
-                            </SelectItem>
-                            <SelectItem value="12" className="w-[86px] px-4 py-3">
-                                12기
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Select value={type} onValueChange={setType}>
-                        <SelectTrigger className="w-[162px] !h-full bg-white rounded-sm px-4 py-3 border-[#C4C4C4] data-[placeholder]:text-black">
-                            <SelectValue placeholder="구분" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-sm w-[162px] border-[#C4C4C4] min-w-0">
-                            <SelectItem value="IDEATHON" className="w-[162px] px-4 py-3">
-                                아이디어톤
-                            </SelectItem>
-                            <SelectItem value="HACKATHON" className="w-[162px] px-4 py-3">
-                                해커톤
-                            </SelectItem>
-                            <SelectItem value="DEMO_DAY" className="w-[162px] px-4 py-3">
-                                데모데이
-                            </SelectItem>
-                            <SelectItem value="LONG_TERM_PROJECT" className="w-[162px] px-4 py-3">
-                                장기프로젝트
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="w-[86px]">
+                        <CustomSelect
+                            value={generation}
+                            onValueChange={setGeneration}
+                            placeholder="기수"
+                            selectList={[
+                                { label: "12기", value: "12" },
+                                { label: "13기", value: "13" },
+                                { label: "14기", value: "14" }
+                            ]}
+                        />
+                    </div>
+                    <div className="w-[162px]">
+                        <CustomSelect
+                            value={category}
+                            onValueChange={setCategory}
+                            placeholder="구분"
+                            selectList={[
+                                { label: "아이디어톤", value: "IDEATHON" },
+                                { label: "해커톤", value: "HACKATHON" },
+                                { label: "장기프로젝트", value: "LONG_TERM_PROJECT" }
+                            ]}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-4">
@@ -274,11 +241,7 @@ export const AdminProjectCreatePage = () => {
                         <span className="w-[169px] h-4 flex flex-row gap-[2px] text-sm font-medium text-[#666666]">
                             <span className="flex flex-col justify-center">기술 스택</span>
                         </span>
-                        <input
-                            className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
-                            value={tagInput}
-                            onChange={handleTagInputChange}
-                        />
+                        <StackInput value={tags} onChange={setTags} color="white-gray" />
                     </div>
                 </div>
 
@@ -292,50 +255,14 @@ export const AdminProjectCreatePage = () => {
                     </span>
                     <div className="flex-1 flex flex-col gap-[10px]">
                         {retros.map((retro, index) => (
-                            <div className="flex flex-row gap-2" key={index}>
-                                <div className="relative w-[89px]">
-                                    <input
-                                        className="w-full h-11 px-4 border border-[#C4C4C4] text-sm rounded-sm"
-                                        placeholder="멤버 검색"
-                                        value={retro.query}
-                                        onChange={(e) =>
-                                            handleMemberInputChange(index, e.target.value)
-                                        }
-                                        onFocus={() => {
-                                            if (retro.query)
-                                                handleChangeRetro(index, "showDropdown", true);
-                                        }}
-                                    />
-                                    {retro.showDropdown && retro.filtered.length > 0 && (
-                                        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-sm shadow mt-1 max-h-40 overflow-auto">
-                                            {retro.filtered.map((member, idx) => (
-                                                <li
-                                                    key={idx}
-                                                    onClick={() => handleSelect(index, member)}
-                                                    className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                                >
-                                                    {member.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-1 relative">
-                                    <input
-                                        maxLength={50}
-                                        className="w-full h-11 px-4 border border-[#C4C4C4] text-sm rounded-sm"
-                                        placeholder="회고"
-                                        value={retro.comment}
-                                        onChange={(e) =>
-                                            handleChangeRetro(index, "comment", e.target.value)
-                                        }
-                                    />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#999999]">
-                                        {retro.comment.replace(/\s/g, "").length}/50
-                                    </span>
-                                </div>
-                            </div>
+                            <RetroRow
+                                key={index}
+                                retro={retro}
+                                index={index}
+                                onChange={handleChangeRetro}
+                                onSelect={handleSelect}
+                                onRemove={index > 0 ? () => handleRemoveRetro(index) : undefined}
+                            />
                         ))}
 
                         <button
@@ -405,6 +332,17 @@ export const AdminProjectCreatePage = () => {
                     <ImageUpload onImagesChange={setImages} />
                 </div>
             </div>
+
+            <ProjectCreateCancelModal
+                open={showCreateCancelModal}
+                onClose={() => {
+                    setShowCreateCancelModal(false);
+                }}
+                onConfirm={() => {
+                    setShowCreateCancelModal(false);
+                    navigate(ADMIN_ABS.PROJECT);
+                }}
+            />
         </AdminLayout>
     );
 };

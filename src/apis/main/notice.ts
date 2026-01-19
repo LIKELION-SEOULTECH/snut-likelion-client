@@ -17,7 +17,7 @@ export const getNoticeById = async (noticeId: number): Promise<Notice> => {
 };
 
 // 공지사항 작성
-export const createNotice = async (notice: { title: string; content: string; pinned: boolean }) => {
+export const createNotice = async (notice: { title: string; content: string }) => {
     const res = await axiosInstance.post("/notices", notice);
     return res.data;
 };

@@ -1,5 +1,3 @@
-// 멤버 리스트 조회 (검색 포함)
-
 import type { MemberListResponse } from "@/types/member";
 import axiosInstance from "../axiosInstance";
 
@@ -9,10 +7,11 @@ import axiosInstance from "../axiosInstance";
 
 // 멤버 리스트 조회 (검색 포함)
 export const getAdminMemberSearchList = async (params?: {
-    generation?: number;
+    generation?: number | null;
+    part?: string;
     role?: string;
-    size?: number;
     keyword?: string;
+    size?: number;
     page?: number;
 }): Promise<MemberListResponse> => {
     const res = await axiosInstance.get("/admin/members", { params });
@@ -28,6 +27,7 @@ export const updateMember = async (
         role: string;
         department: string | null;
         username: string;
+        // 권한 여부 추가
     }
 ): Promise<void> => {
     const { generation, ...body } = data;
