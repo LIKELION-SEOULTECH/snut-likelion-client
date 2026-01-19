@@ -53,12 +53,10 @@ export default function ProjectPage() {
 
                 <CategoryTabs selected={projectCategory} onSelect={setprojectCategory} />
 
-                {isLoading ? (
-                    <div className="text-white mt-12">로딩 중...🦁</div>
-                ) : isError ? (
+                {isError ? (
                     <div className="text-white mt-12">프로젝트를 불러오는데 실패했습니다.</div>
                 ) : (
-                    <ProjectList projects={projects || []} />
+                    <ProjectList projects={projects || []} isLoading={isLoading} />
                 )}
 
                 <div className="w-full mt-24">

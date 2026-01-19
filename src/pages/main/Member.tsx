@@ -40,9 +40,9 @@ export const MemberPage = () => {
                     selected={category}
                     onSelect={setCategory}
                 />
-                {isLoading && <div className="text-white mt-12">로딩 중...🦁</div>}
+
                 {isError && <div className="text-white mt-12">멤버를 불러오는데 실패했습니다.</div>}
-                {members && <MemberCardList MemberData={members} />}
+                <MemberCardList MemberData={members ?? []} isLoading={isLoading} />
                 <div className="w-full mt-24">
                     <QuoteCardList />
                 </div>

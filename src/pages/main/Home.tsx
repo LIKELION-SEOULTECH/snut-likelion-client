@@ -189,7 +189,7 @@ export default function HomePage() {
                 setRecruitType("MEMBER");
                 break;
             case "MEMBER_APPLY":
-                navigate(ROUTES.RECRUIT_FORM_MEMBER);
+                navigate(ROUTES.RECRUIT_MEMBER);
                 break;
             default:
                 break;
