@@ -18,7 +18,7 @@ import { AdminBlogEditPage } from "@/pages/admin/AdminBlogEdit";
 
 import { AdminRecruitPage } from "@/pages/admin/AdminRecruit";
 import { AdminUserRecruitPage } from "@/pages/admin/AdminUserRecruit";
-import { AdminManagerRecruitPage } from "@/pages/admin/AdminManageRecruit";
+import { AdminManagerRecruitPage } from "@/pages/admin/AdminManagerRecruit";
 import { AdminManagerRecruitDetailPage } from "@/pages/admin/ApplyManagerDetail";
 import { AdminUsererRecruitDetailPage } from "@/pages/admin/ApplyUserDetail";
 import { AdminUserApplyPage } from "@/pages/admin/AdminUserApply";

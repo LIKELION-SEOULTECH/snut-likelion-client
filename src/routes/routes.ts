@@ -43,7 +43,7 @@ export const ROUTES = {
 
 // 어드민 라우트: AdminRoute가 /admin/* 로 마운트되므로 "상대 경로" 사용
 export const ADMIN = {
-    INDEX: "", // /admin -> index
+    INDEX: "",
 
     MEMBER: "member",
 
