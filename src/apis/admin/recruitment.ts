@@ -34,11 +34,6 @@ export const getRecruitmentQuestions = (recId: number) => {
     return axiosInstance.get(`/admin/recruitments/${recId}/questions`);
 };
 
-export const updateQuestions = async (recId: number, questions: QuestionRequest[]) => {
-    const response = await axiosInstance.put(`/admin/recruitments/${recId}/questions`, questions);
-    return response.data;
-};
-
 export const getApplicationDetail = (appId: number) => {
     return axiosInstance.get(`/admin/applications/${appId}`);
 };
@@ -71,11 +66,17 @@ export const getSubmittedApplications = async ({
     const res = await axiosInstance.get(`/admin/recruitments/${recId}/applications`, {
         params: { page, part, department, status }
     });
-    return res.data;
+    return res.data.data;
 };
 
 // 특정 모집에 대한 질문 조회
-export const fetchQuestionsByRecruitment = async (recId: number | string) => {
+export const fetchQuestionsByRecruitment = async (recId: number) => {
     const res = await axiosInstance.get(`/admin/recruitments/${recId}/questions`);
     return res.data;
+};
+
+// 특정 모집에 대한 질문 추가 혹은 수정
+export const updateRecruitmentQuestions = async (recId: number, questions: QuestionRequest[]) => {
+    const response = await axiosInstance.put(`/admin/recruitments/${recId}/questions`, questions);
+    return response.data;
 };

@@ -13,9 +13,21 @@ export const CustomImage = Node.create({
         return {
             src: { default: null },
             alt: { default: null },
+
+            tempId: {
+                default: null,
+                parseHTML: (element) => element.getAttribute("data-temp-id"),
+                renderHTML: (attrs) => {
+                    if (!attrs.tempId) return {};
+                    return {
+                        "data-temp-id": attrs.tempId
+                    };
+                }
+            },
+
             isThumbnail: { default: false },
 
-            // ⬇️ 리사이즈용 속성
+            // 리사이즈용 속성
             width: {
                 default: null as number | null,
                 parseHTML: (element) => {
@@ -60,10 +72,8 @@ export const CustomImage = Node.create({
         return [
             "img",
             mergeAttributes(rest, {
-                // 파서가 이 노드를 캐치하게 하는 플래그
                 "data-custom-image": "true",
                 "data-thumbnail": isThumbnail ? "true" : "false",
-                // 안전 가드
                 style: `${rest.style ?? ""};max-width:100%;height:auto;display:block;`
             })
         ];

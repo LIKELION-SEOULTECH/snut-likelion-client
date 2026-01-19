@@ -24,22 +24,24 @@ export const AdminRecruitPage = () => {
         const mm = String(date.getMonth() + 1).padStart(2, "0");
         const dd = String(date.getDate()).padStart(2, "0");
 
-        return type === "full" ? `${yyyy}-${mm}-${dd}` : `${mm}/${dd}`;
+        return type === "full" ? `${yyyy}/${mm}/${dd}` : `${mm}/${dd}`;
     };
 
     const formatDateRange = (start?: string, end?: string) => {
         if (!start || !end) return "기간 정보 없음";
-        return `서류 접수 : ${formatDate(start, "full")} ~ ${formatDate(end, "monthDay")}`;
+        return `서류 접수 : ${formatDate(start, "full")} ~${formatDate(end, "monthDay")}`;
     };
 
     return (
         <AdminLayout>
             <div className="flex flex-col gap-10 mt-12">
                 <div className="flex flex-col p-10 gap-10 bg-white rounded-sm">
-                    <div className="flex h-11 justify-between items-center">
-                        <div className="font-semibold text-xl">아기사자 지원서 관리</div>
+                    <div className="flex h-11 justify-between items-center min-w-80">
+                        <div className="font-semibold text-xl whitespace-no">
+                            아기사자 지원서 관리
+                        </div>
                         <button
-                            className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"
+                            className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm whitespace-nowrap"
                             onClick={() => {
                                 navigate(ADMIN_ABS.APPLY_USER);
                             }}
@@ -56,7 +58,7 @@ export const AdminRecruitPage = () => {
                 </div>
 
                 <div className="flex flex-col p-10 gap-10 bg-white rounded-sm">
-                    <div className="flex h-11 justify-between items-center">
+                    <div className="flex h-11 justify-between items-center min-w-80">
                         <div className="font-semibold text-xl">운영진 지원서 관리</div>
                         <button
                             className="h-full px-[31px] bg-[#404040] text-white text-sm font-medium rounded-sm"

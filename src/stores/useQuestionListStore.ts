@@ -10,14 +10,11 @@ type QuestionListState = {
     commonQuestionList: QuestionList;
     setCommonQuestionList: (list: QuestionList) => void;
 
-    operationQuestionList: QuestionList;
-    setOperationQuestionList: (list: QuestionList) => void;
+    planQuestionList: QuestionList;
+    setPlanQuestionList: (list: QuestionList) => void;
 
-    marketingQuestionList: QuestionList;
-    setMarketingQuestionList: (list: QuestionList) => void;
-
-    academicQuestionList: QuestionList;
-    setAcademicQuestionList: (list: QuestionList) => void;
+    designQuestionList: QuestionList;
+    setDesignQuestionList: (list: QuestionList) => void;
 
     frontendQuestionList: QuestionList;
     setFrontendQuestionList: (list: QuestionList) => void;
@@ -28,11 +25,14 @@ type QuestionListState = {
     aiQuestionList: QuestionList;
     setAiQuestionList: (list: QuestionList) => void;
 
-    designQuestionList: QuestionList;
-    setDesignQuestionList: (list: QuestionList) => void;
+    operationQuestionList: QuestionList;
+    setOperationQuestionList: (list: QuestionList) => void;
 
-    planQuestionList: QuestionList;
-    setPlanQuestionList: (list: QuestionList) => void;
+    marketingQuestionList: QuestionList;
+    setMarketingQuestionList: (list: QuestionList) => void;
+
+    academicQuestionList: QuestionList;
+    setAcademicQuestionList: (list: QuestionList) => void;
 
     getAllManagerQuestions: () => Question[];
     getAllUserQuestions: () => Question[];
@@ -58,6 +58,12 @@ export const useQuestionListsStore = create<QuestionListState>((set, get) => ({
     setAcademicQuestionList: (list) => set({ academicQuestionList: list }),
 
     // 운영진 + 아기사자 파트 질문
+    planQuestionList: [],
+    setPlanQuestionList: (list) => set({ planQuestionList: list }),
+
+    designQuestionList: [],
+    setDesignQuestionList: (list) => set({ designQuestionList: list }),
+
     frontendQuestionList: [],
     setFrontendQuestionList: (list) => set({ frontendQuestionList: list }),
 
@@ -67,25 +73,19 @@ export const useQuestionListsStore = create<QuestionListState>((set, get) => ({
     aiQuestionList: [],
     setAiQuestionList: (list) => set({ aiQuestionList: list }),
 
-    designQuestionList: [],
-    setDesignQuestionList: (list) => set({ designQuestionList: list }),
-
-    planQuestionList: [],
-    setPlanQuestionList: (list) => set({ planQuestionList: list }),
-
     getAllManagerQuestions: () => {
         const s = get();
         return [
             ...s.basicQuestionList,
             ...s.commonQuestionList,
-            ...s.operationQuestionList,
-            ...s.marketingQuestionList,
-            ...s.academicQuestionList,
+            ...s.planQuestionList,
+            ...s.designQuestionList,
             ...s.frontendQuestionList,
             ...s.backendQuestionList,
             ...s.aiQuestionList,
-            ...s.designQuestionList,
-            ...s.planQuestionList
+            ...s.operationQuestionList,
+            ...s.marketingQuestionList,
+            ...s.academicQuestionList
         ];
     },
 
@@ -94,11 +94,11 @@ export const useQuestionListsStore = create<QuestionListState>((set, get) => ({
         return [
             ...s.basicQuestionList,
             ...s.commonQuestionList,
+            ...s.planQuestionList,
+            ...s.designQuestionList,
             ...s.frontendQuestionList,
             ...s.backendQuestionList,
-            ...s.aiQuestionList,
-            ...s.designQuestionList,
-            ...s.planQuestionList
+            ...s.aiQuestionList
         ];
     }
 }));
