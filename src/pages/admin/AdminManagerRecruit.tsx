@@ -1,25 +1,35 @@
 import AdminLayout from "@/layouts/AdminLayout";
+
 import { useState, useEffect } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { RecruitUserSearchTool } from "@/components/admin/recruit/RecruitUserSearchTool";
-import { RecruitUserSearchList } from "@/components/admin/recruit/RecruitUserSearchList";
+import { RecruitManagerSearchTool } from "@/components/admin/recruit/RecruitManagerSearchTool";
+import { RecruitManagerSearchList } from "@/components/admin/recruit/RecruitManagerSearchList";
+
 import { getSubmittedApplications } from "@/apis/admin/recruitment";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
-import { useQuery } from "@tanstack/react-query";
 import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
+import { useQuery } from "@tanstack/react-query";
 
-export const AdminUserRecruitPage = () => {
+export const AdminManagerRecruitPage = () => {
     const { setManageMode } = useRecruitManageStore();
-
     const [currentPage, setCurrentPage] = useState(1);
 
     const [filters, setFilters] = useState({
         result: "",
+        department: "",
         part: ""
     });
 
+    useEffect(() => {
+        setManageMode(false);
+    }, [setManageMode]);
+
+    const handleSearch = (newFilters: typeof filters) => {
+        setFilters(newFilters);
+    };
+
     const {
-        data: userRecruitRes,
+        data: managerRecruitRes,
         isLoading,
         isError
     } = useQuery({
@@ -29,33 +39,25 @@ export const AdminUserRecruitPage = () => {
                 recId: 1,
                 page: currentPage - 1,
                 part: filters.part,
+                department: filters.department,
                 status: filters.result
             })
     });
 
-    const handleSearch = (newFilters: typeof filters) => {
-        setFilters(newFilters);
-    };
-
-    useEffect(() => {
-        setManageMode(false);
-    }, [setManageMode]);
-
-    console.log(userRecruitRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">
-                <RecruitUserSearchTool onSearch={handleSearch} />
+                <RecruitManagerSearchTool onSearch={handleSearch} />
             </div>
-            {isLoading || isError || userRecruitRes.content.length === 0 ? (
-                <AdminRecruitSkeleton isLoading={isLoading} isManager={false} />
+            {isLoading || isError || managerRecruitRes.content.length === 0 ? (
+                <AdminRecruitSkeleton isLoading={isLoading} isManager={true} />
             ) : (
                 <>
-                    <RecruitUserSearchList data={userRecruitRes.content} />
+                    <RecruitManagerSearchList data={managerRecruitRes.content} />
                     <div className="mb-[210px]">
                         <Pagination
                             currentPage={currentPage}
-                            totalPages={userRecruitRes.totalPages}
+                            totalPages={managerRecruitRes.totalPages}
                             onPageChange={(page) => setCurrentPage(page)}
                         />
                     </div>

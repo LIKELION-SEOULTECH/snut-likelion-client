@@ -1,4 +1,5 @@
 export type Question = {
+    clientId?: string;
     id?: number;
     text: string;
     questionTarget: string;
@@ -6,5 +7,5 @@ export type Question = {
     part?: string;
     departmentType?: string;
     order: number;
-    options?: string[];
+    buttonList?: string[];
 };

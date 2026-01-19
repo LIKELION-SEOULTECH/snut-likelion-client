@@ -112,6 +112,13 @@ export interface Recruitment {
     startDate: string;
     endDate: string;
 }
+export interface LatestRecruitment {
+    id: number;
+    generation: number;
+    recruitmentType: "MEMBER" | "MANAGER";
+    openDate: string;
+    closeDate: string;
+}
 
 export interface RecruitmentRequest {
     generation: number;
@@ -121,13 +128,13 @@ export interface RecruitmentRequest {
 }
 
 export interface QuestionRequest {
-    id?: number;
+    id?: number | null;
     text: string;
-    questionType: string;
     questionTarget: string;
+    questionType: string;
     order: number;
-    part?: string;
-    departmentType?: string;
+    part?: string | null;
+    departmentType?: string | null;
     buttonList?: string[];
 }
 

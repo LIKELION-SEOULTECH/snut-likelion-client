@@ -3,7 +3,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import { Input } from "@/components/ui/input";
 import { QuestionListHeader } from "./QuestionListHeader";
-import { Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import {
     Select,
     SelectTrigger,
@@ -14,6 +14,8 @@ import {
 import GripHorizontal from "@/assets/admin/grip-horizontal.svg?react";
 import AddQuestionBtn from "@/assets/admin/add-question-btn.svg?react";
 import type { Question } from "@/types/apply";
+import TriggerClose from "@/assets/admin/trigger-close.svg?react";
+import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
 
 interface QuestionListProps {
     title: string;
@@ -42,27 +44,19 @@ export default function QuestionList({
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
 
-        // order 재정렬(선택)
         const withOrder = items.map((q, idx) => ({ ...q, order: idx }));
         setQuestions(withOrder);
-
-        console.log(
-            "Updated order:",
-            withOrder.map((item) => item.text)
-        );
     };
 
     const handleAdd = () => {
         const nextOrder = questions.length;
         const newQuestion: Question = {
-            id: Date.now(), // 로컬 임시 id(숫자). 서버 저장 시 새 id로 대체 가능
             text: "",
-            questionType: "단답형", // 기본값
+            questionType: "SHORT",
             questionTarget,
             part: questionTarget === "PART" ? (part ?? "") : "",
             departmentType: questionTarget === "DEPARTMENT" ? (departmentType ?? "") : "",
             order: nextOrder
-            // 라디오가 아닐 땐 options 생략
         };
         setQuestions((prev) => [...prev, newQuestion]);
     };
@@ -77,19 +71,36 @@ export default function QuestionList({
     const handleAddOption = (index: number) => {
         const updated = [...questions];
         const target = updated[index];
-        const opts = target.options ? [...target.options] : [];
+        const opts = target.buttonList ? [...target.buttonList] : [];
         opts.push("");
-        updated[index] = { ...target, options: opts };
+        updated[index] = { ...target, buttonList: opts };
         setQuestions(updated);
+    };
+
+    const handleDeleteOption = (index: number) => {
+        setQuestions((prev) => {
+            const updated = [...prev];
+            const target = updated[index];
+
+            if (!target.buttonList || target.buttonList.length <= 1) {
+                return prev;
+            }
+
+            const opts = [...target.buttonList];
+            opts.pop();
+
+            updated[index] = { ...target, buttonList: opts };
+            return updated;
+        });
     };
 
     const handleOptionChange = (qIndex: number, oIndex: number, value: string) => {
         const updated = [...questions];
         const target = updated[qIndex];
-        if (!target.options) return;
-        const opts = [...target.options];
+        if (!target.buttonList) return;
+        const opts = [...target.buttonList];
         opts[oIndex] = value;
-        updated[qIndex] = { ...target, options: opts };
+        updated[qIndex] = { ...target, buttonList: opts };
         setQuestions(updated);
     };
 
@@ -109,12 +120,12 @@ export default function QuestionList({
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {questions.map((q, index) => (
                                         <Draggable
-                                            key={String(q.id)}
-                                            draggableId={String(q.id)}
+                                            key={String(q.clientId)}
+                                            draggableId={String(q.clientId)}
                                             index={index}
                                         >
                                             {(provided) => (
-                                                <div key={String(q.id)} className="w-full">
+                                                <div key={String(q.clientId)} className="w-full">
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
@@ -158,43 +169,53 @@ export default function QuestionList({
                                                                     const updated = [...questions];
                                                                     // 라디오로 변경되면 options 보장
                                                                     const next =
-                                                                        val === "라디오 버튼"
+                                                                        val === "RADIO_BUTTON"
                                                                             ? {
                                                                                   ...q,
                                                                                   questionType: val,
-                                                                                  options:
-                                                                                      q.options ?? [
+                                                                                  buttonList:
+                                                                                      q.buttonList ?? [
                                                                                           ""
                                                                                       ]
                                                                               }
                                                                             : {
                                                                                   ...q,
                                                                                   questionType: val,
-                                                                                  options: undefined
+                                                                                  buttonList:
+                                                                                      undefined
                                                                               };
                                                                     updated[index] = next;
                                                                     setQuestions(updated);
                                                                 }}
                                                             >
-                                                                <SelectTrigger className="w-53 !h-11 px-4 py-3 rounded-sm border border-[#C4C4C4]">
-                                                                    <SelectValue />
+                                                                <SelectTrigger
+                                                                    isArrow={false}
+                                                                    className="min-w-53 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                                                >
+                                                                    <SelectValue placeholder="질문 유형" />
+                                                                    <span className="ml-auto flex items-center">
+                                                                        <TriggerClose className="icon-close size-2" />
+                                                                        <TriggerOpen className="icon-open size-2" />
+                                                                    </span>
                                                                 </SelectTrigger>
-                                                                <SelectContent className="rounded-sm">
+
+                                                                <SelectContent className="w-53 min-w-53 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                                                     <SelectItem
-                                                                        value="장문형"
-                                                                        className="h-11"
-                                                                    >
-                                                                        장문형
-                                                                    </SelectItem>
-                                                                    <SelectItem
-                                                                        value="단답형"
-                                                                        className="h-11"
+                                                                        value="SHORT"
+                                                                        className="w-53 min-w-53 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                                                                     >
                                                                         단답형
                                                                     </SelectItem>
                                                                     <SelectItem
-                                                                        value="라디오 버튼"
-                                                                        className="h-11"
+                                                                        value="LONG"
+                                                                        className="w-53 min-w-53 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                                                    >
+                                                                        장문형
+                                                                    </SelectItem>
+
+                                                                    <SelectItem
+                                                                        value="RADIO_BUTTON"
+                                                                        className="w-53 min-w-53 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                                                                     >
                                                                         라디오 버튼
                                                                     </SelectItem>
@@ -203,33 +224,52 @@ export default function QuestionList({
                                                         </div>
 
                                                         {/* 라디오 버튼 옵션 */}
-                                                        {q.questionType === "라디오 버튼" && (
+                                                        {q.questionType === "RADIO_BUTTON" && (
                                                             <div className="w-full flex flex-col gap-2">
-                                                                {q.options?.map((opt, optIndex) => (
-                                                                    <input
-                                                                        key={optIndex}
-                                                                        value={opt}
-                                                                        onChange={(e) =>
-                                                                            handleOptionChange(
-                                                                                index,
-                                                                                optIndex,
-                                                                                e.target.value
-                                                                            )
+                                                                {q.buttonList?.map(
+                                                                    (opt, optIndex) => (
+                                                                        <input
+                                                                            key={optIndex}
+                                                                            value={opt}
+                                                                            onChange={(e) =>
+                                                                                handleOptionChange(
+                                                                                    index,
+                                                                                    optIndex,
+                                                                                    e.target.value
+                                                                                )
+                                                                            }
+                                                                            className="w-full h-11 border border-[#C4C4C4] rounded px-4 py-3 text-sm text-[#2D2D2D]"
+                                                                            placeholder={`예시 답변`}
+                                                                        />
+                                                                    )
+                                                                )}
+                                                                <div className="flex flex-row gap-2">
+                                                                    <button
+                                                                        type="button"
+                                                                        className="w-[73px] h-[39px] flex flex-row items-center justify-center rounded-sm font-medium text-[#ff7700] border border-[#ff7700] gap-1 mt-2"
+                                                                        onClick={() =>
+                                                                            handleAddOption(index)
                                                                         }
-                                                                        className="w-full h-11 border border-[#C4C4C4] rounded px-4 py-3 text-sm text-[#2D2D2D]"
-                                                                        placeholder={`예시 답변`}
-                                                                    />
-                                                                ))}
-                                                                <button
-                                                                    type="button"
-                                                                    className="w-[73px] h-[39px] flex flex-row items-center justify-center rounded-sm font-medium text-[#ff7700] border border-[#ff7700] gap-1 mt-2"
-                                                                    onClick={() =>
-                                                                        handleAddOption(index)
-                                                                    }
-                                                                >
-                                                                    <Plus size={20} />
-                                                                    추가
-                                                                </button>
+                                                                    >
+                                                                        <Plus size={20} />
+                                                                        추가
+                                                                    </button>
+                                                                    {q.buttonList &&
+                                                                        q.buttonList.length > 1 && (
+                                                                            <button
+                                                                                type="button"
+                                                                                className="w-[73px] h-[39px] flex flex-row items-center justify-center rounded-sm font-medium text-[#c4c4c4] border border-[#c4c4c4] gap-1 mt-2"
+                                                                                onClick={() =>
+                                                                                    handleDeleteOption(
+                                                                                        index
+                                                                                    )
+                                                                                }
+                                                                            >
+                                                                                <Minus size={20} />
+                                                                                삭제
+                                                                            </button>
+                                                                        )}
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>

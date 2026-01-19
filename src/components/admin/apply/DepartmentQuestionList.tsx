@@ -2,22 +2,23 @@ import { useEffect } from "react";
 import QuestionList from "./QuestionList";
 import type { Question } from "@/types/apply";
 import { useQuestionListsStore } from "@/stores/useQuestionListStore";
+import { nanoid } from "nanoid";
 
 const initialQuestions: Question[] = [
     {
-        id: 1,
+        clientId: nanoid(),
         text: "공통 질문 보통 뭐 있어요? 대충 써놓을게요",
         questionTarget: "DEPARTMENT",
-        questionType: "장문형",
+        questionType: "LONG",
         part: "",
         departmentType: "",
         order: 0
     },
     {
-        id: 2,
+        clientId: nanoid(),
         text: "공통 질문 보통 뭐 있어요? 대충 써놓을게요",
         questionTarget: "DEPARTMENT",
-        questionType: "장문형",
+        questionType: "LONG",
         part: "",
         departmentType: "",
         order: 1
@@ -56,7 +57,7 @@ export const OperationQuestionList = () => {
 };
 
 export const AcademicsQuestionList = () => {
-    const questions = useQuestionListsStore((s) => s.operationQuestionList);
+    const questions = useQuestionListsStore((s) => s.academicQuestionList);
     const setAcademicQuestionList = useQuestionListsStore((s) => s.setAcademicQuestionList);
 
     useEffect(() => {
