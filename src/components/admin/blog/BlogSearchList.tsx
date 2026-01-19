@@ -51,11 +51,11 @@ export const BlogSearchList = ({
                 <div>
                     {data.map((blog, index) => (
                         <BlogSearchItem
-                            key={blog.postId}
+                            key={blog.id}
                             blog={blog}
                             index={index}
                             showCheckboxes={showCheckboxes}
-                            selected={selectedIds.includes(blog.postId)}
+                            selected={selectedIds.includes(blog.id)}
                             onToggleSelect={onToggleSelect}
                         />
                     ))}

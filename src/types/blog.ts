@@ -1,5 +1,5 @@
 // 블로그 분류 타입
-export type BlogCategory = "OFFICIAL" | "UNOFFICIAL";
+export type BlogCategory = "OFFICIAL" | "UNOFFICIAL" | "";
 
 // 블로그 조회 타입 (리스트)
 export interface Blog {
@@ -23,11 +23,11 @@ export interface BlogDetail {
 
 // admin blog 타입
 export interface AdminBlog {
-    postId: number;
-    tag: string;
+    id: number;
+    category: string;
     title: string;
-    authorName: string;
-    updatedAt: string;
+    author: string;
+    createdAt: string;
 }
 
 export interface CreateBlogRequest {
@@ -35,7 +35,7 @@ export interface CreateBlogRequest {
     contentHtml: string;
     category: BlogCategory;
     taggedMemberIds?: number[];
-    images: string[];
+    images?: string[];
 }
 
 export interface MyBlogType {
