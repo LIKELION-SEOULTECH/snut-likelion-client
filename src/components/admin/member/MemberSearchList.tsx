@@ -2,11 +2,11 @@ import { useState } from "react";
 import type { Member } from "@/types/members";
 import { MemberInfoModal } from "./MemberInfoModal";
 interface MemberSearchListProps {
-    data: Member[];
+    members: Member[];
     currentPage: number;
     itemsPerPage: number;
 }
-export const MemberSearchList = ({ data, currentPage, itemsPerPage }: MemberSearchListProps) => {
+export const MemberSearchList = ({ members, currentPage, itemsPerPage }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -28,7 +28,7 @@ export const MemberSearchList = ({ data, currentPage, itemsPerPage }: MemberSear
                 </div>
                 {/* 리스트 content */}
                 <div>
-                    {data?.map((member, index) => (
+                    {members?.map((member, index) => (
                         <div
                             key={member.id}
                             onClick={() => handleClick(member)}

@@ -25,7 +25,7 @@ export const AdminMemberPage = () => {
     };
 
     const {
-        data: members,
+        data: membersRes,
         isLoading,
         isError
     } = useQuery({
@@ -54,29 +54,30 @@ export const AdminMemberPage = () => {
         }
     });
 
+    console.log(membersRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">
                 <MemberSearchTool onSearch={handleSearch} />
             </div>
             <div>
-                {isLoading || isError || members?.content.length === 0 ? (
+                {isLoading || isError || membersRes?.content.length === 0 ? (
                     <>
                         <AdminMemberSkeleton isLoading={isLoading} />
                     </>
                 ) : (
                     <>
-                        {members && members?.content.length > 0 && (
+                        {membersRes && membersRes?.content.length > 0 && (
                             <>
                                 <MemberSearchList
-                                    data={members.content}
+                                    members={membersRes.content}
                                     currentPage={currentPage}
                                     itemsPerPage={itemsPerPage}
                                 />
                                 <div className="mb-[210px]">
                                     <Pagination
                                         currentPage={currentPage}
-                                        totalPages={members.totalPages}
+                                        totalPages={membersRes.totalPages}
                                         onPageChange={(page) => setCurrentPage(page)}
                                     />
                                 </div>
