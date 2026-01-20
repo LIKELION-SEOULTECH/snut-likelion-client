@@ -14,14 +14,14 @@ export const getBlogList = async (
             size
         }
     });
-    return res.data;
+    return res.data.data;
 };
 
 // 블로그 글 단건 조회
 export const getBlogDetail = async (postId: number) => {
     const res = await axiosInstance.get(`/blogs/${postId}`);
     console.log(res.data.data);
-    return res.data.data;
+    return res;
 };
 
 // 블로그 게시글 작성
