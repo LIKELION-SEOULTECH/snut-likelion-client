@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import type { AdminBlog } from "@/types/blog";
-import { useQuery } from "@tanstack/react-query";
-import { getBlogDetail } from "@/apis/main/blog";
 
 interface BlogSearchItemProps {
     blog: AdminBlog;
@@ -25,16 +23,10 @@ export const BlogSearchItem = ({
         navigate(`/admin/blog/edit/${blog.id}`);
     };
 
-    const { data: adminBlog } = useQuery({
-        queryKey: ["blog", blog.id],
-        queryFn: () => getBlogDetail(blog.id!),
-        enabled: !!blog.id
-    });
-
     const categoryText =
-        adminBlog?.category === "OFFICIAL"
+        blog?.category === "OFFICIAL"
             ? "세션 이야기"
-            : adminBlog?.category === "UNOFFICIAL"
+            : blog?.category === "UNOFFICIAL"
               ? "아기사자 이야기"
               : "-";
 
@@ -71,7 +63,7 @@ export const BlogSearchItem = ({
                     <span>{blog.title}</span>
                 </div>
             </span>
-            <span className="flex-[1] text-left"> {adminBlog?.authorName ?? "-"}</span>
+            <span className="flex-[1] text-left"> {blog.author ?? "-"}</span>
             <span className="flex-[1.5] text-left">{formattedDate}</span>
         </div>
     );

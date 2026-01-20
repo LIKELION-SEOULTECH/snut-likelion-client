@@ -17,7 +17,7 @@ interface RecruitManagerItemProps {
 
 export const RecruitManagerItem = ({ member, index }: RecruitManagerItemProps) => {
     const navigate = useNavigate();
-    const [result, setResult] = useState<string>(member.result ?? "");
+    const [result, setResult] = useState<string>(member.status ?? "");
 
     const handleChange = (newResult: string) => {
         setResult(newResult);

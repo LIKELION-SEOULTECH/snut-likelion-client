@@ -36,12 +36,12 @@ export const AdminBlogEditPage = () => {
 
     useEffect(() => {
         if (adminBlog) {
-            setTitle(adminBlog.title);
-            setContent(adminBlog.contentHtml);
-            setType(adminBlog.category);
+            setTitle(adminBlog.data.title);
+            setContent(adminBlog.data.contentHtml);
+            setType(adminBlog.data.category);
 
             const tagData: MentionSuggestion[] =
-                adminBlog.taggedMemberIds?.map((tag: string, index: number) => ({
+                adminBlog.data.taggedMemberIds?.map((tag: string, index: number) => ({
                     id: `${index}`,
                     mentionLabel: tag,
                     avatarUrl: index % 2 === 0 ? sample : sample1

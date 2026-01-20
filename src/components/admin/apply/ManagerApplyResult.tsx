@@ -1,7 +1,7 @@
-import type { QNAItem } from "@/types/apply";
+// import type { QNAItem } from "@/types/apply";
 import { BasicApplyResult, CommonApplyResult } from "./ApplyResult";
 
-export const ManagerApplyResult = ({ answerList }: { answerList: QNAItem[] }) => {
+export const ManagerApplyResult = () => {
     return (
         <div>
             <BasicApplyResult />

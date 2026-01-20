@@ -16,6 +16,15 @@ export interface Member {
     generation: number | string;
 }
 
+export interface SearchedMember {
+    id: number;
+    name: string;
+    part: string;
+    role: string;
+    department?: string;
+    generation: number | string;
+}
+
 // 멤버 응답 타입
 export interface MemberResponse {
     id: number;

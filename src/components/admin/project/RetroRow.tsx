@@ -1,5 +1,5 @@
 import { useMemberSearch } from "@/stores/useMemberSearch";
-import type { Member } from "@/types/members";
+import type { SearchedMember } from "@/types/members";
 import type { Retro } from "@/types/project";
 
 interface RetroRowProps {
@@ -12,7 +12,7 @@ interface RetroRowProps {
 
 export const RetroRow = ({ retro, index, onChange, onSelect, onRemove }: RetroRowProps) => {
     const { data, isLoading } = useMemberSearch(retro.query);
-    console.log(data);
+
     return (
         <div className="flex flex-row gap-2">
             {/* 멤버 검색 */}
@@ -31,7 +31,7 @@ export const RetroRow = ({ retro, index, onChange, onSelect, onRemove }: RetroRo
                             <li className="px-4 py-2 text-sm text-gray-400">검색 중...</li>
                         )}
 
-                        {data?.data.data.map((member: Member) => (
+                        {data?.data.data.map((member: SearchedMember) => (
                             <li
                                 key={member.id}
                                 onClick={() => onSelect(index, member)}

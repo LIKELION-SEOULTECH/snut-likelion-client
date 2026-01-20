@@ -30,7 +30,7 @@ export const AdminUsererRecruitDetailPage = () => {
                 <Chevright />
                 <span>{ApplicationDetailRes?.data.username}</span>
             </div>
-            <ManagerApplyResult answerList={ApplicationDetailRes?.data.answer} />
+            <ManagerApplyResult />
         </AdminLayout>
     );
 };

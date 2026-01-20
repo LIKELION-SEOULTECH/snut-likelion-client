@@ -1,6 +1,6 @@
 import { ProjectBox } from "@/components/home/ProjectBox";
 import { OrangeBtn } from "@/components/Member/OrangeBtn";
-import { SmallBtn } from "@/components/member/SmallBtn";
+import { SmallBtn } from "@/components/Member/SmallBtn";
 import samplePRF from "@/assets/Member/samplePRFIMG.png";
 
 import { ROUTES } from "@/routes/routes";

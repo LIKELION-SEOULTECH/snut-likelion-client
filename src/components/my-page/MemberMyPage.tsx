@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { OrangeBtn } from "@/components/Member/OrangeBtn";
-import { SmallBtn } from "@/components/member/SmallBtn";
+import { OrangeBtn } from "../Member/OrangeBtn";
+import { SmallBtn } from "@/components/Member/SmallBtn";
 import { MyBlog } from "./MyBlog";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { ROUTES } from "@/routes/routes";
