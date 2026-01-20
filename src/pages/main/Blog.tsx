@@ -6,6 +6,7 @@ import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { getBlogList } from "@/apis/main/blog";
 import type { Blog } from "@/types/blog";
+import { MainSearchBar } from "@/components/common/mainSearchBar";
 
 type BlogType = "세션 이야기" | "아기사자 이야기";
 

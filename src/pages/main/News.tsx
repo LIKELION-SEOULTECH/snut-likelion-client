@@ -4,6 +4,7 @@ import { NoticeCardList } from "@/components/notice/NoticeCardList";
 import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNotices } from "@/hooks/useNotice";
+import { MainSearchBar } from "@/components/common/mainSearchBar";
 
 const PAGE_SIZE = 8;
 
