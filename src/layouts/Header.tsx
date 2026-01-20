@@ -106,6 +106,15 @@ export const Header = ({ white = false }: HeaderProps) => {
         }
     };
 
+    const handleLogoClick = () => {
+        const role = localStorage.getItem("userRole");
+        if (role === "ROLE_MANAGER" || role === "ROLE_ADMIN") {
+            navigate(ADMIN_ABS.MEMBER);
+        } else {
+            navigate(ROUTES.HOME);
+        }
+    };
+
     return (
         <div
             className={`w-full h-[54px] sm:h-24 flex flex-row justify-start px-4 sm:px-0 sm:justify-center relative ${
@@ -119,10 +128,7 @@ export const Header = ({ white = false }: HeaderProps) => {
             <div className="flex">
                 <div className="flex flex-row justify-center items-center gap-[267px]">
                     <div className="w-[38.12px] h-5 sm:w-[61px] sm:h-8">
-                        <LikeLionLogo
-                            className="cursor-pointer"
-                            onClick={() => navigate(ADMIN_ABS.MEMBER)}
-                        />
+                        <LikeLionLogo className="cursor-pointer" onClick={handleLogoClick} />
                     </div>
 
                     <div className="hidden sm:flex flex-row gap-[206px] sm:items-center whitespace-nowrap">

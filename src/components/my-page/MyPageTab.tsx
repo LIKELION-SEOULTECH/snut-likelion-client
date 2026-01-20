@@ -39,6 +39,13 @@ export const MyPageTab = ({
             });
         }
         if (tab === "비밀번호 변경") navigate("/PasswordChange");
+
+        if (tab === "로그아웃") {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("userRole");
+            navigate(ROUTES.HOME);
+        }
     };
 
     const isActive = (tab: string) => activeTab === tab;
