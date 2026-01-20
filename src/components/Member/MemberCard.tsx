@@ -1,4 +1,5 @@
 import type { MemberResponse } from "@/types/members";
+import samplePrf from "@/assets/Member/samplePRFIMG.png";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -35,7 +36,7 @@ export const MemberCard = ({
                     {imageSrc !== null ? (
                         <img className="w-full h-full object-contain" src={imageSrc} alt={name} />
                     ) : (
-                        <div className="w-full h-full bg-[#232323]"></div>
+                        <img className="w-full h-full object-contain" src={samplePrf} alt={name} />
                     )}
                 </div>
                 <div className="flex flex-col pt-[28px]      text-center gap-[15px]">

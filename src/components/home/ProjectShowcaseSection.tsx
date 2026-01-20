@@ -3,14 +3,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
 import { ProjectBox } from "./ProjectBox";
 
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
 import type { ProjectData } from "@/types/project";
-import { fetchAllProjects } from "@/apis/projects";
 
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Autoplay } from "swiper/modules";
+import { fetchAllProjects } from "@/apis/main/project";
+import { ProjectBoxSkeleton } from "../project/ProjectBoxSkeleton";
 interface ProjectShowcaseSectionProps {
     handleClick: () => void;
 }
@@ -56,12 +57,14 @@ export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionPr
 
             {/* ✅ 데스크톱 전용 Grid */}
             <div className="hidden sm:grid sm:grid-cols-3 gap-[16px] w-[1216px] mx-auto relative">
-                {projectList
-                    .slice(-9)
-                    .reverse()
-                    .map((project) => (
-                        <ProjectBox key={project.id} {...project} />
-                    ))}
+                {projectList.length === 0
+                    ? Array.from({ length: 9 }).map((_, idx) => (
+                          <ProjectBoxSkeleton key={`skeleton-${idx}`} />
+                      ))
+                    : projectList
+                          .slice(-9)
+                          .reverse()
+                          .map((project) => <ProjectBox key={project.id} {...project} />)}
                 <div
                     className="hidden sm:flex w-[1218px] h-[631px] absolute pointer-events-none bottom-0"
                     style={{

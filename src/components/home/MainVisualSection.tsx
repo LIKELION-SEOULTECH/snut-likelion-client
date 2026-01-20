@@ -72,7 +72,7 @@ export const MainVisualSection = ({
                 </div>
                 <div className="flex flex-col sm:flex-row h-[50px] sm:h-9 text-[18px] sm:text-[28px] mt-25 sm:mt-8 font-medium leading-[130%]">
                     <span className="mr-[5px]">우리와 함께 아이디어를</span>
-                    <span>실현 시킬 사자를 찾습니다.</span>
+                    <span>실현시킬 사자를 찾습니다.</span>
                 </div>
                 {/* 컴포넌트 분리 */}
                 <button

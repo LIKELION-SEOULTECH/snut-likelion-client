@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { SmallBtn } from "../Member/SmallBtn";
-import { ROUTES } from "@/constants/routes";
+import { SmallBtn } from "../member/SmallBtn";
+import { ROUTES } from "@/routes/routes";
 
 export const AuthLayout = ({
     title = "로그인",

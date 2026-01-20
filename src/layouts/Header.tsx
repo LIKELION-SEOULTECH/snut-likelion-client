@@ -1,11 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
-import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
-import { ROUTES } from "@/constants/routes";
+// import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
+import { ADMIN_ABS, ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
+// import { MyIcon } from "@/components/header/MyIcon";
+import { fetchMyMemberInfo } from "@/apis/main/member";
+import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { MyIcon } from "@/components/Header/MyIcon";
-import { fetchMyMemberInfo } from "@/apis/members";
-import { fetchRecentRecruitment } from "@/apis/recruit";
+import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
 
 interface HeaderProps {
     white?: boolean;
@@ -46,7 +48,7 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "블로그", route: ROUTES.BLOG },
         { name: "멤버", route: ROUTES.MEMBER },
-        { name: "소식", route: ROUTES.NEWS }
+        { name: "소식", route: ROUTES.NOTICE }
     ];
 
     const handleGuestRecruit = async () => {
@@ -119,7 +121,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                     <div className="w-[38.12px] h-5 sm:w-[61px] sm:h-8">
                         <LikeLionLogo
                             className="cursor-pointer"
-                            onClick={() => navigate(ROUTES.ADMIN_MEMBER)}
+                            onClick={() => navigate(ADMIN_ABS.MEMBER)}
                         />
                     </div>
 

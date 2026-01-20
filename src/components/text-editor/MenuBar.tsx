@@ -6,7 +6,7 @@ import ImageBtn from "@/assets/text-editor/image.svg?react";
 import OpenBtn from "@/assets/text-editor/open-btn.svg?react";
 import CloseBtn from "@/assets/text-editor/close-btn.svg?react";
 import { useState } from "react";
-import { uploadBlogImages } from "@/apis/blog";
+import { uploadBlogImages } from "@/apis/main/blog";
 import type { Dispatch, SetStateAction } from "react";
 
 export const MenuBar = ({

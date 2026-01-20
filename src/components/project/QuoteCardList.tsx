@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import QuoteDot from "@/assets//project/quote-dot.svg?react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchSaying } from "@/apis/saying";
+import { getSaying } from "@/apis/main/member";
 
 const quotes = [
     { saying: "일찍 일어나는 새가 피곤하다", username: "전민경" },
@@ -24,7 +24,7 @@ export default function QuoteCardList() {
 
     const { data: sayings } = useQuery({
         queryKey: ["saying"],
-        queryFn: fetchSaying
+        queryFn: getSaying
     });
 
     useEffect(() => {
