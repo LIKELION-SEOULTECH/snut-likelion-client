@@ -93,9 +93,3 @@ export interface GetProjectListParams {
     type?: string;
     keyword?: string;
 }
-
-// 쿼리 파라미터 (generation, category)
-export interface ProjectQueryParams {
-    generation?: number;
-    category?: string;
-}

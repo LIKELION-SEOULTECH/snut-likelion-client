@@ -1,13 +1,13 @@
-import Logo from "@/assets/Header/likelion_logo.svg?react";
+import Logo from "@/assets/Header/likelion_logo.svg?react"; // SVG 컴포넌트로 불러올 경우
 import { useNavigate } from "react-router-dom";
-import { ADMIN_ABS } from "@/routes/routes";
+import { ROUTES } from "@/constants/routes";
 
 export const SidebarHeader = () => {
     const navigate = useNavigate();
     return (
         <div
             className="flex items-center gap-[9px] h-20 px-10 cursor-pointer"
-            onClick={() => navigate(ADMIN_ABS.MEMBER)}
+            onClick={() => navigate(ROUTES.ADMIN_MEMBER)}
         >
             <Logo />
             <span className="text-white text-[28px] font-medium pr-[38px]">Admin</span>

@@ -1,11 +1,9 @@
 // src/hooks/useSignupForm.ts
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { register, sendVerificationCode, verifyEmailCode } from "@/apis/main/auth";
+import { register, sendVerificationCode, verifyEmailCode } from "@/apis/auth";
 import { useNavigate } from "react-router-dom";
-import { ROUTES } from "@/routes/routes";
-
-const normalizePhoneNumber = (value: string) => value.replace(/[^0-9]/g, "");
+import { ROUTES } from "@/constants/routes";
 
 export const useRegister = () => {
     const navigate = useNavigate();
@@ -20,6 +18,7 @@ export const useRegister = () => {
 
     const [verificationStatus, setVerificationStatus] = useState<"success" | "fail" | null>(null);
     const [timer, setTimer] = useState(0);
+    const [timerId, setTimerId] = useState<ReturnType<typeof setInterval> | null>(null);
 
     const [errors, setErrors] = useState({
         username: "",
@@ -29,16 +28,6 @@ export const useRegister = () => {
         phoneNumber: ""
     });
 
-    useEffect(() => {
-        if (timer === 0) return;
-
-        const timerId = setInterval(() => {
-            setTimer((prev) => prev - 1);
-        }, 1000);
-
-        return () => clearInterval(timerId);
-    }, [timer]);
-
     const registerMutation = useMutation({
         mutationFn: () =>
             register({
@@ -46,7 +35,7 @@ export const useRegister = () => {
                 username,
                 password,
                 confirmPassword,
-                phoneNumber: normalizePhoneNumber(phoneNumber),
+                phoneNumber,
                 isEmailVerified
             }),
         onSuccess: (res) => {
@@ -87,6 +76,18 @@ export const useRegister = () => {
 
             setVerificationStatus(null); // 이전 인증 결과 초기화
             setTimer(120); // 2분 타이머...
+
+            if (timerId) clearInterval(timerId);
+            const id = setInterval(() => {
+                setTimer((prev) => {
+                    if (prev <= 1) {
+                        clearInterval(id);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+            setTimerId(id);
         } catch (err) {
             console.error("인증 코드 전송 실패", err);
         }
@@ -99,7 +100,6 @@ export const useRegister = () => {
             console.log("인증 성공");
             setIsEmailVerified(true);
             setVerificationStatus("success");
-            setTimer(0);
         } catch (err) {
             console.error("인증 실패", err);
             setVerificationStatus("fail");

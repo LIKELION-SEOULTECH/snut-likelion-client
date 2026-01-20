@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useState } from "react";
-import { subscribeRecruitment } from "@/apis/main/recruitment";
+import { subscribeRecruitment } from "@/apis/recruit";
 
 export const NotificationModal = ({ onClose, type }: { onClose: () => void; type: string }) => {
     const [email, setEmail] = useState("");

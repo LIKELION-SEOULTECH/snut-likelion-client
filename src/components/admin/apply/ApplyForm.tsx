@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { fetchRecentRecruitment } from "@/apis/main/recruitment";
+import { fetchRecentRecruitment } from "@/apis/recruit";
 import { BasicQuestionList } from "./BasicQuestionList";
 import { CommonQuestionList } from "./CommonQuestionList";
 import { AcademicsQuestionList, OpsQuestionList, PRQuestionList } from "./DepartmentQuestionList";
@@ -10,7 +10,7 @@ import {
     FrontendQuestionList,
     PlanQuestionList
 } from "./PartQuestionList";
-import { fetchQuestionsByRecruitment } from "@/apis/admin/recruitment";
+import { fetchQuestionsByRecruitment } from "@/apis/recruit";
 
 export const ManagerApplyForm = ({ onSave }: { onSave?: (saveFns: (() => void)[]) => void }) => {
     const [recId, setRecId] = useState<number | null>(null);

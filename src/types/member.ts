@@ -89,20 +89,3 @@ export interface MemberSearchResponse {
     profileImageUrl: string;
     data?: string;
 }
-
-export interface UpdateProfileRequest {
-    name?: string;
-    phoneNumber?: string;
-    email?: string;
-}
-
-export interface MemberQueryParams {
-    generation?: number;
-    role?: string;
-}
-
-// 쿼리 파라미터 (기수, 운영진 여부)
-export interface MemberQueryParams {
-    generation?: number;
-    isManager?: boolean;
-}

@@ -1,6 +1,5 @@
-import type { Blog } from "@/types/blog";
 import { BlogCardItem } from "./BlogCardItem";
-
+import type { Blog } from "@/apis/blog";
 interface BlogCardListProps {
     blogs: Blog[];
 }

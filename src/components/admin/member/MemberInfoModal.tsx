@@ -10,9 +10,8 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { Member } from "@/types/members";
 import { useState, useEffect } from "react";
-
+import { updateMember, deleteMember } from "@/apis/member";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { deleteMember, updateMember } from "@/apis/admin/member";
 
 interface MemberInfoModalProps {
     open: boolean;

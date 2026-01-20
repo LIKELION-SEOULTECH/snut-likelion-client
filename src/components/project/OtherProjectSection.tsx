@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ProjectBox } from "../home/ProjectBox";
 
-import { ROUTES } from "@/routes/routes";
+import { ROUTES } from "@/constants/routes";
 import type { ProjectData } from "@/types/project";
 
 interface OtherProjectSectionProps {

@@ -8,12 +8,10 @@ import {
 } from "@/components/ui/select";
 import QuestionChevDown from "@/assets/admin/question-chevdown.svg?react";
 import QuestionChevUp from "@/assets/admin/question-chevup.svg?react";
+import { createRecruitment } from "@/apis/recruit";
 import { useQuery } from "@tanstack/react-query";
-import {
-    createRecruitment,
-    getRecruitmentByType,
-    updateRecruitment
-} from "@/apis/admin/recruitment";
+import { getRecruitmentByType } from "@/apis/recruit";
+import { updateRecruitment } from "@/apis/recruit";
 
 export const ApplyDateForm = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);

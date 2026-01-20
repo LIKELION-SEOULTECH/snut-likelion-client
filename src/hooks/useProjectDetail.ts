@@ -1,5 +1,5 @@
-import { getProjectDetail } from "@/apis/main/project";
 import { useQuery } from "@tanstack/react-query";
+import { getProjectDetail } from "@/apis/projects";
 
 export const useProjectDetail = (projectId: number) => {
     return useQuery({

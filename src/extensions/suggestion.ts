@@ -2,9 +2,8 @@ import type { MentionOptions } from "@tiptap/extension-mention";
 import { ReactRenderer } from "@tiptap/react";
 import tippy, { type Instance as TippyInstance } from "tippy.js";
 import SuggestionList, { type SuggestionListRef } from "@/components/text-editor/SuggestionList";
-
+import { searchMembers } from "@/apis/member";
 import type { MemberSearchResponse } from "@/types/member";
-import { getMemberSearchList } from "@/apis/main/member";
 
 export type MentionSuggestion = {
     id: number;
@@ -29,7 +28,7 @@ const DOM_RECT_FALLBACK: DOMRect = {
 export const mentionSuggestionOptions: MentionOptions["suggestion"] = {
     items: async ({ query }): Promise<MentionSuggestion[]> => {
         try {
-            const res = await getMemberSearchList({ keyword: query });
+            const res = await searchMembers(query);
             const members = res.data.data;
 
             return members.map((member: MemberSearchResponse) => ({

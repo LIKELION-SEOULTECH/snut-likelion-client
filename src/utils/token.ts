@@ -1,5 +1,3 @@
-// 토큰 로컬 스토리지 저장 함수
-
 export const getAccessToken = () => {
     return localStorage.getItem("accessToken");
 };

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchMemberDetail } from "@/apis/main/member";
+import { fetchMemberDetail } from "@/apis/members";
 
 export const useMemberDetail = (id: number) => {
     return useQuery({

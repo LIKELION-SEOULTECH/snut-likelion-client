@@ -1,4 +1,3 @@
-// 날짜 변환 함수
 export const formatDate = (isoString: string) => {
     const date = new Date(isoString);
     const year = date.getFullYear();

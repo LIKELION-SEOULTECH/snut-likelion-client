@@ -1,4 +1,4 @@
-import { getMemberSearchList } from "@/apis/main/member";
+import { fetchMemberList } from "@/apis/members";
 import type { MemberSearch } from "@/types/member";
 import { useState, useEffect } from "react";
 
@@ -27,7 +27,7 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
     // 불러오기...
     useEffect(() => {
         const loadMembers = async () => {
-            const memberList = await getMemberSearchList({ keyword: "" });
+            const memberList = await fetchMemberList({ keyword: "" });
             setMembers(memberList.data.data);
         };
         loadMembers();
@@ -47,7 +47,7 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
         updated[index] = value;
         setSearchText(updated);
 
-        const memberList = await getMemberSearchList({ keyword: value });
+        const memberList = await fetchMemberList({ keyword: value });
         setMembers(memberList.data.data);
 
         setShowSuggestions((prev) => {
