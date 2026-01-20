@@ -1,24 +1,26 @@
 import type { AdminBlog } from "@/types/blog";
 import { BlogSearchItem } from "./BlogSearchItem";
 interface BlogSearchListProps {
-    data: AdminBlog[];
+    blogs: AdminBlog[];
     showCheckboxes: boolean;
     selectedIds: number[];
+    totalElements: number;
     onToggleSelect: (id: number) => void;
     onToggleSelectAll?: (checked: boolean) => void;
 }
 
 export const BlogSearchList = ({
-    data,
+    blogs,
     showCheckboxes,
     selectedIds,
+    totalElements,
     onToggleSelect,
     onToggleSelectAll
 }: BlogSearchListProps) => {
     return (
         <div>
             <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{data.length}</span>
+                검색결과 <span className="text-orange-400">{totalElements}</span>
             </div>
 
             <div className="w-full text-sm rounded-sm overflow-hidden">
@@ -34,7 +36,7 @@ export const BlogSearchList = ({
                                 checked:after:text-[16px] checked:after:block 
                                 checked:after:text-center checked:after:leading-[1rem] 
                                 flex items-center justify-center align-middle"
-                                checked={data.length > 0 && selectedIds.length === data.length}
+                                checked={blogs.length > 0 && selectedIds.length === blogs.length}
                                 onChange={(e) => onToggleSelectAll?.(e.target.checked)}
                             />
                         </span>
@@ -49,7 +51,7 @@ export const BlogSearchList = ({
 
                 {/* 리스트 content */}
                 <div>
-                    {data.map((blog, index) => (
+                    {blogs.map((blog, index) => (
                         <BlogSearchItem
                             key={blog.id}
                             blog={blog}

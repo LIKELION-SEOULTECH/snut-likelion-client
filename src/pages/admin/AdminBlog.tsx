@@ -24,20 +24,19 @@ export const AdminBlogPage = () => {
     const queryClient = useQueryClient();
 
     const {
-        data: blogs,
-        isLoading: isOfficialLoading,
-        isError: isOfficialError
+        data: blogsRes,
+        isLoading: isLoading,
+        isError: isError
     } = useQuery({
         queryKey: ["blogs"],
-        queryFn: () => getAdminBlogList("OFFICIAL", 0)
+        queryFn: () => getAdminBlogList()
     });
 
     const { mutate: deleteSelectedBlogs } = useMutation({
         mutationFn: deleteAdminBlogs,
         onSuccess: () => {
             alert("삭제가 완료되었습니다.");
-            queryClient.invalidateQueries({ queryKey: ["blogs", "official"] });
-            queryClient.invalidateQueries({ queryKey: ["blogs", "unofficial"] });
+            queryClient.invalidateQueries({ queryKey: ["blogs"] });
             setShowDeleteConfirm(false);
             setSelectedIds([]);
             setIsDeleteMode(false);
@@ -61,7 +60,7 @@ export const AdminBlogPage = () => {
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
-            const allIds = blogs.content.map((item: AdminBlog) => item.id);
+            const allIds = blogsRes.content.map((item: AdminBlog) => item.id);
             setSelectedIds(allIds);
         } else {
             // 전체 해제
@@ -86,7 +85,7 @@ export const AdminBlogPage = () => {
         deleteSelectedBlogs(selectedIds);
     };
 
-    console.log(blogs);
+    console.log("blog res", blogsRes);
     return (
         <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={isDeleteMode}>
             {!isDeleteMode && (
@@ -95,22 +94,23 @@ export const AdminBlogPage = () => {
                 </div>
             )}
             <div className="mt-8">
-                {isOfficialLoading || isOfficialError || blogs.content?.length === 0 ? (
-                    <AdminBlogSkeleton isLoading={isOfficialLoading} />
+                {isLoading || isError || blogsRes.content?.length === 0 ? (
+                    <AdminBlogSkeleton isLoading={isLoading} />
                 ) : (
-                    blogs.content.length > 0 && (
+                    blogsRes.content.length > 0 && (
                         <>
                             <BlogSearchList
-                                data={blogs.content}
+                                blogs={blogsRes.content}
                                 showCheckboxes={isDeleteMode}
                                 selectedIds={selectedIds}
+                                totalElements={blogsRes.totalElements}
                                 onToggleSelect={toggleSelect}
                                 onToggleSelectAll={handleToggleSelectAll}
                             />
                             <div className="mb-[210px]">
                                 <Pagination
                                     currentPage={currentPage}
-                                    totalPages={blogs.totalPages}
+                                    totalPages={blogsRes.totalPages}
                                     onPageChange={(page) => setCurrentPage(page)}
                                 />
                             </div>

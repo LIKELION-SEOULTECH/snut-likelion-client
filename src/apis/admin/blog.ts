@@ -3,7 +3,7 @@ import axiosInstance from "../axiosInstance";
 
 // 블로그 목록 조회
 export const getAdminBlogList = async (
-    category: "OFFICIAL" | "UNOFFICIAL",
+    category?: "OFFICIAL" | "UNOFFICIAL",
     page: number = 0,
     keyword?: string | null
 ) => {
