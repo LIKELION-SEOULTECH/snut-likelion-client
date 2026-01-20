@@ -1,4 +1,3 @@
-import { ROUTES } from "@/routes/routes";
 import { useNavigate } from "react-router-dom";
 
 interface RecruitFormHeaderProps {
@@ -7,6 +6,8 @@ interface RecruitFormHeaderProps {
     onPrev: () => void;
     isValid: boolean;
     step: number;
+    onTempSave: () => void;
+    onSubmit: () => void;
 }
 
 export const RecruitFormHeader = ({
@@ -14,7 +15,9 @@ export const RecruitFormHeader = ({
     onNext,
     onPrev,
     isValid,
-    step
+    step,
+    onSubmit,
+    onTempSave
 }: RecruitFormHeaderProps) => {
     const navigate = useNavigate();
 
@@ -26,16 +29,6 @@ export const RecruitFormHeader = ({
         }
     };
 
-    const handleTempSave = () => {
-        alert("임시 저장되었습니다!");
-        //****채워야함.. ****//
-    };
-
-    const handleSubmit = () => {
-        alert("지원서가 제출되었습니다!");
-        navigate(ROUTES.MYPAGE);
-        //****채워야한다.......****//
-    };
     return (
         <div className="w-full h-24 bg-black flex justify-between items-center px-[110px] relative">
             {/* ← 나가기 버튼 */}
@@ -65,13 +58,13 @@ export const RecruitFormHeader = ({
                 ) : (
                     <>
                         <button
-                            onClick={handleTempSave}
+                            onClick={onTempSave}
                             className="bg-[#000] text-[#f70] font-bold px-4 py-2 rounded-[120px] border-[1px] border-[#f70]"
                         >
                             임시저장
                         </button>
                         <button
-                            onClick={handleSubmit}
+                            onClick={onSubmit}
                             className="bg-[#F70] text-white  font-bold px-4 py-2 rounded-[120px] border-[1px] border-[#f70]"
                         >
                             지원하기

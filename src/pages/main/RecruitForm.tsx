@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RecruitFormStep1 } from "@/components/recruitment/RecruitFormStep1";
 import { RecruitFormStep2 } from "@/components/recruitment/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/recruitment/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
-import { fetchQuestions, fetchRecentRecruitment } from "@/apis/main/recruitment";
-import type { QuestionResponse } from "@/types/recruitment";
+import { useRecruitmentSchedule, useQuestions } from "@/hooks/useRecruitment";
+import { postApplication } from "@/apis/main/recruitment";
+import { ROUTES } from "@/routes/routes";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 interface RecruitFormProps {
     isManeger: boolean;
@@ -22,62 +25,68 @@ export interface FormDataType {
     mobileNumber: string;
 }
 export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
+    const navigate = useNavigate();
     const [step, setStep] = useState(1);
 
-    // 지원서
     const [formData, setFormData] = useState<FormDataType>({
-        part: "", // 파트
-        departmentType: "", // 운영진 부서
+        part: "",
+        departmentType: "",
         name: "",
         major: "",
         studentId: "",
         grade: 1,
         inSchool: true,
-        // isPersonalInfoConsent: false, -> 뺄수도 있음
-        portfolio: null as File | null,
+        portfolio: null,
         answers: [] as { questionId: number; answer: string }[],
         mobileNumber: ""
     });
-    const [questions, setQuestions] = useState<QuestionResponse[]>([]);
-    const [loadingQuestions, setLoadingQuestions] = useState(false);
 
-    useEffect(() => {
-        if (step !== 2) return;
-        console.log("▶ Entering step 2, formData:", {
-            part: formData.part,
-            department: formData.departmentType
-        });
+    const recType = isManeger ? "MANAGER" : "MEMBER";
+    const { data: recData } = useRecruitmentSchedule(recType);
+    const recId = recData?.data.id;
 
-        (async () => {
-            setLoadingQuestions(true);
-            try {
-                const recType = isManeger ? "MANAGER" : "MEMBER";
-                const recRes = await fetchRecentRecruitment(recType);
+    const { data: questions, isLoading: loadingQuestions } = useQuestions(recId, {
+        part: formData.part,
+        department: isManeger ? formData.departmentType : undefined
+    });
 
-                const qs = await fetchQuestions(recRes.data.id, {
-                    part: formData.part,
-                    department: isManeger ? formData.departmentType : undefined
-                });
-                setQuestions(qs);
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoadingQuestions(false);
-            }
-        })();
-    }, [step, isManeger, formData.part, formData.departmentType]);
-
-    // 파트. 부서 행들러
     const handleSelect = (field: "part" | "departmentType", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-    // 다음 스텝으로..
     const handleNext = () => setStep((prev) => prev + 1);
+    const handlePrev = () => setStep((prev) => prev - 1);
 
-    // !! : 비었는지 확인에 쓰는..... 불리언으로 리턴 굿
     const isValid = isManeger ? !!formData.part && !!formData.departmentType : !!formData.part;
 
+    const applyMutation = useMutation({
+        mutationFn: ({ submit }: { submit: boolean }) => {
+            if (!recId) throw new Error("recId가 없습니다.");
+
+            return postApplication(recId, submit, {
+                major: formData.major,
+                studentId: formData.studentId,
+                grade: formData.grade,
+                inSchool: formData.inSchool,
+                answers: formData.answers,
+                isPersonalInfoConsent: true,
+                part: formData.part,
+                ...(isManeger ? { departmentType: formData.departmentType } : {}),
+                portfolio: formData.portfolio
+            });
+        },
+        onSuccess: (_, vars) => {
+            alert(vars.submit ? "지원서가 제출되었습니다!" : "임시 저장되었습니다!");
+            if (vars.submit) navigate(ROUTES.MYPAGE);
+        },
+        onError: (e) => {
+            console.error(e);
+            alert("저장 중 오류가 발생했습니다.");
+        }
+    });
+
+    const handleTempSave = () => applyMutation.mutate({ submit: false });
+    const handleSubmit = () => applyMutation.mutate({ submit: true });
     return (
         <div
             className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "h-screen " : "min-h-screen"}`}
@@ -85,7 +94,10 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             <RecruitFormHeader
                 isManeger={isManeger}
                 onNext={handleNext}
+                onPrev={handlePrev}
                 isValid={isValid}
+                onTempSave={handleTempSave}
+                onSubmit={handleSubmit}
                 step={step}
             />
             <div className="flex-1 flex overflow-y-auto">
@@ -102,7 +114,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                     <RecruitFormStep2
                         formData={formData}
                         setFormData={setFormData}
-                        questions={questions}
+                        questions={questions || []}
                         loading={loadingQuestions}
                         isManeger={isManeger}
                     />

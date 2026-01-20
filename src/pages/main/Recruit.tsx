@@ -1,22 +1,15 @@
-// src/components/Recruit.tsx
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import PageLayout from "@/layouts/PageLayout";
 import joinUs from "@/assets/recruitment/JoinUs.jpg";
 import { InfoBox } from "@/components/recruitment/InfoBox";
 import { ManegerRoleLIst, RoleList } from "@/components/home/RoleList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNavigate } from "react-router-dom";
-import { fetchRecentRecruitment } from "@/apis/main/recruitment";
+import { useRecruitmentSchedule } from "@/hooks/useRecruitment";
 import { NotificationModal } from "@/components/home/NotificationModal";
 
 interface RecruitProps {
     isManager?: boolean;
-}
-
-interface Schedule {
-    generation: number;
-    openDate: string;
-    closeDate: string;
 }
 
 const weekdayMap = ["일", "월", "화", "수", "목", "금", "토"];
@@ -37,28 +30,18 @@ function formatRange(open: string, close: string) {
 }
 export const Recruit = ({ isManager = false }: RecruitProps) => {
     const navigate = useNavigate();
-
-    // 모집 일정 가져오기
-    const [schedule, setSchedule] = useState<Schedule | null>(null);
-    const [isApplyOpen, setIsApplyOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => {
-        const type = isManager ? "MANAGER" : "MEMBER";
-        fetchRecentRecruitment(type)
-            .then((res) => {
-                const { generation, openDate, closeDate } = res.data;
-                setSchedule({ generation, openDate, closeDate });
+    const recruitmentType = isManager ? "MANAGER" : "MEMBER";
+    const { data: schedule, isLoading, isError } = useRecruitmentSchedule(recruitmentType);
 
-                const now = new Date();
-                const open = new Date(openDate);
-                const close = new Date(closeDate);
-                setIsApplyOpen(open <= now && now <= close);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    }, [isManager]);
+    const isApplyOpen = useMemo(() => {
+        if (!schedule) return false;
+        const now = new Date();
+        const open = new Date(schedule.data.openDate);
+        const close = new Date(schedule.data.closeDate);
+        return open <= now && now <= close;
+    }, [schedule]);
 
     function addDays(dateStr: string, days: number): string {
         const d = new Date(dateStr);
@@ -66,43 +49,41 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
         return d.toISOString();
     }
 
-    // 버튼 클릭 -  기간 ㄴㄴ? 모달띄우기...
     const handleApplyClick = () => {
         if (!schedule) return;
         if (isApplyOpen) {
-            // 기간 → 지원 폼
-            navigate(isManager ? "/recruitform/manager" : "/recruitform/member");
+            navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
+                state: { recId: schedule.id }
+            });
         } else {
-            // 기간 ㄴㄴ → 모달 띄우기
             setShowModal(true);
         }
     };
 
-    // InfoData: 동적 첫 항목 + 나머지 static
-    const infoData = schedule
+    const infoData = schedule?.data
         ? [
               {
                   title: "서류 접수",
-                  date: formatRange(schedule.openDate, schedule.closeDate),
+                  date: formatRange(schedule.data.openDate, schedule.data.closeDate),
                   note: `총 ${Math.ceil(
-                      (new Date(schedule.closeDate).getTime() -
-                          new Date(schedule.openDate).getTime()) /
+                      (new Date(schedule.data.closeDate).getTime() -
+                          new Date(schedule.data.openDate).getTime()) /
                           (1000 * 60 * 60 * 24)
                   )}일`
               },
               {
                   title: "서류 발표",
-                  date: formatDate(addDays(schedule.closeDate, 7), true),
+                  date: formatDate(addDays(schedule.data.closeDate, 7), true),
                   note: "메일로 개별 발표"
               },
               {
                   title: "면접",
-                  date: `${formatDate(addDays(schedule.closeDate, 12))} ~ ${formatDate(addDays(schedule.closeDate, 16))}`,
+                  date: `${formatDate(addDays(schedule.data.closeDate, 12))} ~ ${formatDate(addDays(schedule.data.closeDate, 16))}`,
                   note: "개별 안내되는 일정에 따라 대면 진행"
               },
               {
                   title: "최종 발표",
-                  date: formatDate(addDays(schedule.closeDate, 20)),
+                  date: formatDate(addDays(schedule.data.closeDate, 20)),
                   note: "메일로 개별 발표"
               }
           ]
@@ -139,6 +120,8 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                     <div className="flex-1 ">
                         <h4 className="text-[32px] text-white font-[700] mb-[44px]">모집 일정</h4>
                         <div className="w-[908px] flex flex-col gap-y-3 mb-[180px]">
+                            {isLoading && <div>Loading...</div>}
+                            {isError && <div>Error fetching schedule.</div>}
                             {infoData.map((e, i) => (
                                 <div key={i} className="flex gap-x-4 w-full">
                                     <div className="w-[148px] text-center">
