@@ -2,7 +2,7 @@ import axiosInstance from "../axiosInstance";
 
 // 프로젝트 리스트 조회
 export const getAdminProjects = async (params?: {
-    generation?: string;
+    generation?: number | null;
     keyword?: string;
     page?: number;
 }) => {
@@ -33,7 +33,7 @@ export const createAdminProject = async (formData: FormData): Promise<void> => {
 };
 
 // 프로젝트 수정
-export const updateAdminProject = (id: string, data: FormData) => {
+export const updateAdminProject = (id: number, data: FormData) => {
     console.log(data);
     return axiosInstance.patch(`/admin/projects/${id}`, data);
 };

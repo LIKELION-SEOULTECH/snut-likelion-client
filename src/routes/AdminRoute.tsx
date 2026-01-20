@@ -1,4 +1,3 @@
-// src/routes/AdminRoute.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ADMIN } from "@/routes/routes";
 
@@ -19,11 +18,11 @@ import { AdminBlogEditPage } from "@/pages/admin/AdminBlogEdit";
 
 import { AdminRecruitPage } from "@/pages/admin/AdminRecruit";
 import { AdminUserRecruitPage } from "@/pages/admin/AdminUserRecruit";
-import { AdminManagerRecruitPage } from "@/pages/admin/AdminManageRecruit";
+import { AdminManagerRecruitPage } from "@/pages/admin/AdminManagerRecruit";
 import { AdminManagerRecruitDetailPage } from "@/pages/admin/ApplyManagerDetail";
 import { AdminUsererRecruitDetailPage } from "@/pages/admin/ApplyUserDetail";
-import { AdminApplyUserPage } from "@/pages/admin/AdminApplyUser";
-import { AdminApplyManagerPage } from "@/pages/admin/AdminApplyManager";
+import { AdminUserApplyPage } from "@/pages/admin/AdminUserApply";
+import { AdminManagerApplyPage } from "@/pages/admin/AdminManagerApply";
 
 export default function AdminRoute() {
     return (
@@ -47,8 +46,8 @@ export default function AdminRoute() {
             <Route path={ADMIN.BLOG_EDIT} element={<AdminBlogEditPage />} />
 
             <Route path={ADMIN.RECRUIT} element={<AdminRecruitPage />} />
-            <Route path={ADMIN.APPLY_MANAGER} element={<AdminApplyManagerPage />} />
-            <Route path={ADMIN.APPLY_USER} element={<AdminApplyUserPage />} />
+            <Route path={ADMIN.APPLY_MANAGER} element={<AdminManagerApplyPage />} />
+            <Route path={ADMIN.APPLY_USER} element={<AdminUserApplyPage />} />
             <Route path={ADMIN.RECRUIT_USER} element={<AdminUserRecruitPage />} />
             <Route path={ADMIN.RECRUIT_MANAGER} element={<AdminManagerRecruitPage />} />
             <Route

@@ -35,8 +35,8 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }: Pagination
                 <button
                     key={page}
                     onClick={() => onPageChange(page)}
-                    className={`w-8 h-8 rounded-full text-xl flex items-center justify-center cursor-pointer 
-              ${page === currentPage ? "bg-orange-500 text-white font-semibold" : "text-[#A7A7A7]"}`}
+                    className={`w-6 h-6 rounded-full flex items-center justify-center cursor-pointer 
+              ${page === currentPage ? "bg-orange-500 text-white semibold-12" : "text-[#A7A7A7] regular-12"}`}
                 >
                     {page}
                 </button>

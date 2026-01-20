@@ -56,7 +56,7 @@ export function AdminTagEditor({
 
         editorProps: {
             attributes: {
-                class: "w-full h-11 flex items-center rounded-sm text-sm border border-[#C4C4C4] p-[7px]"
+                class: "w-full h-11 flex items-center rounded-sm text-sm border border-[#C4C4C4] px-4"
             }
         },
         onUpdate: ({ editor }) => {

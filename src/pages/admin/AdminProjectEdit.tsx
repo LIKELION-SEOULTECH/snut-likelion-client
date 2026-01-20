@@ -1,26 +1,19 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
-
-import type { MemberSearchResponse } from "@/types/member";
 import { getProjectDetail, getRetrospections } from "@/apis/main/project";
 import type { RetrospectionResponse } from "@/types/project";
-import { getMemberSearchList } from "@/apis/main/member";
 import { updateAdminProject } from "@/apis/admin/project";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { StackInput } from "@/components/my-page/StackInput";
+import { ADMIN_ABS } from "@/routes/routes";
+import { CustomSelect } from "@/components/admin/common/custom-select";
+import { RetroRow } from "@/components/admin/project/RetroRow";
 interface Retro {
     memberId: number | null;
-    memberName: string; // UI에 보여줄 이름
+    memberName: string;
     comment: string;
     query: string;
     filtered: { id: number; name: string }[];
@@ -28,6 +21,9 @@ interface Retro {
 }
 
 export const AdminProjectEditPage = () => {
+    const queryClient = useQueryClient();
+
+    const navigate = useNavigate();
     const projectId = useParams<{ id: string }>().id;
 
     const [name, setName] = useState("");
@@ -35,9 +31,8 @@ export const AdminProjectEditPage = () => {
     const [images, setImages] = useState<File[]>([]);
 
     const [generation, setGeneration] = useState("");
-    const [type, setType] = useState("");
+    const [category, setCategory] = useState("");
 
-    const [tagInput, setTagInput] = useState("");
     const [tags, setTags] = useState<string[]>([]);
 
     const [projectDescription, setProjectDescription] = useState("");
@@ -57,62 +52,55 @@ export const AdminProjectEditPage = () => {
         }
     ]);
 
-    useEffect(() => {
-        if (!projectId) return;
+    const projectIdNum = Number(projectId);
 
-        const fetchProject = async () => {
-            try {
-                const res = await getProjectDetail(Number(projectId));
-                const data = res.data.data;
-                console.log(data);
-                console.log(data.category);
-
-                setName(data.name);
-                setIntro(data.intro);
-                setProjectDescription(data.description);
-                setGeneration(data.generation.toString());
-                setType(convertCategoryToEnum(data.category));
-                setWebUrl(data.websiteUrl ?? "");
-                setAndroidUrl(data.playstoreUrl ?? "");
-                setIosUrl(data.appstoreUrl ?? "");
-                setTags(data.tags);
-
-                setImageUrls(data.imageUrls);
-            } catch (err) {
-                console.error("getProject error", err);
-            }
-        };
-
-        fetchProject();
-    }, [projectId]);
+    const { data: projectDetail } = useQuery({
+        queryKey: ["adminProject", projectIdNum],
+        queryFn: () => getProjectDetail(projectIdNum),
+        enabled: !!projectId
+    });
 
     useEffect(() => {
-        if (!projectId) return;
+        if (!projectDetail) return;
 
-        const fetchRetrospections = async () => {
-            try {
-                const res = await getRetrospections(Number(projectId));
-                const fetched: RetrospectionResponse[] = res.data.data;
-                console.log(fetched);
-                setRetros(
-                    fetched.map(
-                        (r): Retro => ({
-                            memberId: r.writer.id,
-                            memberName: r.writer.name,
-                            comment: r.content,
-                            query: r.writer.name,
-                            filtered: [],
-                            showDropdown: false
-                        })
-                    )
-                );
-            } catch (err) {
-                console.error("회고 불러오기 실패", err);
-            }
-        };
+        const data = projectDetail.data.data;
 
-        fetchRetrospections();
-    }, [projectId]);
+        setName(data.name);
+        setIntro(data.intro);
+        setProjectDescription(data.description);
+        setGeneration(String(data.generation));
+        setCategory(data.category);
+        setWebUrl(data.websiteUrl ?? "");
+        setAndroidUrl(data.playstoreUrl ?? "");
+        setIosUrl(data.appstoreUrl ?? "");
+        setTags(data.tags);
+        setImageUrls(data.imageUrls);
+    }, [projectDetail]);
+
+    const { data: retrosData } = useQuery({
+        queryKey: ["projectRetros", projectIdNum],
+        queryFn: () => getRetrospections(projectIdNum),
+        enabled: !!projectId
+    });
+
+    useEffect(() => {
+        if (!retrosData) return;
+
+        const fetched: RetrospectionResponse[] = retrosData.data.data;
+
+        setRetros(
+            fetched.map(
+                (r): Retro => ({
+                    memberId: r.writer.id,
+                    memberName: r.writer.name,
+                    comment: r.content,
+                    query: r.writer.name,
+                    filtered: [],
+                    showDropdown: false
+                })
+            )
+        );
+    }, [retrosData]);
 
     const handleChangeRetro = <K extends keyof Retro>(index: number, field: K, value: Retro[K]) => {
         const updated = [...retros];
@@ -150,73 +138,59 @@ export const AdminProjectEditPage = () => {
         ]);
     };
 
-    const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const input = e.target.value;
-        setTagInput(input);
-
-        // 띄어쓰기 기준으로 분리
-        const splitTags = input
-            .split(" ")
-            .map((tag) => tag.trim())
-            .filter((tag) => tag !== "");
-
-        setTags(splitTags);
+    const handleRemoveRetro = (index: number) => {
+        setRetros((prev) => prev.filter((_, i) => i !== index));
     };
 
     const isFormValid =
         generation.trim() !== "" &&
-        type.trim() !== "" &&
+        category.trim() !== "" &&
         name.trim() !== "" &&
         intro.trim() !== "" &&
         projectDescription.trim() !== "" &&
-        retros.every((r) => r.memberId !== null && r.comment.trim() !== "") &&
-        images.length > 0;
+        // retros.every((r) => r.memberId !== null && r.comment.trim() !== "") &&
+        images.length >= 0;
 
-    // 멤버 검색
-    const handleMemberInputChange = async (index: number, value: string) => {
-        try {
-            if (value.trim()) {
-                const res = await getMemberSearchList({ keyword: value.trim() });
-                const filtered = res.data.data.map((member: MemberSearchResponse) => ({
-                    id: member.id,
-                    name: member.name
-                }));
-
-                setRetros((prev) =>
-                    prev.map((r, i) =>
-                        i === index
-                            ? {
-                                  ...r,
-                                  query: value,
-                                  filtered,
-                                  showDropdown: filtered.length > 0
-                              }
-                            : r
-                    )
-                );
-            }
-        } catch (err) {
-            console.error("멤버 검색 실패", err);
+    const handleBackBtn = () => {
+        if (!isFormValid) {
+            navigate(ADMIN_ABS.PROJECT);
+        } else {
+            alert("뭐");
         }
     };
 
-    const handleUpdateProject = async () => {
+    const updateProjectMutation = useMutation({
+        mutationFn: (formData: FormData) => updateAdminProject(projectIdNum, formData),
+
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
+            queryClient.invalidateQueries({ queryKey: ["adminProject", projectIdNum] });
+
+            alert("프로젝트가 성공적으로 수정되었습니다.");
+        },
+
+        onError: () => {
+            alert("수정 실패");
+        }
+    });
+
+    const handleUpdateProject = () => {
+        if (!projectId) return;
+
         const formData = new FormData();
 
         formData.append("name", name);
         formData.append("intro", intro);
         formData.append("description", projectDescription);
         formData.append("generation", generation);
-        formData.append("category", convertCategoryToEnum(type));
+        formData.append("category", category);
 
         if (webUrl) formData.append("websiteUrl", webUrl);
         if (iosUrl) formData.append("appstoreUrl", iosUrl);
         if (androidUrl) formData.append("playstoreUrl", androidUrl);
 
-        // ✅ tags 전체 전달 (replace 방식)
         tags.forEach((tag) => formData.append("tags", tag));
 
-        // ✅ retrospections JSON으로 전달
         formData.append(
             "retrospections",
             JSON.stringify(
@@ -229,74 +203,48 @@ export const AdminProjectEditPage = () => {
             )
         );
 
-        // ✅ newImages 추가만 가능
         images.forEach((img) => {
             formData.append("newImages", img);
         });
 
-        try {
-            if (projectId) {
-                await updateAdminProject(projectId, formData);
-            }
-            console.log("프로젝트가 성공적으로 수정되었습니다.");
-        } catch (err) {
-            console.error("수정 실패", err);
-            alert("수정 실패");
-        }
-    };
-
-    // "아이디어톤" -> "IDEATHON" 등으로 변환하는 함수
-    const convertCategoryToEnum = (type: string): string => {
-        switch (type) {
-            case "아이디어톤":
-                return "IDEATHON";
-            case "해커톤":
-                return "HACKATHON";
-            case "데모데이":
-                return "DEMO_DAY";
-            case "장기 프로젝트":
-                return "LONG_TERM_PROJECT";
-            default:
-                return "IDEATHON";
-        }
+        updateProjectMutation.mutate(formData);
     };
 
     return (
-        <AdminLayout isFormValid={isFormValid} onSubmit={handleUpdateProject}>
+        <AdminLayout
+            isFormValid={isFormValid}
+            onDelete={() => {
+                alert("삭제 로직 추가");
+            }}
+            onSubmit={handleUpdateProject}
+            onClickBackBtn={handleBackBtn}
+        >
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm mb-12 pt-[22px] px-10 pb-10 gap-8">
                 <div className="flex flex-row items-center h-11 pl-[169px] gap-2">
-                    <Select value={generation} onValueChange={setGeneration}>
-                        <SelectTrigger className="w-[86px] !h-full bg-white rounded-sm px-4 py-3 border-[#C4C4C4] data-[placeholder]:text-black">
-                            <SelectValue placeholder="기수" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-sm w-[86px] border-[#C4C4C4] min-w-0">
-                            <SelectItem value="13" className="w-[86px] px-4 py-3">
-                                13기
-                            </SelectItem>
-                            <SelectItem value="12" className="w-[86px] px-4 py-3">
-                                12기
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <Select value={type} onValueChange={setType}>
-                        <SelectTrigger className="w-[162px] !h-full bg-white rounded-sm px-4 py-3 border-[#C4C4C4] data-[placeholder]:text-black">
-                            <SelectValue placeholder="구분" />
-                        </SelectTrigger>
-                        <SelectContent className="rounded-sm w-[162px] border-[#C4C4C4] min-w-0">
-                            <SelectItem value="IDEATHON" className="w-[162px] px-4 py-3">
-                                아이디어톤
-                            </SelectItem>
-                            <SelectItem value="HACKATHON" className="w-[162px] px-4 py-3">
-                                해커톤
-                            </SelectItem>
-                            <SelectItem value="DEMO_DAY" className="w-[162px] px-4 py-3">
-                                데모데이
-                            </SelectItem>
-                            <SelectItem value="LONG_TERM_PROJECT" className="w-[162px] px-4 py-3">
-                                장기프로젝트
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="w-[86px]">
+                        <CustomSelect
+                            value={generation}
+                            onValueChange={setGeneration}
+                            placeholder="기수"
+                            selectList={[
+                                { label: "12기", value: "12" },
+                                { label: "13기", value: "13" },
+                                { label: "14기", value: "14" }
+                            ]}
+                        />
+                    </div>
+                    <div className="w-[162px]">
+                        <CustomSelect
+                            value={category}
+                            onValueChange={setCategory}
+                            placeholder="구분"
+                            selectList={[
+                                { label: "아이디어톤", value: "IDEATHON" },
+                                { label: "해커톤", value: "HACKATHON" },
+                                { label: "장기프로젝트", value: "LONG_TERM_PROJECT" }
+                            ]}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-4">
@@ -352,11 +300,7 @@ export const AdminProjectEditPage = () => {
                         <span className="w-[169px] h-4 flex flex-row gap-[2px] text-sm font-medium text-[#666666]">
                             <span className="flex flex-col justify-center">기술 스택</span>
                         </span>
-                        <input
-                            className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
-                            value={tagInput}
-                            onChange={handleTagInputChange}
-                        />
+                        <StackInput value={tags} onChange={setTags} color="white-gray" />
                     </div>
                 </div>
 
@@ -370,50 +314,14 @@ export const AdminProjectEditPage = () => {
                     </span>
                     <div className="flex-1 flex flex-col gap-[10px]">
                         {retros.map((retro, index) => (
-                            <div className="flex flex-row gap-2" key={index}>
-                                <div className="relative w-[89px]">
-                                    <input
-                                        className="w-full h-11 px-4 border border-[#C4C4C4] text-sm rounded-sm"
-                                        placeholder="멤버 검색"
-                                        value={retro.query}
-                                        onChange={(e) =>
-                                            handleMemberInputChange(index, e.target.value)
-                                        }
-                                        onFocus={() => {
-                                            if (retro.query)
-                                                handleChangeRetro(index, "showDropdown", true);
-                                        }}
-                                    />
-                                    {retro.showDropdown && retro.filtered.length > 0 && (
-                                        <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-sm shadow mt-1 max-h-40 overflow-auto">
-                                            {retro.filtered.map((member, idx) => (
-                                                <li
-                                                    key={idx}
-                                                    onClick={() => handleSelect(index, member)}
-                                                    className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
-                                                >
-                                                    {member.name}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    )}
-                                </div>
-
-                                <div className="flex flex-1 relative">
-                                    <input
-                                        maxLength={50}
-                                        className="w-full h-11 px-4 border border-[#C4C4C4] text-sm rounded-sm"
-                                        placeholder="회고"
-                                        value={retro.comment}
-                                        onChange={(e) =>
-                                            handleChangeRetro(index, "comment", e.target.value)
-                                        }
-                                    />
-                                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[#999999]">
-                                        {retro.comment.replace(/\s/g, "").length}/50
-                                    </span>
-                                </div>
-                            </div>
+                            <RetroRow
+                                key={index}
+                                retro={retro}
+                                index={index}
+                                onChange={handleChangeRetro}
+                                onSelect={handleSelect}
+                                onRemove={index > 0 ? () => handleRemoveRetro(index) : undefined}
+                            />
                         ))}
 
                         <button

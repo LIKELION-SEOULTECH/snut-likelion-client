@@ -8,41 +8,67 @@ import {
 } from "@/components/ui/select";
 import QuestionChevDown from "@/assets/admin/question-chevdown.svg?react";
 import QuestionChevUp from "@/assets/admin/question-chevup.svg?react";
-import { useQuery } from "@tanstack/react-query";
-import {
-    createRecruitment,
-    getRecruitmentByType,
-    updateRecruitment
-} from "@/apis/admin/recruitment";
+import { createRecruitment, updateRecruitment } from "@/apis/admin/recruitment";
+import TriggerClose from "@/assets/admin/trigger-close.svg?react";
+import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import { CustomSelect } from "../common/custom-select";
+import type { LatestRecruitment } from "@/types/recruitment";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Spinner } from "@/components/ui/spinner";
 
-export const ApplyDateForm = () => {
+export const ApplyDateForm = ({
+    latestRecruitment,
+    recruitmentType
+}: {
+    latestRecruitment: LatestRecruitment;
+    recruitmentType: string;
+}) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [generation, setGeneration] = useState("");
+    const [generation, setGeneration] = useState<number | null>(null);
     const [startDate, setStartDate] = useState({ year: "", month: "", day: "" });
     const [endDate, setEndDate] = useState({ year: "", month: "", day: "" });
     const [error, setError] = useState("");
     const [isEditing, setIsEditing] = useState(false);
-    const [recruitmentId, setRecruitmentId] = useState<number | null>(null); // PATCH용 id
+    const [recruitmentId, setRecruitmentId] = useState<number | null>(null);
 
     const todayRef = useRef(new Date());
     const today = todayRef.current;
     const thisYear = today.getFullYear();
+    const queryClient = useQueryClient();
 
-    const recruitmentType = location.pathname.includes("apply-manager") ? "MANAGER" : "MEMBER";
+    const recruitmentMutation = useMutation({
+        mutationFn: (payload: {
+            id?: number;
+            generation: number;
+            recruitmentType: string;
+            openDate: string;
+            closeDate: string;
+        }) => {
+            return payload.id ? updateRecruitment(payload.id, payload) : createRecruitment(payload);
+        },
 
-    const { data: latestRecruitment } = useQuery({
-        queryKey: ["recruitment", recruitmentType],
-        queryFn: () => getRecruitmentByType(recruitmentType)
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["latestRecruitment", recruitmentType]
+            });
+
+            setIsEditing(false);
+            console.log("모집 등록 성공");
+        },
+
+        onError: (err) => {
+            console.error("모집 등록 실패", err);
+        }
     });
 
     useEffect(() => {
-        if (latestRecruitment?.data) {
-            const open = new Date(latestRecruitment.data.openDate);
-            const close = new Date(latestRecruitment.data.closeDate);
+        if (latestRecruitment) {
+            const open = new Date(latestRecruitment.openDate);
+            const close = new Date(latestRecruitment.closeDate);
 
-            setRecruitmentId(latestRecruitment.data.id); // id 저장
+            setRecruitmentId(latestRecruitment.id);
 
-            setGeneration(String(latestRecruitment.data.generation));
+            setGeneration(latestRecruitment.generation);
             setStartDate({
                 year: String(open.getFullYear()),
                 month: String(open.getMonth() + 1).padStart(2, "0"),
@@ -66,15 +92,6 @@ export const ApplyDateForm = () => {
         return date.getFullYear() === +y && date.getMonth() + 1 === +m && date.getDate() === +d;
     };
 
-    const isAfterToday = useCallback(
-        (y: string, m: string, d: string) => {
-            if (!isValidDate(y, m, d)) return false;
-            const selected = new Date(+y, +m - 1, +d);
-            return selected > today;
-        },
-        [today]
-    );
-
     const isEndAfterStart = useCallback(() => {
         if (!isValidDate(startDate.year, startDate.month, startDate.day)) return false;
         if (!isValidDate(endDate.year, endDate.month, endDate.day)) return false;
@@ -94,14 +111,12 @@ export const ApplyDateForm = () => {
 
         if (!allSelected) return;
 
-        if (!isAfterToday(startDate.year, startDate.month, startDate.day)) {
-            setError("*오늘 이후의 날짜만 선택할 수 있습니다.");
-        } else if (!isEndAfterStart()) {
+        if (!isEndAfterStart()) {
             setError("*모집 마감일은 모집 시작일 이후로 설정해주세요.");
         } else {
             setError("");
         }
-    }, [startDate, endDate, isAfterToday, isEndAfterStart]);
+    }, [startDate, endDate, isEndAfterStart]);
 
     const getDaysInMonth = (year: string, month: string) => {
         if (!year || !month) return [];
@@ -113,38 +128,25 @@ export const ApplyDateForm = () => {
     const months = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
     const startDays = getDaysInMonth(startDate.year, startDate.month);
     const endDays = getDaysInMonth(endDate.year, endDate.month);
-    const generations = Array.from({ length: 5 }, (_, i) => `${13 + i}`);
 
     const handleSubmit = () => {
         if (!generation || error) return;
 
         const openDate = new Date(
-            `${startDate.year}-${startDate.month}-${startDate.day}T00:00:00`
+            Date.UTC(Number(startDate.year), Number(startDate.month) - 1, Number(startDate.day))
         ).toISOString();
 
         const closeDate = new Date(
-            `${endDate.year}-${endDate.month}-${endDate.day}T00:00:00`
+            Date.UTC(Number(endDate.year), Number(endDate.month) - 1, Number(endDate.day))
         ).toISOString();
 
-        const payload = {
-            generation: Number(generation),
+        recruitmentMutation.mutate({
+            id: recruitmentId ?? undefined,
+            generation,
             recruitmentType,
             openDate,
             closeDate
-        };
-
-        const promise = recruitmentId
-            ? updateRecruitment(recruitmentId, payload) // PATCH
-            : createRecruitment(payload); // POST
-
-        promise
-            .then(() => {
-                console.log("모집 등록 성공");
-                setIsEditing(false); // 다시 readonly로
-            })
-            .catch((err) => {
-                console.error("모집 등록 실패", err);
-            });
+        });
     };
 
     return (
@@ -159,12 +161,12 @@ export const ApplyDateForm = () => {
 
             {!isCollapsed && (
                 <>
-                    {latestRecruitment?.data && !isEditing ? (
+                    {latestRecruitment && !isEditing ? (
                         <div className="flex items-center gap-10 mt-8">
-                            <span className="flex flex-row text-sm gap-10">
-                                <span className="text-sm">{generation}기</span>
-                                {`${startDate.year}년 ${startDate.month}월 ${startDate.day}일`} ~
-                                {` ${endDate.month}월 ${endDate.day}일`}
+                            <span className="flex flex-row text-base gap-10">
+                                <span>{generation}기</span>
+                                {`${startDate.year}/${startDate.month}/${startDate.day}`} ~
+                                {` ${endDate.month}/${endDate.day}`}
                             </span>
                             <button
                                 className="bg-[#404040] text-white text-sm rounded-sm w-[111px] h-11"
@@ -176,18 +178,18 @@ export const ApplyDateForm = () => {
                     ) : (
                         <div className="flex flex-col gap-5 mt-8">
                             {/* 기수 선택 */}
-                            <Select value={generation} onValueChange={(v) => setGeneration(v)}>
-                                <SelectTrigger className="w-[132px] !h-11 rounded-sm">
-                                    <SelectValue placeholder="기수" />
-                                </SelectTrigger>
-                                <SelectContent className="w-[132px] rounded-sm">
-                                    {generations.map((g) => (
-                                        <SelectItem key={g} value={g}>
-                                            {g}기
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            <div className="w-[86px]">
+                                <CustomSelect
+                                    value={generation}
+                                    onValueChange={setGeneration}
+                                    placeholder={"기수별"}
+                                    selectList={[
+                                        { label: "12기", value: 12 },
+                                        { label: "13기", value: 13 },
+                                        { label: "14기", value: 14 }
+                                    ]}
+                                />
+                            </div>
 
                             <div className="flex flex-row gap-2 items-center">
                                 {/* 시작일 */}
@@ -197,29 +199,54 @@ export const ApplyDateForm = () => {
                                         setStartDate((prev) => ({ ...prev, year: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[132px] !h-11 rounded-sm">
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-33 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
                                         <SelectValue placeholder="년도" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[132px] rounded-sm">
+
+                                    <SelectContent className="w-33 min-w-33 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {years.map((y) => (
-                                            <SelectItem key={y} value={y}>
+                                            <SelectItem
+                                                key={y}
+                                                value={y}
+                                                className="w-33 min-w-[86px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {y}년
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
+
                                 <Select
                                     value={startDate.month}
                                     onValueChange={(v) =>
-                                        setStartDate((prev) => ({ ...prev, month: v, day: "" }))
+                                        setStartDate((prev) => ({ ...prev, month: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[88px] !h-11 rounded-sm">
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-22 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
                                         <SelectValue placeholder="월" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[88px]">
+
+                                    <SelectContent className="w-22 min-w-22 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {months.map((m) => (
-                                            <SelectItem key={m} value={m}>
+                                            <SelectItem
+                                                key={m}
+                                                value={m}
+                                                className="w-22 min-w-22 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {m}월
                                             </SelectItem>
                                         ))}
@@ -231,12 +258,24 @@ export const ApplyDateForm = () => {
                                         setStartDate((prev) => ({ ...prev, day: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[88px] !h-11 rounded-sm">
-                                        <SelectValue placeholder="일" />
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-22 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
+                                        <SelectValue placeholder="월" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[88px]">
+
+                                    <SelectContent className="w-22 min-w-22 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {startDays.map((d) => (
-                                            <SelectItem key={d} value={d}>
+                                            <SelectItem
+                                                key={d}
+                                                value={d}
+                                                className="w-22 min-w-22 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {d}일
                                             </SelectItem>
                                         ))}
@@ -244,35 +283,61 @@ export const ApplyDateForm = () => {
                                 </Select>
                                 <span className="mx-2">-</span>
                                 {/* 종료일 */}
+
                                 <Select
                                     value={endDate.year}
                                     onValueChange={(v) =>
                                         setEndDate((prev) => ({ ...prev, year: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[132px] !h-11 rounded-sm">
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-33 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
                                         <SelectValue placeholder="년도" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[132px]">
+
+                                    <SelectContent className="w-33 min-w-33 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {years.map((y) => (
-                                            <SelectItem key={y} value={y}>
+                                            <SelectItem
+                                                key={y}
+                                                value={y}
+                                                className="w-33 min-w-[86px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {y}년
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
+
                                 <Select
                                     value={endDate.month}
                                     onValueChange={(v) =>
-                                        setEndDate((prev) => ({ ...prev, month: v, day: "" }))
+                                        setEndDate((prev) => ({ ...prev, month: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[88px] !h-11 rounded-sm">
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-22 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
                                         <SelectValue placeholder="월" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[88px]">
+
+                                    <SelectContent className="w-22 min-w-22 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {months.map((m) => (
-                                            <SelectItem key={m} value={m}>
+                                            <SelectItem
+                                                key={m}
+                                                value={m}
+                                                className="w-22 min-w-22 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {m}월
                                             </SelectItem>
                                         ))}
@@ -284,12 +349,24 @@ export const ApplyDateForm = () => {
                                         setEndDate((prev) => ({ ...prev, day: v }))
                                     }
                                 >
-                                    <SelectTrigger className="w-[88px] !h-11 rounded-sm">
-                                        <SelectValue placeholder="일" />
+                                    <SelectTrigger
+                                        isArrow={false}
+                                        className="min-w-22 !h-11 pl-4 bg-white border-gray-100 rounded-sm data-[placeholder]:text-gray-200 [&_.icon-open]:hidden data-[state=open]:[&_.icon-open]:block data-[state=open]:[&_.icon-close]:hidden data-[state=open]:rounded-b-none data-[state=open]:border-b-0"
+                                    >
+                                        <SelectValue placeholder="월" />
+                                        <span className="ml-auto flex items-center">
+                                            <TriggerClose className="icon-close size-2" />
+                                            <TriggerOpen className="icon-open size-2" />
+                                        </span>
                                     </SelectTrigger>
-                                    <SelectContent className="w-[88px]">
+
+                                    <SelectContent className="w-22 min-w-22 rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                                         {endDays.map((d) => (
-                                            <SelectItem key={d} value={d}>
+                                            <SelectItem
+                                                key={d}
+                                                value={d}
+                                                className="w-22 min-w-22 h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                                            >
                                                 {d}일
                                             </SelectItem>
                                         ))}
@@ -299,7 +376,7 @@ export const ApplyDateForm = () => {
                                     className="flex items-center justify-center text-white w-[111px] h-11 font-medium text-sm bg-[#404040] rounded-sm ml-3"
                                     onClick={handleSubmit}
                                 >
-                                    저장하기
+                                    {recruitmentMutation.isPending ? <Spinner /> : "저장하기"}
                                 </button>
                             </div>
                         </div>

@@ -7,6 +7,8 @@ interface AdminLayoutProps {
     onToggleDeleteMode?: () => void;
     isDeleteMode?: boolean;
     onSubmit?: () => void;
+    onDelete?: () => void;
+    onClickBackBtn?: () => void;
 }
 
 export default function AdminLayout({
@@ -14,12 +16,14 @@ export default function AdminLayout({
     isFormValid,
     onToggleDeleteMode,
     isDeleteMode,
-    onSubmit
+    onSubmit,
+    onDelete,
+    onClickBackBtn
 }: AdminLayoutProps) {
     return (
         <div className="flex w-full">
             {/* Admin Sidebar */}
-            <aside className="h-100% bg-[#2D2D2D] text-white">
+            <aside className="h-100% bg-gray-700 text-white">
                 <Sidebar />
             </aside>
 
@@ -29,9 +33,11 @@ export default function AdminLayout({
                     onToggleDeleteMode={onToggleDeleteMode}
                     isDeleteMode={isDeleteMode}
                     onSubmit={onSubmit}
+                    onDelete={onDelete}
+                    onClickBackBtn={onClickBackBtn}
                 />
                 {/* Main content */}
-                <main className="flex-1 overflow-y-auto px-10 bg-[#ececec]">{children}</main>
+                <main className="flex-1 overflow-y-auto px-10 bg-gray-50">{children}</main>
             </div>
         </div>
     );

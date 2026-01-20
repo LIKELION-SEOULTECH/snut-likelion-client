@@ -1,65 +1,120 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { useState, useEffect } from "react";
 import { Pagination } from "@/components/common/Pagination";
-import { dummyUserData } from "@/constants/admin/dummyUserData";
 import { RecruitUserSearchTool } from "@/components/admin/recruit/RecruitUserSearchTool";
 import { RecruitUserSearchList } from "@/components/admin/recruit/RecruitUserSearchList";
-import { getSubmittedApplications } from "@/apis/admin/recruitment";
+import { getSubmittedApplications, updateApplicationStatus } from "@/apis/admin/recruitment";
+import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
+import type { ApplicationData } from "@/types/recruitment";
 
 export const AdminUserRecruitPage = () => {
+    const queryClient = useQueryClient();
+    const { setManageMode } = useRecruitManageStore();
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // 한 페이지에 보여줄 개수
+
     const [filters, setFilters] = useState({
         result: "",
         part: ""
     });
+    const {
+        data: userRecruitRes,
+        isLoading,
+        isError
+    } = useQuery({
+        queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
+        queryFn: () =>
+            getSubmittedApplications({
+                recId: 1,
+                page: currentPage - 1,
+                part: filters.part,
+                status: filters.result
+            })
+    });
+
+    const pageIds = userRecruitRes?.content.map((app: ApplicationData) => app.id) ?? [];
+
+    const isAllSelected =
+        pageIds.length > 0 && pageIds.every((id: number) => selectedIds.includes(id));
+
+    const toggleSelectAll = () => {
+        setSelectedIds((prev) =>
+            isAllSelected
+                ? prev.filter((id) => !pageIds.includes(id))
+                : Array.from(new Set([...prev, ...pageIds]))
+        );
+    };
+
+    const toggleSelect = (id: number) => {
+        setSelectedIds((prev) =>
+            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+        );
+    };
+
+    const clearSelection = () => setSelectedIds([]);
+
+    const applicationResultMutation = useMutation({
+        mutationFn: updateApplicationStatus,
+        onSuccess: () => {
+            clearSelection();
+            queryClient.invalidateQueries({
+                queryKey: ["submittedApplications"]
+            });
+        },
+        onError: () => {
+            alert("결과 변경 실패");
+        }
+    });
+
     const handleSearch = (newFilters: typeof filters) => {
         setFilters(newFilters);
     };
 
-    // 필터링된 데이터
-    const filteredData = dummyUserData.filter(
-        (member) => filters.part === "" || member.part === filters.part
-    );
+    const handleResult = (status: "FINAL_PASS" | "FAIL" | "PAPER_PASS") => {
+        if (selectedIds.length === 0) {
+            alert("선택된 지원자가 없습니다.");
+            return;
+        }
 
-    // 현재 페이지에 해당하는 데이터
-    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-    const currentPageData = filteredData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+        applicationResultMutation.mutate({
+            status,
+            ids: selectedIds
+        });
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getSubmittedApplications({
-                    recId: 1,
-                    page: 0,
-                    part: filters.part,
-                    status: filters.result
-                });
-                console.log("지원자 목록:", data);
-            } catch (err) {
-                console.error("지원자 목록 불러오기 실패", err);
-            }
-        };
+        setManageMode(false);
+    }, [setManageMode]);
 
-        fetchData();
-    }, [filters, currentPage]);
-
+    console.log(userRecruitRes);
     return (
         <AdminLayout>
-            <div className="mt-12 mb-7">
-                <RecruitUserSearchTool onSearch={handleSearch} />
+            <div className="mt-12 mb-8">
+                <RecruitUserSearchTool onSearch={handleSearch} onChangeResult={handleResult} />
             </div>
-            <RecruitUserSearchList data={currentPageData} />
-            <div className="mb-[210px]">
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={(page) => setCurrentPage(page)}
-                />
-            </div>
+            {isLoading || isError || userRecruitRes.content.length === 0 ? (
+                <AdminRecruitSkeleton isLoading={isLoading} isManager={false} />
+            ) : (
+                <>
+                    <RecruitUserSearchList
+                        data={userRecruitRes.content}
+                        totalElements={userRecruitRes.totalElements}
+                        selectedIds={selectedIds}
+                        onToggleSelect={toggleSelect}
+                        onToggleSelectAll={toggleSelectAll}
+                    />
+                    <div className="mb-[210px]">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={userRecruitRes.totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    </div>
+                </>
+            )}
         </AdminLayout>
     );
 };

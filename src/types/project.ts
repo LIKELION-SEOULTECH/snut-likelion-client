@@ -99,3 +99,20 @@ export interface ProjectQueryParams {
     generation?: number;
     category?: string;
 }
+
+// 어드민 프로젝트 검색 필터 타입 정의
+
+export interface ProjectFilter {
+    generation: number | null;
+    keyword: string;
+}
+
+// 프로젝트 회고 타입
+export interface Retro {
+    memberId: number | null;
+    memberName: string;
+    comment: string;
+    query: string;
+    filtered: { id: number; name: string }[];
+    showDropdown: boolean;
+}

@@ -1,15 +1,24 @@
-import { useEffect } from "react";
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEffect, useRef } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { AdminMenuBar } from "./AdminMenuBar";
-import Blockquote from "@tiptap/extension-blockquote";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
+
 import Image from "@tiptap/extension-image";
 import { CustomImage } from "@/extensions/customImage";
 import Mention from "@tiptap/extension-mention";
 import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
 import { forwardRef, useImperativeHandle } from "react";
+import { uploadBlogImages } from "@/apis/main/blog";
+import { CustomHorizontalRule } from "@/extensions/customHorizontalRule";
+import { CustomBlockQuote } from "@/extensions/customBlockQuote";
+
+export interface AdminEditorHandle {
+    getFinalHtmlAndImages: () => Promise<{
+        html: string;
+        imageUrls: string[];
+    }>;
+}
 
 interface Props {
     content: string;
@@ -18,8 +27,8 @@ interface Props {
 
 const extensions = [
     StarterKit,
-    Blockquote,
-    HorizontalRule,
+    CustomBlockQuote,
+    CustomHorizontalRule,
     Image.configure({
         allowBase64: false
     }),
@@ -38,37 +47,77 @@ const extensions = [
     })
 ];
 
-const AdminTextEditor = forwardRef<Editor | null, Props>(({ content, setContent }, ref) => {
-    const editor = useEditor({
-        extensions,
-        content,
-        editorProps: {
-            attributes: {
-                class: "w-full min-h-[380px] px-4 py-3 rounded-sm border border-[#C4C4C4] text-sm leading-[150%] focus:outline-none"
+const AdminTextEditor = forwardRef<AdminEditorHandle | null, Props>(
+    ({ content, setContent }, ref) => {
+        const imageFileMap = useRef<Record<string, File>>({});
+
+        const editor = useEditor({
+            extensions,
+            content,
+            editorProps: {
+                attributes: {
+                    class: "w-full min-h-[380px] px-4 py-3 rounded-sm border border-gray-100 text-sm leading-[150%] focus:outline-none"
+                }
+            },
+
+            onUpdate({ editor }) {
+                setContent(editor.getHTML());
             }
-        },
+        });
 
-        onUpdate({ editor }) {
-            setContent(editor.getHTML());
-            console.log(editor.getHTML());
-        }
-    });
+        useImperativeHandle(ref, () => ({
+            async getFinalHtmlAndImages() {
+                if (!editor) throw new Error("Editor not ready");
 
-    useImperativeHandle(ref, () => editor!, [editor]);
+                const html = editor.getHTML();
+                const dom = new DOMParser().parseFromString(html, "text/html");
 
-    useEffect(() => {
-        if (editor && content !== editor.getHTML()) {
-            editor.commands.setContent(content, false);
-        }
-    }, [content, editor]);
-    if (!editor) return;
+                const imgEls = Array.from(
+                    dom.querySelectorAll<HTMLImageElement>("img[data-temp-id]")
+                );
 
-    return (
-        <div className="flex flex-col">
-            <AdminMenuBar editor={editor!} />
-            <EditorContent editor={editor} />
-        </div>
-    );
-});
+                const filesWithId = imgEls
+                    .map((img) => {
+                        const tempId = img.getAttribute("data-temp-id")!;
+                        const file = imageFileMap.current[tempId];
+                        return file ? { tempId, file, img } : null;
+                    })
+                    .filter(Boolean) as { tempId: string; file: File; img: HTMLImageElement }[];
+
+                if (filesWithId.length === 0) {
+                    return { html, imageUrls: [] };
+                }
+
+                // 업로드 (순서 유지)
+                const urls = await uploadBlogImages(filesWithId.map((f) => f.file));
+
+                // 정확히 매칭해서 치환
+                filesWithId.forEach((item, i) => {
+                    item.img.setAttribute("src", urls[i]);
+                    item.img.removeAttribute("data-temp-id");
+                });
+
+                return {
+                    html: dom.body.innerHTML,
+                    imageUrls: urls
+                };
+            }
+        }));
+
+        useEffect(() => {
+            if (editor && content !== editor.getHTML()) {
+                editor.commands.setContent(content, false);
+            }
+        }, [content, editor]);
+        if (!editor) return;
+
+        return (
+            <div className="flex flex-col">
+                <AdminMenuBar editor={editor!} imageFileMap={imageFileMap} />
+                <EditorContent editor={editor} />
+            </div>
+        );
+    }
+);
 
 export default AdminTextEditor;

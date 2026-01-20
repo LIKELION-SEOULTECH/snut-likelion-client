@@ -5,12 +5,18 @@ export const getAdminNotices = async (params?: { keyword?: string; page?: number
     const res = await axiosInstance.get("/admin/notices", {
         params
     });
-    console.log(res.data.data);
     return res.data.data;
 };
 
-// 공지 생성
-
+// 공지사항 생성
+export const createAdminNotice = async (notice: {
+    title: string;
+    content: string;
+    pinned: boolean;
+}) => {
+    const res = await axiosInstance.post("/admin/notices", notice);
+    return res.data;
+};
 // 공지 수정
 
 // 핀 토글

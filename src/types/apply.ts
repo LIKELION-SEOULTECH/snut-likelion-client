@@ -1,6 +1,18 @@
-export interface Question {
-    id: string;
+export type Question = {
+    clientId?: string;
+    id?: number;
     text: string;
-    type: string;
-    options?: string[];
-}
+    questionTarget: string;
+    questionType: string;
+    part?: string;
+    departmentType?: string;
+    order: number;
+    buttonList?: string[];
+};
+
+export type QNAItem = {
+    questionId?: number;
+    questionText: string;
+    order: number;
+    answer: string;
+};

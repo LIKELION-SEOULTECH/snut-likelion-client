@@ -3,7 +3,7 @@ import { SidebarList } from "@/components/admin/SidebarList";
 
 export const Sidebar = () => {
     return (
-        <div className="flex flex-col min-h-screen text-white]">
+        <div className="flex flex-col w-[270px] min-h-screen text-white]">
             <SidebarHeader />
             <SidebarList />
         </div>

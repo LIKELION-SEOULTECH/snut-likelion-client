@@ -5,16 +5,16 @@ export interface ManagerData {
     department: string;
     part: string;
     applyDate: string;
-    result: "합격" | "불합격";
+    status: "합격" | "불합격";
 }
 
-export interface UserData {
+export interface ApplicationData {
     id: number;
-    name: string;
+    username: string;
     email: string;
     part: string;
-    applyDate: string;
-    result: "합격" | "불합격";
+    submittedAt: string;
+    status: "합격" | "불합격";
 }
 
 export interface UpdateQuestionRequest {
@@ -112,6 +112,13 @@ export interface Recruitment {
     startDate: string;
     endDate: string;
 }
+export interface LatestRecruitment {
+    id: number;
+    generation: number;
+    recruitmentType: "MEMBER" | "MANAGER";
+    openDate: string;
+    closeDate: string;
+}
 
 export interface RecruitmentRequest {
     generation: number;
@@ -121,13 +128,13 @@ export interface RecruitmentRequest {
 }
 
 export interface QuestionRequest {
-    id?: number;
+    id?: number | null;
     text: string;
-    questionType: string;
     questionTarget: string;
+    questionType: string;
     order: number;
-    part?: string;
-    departmentType?: string;
+    part?: string | null;
+    departmentType?: string | null;
     buttonList?: string[];
 }
 

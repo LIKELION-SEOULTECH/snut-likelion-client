@@ -1,15 +1,20 @@
-import NoticeTextEditor from "@/components/text-editor/NoticeTextEditor";
 import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
-import { createNotice } from "@/apis/main/notice";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ADMIN_ABS } from "@/routes/routes";
+import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
+import { CustomSelect } from "@/components/admin/common/custom-select";
+import { createAdminNotice } from "@/apis/admin/notice";
 
 export const AdminNoticeCreatePage = () => {
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const isPinned = true; // 임의값
-
+    const [type, setType] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,77 +44,108 @@ export const AdminNoticeCreatePage = () => {
         fileInputRef.current?.click();
     };
 
-    const totalSizeMB = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0).toFixed(2);
+    const totalSizeMB = (() => {
+        const size = files.reduce((acc, file) => acc + file.size / 1024 / 1024, 0);
+        return size === 0 ? 0 : size.toFixed(2);
+    })();
 
-    // 실제 업로드 로직
-    const handleUpload = async () => {
-        if (!title.trim()) {
-            alert("제목을 입력해주세요.");
-            return;
-        }
-        if (!content.trim()) {
-            alert("내용을 입력해주세요.");
-            return;
-        }
+    const isFormValid = type.trim() !== "" && content.trim() !== "" && title.trim() !== "";
 
-        try {
-            await createNotice({
+    // notice 생성
+    const createNoticeMutation = useMutation({
+        mutationFn: () =>
+            createAdminNotice({
                 title,
                 content,
-                pinned: isPinned
+                pinned: true
+            }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["adminNotices"]
             });
-            console.log("공지사항 등록");
-            navigate("/admin/notice");
-        } catch (error) {
-            console.error(error);
-            console.log("공지사항 등록에 실패했습니다.");
+
+            navigate(ADMIN_ABS.NOTICE);
+        },
+        onError: () => {
+            alert("공지사항 등록에 실패했습니다.");
         }
+    });
+
+    // 업로드
+    const handleUpload = () => {
+        createNoticeMutation.mutate();
+    };
+
+    const handleBackBtn = () => {
+        navigate(ADMIN_ABS.NOTICE);
     };
 
     return (
-        <AdminLayout onSubmit={handleUpload}>
-            <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
-                <div className="flex flex-row gap-[18px] items-center">
-                    <span className="w-19 text-sm font-medium text-[#666666]">제목</span>
-                    <input
-                        className="flex-1 h-11 px-4 border border-[#C4C4C4] rounded-sm"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                </div>
-                <div className="flex flex-row gap-[18px] items-start">
-                    <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
-                    <div className="flex-1">
-                        <NoticeTextEditor content={content} setContent={setContent} />
+        <AdminLayout
+            isFormValid={isFormValid}
+            onSubmit={handleUpload}
+            onClickBackBtn={handleBackBtn}
+        >
+            <div className="w-full flex flex-col bg-gray-0 mt-11 rounded-sm mb-12 pl-[33px] p-10 gap-8">
+                {/* 카테고리 입력 */}
+                <div className="flex flex-row h-11 items-center">
+                    <span className="min-w-[94px] medium-14 text-gray-400">카테고리</span>
+                    <div className="w-[99px]">
+                        <CustomSelect
+                            value={type}
+                            onValueChange={setType}
+                            placeholder="구분"
+                            selectList={[{ label: "공지", value: "NOTICE" }]}
+                        />
                     </div>
                 </div>
+
+                {/* 제목 입력 */}
+                <div className="flex flex-row h-11 items-center">
+                    <span className="min-w-[94px] medium-14 text-gray-400">제목</span>
+                    <Input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full bg-gray-0 !h-full rounded-sm pl-4 border-gray-100 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none"
+                    />
+                </div>
+
+                {/* 내용 입력 */}
+                <div className="flex flex-row items-start">
+                    <span className="min-w-[94px] pt-[14px] medium-14 text-gray-400">내용</span>
+                    <div className="flex-1">
+                        <AdminTextEditor content={content} setContent={setContent} />
+                    </div>
+                </div>
+
                 {/* 첨부파일 */}
-                <div className="flex flex-row gap-[18px] items-start">
-                    <span className="w-19 pt-2 text-sm font-medium text-[#666666]">첨부파일</span>
+                <div className="flex flex-row items-start">
+                    <span className="min-w-[94px] pt-2 medium-14 text-gray-400">첨부파일</span>
                     <div className="flex-1 flex flex-col gap-2">
                         <div className="flex justify-between items-center">
                             <button
-                                className="bg-[#7F7F7F] px-3 py-2 text-white text-sm rounded-sm"
+                                className="px-3 py-2 regular-14 text-gray-25 rounded-sm bg-gray-300"
                                 onClick={openFileDialog}
                             >
                                 파일 첨부
                             </button>
                             <span className="text-sm text-[#A7A7A7]">
-                                일반파일 현재{totalSizeMB}MB/전체10MB
+                                일반파일 현재{totalSizeMB}KB/전체10MB
                             </span>
                         </div>
 
                         {/* Drag 영역 */}
                         {files.length <= 0 && (
                             <div
-                                className="w-full h-[120px] border border-dotted border-[#339DFF] rounded-sm 
-                                flex items-center justify-center text-sm text-[#666666] bg-white"
+                                className="w-full h-16 border border-gray-100 rounded-sm 
+                                flex items-center justify-center text-sm text-gray-600 bg-white"
                                 onDragOver={handleDragOver}
                                 onDrop={handleDrop}
                             >
                                 파일을 마우스로 끌어 오세요
                             </div>
                         )}
+
                         {/* 파일 리스트 */}
                         {files.length > 0 && (
                             <div className="mt-2 bg-[#FAFAFA] border border-[#D9D9D9] rounded-sm">
@@ -145,7 +181,7 @@ export const AdminNoticeCreatePage = () => {
                                             </span>
                                         </div>
                                         <div className="text-sm text-[#666666]">
-                                            {(file.size / 1024 / 1024).toFixed(2)}MB
+                                            {(file.size / 1024 / 1024).toFixed(2)}KB
                                         </div>
                                     </div>
                                 ))}

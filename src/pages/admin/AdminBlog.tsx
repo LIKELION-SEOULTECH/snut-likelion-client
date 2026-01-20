@@ -1,71 +1,54 @@
 import AdminLayout from "@/layouts/AdminLayout";
 import { BlogSearchList } from "@/components/admin/blog/BlogSearchList";
 import { NoticeSearchTool } from "@/components/admin/notice/NoticeSearchTool";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Pagination } from "@/components/common/Pagination";
 import { useQuery } from "@tanstack/react-query";
 
 import { BlogDeleteConfirmDialog } from "@/components/admin/blog/BlogDeleteConfirmDialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getBlogList } from "@/apis/main/blog";
+import { getAdminBlogList } from "@/apis/admin/blog";
 import { deleteAdminBlogs } from "@/apis/admin/blog";
+import { AdminBlogSkeleton } from "@/components/admin/blog/BlogSkeleton";
+import type { AdminBlog } from "@/types/blog";
 
 export const AdminBlogPage = () => {
-    // const [blogs, setBlogs] = useState(dummyBlogData);
-
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // 한 페이지에 보여줄 개수
-    const [filters, setFilters] = useState({
+    const [, setFilters] = useState<{ keyword: string }>({
         keyword: ""
     });
 
-    const [showCheckboxes, setShowCheckboxes] = useState(false);
+    const [isDeleteMode, setIsDeleteMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-    const { data: official = [] } = useQuery({
-        queryKey: ["blogs", "official"],
-        queryFn: () => getBlogList("OFFICIAL", 0).then((res) => res.data.content)
-    });
-
-    const { data: unofficial = [] } = useQuery({
-        queryKey: ["blogs", "unofficial"],
-        queryFn: () => getBlogList("UNOFFICIAL", 0).then((res) => res.data.content)
-    });
-
-    const combinedData = useMemo(() => {
-        const all = [...official, ...unofficial];
-        return all
-            .filter((item) => filters.keyword.trim() === "" || item.title.includes(filters.keyword))
-            .sort((a, b) => b.id - a.id); // 최신순 정렬
-    }, [official, unofficial, filters]);
-
     const queryClient = useQueryClient();
+
+    const {
+        data: blogsRes,
+        isLoading: isLoading,
+        isError: isError
+    } = useQuery({
+        queryKey: ["blogs"],
+        queryFn: () => getAdminBlogList()
+    });
 
     const { mutate: deleteSelectedBlogs } = useMutation({
         mutationFn: deleteAdminBlogs,
         onSuccess: () => {
             alert("삭제가 완료되었습니다.");
-            queryClient.invalidateQueries({ queryKey: ["blogs", "official"] });
-            queryClient.invalidateQueries({ queryKey: ["blogs", "unofficial"] });
+            queryClient.invalidateQueries({ queryKey: ["blogs"] });
             setShowDeleteConfirm(false);
             setSelectedIds([]);
-            setShowCheckboxes(false);
+            setIsDeleteMode(false);
         },
         onError: () => {
             alert("삭제에 실패했습니다.");
         }
     });
-    // 현재 페이지에 해당하는 데이터
-    const totalPages = Math.ceil(combinedData.length / itemsPerPage);
-    const currentPageData = combinedData.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
 
-    const handleSearch = (newFilters: typeof filters) => {
-        setFilters(newFilters);
-        setCurrentPage(1); // 검색하면 첫 페이지로 이동
+    const handleSearch = (filters: { keyword: string }) => {
+        setFilters(filters);
+        setCurrentPage(1);
     };
 
     const toggleSelect = (id: number) => {
@@ -77,7 +60,7 @@ export const AdminBlogPage = () => {
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
-            const allIds = currentPageData.map((item) => item.id);
+            const allIds = blogsRes.content.map((item: AdminBlog) => item.id);
             setSelectedIds(allIds);
         } else {
             // 전체 해제
@@ -86,14 +69,14 @@ export const AdminBlogPage = () => {
     };
 
     const handleClickDelete = () => {
-        if (showCheckboxes) {
+        if (isDeleteMode) {
             if (selectedIds.length === 0) {
                 alert("삭제할 항목을 선택해주세요.");
                 return;
             }
             setShowDeleteConfirm(true);
         } else {
-            setShowCheckboxes(true); // 삭제 모드 진입
+            setIsDeleteMode(true); // 삭제 모드 진입
         }
     };
 
@@ -102,24 +85,38 @@ export const AdminBlogPage = () => {
         deleteSelectedBlogs(selectedIds);
     };
 
+    console.log("blog res", blogsRes);
     return (
-        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
-            <div className="mt-12 mb-7">
-                <NoticeSearchTool onSearch={handleSearch} />
-            </div>
-            <BlogSearchList
-                data={currentPageData}
-                showCheckboxes={showCheckboxes}
-                selectedIds={selectedIds}
-                onToggleSelect={toggleSelect}
-                onToggleSelectAll={handleToggleSelectAll}
-            />
-            <div className="mb-[210px]">
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={(page) => setCurrentPage(page)}
-                />
+        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={isDeleteMode}>
+            {!isDeleteMode && (
+                <div className="mt-12">
+                    <NoticeSearchTool onSearch={handleSearch} />
+                </div>
+            )}
+            <div className="mt-8">
+                {isLoading || isError || blogsRes.content?.length === 0 ? (
+                    <AdminBlogSkeleton isLoading={isLoading} />
+                ) : (
+                    blogsRes.content.length > 0 && (
+                        <>
+                            <BlogSearchList
+                                blogs={blogsRes.content}
+                                showCheckboxes={isDeleteMode}
+                                selectedIds={selectedIds}
+                                totalElements={blogsRes.totalElements}
+                                onToggleSelect={toggleSelect}
+                                onToggleSelectAll={handleToggleSelectAll}
+                            />
+                            <div className="mb-[210px]">
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={blogsRes.totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />
+                            </div>
+                        </>
+                    )
+                )}
             </div>
             {showDeleteConfirm && (
                 <BlogDeleteConfirmDialog

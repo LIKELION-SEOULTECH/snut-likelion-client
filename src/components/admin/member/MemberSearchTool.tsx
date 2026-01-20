@@ -1,27 +1,18 @@
 import { useState } from "react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "../common/custom-select";
+import SearchIcon from "@/assets/admin/search-icon.svg?react";
+import type { MemberFilter } from "@/types/member";
 
 interface MemberSearchToolProps {
-    onSearch: (filters: {
-        generation: string;
-        part: string;
-        role: string;
-        keyword: string;
-    }) => void;
+    onSearch: (filters: MemberFilter) => void;
 }
 
 export const MemberSearchTool = ({ onSearch }: MemberSearchToolProps) => {
-    const [generation, setGeneration] = useState("");
-    const [part, setPart] = useState("");
-    const [role, setRole] = useState("");
+    const [generation, setGeneration] = useState<number | null>(null);
+    const [part, setPart] = useState<string>("");
+    const [role, setRole] = useState<string>("");
     const [keyword, setKeyword] = useState("");
 
     const handleSearch = () => {
@@ -31,92 +22,61 @@ export const MemberSearchTool = ({ onSearch }: MemberSearchToolProps) => {
     return (
         <div className="h-11 flex flex-row gap-2 items-center">
             {/* Generation */}
-            <Select value={generation} onValueChange={setGeneration}>
-                <SelectTrigger className="w-[86px] !h-full bg-white rounded-sm data-[placeholder]:text-black">
-                    <SelectValue placeholder="기수별" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[86px] min-w-0">
-                    <SelectItem value="13" className="w-[86px]">
-                        13기
-                    </SelectItem>
-                    <SelectItem value="12" className="w-[86px]">
-                        12기
-                    </SelectItem>
-                </SelectContent>
-            </Select>
+            <div className="w-[86px]">
+                <CustomSelect
+                    value={generation}
+                    placeholder={"기수"}
+                    onValueChange={setGeneration}
+                    selectList={[
+                        { label: "12기", value: 12 },
+                        { label: "13기", value: 13 },
+                        { label: "14기", value: 14 }
+                    ]}
+                />
+            </div>
 
-            <Select value={part} onValueChange={setPart}>
-                <SelectTrigger className="w-[93px] bg-white rounded-sm !h-full data-[placeholder]:text-black whitespace-nowrap">
-                    <SelectValue placeholder="파트별" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[93px] min-w-0">
-                    <SelectItem
-                        value="FRONTEND"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        프론트엔드
-                    </SelectItem>
-                    <SelectItem
-                        value="BACKEND"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        백엔드
-                    </SelectItem>
-                    <SelectItem
-                        value="DESIGN"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        디자인
-                    </SelectItem>
-                    <SelectItem
-                        value="PLANNING"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        기획
-                    </SelectItem>
-                    <SelectItem
-                        value="AI"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        AI
-                    </SelectItem>
-                </SelectContent>
-            </Select>
+            {/* Part */}
+            <div className="w-[122px]">
+                <CustomSelect
+                    value={part}
+                    placeholder={"파트"}
+                    onValueChange={setPart}
+                    selectList={[
+                        { label: "전체", value: "all" },
+                        { label: "기획", value: "PLANNING" },
+                        { label: "디자인", value: "DESIGN" },
+                        { label: "AI", value: "AI" },
+                        { label: "프론트엔드", value: "FRONTEND" },
+                        { label: "백엔드", value: "BACKEND" }
+                    ]}
+                />
+            </div>
 
             {/* Role */}
-            <Select value={role} onValueChange={setRole}>
-                <SelectTrigger className="w-[86px] rounded-sm bg-white !h-full data-[placeholder]:text-black">
-                    <SelectValue placeholder="역할" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[86px] min-w-0">
-                    <SelectItem
-                        value="ROLE_ADMIN"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        대표
-                    </SelectItem>
-                    <SelectItem
-                        value="ROLE_MANAGER"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        운영진
-                    </SelectItem>
-                    <SelectItem
-                        value="ROLE_USER"
-                        className="whitespace-nowrap data-[state=checked]:font-bold"
-                    >
-                        아기사자
-                    </SelectItem>
-                </SelectContent>
-            </Select>
+            <div className="w-[110px]">
+                <CustomSelect
+                    value={role}
+                    placeholder={"역할"}
+                    onValueChange={setRole}
+                    selectList={[
+                        { label: "운영진", value: "ROLE_MANAGER" },
+                        { label: "아기사자", value: "ROLE_USER" }
+                    ]}
+                />
+            </div>
 
-            {/* Keyword Input */}
-            <Input
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="이름 검색"
-                className="w-[631px] bg-white !h-full rounded-sm"
-            />
+            <div className="relative flex-1 h-full">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <SearchIcon />
+                </div>
+                {/* Keyword Input */}
+                <Input
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="이름 검색"
+                    className="min-w-100 w-full bg-white !h-full rounded-sm pl-10 border-gray-100 placeholder:text-gray-100 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none"
+                />
+            </div>
 
             {/* Search Button */}
             <Button

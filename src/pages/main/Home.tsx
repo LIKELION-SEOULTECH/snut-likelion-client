@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/layouts/PageLayout";
 
-import Donut from "@/assets/home/donut.svg?react";
+import Donut from "@/assets/home/donut.svg";
 import Shadow from "@/assets/home/shadow.svg?react";
 
 import ChatbotBtn from "@/assets/home/chatbot_btn.svg?react";
@@ -204,7 +204,11 @@ export default function HomePage() {
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
                 <MainVisualSection onOpenModal={openModal} buttonType={buttonType} />
-                <Donut className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 left-30 sm:left-160 animate-[floatTube_6s_ease-in-out_infinite]" />
+                <img
+                    src={Donut}
+                    alt="donut"
+                    className="absolute w-[500px] h-[500px] sm:w-[1252px] sm:h-[1252px] top-90 sm:top-30 right-15 sm:right-25 lg:right-50 translate-x-1/2 animate-[floatTube_6s_ease-in-out_infinite]"
+                />
 
                 {/* chatbot #29*/}
                 <section

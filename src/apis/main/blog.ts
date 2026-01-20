@@ -73,6 +73,6 @@ export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
             "Content-Type": "multipart/form-data"
         }
     });
-    console.log(res.data.data);
+    console.log("image s3 urls 요청 결과", res.data.data);
     return res.data.data.urls;
 };

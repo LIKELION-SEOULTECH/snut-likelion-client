@@ -106,3 +106,11 @@ export interface MemberQueryParams {
     generation?: number;
     isManager?: boolean;
 }
+
+// 멤버 관리 검색 필터 타입 정의
+export interface MemberFilter {
+    generation: number | null;
+    part: string;
+    role: string;
+    keyword: string;
+}

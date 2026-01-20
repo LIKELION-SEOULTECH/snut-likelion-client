@@ -5,6 +5,7 @@ export interface GetQuestionsParameter {
     part: string;
     department?: string;
 }
+
 export interface QuestionListResponse {
     code: string;
     message: string;

@@ -1,20 +1,16 @@
 import { useState } from "react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SearchIcon from "@/assets/admin/search-icon.svg?react";
+import { CustomSelect } from "../common/custom-select";
+import type { ProjectFilter } from "@/types/project";
 
 interface ProjectSearchToolProps {
-    onSearch: (filters: { generation: string; keyword: string }) => void;
+    onSearch: (filters: ProjectFilter) => void;
 }
 
 export const ProjectSearchTool = ({ onSearch }: ProjectSearchToolProps) => {
-    const [generation, setGeneration] = useState("");
+    const [generation, setGeneration] = useState<number | null>(null);
     const [keyword, setKeyword] = useState("");
 
     const handleSearch = () => {
@@ -24,26 +20,30 @@ export const ProjectSearchTool = ({ onSearch }: ProjectSearchToolProps) => {
     return (
         <div className="h-11 flex flex-row gap-2 items-center">
             {/* Generation */}
-            <Select value={generation} onValueChange={setGeneration}>
-                <SelectTrigger className="w-[86px] !h-full bg-white rounded-sm data-[placeholder]:text-black">
-                    <SelectValue placeholder="기수별" />
-                </SelectTrigger>
-                <SelectContent className="rounded-sm w-[86px] min-w-0">
-                    <SelectItem value="13기" className="w-[86px]">
-                        13기
-                    </SelectItem>
-                    <SelectItem value="12기" className="w-[86px]">
-                        12기
-                    </SelectItem>
-                </SelectContent>
-            </Select>
-            {/* Keyword Input */}
-            <Input
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                placeholder="이름 검색"
-                className="flex-1 bg-white !h-full rounded-sm"
-            />
+            <div className="w-[86px]">
+                <CustomSelect
+                    value={generation}
+                    placeholder={"기수별"}
+                    onValueChange={setGeneration}
+                    selectList={[
+                        { label: "12기", value: 12 },
+                        { label: "13기", value: 13 },
+                        { label: "14기", value: 14 }
+                    ]}
+                />
+            </div>
+            <div className="relative flex-1 h-full">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                    <SearchIcon />
+                </div>
+                {/* Keyword Input */}
+                <Input
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="이름 검색"
+                    className="flex-1 bg-white !h-full pl-10 rounded-sm border-gray-100 focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none"
+                />
+            </div>
 
             {/* Search Button */}
             <Button
