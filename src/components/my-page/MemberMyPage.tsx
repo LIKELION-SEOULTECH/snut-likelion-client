@@ -202,12 +202,6 @@ export const MemberMyPage = ({
                             </a>
                         ))}
                     </div>
-                    <a
-                        href={`mailto:${member.email}`}
-                        className="text-[56px] w-[390px] h-[73px] font-bold cursor-pointer hover:border-b-6 px-0"
-                    >
-                        Contact me<span className="text-[#F70]">.</span> →
-                    </a>
                 </div>
             </div>
         </div>
