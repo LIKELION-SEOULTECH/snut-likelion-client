@@ -21,7 +21,7 @@ export default function ProjectDetailPage() {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
 
-    const { allProjects: allProjects } = useAllProjects();
+    const { data: allProjects } = useAllProjects();
 
     useEffect(() => {
         if (slideRef.current) {
@@ -32,7 +32,10 @@ export default function ProjectDetailPage() {
         }
     }, [currentImageIndex]);
 
-    if (!data) return <div className="text-white">프로젝트를 찾을 수 없습니다.</div>;
+    if (!data)
+        return (
+            <div className="text-white flex justify-center mt-20">프로젝트를 찾을 수 없습니다.</div>
+        );
 
     const imageList = data.imageUrls ?? [];
 
@@ -114,10 +117,12 @@ export default function ProjectDetailPage() {
                         </section>
 
                         <section className="flex flex-col">
-                            <OtherProjectSection
-                                currentProjectId={data.id}
-                                allProjects={allProjects}
-                            />
+                            {allProjects && (
+                                <OtherProjectSection
+                                    currentProjectId={data.id}
+                                    allProjects={allProjects}
+                                />
+                            )}
                         </section>
                         <QuoteCardList />
                     </div>

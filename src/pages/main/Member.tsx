@@ -1,50 +1,23 @@
-import { fetchMembers } from "@/apis/main/member";
-import CategoryTabs from "@/components/member/CategoryTabs";
-import GenerationTabs from "@/components/member/GenerationTabs";
-
-import { MemberCardList } from "@/components/member/MemberCardList";
+import CategoryTabs from "@/components/Member/CategoryTabs";
+import GenerationTabs from "@/components/Member/GenerationTabs";
+import { MemberCardList } from "@/components/Member/MemberCardList";
 import QuoteCardList from "@/components/project/QuoteCardList";
-
 import PageLayout from "@/layouts/PageLayout";
-import type { MemberResponse } from "@/types/members";
-import { useEffect, useState } from "react";
-
-const extractGenerations = (members: MemberResponse[]): string[] => {
-    const genSet = new Set<number>();
-    members.forEach((member) => genSet.add(member.generation));
-    const gens = Array.from(genSet).sort((a, b) => b - a);
-    return gens.map((g) => `${g}기`);
-};
+import { useMembers } from "@/hooks/useMembers";
+import { useState } from "react";
+import { getGenerationListByYear } from "@/utils/getGenerationList";
 
 const MemberCategories = ["운영진", "아기사자"];
 
 export const MemberPage = () => {
-    const [generation, setGeneration] = useState("13기");
-    const [generationList, setGenerationList] = useState<string[]>([]); // 전체 리스트
+    const generationList = getGenerationListByYear(2025, 13);
+    const [generation, setGeneration] = useState(generationList[0]);
     const [category, setCategory] = useState("운영진");
-    const [members, setMembers] = useState<MemberResponse[]>([]);
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const genNumber = Number(generation.replace("기", ""));
-                const isManager = category === "운영진";
 
-                const data = await fetchMembers({
-                    generation: genNumber,
-                    isManager
-                });
+    const genNumber = Number(generation.replace("기", ""));
+    const isManager = category === "운영진";
 
-                setMembers(data);
-
-                const gens = extractGenerations(data);
-                setGenerationList(gens);
-            } catch (err) {
-                console.error("멤버 불러오기 실패:", err);
-            }
-        };
-
-        fetchData();
-    }, [generation, category]);
+    const { data: members, isLoading, isError } = useMembers({ generation: genNumber, isManager });
 
     return (
         <PageLayout>
@@ -67,8 +40,12 @@ export const MemberPage = () => {
                     selected={category}
                     onSelect={setCategory}
                 />
-                <MemberCardList MemberData={members} />
-                <QuoteCardList />
+
+                {isError && <div className="text-white mt-12">멤버를 불러오는데 실패했습니다.</div>}
+                <MemberCardList MemberData={members ?? []} isLoading={isLoading} />
+                <div className="w-full mt-24">
+                    <QuoteCardList />
+                </div>
             </div>
         </PageLayout>
     );

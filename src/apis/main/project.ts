@@ -2,6 +2,14 @@ import axiosInstance from "../axiosInstance";
 import type { Project, ProjectQueryParams } from "@/types/project";
 
 // 프로젝트 생성
+export const createProject = async (formData: FormData) => {
+    const res = await axiosInstance.post("/projects", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+    return res.data;
+};
 
 // 프로젝트 전체 조회
 export const fetchAllProjects = async (params?: ProjectQueryParams): Promise<Project[]> => {

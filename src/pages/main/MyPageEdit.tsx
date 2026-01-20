@@ -8,6 +8,8 @@ import type {
 } from "@/types/member";
 import { useState } from "react";
 import { ImageCropper } from "@/components/my-page/ImageCropper";
+
+import samplePRf from "@/assets/Member/samplePRFIMG.png";
 import axiosInstance from "@/apis/axiosInstance";
 
 export const MyPageEdit = () => {
@@ -22,7 +24,7 @@ export const MyPageEdit = () => {
 
     const { member, lionInfo, selectedGeneration } = state;
 
-    const [profileImage, setProfileImage] = useState<string>(member.profileImageUrl);
+    const [profileImage, setProfileImage] = useState<string>(member.profileImageUrl || samplePRf);
     const [rawImage, setRawImage] = useState<string | null>(null);
     const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
 

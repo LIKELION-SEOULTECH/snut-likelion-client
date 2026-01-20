@@ -34,7 +34,7 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
         return (
             <div
                 ref={bubbleRef}
-                className="text-sm text-[#fff] w-[82px] px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none ml-4"
+                className="text-sm text-[#fff] w-fit px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none ml-4"
             >
                 입력 중...
             </div>

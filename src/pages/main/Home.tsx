@@ -79,33 +79,59 @@ export default function HomePage() {
     }, [isModalOpen]);
 
     // 모집 일정 조회
+
     const [buttonType, setButtonType] = useState<VisualButtonType>(null);
 
     useEffect(() => {
         const fetchRecruitments = async () => {
-            try {
-                const [memberRes, managerRes] = await Promise.all([
-                    fetchRecentRecruitment("MEMBER"),
-                    fetchRecentRecruitment("MANAGER")
-                ]);
+            const fetchSafe = async (type: string) => {
+                try {
+                    return await fetchRecentRecruitment(type);
+                } catch {
+                    return null;
+                }
+            };
 
-                const now = new Date();
-                const managerOpen = new Date(managerRes.data.openDate);
-                const managerClose = new Date(managerRes.data.closeDate);
-                const memberOpen = new Date(memberRes.data.openDate);
-                const memberClose = new Date(memberRes.data.closeDate);
+            const memberRes = await fetchSafe("MEMBER");
 
-                const visualType = getVisualButtonType(
-                    now,
-                    managerOpen,
-                    managerClose,
-                    memberOpen,
-                    memberClose
-                );
-                setButtonType(visualType);
-            } catch (error) {
-                console.error("❌ 모집 일정 조회 실패:", error);
-            }
+            const managerRes = await fetchSafe("MANAGER");
+
+            const getRecruitmentData = (res: {
+                data: {
+                    closeDate: string;
+                    openDate: string;
+                    generation: number;
+                    recruitmentType: string;
+                };
+            }) => {
+                console.log(">>>", res);
+                if (!res) return null;
+
+                if (res.data) {
+                    return Array.isArray(res.data) ? res.data[0] : res.data;
+                }
+
+                return res;
+            };
+
+            const managerData = getRecruitmentData(managerRes);
+            const memberData = getRecruitmentData(memberRes);
+            const now = new Date();
+            const managerOpen = managerData?.openDate ? new Date(managerData.openDate) : null;
+            const managerClose = managerData?.closeDate ? new Date(managerData.closeDate) : null;
+
+            const memberOpen = memberData?.openDate ? new Date(memberData.openDate) : null;
+            const memberClose = memberData?.closeDate ? new Date(memberData.closeDate) : null;
+
+            const visualType = getVisualButtonType(
+                now,
+                managerOpen,
+                managerClose,
+                memberOpen,
+                memberClose
+            );
+
+            setButtonType(visualType);
         };
 
         fetchRecruitments();
@@ -113,15 +139,28 @@ export default function HomePage() {
 
     const getVisualButtonType = (
         now: Date,
-        managerOpen: Date,
-        managerClose: Date,
-        memberOpen: Date,
-        memberClose: Date
+
+        managerOpen: Date | null,
+        managerClose: Date | null,
+        memberOpen: Date | null,
+        memberClose: Date | null
     ): VisualButtonType => {
-        if (now < managerOpen) return "MANAGER_NOTIFY";
-        if (now >= managerOpen && now <= managerClose) return "MANAGER_APPLY";
-        if (now > managerClose && now < memberOpen) return "MEMBER_NOTIFY";
-        if (now >= memberOpen && now <= memberClose) return "MEMBER_APPLY";
+        if (managerOpen && managerClose && now >= managerOpen && now <= managerClose) {
+            return "MANAGER_APPLY";
+        }
+
+        if (memberOpen && memberClose && now >= memberOpen && now <= memberClose) {
+            return "MEMBER_APPLY";
+        }
+
+        if (managerOpen && now < managerOpen) {
+            return "MANAGER_NOTIFY";
+        }
+
+        if (memberOpen && now < memberOpen) {
+            return "MEMBER_NOTIFY";
+        }
+
         return null;
     };
 
@@ -150,7 +189,7 @@ export default function HomePage() {
                 setRecruitType("MEMBER");
                 break;
             case "MEMBER_APPLY":
-                navigate(ROUTES.RECRUIT_FORM_MEMBER);
+                navigate(ROUTES.RECRUIT_MEMBER);
                 break;
             default:
                 break;

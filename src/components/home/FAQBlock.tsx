@@ -8,9 +8,10 @@ interface FAQBlockProps {
 }
 
 export const FAQBlock = ({ tag, content, isOpen = false, onClick }: FAQBlockProps) => {
+    const isQuestion = tag === "Q";
     return (
         <div
-            onClick={onClick}
+            onClick={isQuestion ? onClick : undefined}
             className={` bg-[#2D2D2D]  ${isOpen ? "bg-[#666666]" : ""} w-[343px] sm:w-[1216px] rounded-[8px] flex justify-between items-center text-sm sm:text-[20px] px-3 sm:px-[28px] py-2 sm:py-[20px] cursor-pointer `}
             style={{ backgroundColor: tag === "A" ? "#ECECEC" : "" }}
         >
@@ -24,7 +25,7 @@ export const FAQBlock = ({ tag, content, isOpen = false, onClick }: FAQBlockProp
                 <span
                     className={`whitespace-pre-wrap ${
                         tag === "A"
-                            ? "text-[#2D2D2D] mt-0 sm:mt-[2px]"
+                            ? "text-[#2D2D2D] mt-0 sm:mt-[0px]"
                             : "text-[#ECECEC] mt-0 sm:mt-[4px]"
                     }`}
                 >

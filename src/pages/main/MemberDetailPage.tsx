@@ -1,6 +1,7 @@
 import { ProjectBox } from "@/components/home/ProjectBox";
-import { OrangeBtn } from "@/components/member/OrangeBtn";
+import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/member/SmallBtn";
+import samplePRF from "@/assets/Member/samplePRFIMG.png";
 
 import { ROUTES } from "@/routes/routes";
 import PageLayout from "@/layouts/PageLayout";
@@ -38,11 +39,14 @@ export const MemberDetailPage = () => {
     );
 
     const [projects, setProjects] = useState<ParticipatingProject[]>([]);
+    const [loadingMember, setLoadingMember] = useState(true);
 
     const location = useLocation();
     const fallbackData = location.state?.member;
 
     useEffect(() => {
+        if (!id) return;
+
         const getMember = async () => {
             const data = await fetchMemberDetail(Number(id));
             setMember({
@@ -62,21 +66,11 @@ export const MemberDetailPage = () => {
 
             const lionInfo = await fetchLionInfo(Number(id), fallbackData.generation);
             setProjects(lionInfo.projects ?? []);
+            setLoadingMember(false);
         };
 
         loadProjects();
     }, [id, fallbackData?.generation]);
-
-    if (!member) {
-        console.log(member);
-        return (
-            <PageLayout>
-                <div className="p-10 text-[#fff] h-[75vh] w-full flex justify-center items-center ">
-                    <h1 className="text-2xl text-[#fff] font-semibold">멤버를 찾을 수 없어요 </h1>
-                </div>
-            </PageLayout>
-        );
-    }
 
     return (
         <div>
@@ -87,7 +81,12 @@ export const MemberDetailPage = () => {
                         background: "linear-gradient(180deg, #000 0%, #1B1B1B 29.27%)"
                     }}
                 >
-                    {member ? (
+                    {loadingMember && (
+                        <div className="p-10 text-[#C4C4C4] h-[75vh] w-full flex justify-center items-center ">
+                            <h1 className="text-2xl  font-semibold">로딩중...</h1>
+                        </div>
+                    )}
+                    {!loadingMember && member && (
                         // 정보 o 경우
                         <div className="flex w-full h-auto gap-[119px]">
                             <div className=" relative w-[291px]">
@@ -107,10 +106,19 @@ export const MemberDetailPage = () => {
                                 </div>
                                 {/* 왼쪽 - 사진*/}
                                 <div className="w-[291px] h-[281px] flex overflow-hidden">
-                                    <img
-                                        className="w-full h-full object-contain"
-                                        src={member.profileImageUrl}
-                                    />
+                                    {member.profileImageUrl ? (
+                                        <img
+                                            className="w-full h-full object-contain"
+                                            src={member.profileImageUrl}
+                                        />
+                                    ) : (
+                                        <img
+                                            src={samplePRF}
+                                            alt="프로필 이미지"
+                                            width={291}
+                                            height={281}
+                                        />
+                                    )}
                                 </div>
                             </div>
                             {/* 오른쪽 - 나머지 정보들*/}
@@ -198,10 +206,11 @@ export const MemberDetailPage = () => {
                                 </div>
                             </div>
                         </div>
-                    ) : (
+                    )}
+                    {!loadingMember && !member && (
                         // 정보 x 경우
                         <div className="p-10 text-[#C4C4C4] h-[75vh] w-full flex justify-center items-center ">
-                            <h1 className="text-2xl  font-semibold">멤버를 찾을 수 없어요 😥</h1>
+                            <h1 className="text-2xl font-semibold">멤버를 찾을 수 없어요 </h1>
                         </div>
                     )}
                 </div>

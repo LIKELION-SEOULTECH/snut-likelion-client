@@ -71,8 +71,7 @@ export const MyPageTab = ({
         <div
             style={{
                 border: "1px solid #3A3A3A",
-                background: `linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), 
-                linear-gradient(0deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%),  #232323`,
+                background: `#232323`,
                 borderRadius: "12px",
                 padding: "33px",
                 color: "#FFF",
@@ -86,7 +85,7 @@ export const MyPageTab = ({
             {!isGuest && (
                 <button
                     onClick={() => toggleTab("프로필 수정")}
-                    className={`${baseBtnClass} ${isActive("프로필 수정") ? "bg-[#404040]" : ""}`}
+                    className={`${baseBtnClass} ${isActive("프로필 수정") ? "bg-[#3A3A3A]" : ""} hover:bg-black`}
                 >
                     프로필 수정
                 </button>
@@ -95,23 +94,29 @@ export const MyPageTab = ({
             {/* 계정설정 탭 */}
             <button
                 onClick={() => toggleTab("계정설정")}
-                className={`${baseBtnClass} ${isAnyAccountTabActive ? "bg-[#404040]" : ""}`}
+                className={`${baseBtnClass} ${isAnyAccountTabActive ? "bg-[#3A3A3A]" : ""} hover:bg-black`}
             >
-                계정설정
+                {isGuest ? "지원서" : "계정설정"}
             </button>
             {/* 아래버튼 */}
             {(isGuest || isAccountOpen) && (
                 <>
                     <button
                         onClick={() => toggleTab("비밀번호 변경")}
-                        className={`${baseBtnClass} `}
+                        className={`${baseBtnClass} hover:bg-black`}
                     >
                         비밀번호 변경
                     </button>
-                    <button onClick={() => toggleTab("로그아웃")} className={`${baseBtnClass} `}>
+                    <button
+                        onClick={() => toggleTab("로그아웃")}
+                        className={`${baseBtnClass} hover:bg-black`}
+                    >
                         로그아웃
                     </button>
-                    <button onClick={handleDeleteMember} className={`${baseBtnClass}`}>
+                    <button
+                        onClick={handleDeleteMember}
+                        className={`${baseBtnClass} hover:bg-black`}
+                    >
                         회원탈퇴
                     </button>
                 </>

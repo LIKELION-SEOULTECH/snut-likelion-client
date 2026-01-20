@@ -27,7 +27,7 @@ export const BlogPostPage = () => {
     const isUploadEnabled = title.trim() !== "" && tags.length > 0 && content.trim() !== "";
 
     const handleSubmit = async (submit: boolean) => {
-        console.log("images 상태:", images); // ✅ 확인
+        console.log("images 상태:", images);
 
         try {
             await createBlog(
@@ -77,14 +77,14 @@ export const BlogPostPage = () => {
                     </div>
                 </div>
                 {/* text editor */}
-                <div className="mt-[49px]">
+                <div className="mt-[49px] mb-[60px]">
                     <input
                         placeholder="제목을 입력하세요"
                         onChange={(e) => setTitle(e.target.value)}
                         className="w-full text-[50px] font-bold placeholder:text-[#C4C4C4] focus:outline-none focus:border-none"
                     />
                 </div>
-                <div className="w-28 border-t-[4px] border-[#000000] mt-[36px] mb-[45px]" />
+
                 <TagEditor setTags={setTags} />
                 <div className="mt-25">
                     <TextEditor content={content} setContent={setContent} setImages={setImages} />

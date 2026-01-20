@@ -3,8 +3,8 @@ import { NewImageDrop } from "@/components/project/NewImageDrop";
 import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsInput";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axiosInstance from "@/apis/axiosInstance";
-
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createProject } from "@/apis/main/project";
 import axios from "axios";
 import { DropDwon } from "@/components/my-page/DropDown";
 
@@ -18,6 +18,7 @@ const categoryMap: Record<string, string> = {
 
 export const NewProjectPage = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const [selectedGen, setSelectedGen] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -36,6 +37,23 @@ export const NewProjectPage = () => {
 
     const [imageFiles, setImageFiles] = useState<File[]>([]);
 
+    const createProjectMutation = useMutation({
+        mutationFn: createProject,
+        onSuccess: () => {
+            alert("프로젝트가 성공적으로 업로드되었습니다!");
+            queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+            navigate("/project");
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                console.error(error.response?.data?.message || error.message);
+            } else {
+                console.error(error);
+            }
+            alert("업로드 중 오류가 발생했습니다.");
+        }
+    });
+
     const handleLeave = () => {
         const confirmLeave = confirm("선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?");
         if (confirmLeave) {
@@ -44,7 +62,7 @@ export const NewProjectPage = () => {
         }
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = () => {
         // 필수 입력 유효성 검사
         if (!name || !intro || !description || !selectedGen || !selectedCategory) {
             alert("모든 필수 항목을 작성해주세요.");
@@ -60,43 +78,26 @@ export const NewProjectPage = () => {
             return;
         }
 
-        try {
-            const formData = new FormData();
-            formData.append("name", name);
-            formData.append("intro", intro);
-            formData.append("description", description);
-            formData.append("category", categoryMap[selectedCategory]);
-            if (websiteUrl) formData.append("websiteUrl", websiteUrl);
-            if (playstoreUrl) formData.append("playstoreUrl", playstoreUrl);
-            if (appstoreUrl) formData.append("appstoreUrl", appstoreUrl);
-            formData.append("generation", String(selectedGen));
-            // formData.append("tags", JSON.stringify(tags));
-            tags.forEach((tag) => {
-                formData.append("tags", tag);
-            });
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("intro", intro);
+        formData.append("description", description);
+        formData.append("category", categoryMap[selectedCategory]);
+        if (websiteUrl) formData.append("websiteUrl", websiteUrl);
+        if (playstoreUrl) formData.append("playstoreUrl", playstoreUrl);
+        if (appstoreUrl) formData.append("appstoreUrl", appstoreUrl);
+        formData.append("generation", String(selectedGen));
+        tags.forEach((tag) => {
+            formData.append("tags", tag);
+        });
 
-            imageFiles.forEach((file) => formData.append("images", file));
-            retrospections.forEach((retro, idx) => {
-                formData.append(`retrospections[${idx}].memberId`, String(retro.memberId));
-                formData.append(`retrospections[${idx}].content`, retro.content);
-            });
+        imageFiles.forEach((file) => formData.append("images", file));
+        retrospections.forEach((retro, idx) => {
+            formData.append(`retrospections[${idx}].memberId`, String(retro.memberId));
+            formData.append(`retrospections[${idx}].content`, retro.content);
+        });
 
-            await axiosInstance.post("/projects", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            alert("프로젝트가 성공적으로 업로드되었습니다!");
-            navigate("/project");
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.error(error.response?.data?.message || error.message);
-            } else {
-                console.error(error);
-            }
-            alert("업로드 중 오류가 발생했습니다.");
-        }
+        createProjectMutation.mutate(formData);
     };
 
     return (

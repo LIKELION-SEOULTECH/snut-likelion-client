@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
-import { OrangeBtn } from "@/components/member/OrangeBtn";
+import { useNavigate } from "react-router-dom";
+import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/member/SmallBtn";
 import { MyBlog } from "./MyBlog";
-import { fetchLionInfo } from "@/apis/main/member";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 import { ProjectBox } from "../home/ProjectBox";
+import { useState } from "react";
 
-const partMap = {
+const partMap: { [key: string]: string } = {
     프론트엔드: "front-end",
     백엔드: "back-end",
     디자인: "designer",
@@ -16,7 +15,7 @@ const partMap = {
     AI: "A.I"
 };
 
-const nameMap = {
+const nameMap: { [key: string]: string } = {
     GITHUB: "GitHub",
     NOTION: "Notion",
     BEHANCE: "Behance",
@@ -25,15 +24,19 @@ const nameMap = {
     OTHER: "Other"
 };
 
-type MyProps = {
+type MemberProps = {
     member: MemberDetailResponse;
+    lionInfo: LionInfoDetailsResponse | undefined;
     selectedGeneration: number;
     setSelectedGeneration: (value: number) => void;
 };
 
-export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }: MyProps) => {
-    const [lionInfo, setLionInfo] = useState<LionInfoDetailsResponse | null>(null);
-    const [loading, setLoading] = useState(true);
+export const MemberMyPage = ({
+    member,
+    lionInfo,
+    selectedGeneration,
+    setSelectedGeneration
+}: MemberProps) => {
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -42,29 +45,27 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
         setShowDropdown(false);
     };
 
-    useEffect(() => {
-        const loadLionInfo = async () => {
-            const lionData = await fetchLionInfo(member.id, selectedGeneration);
-            setLionInfo(lionData);
-            setLoading(false);
-        };
-
-        loadLionInfo();
-    }, [member.id, selectedGeneration]);
-
-    console.log(lionInfo);
-    if (loading || !lionInfo) {
-        return (
-            <div className="text-white h-[60vh] flex justify-center items-center text-xl">
-                내 정보를 불러오는 중...
-            </div>
-        );
-    }
-
     return (
         <div className="flex flex-1 h-auto ">
             <div className="flex flex-col">
                 {/* 기본 정보 */}
+                <div className="flex justify-between pb-8 items-center">
+                    <h2 className="text-[28px] font-bold">기본 소개</h2>
+                    <p
+                        className="text-[#7F7F7F] cursor-pointer"
+                        onClick={() => {
+                            navigate("/mypage-edit", {
+                                state: {
+                                    member,
+                                    lionInfo,
+                                    selectedGeneration
+                                }
+                            });
+                        }}
+                    >
+                        수정하기
+                    </p>
+                </div>
                 <div className="flex flex-col">
                     <div className="flex gap-4 pb-6 flex-wrap">
                         {/* 기수 여러개.. */}
@@ -99,20 +100,32 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                                 isNotButton={true}
                             />
                         )}
-                        <OrangeBtn tag={lionInfo.role} isNotButton={true} />
-                        <OrangeBtn
-                            tag={partMap[lionInfo.part] ?? lionInfo.part}
-                            isNotButton={true}
-                        />
+                        {lionInfo && (
+                            <div className="flex gap-4">
+                                <OrangeBtn tag={lionInfo.role} isNotButton={true} />
+                                <OrangeBtn
+                                    tag={partMap[lionInfo.part] ?? lionInfo.part}
+                                    isNotButton={true}
+                                />
+                            </div>
+                        )}
                     </div>
                     <h1 className="text-[50px] my-0 text-[#fff] font-bold pb-10">{member.name}</h1>
                     <div className="min-h-[200px]">
-                        <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
-                            {member.intro}
-                        </div>
-                        <div className="text-[#C4C4C4] text-[20px] pb-[32px] font-light">
-                            {member.description}
-                        </div>
+                        {member?.intro || member?.description ? (
+                            <>
+                                <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
+                                    {member.intro}
+                                </div>
+                                <div className="text-[#C4C4C4] text-[20px] pb-[32px] font-light">
+                                    {member.description}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="w-full text-center text-[#A7A7A7] text-[24px] pt-10">
+                                아직 작성된 소개가 없어요
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex gap-[8px] pb-30 flex-wrap">
@@ -128,7 +141,7 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                             참여한 프로젝트
                         </h1>
                         <span
-                            className="text-[20px] underline text-[#7F7F7F] mt-2 cursor-pointer "
+                            className="text-[20px]  text-[#7F7F7F] mt-2 cursor-pointer "
                             onClick={() => {
                                 navigate(ROUTES.PROJECT_NEW);
                             }}
@@ -136,18 +149,27 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                             업로드
                         </span>
                     </div>
-                    <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
-                        {lionInfo.projects?.reverse().map((project) => (
-                            <ProjectBox
-                                generation={selectedGeneration}
-                                key={project.id}
-                                {...{
-                                    id: project.id,
-                                    name: project.name,
-                                    thumbnailUrl: project.thumbnailUrl
-                                }}
-                            />
-                        ))}
+                    <div className="w-[806px] pb-40">
+                        <div className="grid grid-cols-2 gap-[16px] ">
+                            {lionInfo?.projects?.length !== 0
+                                ? lionInfo?.projects?.reverse().map((project) => (
+                                      <ProjectBox
+                                          generation={selectedGeneration}
+                                          key={project.id}
+                                          {...{
+                                              id: project.id,
+                                              name: project.name,
+                                              thumbnailUrl: project.thumbnailUrl
+                                          }}
+                                      />
+                                  ))
+                                : null}
+                        </div>
+                        {!lionInfo?.projects?.length && (
+                            <div className="w-full pt-30 text-center text-[#A7A7A7] text-[24px]">
+                                업로드한 프로젝트가 없습니다
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex justify-between">
@@ -155,7 +177,7 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                             내가 쓴 블로그
                         </h1>
                         <span
-                            className="text-[20px] underline text-[#7F7F7F] mt-2 cursor-pointer "
+                            className="text-[20px]  text-[#7F7F7F] mt-2 cursor-pointer "
                             onClick={() => {
                                 navigate(ROUTES.BLOG_POST);
                             }}
@@ -180,12 +202,6 @@ export const MyPageMain = ({ member, selectedGeneration, setSelectedGeneration }
                             </a>
                         ))}
                     </div>
-                    <a
-                        href={`mailto:${member.email}`}
-                        className="text-[56px] w-[390px] h-[73px] font-bold cursor-pointer hover:border-b-6 px-0"
-                    >
-                        Contact me<span className="text-[#F70]">.</span> →
-                    </a>
                 </div>
             </div>
         </div>

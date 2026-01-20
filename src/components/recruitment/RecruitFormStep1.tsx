@@ -14,7 +14,6 @@ const PARTS = [
     { ko: "인공지능", en: "A.I", id: "AI" }
 ];
 
-// const DEPARTMENTS = ["학술부", "홍보부", "운영부"];
 const DEPARTMENTS = [
     { ko: "학술부", en: "Academic Department", id: "ACADEMIC" },
     { ko: "홍보부", en: "Public Relations Department", id: "MARKETING" },
@@ -24,20 +23,6 @@ const DEPARTMENTS = [
         id: "OPERATION"
     }
 ];
-
-// const PARTS = [
-//     { ko: "기획자", en: "PLANNING" },
-//     { ko: "디자이너", en: "DESIGN" },
-//     { ko: "프론트엔드", en: "FRONTEND" },
-//     { ko: "백엔드", en: "BACKEND" },
-//     { ko: "인공지능", en: "AI" }
-// ];
-
-// const DEPARTMENTS = [
-//     { ko: "학술부", en: "ACADEMIC" },
-//     { ko: "홍보부", en: "MARKETING" },
-//     { ko: "운영부", en: "OPERATION" }
-// ];
 
 export const RecruitFormStep1 = ({
     isManeger,
@@ -97,7 +82,7 @@ export const RecruitFormStep1 = ({
                                         border-[1px] flex flex-col items-start justify-center text-left`}
                                     >
                                         <span>{dept.ko}</span>
-                                        <span className="text-[20px] font-medium text-[#A7A7A7]">
+                                        <span className="text-[20px] font-medium text-[#fff]/60">
                                             {dept.en}
                                         </span>
                                     </button>

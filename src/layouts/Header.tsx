@@ -1,11 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
-import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
+// import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
 import { ADMIN_ABS, ROUTES } from "@/routes/routes";
 import { useEffect, useState } from "react";
-import { MyIcon } from "@/components/header/MyIcon";
+// import { MyIcon } from "@/components/header/MyIcon";
 import { fetchMyMemberInfo } from "@/apis/main/member";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
+import { MyIcon } from "@/components/Header/MyIcon";
+import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
 
 interface HeaderProps {
     white?: boolean;
