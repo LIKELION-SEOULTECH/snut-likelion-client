@@ -32,7 +32,7 @@ export const AdminNoticePage = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const {
-        data: notices,
+        data: noticeRes,
         isLoading,
         isError
     } = useQuery({
@@ -75,7 +75,7 @@ export const AdminNoticePage = () => {
     const handleToggleSelectAll = (checked: boolean) => {
         if (checked) {
             // 전체 선택
-            const allIds = notices.map((item: Notice) => item.noticeId);
+            const allIds = noticeRes.content.map((item: Notice) => item.noticeId);
             setSelectedIds(allIds);
         } else {
             // 전체 해제
@@ -107,23 +107,22 @@ export const AdminNoticePage = () => {
                 </div>
             )}
             <div className="mt-8">
-                {isLoading || isError || notices.content.length === 0 ? (
+                {isLoading || isError || noticeRes.content.length === 0 ? (
                     <AdminNoticeSkeleton isLoading={isLoading} />
                 ) : (
-                    notices.content.length > 1 && (
+                    noticeRes.content.length > 0 && (
                         <>
                             <NoticeSearchList
-                                data={notices}
-                                showCheckboxes={isDeleteMode}
+                                data={noticeRes.content}
                                 selectedIds={selectedIds}
                                 onToggleSelect={toggleSelect}
                                 onToggleSelectAll={handleToggleSelectAll}
-                                length={notices.length}
+                                length={noticeRes.length}
                             />
                             <div className="mb-[210px]">
                                 <Pagination
                                     currentPage={currentPage}
-                                    totalPages={notices.length}
+                                    totalPages={noticeRes.length}
                                     onPageChange={setCurrentPage}
                                 />
                             </div>

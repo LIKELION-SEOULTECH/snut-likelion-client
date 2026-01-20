@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
-import { createNotice } from "@/apis/main/notice";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ADMIN_ABS } from "@/routes/routes";
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { CustomSelect } from "@/components/admin/common/custom-select";
+import { createAdminNotice } from "@/apis/admin/notice";
 
 export const AdminNoticeCreatePage = () => {
     const queryClient = useQueryClient();
@@ -54,9 +54,10 @@ export const AdminNoticeCreatePage = () => {
     // notice 생성
     const createNoticeMutation = useMutation({
         mutationFn: () =>
-            createNotice({
+            createAdminNotice({
                 title,
-                content
+                content,
+                pinned: true
             }),
         onSuccess: () => {
             queryClient.invalidateQueries({

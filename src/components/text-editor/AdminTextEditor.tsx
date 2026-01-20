@@ -2,8 +2,7 @@ import { useEffect, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { AdminMenuBar } from "./AdminMenuBar";
-import Blockquote from "@tiptap/extension-blockquote";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
+
 import Image from "@tiptap/extension-image";
 import { CustomImage } from "@/extensions/customImage";
 import Mention from "@tiptap/extension-mention";
@@ -11,6 +10,8 @@ import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
 import { forwardRef, useImperativeHandle } from "react";
 import { uploadBlogImages } from "@/apis/main/blog";
+import { CustomHorizontalRule } from "@/extensions/customHorizontalRule";
+import { CustomBlockQuote } from "@/extensions/customBlockQuote";
 
 export interface AdminEditorHandle {
     getFinalHtmlAndImages: () => Promise<{
@@ -26,8 +27,8 @@ interface Props {
 
 const extensions = [
     StarterKit,
-    Blockquote,
-    HorizontalRule,
+    CustomBlockQuote,
+    CustomHorizontalRule,
     Image.configure({
         allowBase64: false
     }),
@@ -61,7 +62,6 @@ const AdminTextEditor = forwardRef<AdminEditorHandle | null, Props>(
 
             onUpdate({ editor }) {
                 setContent(editor.getHTML());
-                console.log(editor.getHTML());
             }
         });
 
