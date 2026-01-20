@@ -1,49 +1,61 @@
-import { useNavigate } from "react-router-dom";
-import { fetchRecentRecruitment } from "@/apis/main/recruitment";
-import { ROUTES } from "@/routes/routes";
+import { fetchMyApplications } from "@/apis/main/recruitment";
+import { useGuestRecruitNavigation } from "@/hooks/useGuestRecruitNavigation";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { useNavigate } from "react-router";
 
 export const GuestMyPage = () => {
     const navigate = useNavigate();
+    const { goRecruitForm } = useGuestRecruitNavigation();
+    const partLabelMap: Record<string, string> = {
+        FRONTEND: "프론트엔드",
+        BACKEND: "백엔드",
+        DESIGN: "디자인",
+        AI: "인공지능",
+        PLANNING: "기획"
+    };
 
-    const handleGuestRecruit = async () => {
-        try {
-            const [memberRes, managerRes] = await Promise.all([
-                fetchRecentRecruitment("MEMBER"),
-                fetchRecentRecruitment("MANAGER")
-            ]);
+    const deptLabelMap: Record<string, string> = {
+        ACADEMIC: "학술부",
+        MARKETING: "홍보부",
+        OPERATION: "운영부"
+    };
 
-            const now = new Date();
-            const mOpen = new Date(managerRes.data.openDate);
-            const mClose = new Date(managerRes.data.closeDate);
-            const uOpen = new Date(memberRes.data.openDate);
-            const uClose = new Date(memberRes.data.closeDate);
+    const { data: appsRes, isLoading } = useQuery({
+        queryKey: ["myApplications"],
+        queryFn: fetchMyApplications,
+        staleTime: 1000 * 30
+    });
 
-            // 운영진 지원 가능
-            if (mOpen <= now && now <= mClose) {
-                navigate(ROUTES.RECRUIT_MANAGER);
-                return;
-            }
-            // 멤버 지원 가능 기간
-            if (uOpen <= now && now <= uClose) {
-                navigate(ROUTES.RECRUIT_MEMBER);
-                return;
-            }
+    const hasApplication = !!appsRes?.[0];
+    const isSubmitted = appsRes?.[0]?.status === "true";
 
-            // 지원기간이 아닐 때 가장 가까운 모집 일정으로 이동
-            const upcoming: Array<{ type: "MANAGER" | "MEMBER"; open: Date }> = [];
-            if (mOpen > now) upcoming.push({ type: "MANAGER", open: mOpen });
-            if (uOpen > now) upcoming.push({ type: "MEMBER", open: uOpen });
+    const applicationTitle = useMemo(() => {
+        if (!appsRes?.[0]) return "";
 
-            if (upcoming.length > 0) {
-                upcoming.sort((a, b) => a.open.getTime() - b.open.getTime());
-                const next = upcoming[0];
-                navigate(next.type === "MANAGER" ? ROUTES.RECRUIT_MANAGER : ROUTES.RECRUIT_MEMBER);
-                return;
-            }
-            navigate(ROUTES.RECRUIT_MEMBER);
-        } catch (err) {
-            console.error(err);
+        const partKo = partLabelMap[appsRes?.[0].part] ?? appsRes?.[0].part ?? "";
+        const deptRaw = appsRes?.[0].departmentType;
+
+        const deptKo = deptRaw && deptRaw.trim() !== "" ? (deptLabelMap[deptRaw] ?? deptRaw) : "";
+
+        // departmentType 있으면 운영진, 없으면 아기사자
+        if (deptKo) {
+            return `[운영진] ${deptKo}/${partKo} 지원서`;
         }
+        return `[아기사자] ${partKo} 파트 지원서`;
+    }, [appsRes]);
+
+    const goPreview = () => {
+        if (!appsRes?.[0]) return;
+        navigate("/applications/preview", { state: { application: appsRes?.[0] } });
+    };
+
+    const handleGuestRecruit = () => {
+        if (hasApplication && isSubmitted) {
+            goPreview();
+            return;
+        }
+        goRecruitForm();
     };
 
     return (
@@ -51,14 +63,25 @@ export const GuestMyPage = () => {
             <div className="flex justify-between mb-[29px]">
                 <h4 className="text-[32px] text-white font-bold">지원서</h4>
                 <span
-                    className="text-[20px] text-[#7F7F7F] cursor-pointer text-[#f70]"
+                    className={`text-[20px] cursor-pointer text-[#f70] ${
+                        hasApplication ? "text-[#7F7F7F]" : "text-[#F70]"
+                    }`}
                     onClick={handleGuestRecruit}
                 >
-                    지원서 작성하기
+                    {hasApplication && isSubmitted === false && <span>수정하기</span>}
+                    {!hasApplication && !isLoading && <span>지원서 작성하기</span>}
                 </span>
             </div>
             <div className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]">
-                아직 작성한 지원서가 없습니다.
+                {!hasApplication && isSubmitted && (
+                    <span className="py-[10px] px-4 mr-4 bg-[#F70] rounded-[120px] text-[16px] text-white">
+                        지원 완료
+                    </span>
+                )}
+                {!hasApplication && !isLoading && <span>아직 작성한 지원서가 없습니다.</span>}
+                {hasApplication && !isLoading && (
+                    <span className="text-[#ECECEC]">{applicationTitle}</span>
+                )}
             </div>
         </div>
     );
