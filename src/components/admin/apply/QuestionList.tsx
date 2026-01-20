@@ -120,12 +120,15 @@ export default function QuestionList({
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {questions.map((q, index) => (
                                         <Draggable
-                                            key={String(q.clientId)}
-                                            draggableId={String(q.clientId)}
+                                            key={String(q.id ? q.id : q.clientId)}
+                                            draggableId={String(q.id ? q.id : q.clientId)}
                                             index={index}
                                         >
                                             {(provided) => (
-                                                <div key={String(q.clientId)} className="w-full">
+                                                <div
+                                                    key={String(q.id ? q.id : q.clientId)}
+                                                    className="w-full"
+                                                >
                                                     <div
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
