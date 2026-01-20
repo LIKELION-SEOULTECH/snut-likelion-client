@@ -9,3 +9,10 @@ export type Question = {
     order: number;
     buttonList?: string[];
 };
+
+export type QNAItem = {
+    questionId?: number;
+    questionText: string;
+    order: number;
+    answer: string;
+};

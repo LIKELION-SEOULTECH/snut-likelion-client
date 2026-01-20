@@ -5,16 +5,16 @@ export interface ManagerData {
     department: string;
     part: string;
     applyDate: string;
-    result: "합격" | "불합격";
+    status: "합격" | "불합격";
 }
 
-export interface UserData {
+export interface ApplicationData {
     id: number;
-    name: string;
+    username: string;
     email: string;
     part: string;
-    applyDate: string;
-    result: "합격" | "불합격";
+    submittedAt: string;
+    status: "합격" | "불합격";
 }
 
 export interface UpdateQuestionRequest {

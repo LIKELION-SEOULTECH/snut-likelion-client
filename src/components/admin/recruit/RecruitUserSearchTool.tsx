@@ -12,9 +12,10 @@ import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; part: string }) => void;
+    onChangeResult: (status: "FAIL" | "FINAL_PASS" | "PAPER_PASS") => void;
 }
 
-export const RecruitUserSearchTool = ({ onSearch }: MemberSearchToolProps) => {
+export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
     const [part, setPart] = useState("");
@@ -42,25 +43,19 @@ export const RecruitUserSearchTool = ({ onSearch }: MemberSearchToolProps) => {
 
                     <SelectContent className="w-[135px] min-w-[135px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="제출"
+                            value="SUBMITTED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             제출
                         </SelectItem>
                         <SelectItem
-                            value="불합격"
+                            value="FAILED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             불합격
                         </SelectItem>
                         <SelectItem
-                            value="서류 합격"
-                            className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
-                        >
-                            서류 합격
-                        </SelectItem>
-                        <SelectItem
-                            value="합격"
+                            value="FINAL_PASS"
                             className="w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             합격
@@ -115,16 +110,17 @@ export const RecruitUserSearchTool = ({ onSearch }: MemberSearchToolProps) => {
                     </SelectContent>
                 </Select>
             </div>
+
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
                     <Button
-                        onClick={handleSearch}
+                        // onClick={() => onChangeResult("FAIL")}
                         className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
                     >
                         불합격
                     </Button>
                     <Button
-                        onClick={handleSearch}
+                        onClick={() => onChangeResult("PAPER_PASS")}
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

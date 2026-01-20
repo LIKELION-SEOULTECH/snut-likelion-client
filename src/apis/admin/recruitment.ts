@@ -1,22 +1,12 @@
-// 모집 일정 생성
-
 import type { QuestionRequest, RecruitmentRequest } from "@/types/recruitment";
 import axiosInstance from "../axiosInstance";
 import type { Question } from "@/types/apply";
-
-// 모집 일정 수정
-
-// 모집 일정 삭제
 
 // 특정 모집 일정의 모든 질문들 조회
 
 // 특정 모집 일정에 질문 업데이트
 
 // 특정 모집에 대한 모든 제출된 지원서 목록 조회
-
-// 단일 지원서 상세 조회
-
-// 지원서 상태 일괄 변경
 
 export const createRecruitment = (data: RecruitmentRequest) => {
     return axiosInstance.post("/admin/recruitments", data);
@@ -77,6 +67,23 @@ export const fetchQuestionsByRecruitment = async (recId: number) => {
 
 // 특정 모집에 대한 질문 추가 혹은 수정
 export const updateRecruitmentQuestions = async (recId: number, questions: QuestionRequest[]) => {
-    const response = await axiosInstance.put(`/admin/recruitments/${recId}/questions`, questions);
-    return response.data;
+    const res = await axiosInstance.put(`/admin/recruitments/${recId}/questions`, questions);
+    return res.data;
+};
+
+// 단일 지원서 상세 조회
+export const getAdminApplicationDetail = async (appId: number) => {
+    const res = await axiosInstance.get(`/admin/applications/${appId}`);
+    return res.data;
+};
+
+// 지원서 상태 일괄 변경
+export const updateApplicationStatus = ({
+    status,
+    ids
+}: {
+    status: "PAPER_PASS" | "FINAL_PASS" | "FAIL";
+    ids: number[];
+}) => {
+    return axiosInstance.patch("/admin/applications/status", { ids }, { params: { status } });
 };
