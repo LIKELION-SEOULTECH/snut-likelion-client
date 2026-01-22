@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import sample from "@/assets/home/sample.png";
+import sample from "@/assets/common/sampleBox.png";
 interface BlogCardProps {
     id: number;
     imageUrl: string;

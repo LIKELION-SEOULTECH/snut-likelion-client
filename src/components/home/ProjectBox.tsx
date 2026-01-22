@@ -1,6 +1,7 @@
 import { categoryMap } from "@/types/project";
 import { useNavigate } from "react-router-dom";
 import type { ProjectCategory } from "@/types/project";
+import sample from "@/assets/common/sampleBox.png";
 
 interface ProjectBoxProps {
     id: number;
@@ -33,7 +34,7 @@ export const ProjectBox = ({
                 <img
                     // *** 여기 주석 부분 3줄 ****//
                     // 웹 부분꺼임(지우지마유)
-                    src={thumbnailUrl}
+                    src={thumbnailUrl || sample}
                     alt={name}
                     //**** 모바일 부분 ***//
                     //   src={image}
