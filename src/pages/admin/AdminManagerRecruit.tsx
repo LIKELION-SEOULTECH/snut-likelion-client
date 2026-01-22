@@ -44,6 +44,7 @@ export const AdminManagerRecruitPage = () => {
             })
     });
 
+    console.log(managerRecruitRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">

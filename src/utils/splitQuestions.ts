@@ -7,16 +7,16 @@ export const splitQuestions = (questions: Question[]) => {
     const departmentMap: Record<string, Question[]> = {};
 
     questions.forEach((q) => {
-        if (q.questionTarget === "공통 질문" || q.questionTarget === "기본 질문") {
+        if (q.questionTarget === "COMMON" || q.questionTarget === "BASIC") {
             common.push(q);
         }
 
-        if (q.questionTarget === "파트 질문" && q.part) {
+        if (q.questionTarget === "PART" && q.part) {
             partMap[q.part] ??= [];
             partMap[q.part].push(q);
         }
 
-        if (q.questionTarget === "부서 질문" && q.departmentType) {
+        if (q.questionTarget === "DEPARTMENT" && q.departmentType) {
             departmentMap[q.departmentType] ??= [];
             departmentMap[q.departmentType].push(q);
         }

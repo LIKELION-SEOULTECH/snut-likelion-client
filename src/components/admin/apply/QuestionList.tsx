@@ -16,6 +16,7 @@ import AddQuestionBtn from "@/assets/admin/add-question-btn.svg?react";
 import type { Question } from "@/types/apply";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import { nanoid } from "nanoid";
 
 interface QuestionListProps {
     title: string;
@@ -51,6 +52,7 @@ export default function QuestionList({
     const handleAdd = () => {
         const nextOrder = questions.length;
         const newQuestion: Question = {
+            clientId: nanoid(),
             text: "",
             questionType: "SHORT",
             questionTarget,
