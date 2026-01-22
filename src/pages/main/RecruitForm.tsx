@@ -20,7 +20,7 @@ export interface FormDataType {
     studentId: string;
     grade: number;
     inSchool: boolean;
-    portfolio: File | null;
+    portfolio: string | null;
     answers: { questionId: number; answer: string }[];
     mobileNumber: string;
 }
@@ -36,7 +36,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         studentId: "",
         grade: 1,
         inSchool: true,
-        portfolio: null,
+        portfolio: "",
         answers: [] as { questionId: number; answer: string }[],
         mobileNumber: ""
     });

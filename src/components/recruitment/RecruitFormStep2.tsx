@@ -38,20 +38,20 @@ export const RecruitFormStep2 = ({
     // 질문 내가 고른것만..
     // 공통 질문
     const commonQs = questions
-        .filter((q) => q.questionTarget === "공통 질문")
+        .filter((q) => q.questionTarget === "COMMON")
         .sort((a, b) => a.orderNum - b.orderNum);
 
     // 파트 질문
     const partQs = questions
-        .filter((q) => q.questionTarget === "파트 질문" && q.part === PART_ID_TO_KO[formData.part])
+        .filter((q) => q.questionTarget === "PART" && q.part === formData.part)
         .sort((a, b) => a.orderNum - b.orderNum);
 
     const deptQs = isManeger
         ? questions
               .filter(
                   (q) =>
-                      q.questionTarget === "부서 질문" &&
-                      q.departmentType === DEPT_ID_TO_KO[formData.departmentType]
+                      q.questionTarget === "DEPARTMENT" &&
+                      q.departmentType === formData.departmentType
               )
               .sort((a, b) => a.orderNum - b.orderNum)
         : [];
