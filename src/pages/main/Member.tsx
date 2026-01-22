@@ -4,13 +4,17 @@ import { MemberCardList } from "@/components/Member/MemberCardList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import PageLayout from "@/layouts/PageLayout";
 import { useMembers } from "@/hooks/useMembers";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
 
 const MemberCategories = ["운영진", "아기사자"];
 
 export const MemberPage = () => {
-    const generationList = getGenerationListByYear(2025, 13);
+    const generationList = useMemo(() => {
+        const gens = getGenerationListByYear(2025, 13);
+        return [...gens.map((gen) => `${gen}기`)];
+    }, []);
+
     const [generation, setGeneration] = useState(generationList[0]);
     const [category, setCategory] = useState("운영진");
 
