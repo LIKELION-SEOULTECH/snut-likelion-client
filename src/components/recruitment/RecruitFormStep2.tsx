@@ -10,6 +10,7 @@ interface RecruitFormStep2Props {
     questions: QuestionResponse[];
     loading: boolean;
     isManeger: boolean;
+    readOnly?: boolean;
 }
 // 변환 맵
 const PART_ID_TO_KO: Record<string, string> = {
@@ -31,7 +32,8 @@ export const RecruitFormStep2 = ({
     setFormData,
     questions,
     loading,
-    isManeger
+    isManeger,
+    readOnly
 }: RecruitFormStep2Props) => {
     if (loading) {
         return <div className="text-white p-8">질문을 불러오는 중…</div>;
@@ -58,6 +60,7 @@ export const RecruitFormStep2 = ({
         : [];
 
     const handleAnswerChange = (questionId: number, answer: string) => {
+        if (readOnly) return;
         setFormData((prev) => {
             const other = prev.answers.filter((a) => a.questionId !== questionId);
             return {
@@ -76,10 +79,13 @@ export const RecruitFormStep2 = ({
 
     return (
         <div className="bg-[#1B1B1B] w-full h-auto pt-[72px] px-[112px] space-y-12">
-            <h4 className="text-[32px] text-white font-bold">기본 질문</h4>
+            <h4 className="text-[32px] text-white font-bold">
+                {readOnly ? "지원서 미리보기" : "기본 질문"}
+            </h4>
 
             <FormUserInfoBox
                 name={formData.username}
+                readOnly={readOnly}
                 major={formData.major}
                 studentId={formData.studentId}
                 inSchool={formData.inSchool}
@@ -92,7 +98,11 @@ export const RecruitFormStep2 = ({
             {commonQs.length > 0 && (
                 <>
                     <h4 className="text-[32px] text-white font-bold mt-[150px]">공통 질문</h4>
-                    <AnswerBox questions={toItems(commonQs)} onChange={handleAnswerChange} />
+                    <AnswerBox
+                        questions={toItems(commonQs)}
+                        onChange={handleAnswerChange}
+                        readOnly={readOnly}
+                    />
                 </>
             )}
 
@@ -102,7 +112,11 @@ export const RecruitFormStep2 = ({
                     <h4 className="text-[32px] text-white font-bold">
                         {PART_ID_TO_KO[formData.part]} 질문
                     </h4>
-                    <AnswerBox questions={toItems(partQs)} onChange={handleAnswerChange} />
+                    <AnswerBox
+                        questions={toItems(partQs)}
+                        onChange={handleAnswerChange}
+                        readOnly={readOnly}
+                    />
                 </>
             )}
 
@@ -112,7 +126,11 @@ export const RecruitFormStep2 = ({
                     <h4 className="text-[32px] text-white font-bold">
                         {DEPT_ID_TO_KO[formData.departmentType]} 질문
                     </h4>
-                    <AnswerBox questions={toItems(deptQs)} onChange={handleAnswerChange} />
+                    <AnswerBox
+                        questions={toItems(deptQs)}
+                        onChange={handleAnswerChange}
+                        readOnly={readOnly}
+                    />
                 </>
             )}
             <>
@@ -137,6 +155,7 @@ export const RecruitFormStep2 = ({
                                     }))
                                 }
                                 className="bg-white rounded-[4px] px-4 py-[14px] max-w-[680px] w-full text-black"
+                                disabled={readOnly}
                             />
                         </div>
                     </FormBox>

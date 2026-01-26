@@ -28,8 +28,11 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const navigate = useNavigate();
     const location = useLocation();
     const navState = location.state as
-        | { mode?: "edit"; step?: number; appId?: number; application?: FormDataType }
+        | { mode?: "edit" | "preview"; step?: number; appId?: number; application?: FormDataType }
         | undefined;
+
+    const isPreview = navState?.mode === "preview";
+    const isEdit = navState?.mode === "edit" && typeof navState?.appId === "number";
 
     const [step, setStep] = useState(1);
 
@@ -92,8 +95,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         setStep(navState.step ?? 2);
     }, [navState]);
 
-    const isEdit = navState?.mode === "edit" && typeof navState?.appId === "number";
-
     const validateBeforeSubmit = () => {
         if (!formData.part) return "파트를 선택해주세요.";
         if (!formData.major.trim()) return "학과를 입력해주세요.";
@@ -127,7 +128,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             if (isEdit) {
                 return patchApplication(navState!.appId!, submit, payload);
             }
-            if (!recId) throw new Error("recId가 없습니다.");
+            if (!recId) throw new Error("저장 중 오류가 발생했습니다");
             return postApplication(recId, submit, payload);
         },
         onSuccess: (_, vars) => {
@@ -162,6 +163,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 onTempSave={handleTempSave}
                 onSubmit={handleSubmit}
                 step={step}
+                preview={isPreview}
             />
             <div className="flex-1 flex overflow-y-auto">
                 {step === 1 && (
@@ -180,6 +182,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                         questions={questions || []}
                         loading={loadingQuestions}
                         isManeger={isManeger}
+                        readOnly={isPreview}
                     />
                 )}
             </div>

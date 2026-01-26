@@ -9,6 +9,7 @@ interface FormUserInfoBoxProps {
     inSchool: boolean;
     grade: number;
     onChange: (field: keyof FormDataType, value: string | number | boolean) => void;
+    readOnly?: boolean;
 }
 
 const radioStyle = `
@@ -35,7 +36,8 @@ export const FormUserInfoBox = ({
     phoneNumber,
     grade,
     inSchool,
-    onChange
+    onChange,
+    readOnly
 }: FormUserInfoBoxProps) => {
     return (
         <FormBox>
@@ -48,6 +50,7 @@ export const FormUserInfoBox = ({
                         value={name}
                         onChange={(e) => onChange("username", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        disabled={readOnly}
                     />
                 </div>
                 {/* 학과 */}
@@ -58,6 +61,7 @@ export const FormUserInfoBox = ({
                         value={major}
                         onChange={(e) => onChange("major", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        disabled={readOnly}
                     />
                 </div>
                 {/* 학번 */}
@@ -68,6 +72,7 @@ export const FormUserInfoBox = ({
                         value={studentId}
                         onChange={(e) => onChange("studentId", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        disabled={readOnly}
                     />
                 </div>
                 {/* 핸드폰 번호 */}
@@ -78,6 +83,7 @@ export const FormUserInfoBox = ({
                         value={phoneNumber}
                         onChange={(e) => onChange("phoneNumber", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        disabled={readOnly}
                     />
                 </div>
                 <div className="max-w-[850px] flex items-center">
@@ -97,6 +103,7 @@ export const FormUserInfoBox = ({
                                     checked={grade === num}
                                     onChange={() => onChange("grade", num)}
                                     className={radioStyle}
+                                    disabled={readOnly}
                                 />
                                 {num}학년
                             </label>
@@ -125,6 +132,7 @@ export const FormUserInfoBox = ({
                                     checked={inSchool === value}
                                     onChange={() => onChange("inSchool", value)}
                                     className={radioStyle}
+                                    disabled={readOnly}
                                 />
                                 {text}
                             </label>

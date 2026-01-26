@@ -45,22 +45,25 @@ export const GuestMyPage = () => {
         return `[아기사자] ${partKo} 파트 지원서`;
     }, [appsRes]);
 
-    const goPreview = () => {
-        if (!appsRes?.[0]) return;
-        navigate("/applications/preview", { state: { application: appsRes?.[0] } });
-    };
-
     const handleGuestRecruit = () => {
-        if (hasApplication && isSubmitted) {
-            goPreview();
-            return;
-        }
         if (!appsRes?.[0]) {
             goRecruitForm();
             return;
         }
         const app = appsRes[0];
         const isManagerDraft = !!app.departmentType && app.departmentType.trim() !== "";
+
+        if (hasApplication && isSubmitted) {
+            navigate(isManagerDraft ? "/recruitform/manager" : "/recruitform/member", {
+                state: {
+                    mode: "preview",
+                    step: 2,
+                    appId: app.id,
+                    application: app
+                }
+            });
+            return;
+        }
 
         navigate(isManagerDraft ? "/recruitform/manager" : "/recruitform/member", {
             state: {
@@ -86,7 +89,10 @@ export const GuestMyPage = () => {
                     {!hasApplication && !isLoading && <span>지원서 작성하기</span>}
                 </span>
             </div>
-            <div className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]">
+            <div
+                className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]"
+                onClick={handleGuestRecruit}
+            >
                 {hasApplication && isSubmitted && (
                     <span className="py-[10px] px-4 mr-4 bg-[#F70] rounded-[120px] text-[16px] text-white">
                         지원 완료
