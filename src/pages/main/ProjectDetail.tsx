@@ -12,16 +12,20 @@ import { ROUTES } from "@/routes/routes";
 import ArrowLeft from "@/assets/project/arrow-left.svg?react";
 import ArrowRight from "@/assets/project/arrow-right.svg?react";
 import { useAllProjects } from "@/hooks/useAllProjects";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectDetailPage() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
-    const { data } = useProjectDetail(Number(id));
+
+    const { data: projectDetailData, isLoading: isProjectDetailLoading } = useProjectDetail(
+        Number(id)
+    );
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
 
-    const { data: allProjects } = useAllProjects();
+    const { data: allProjects, isLoading: isAllProjectsLoading } = useAllProjects();
 
     useEffect(() => {
         if (slideRef.current) {
@@ -32,11 +36,42 @@ export default function ProjectDetailPage() {
         }
     }, [currentImageIndex]);
 
-    if (!data)
+    if (isProjectDetailLoading) {
+        return (
+            <PageLayout>
+                <div
+                    className="w-full flex justify-center mx-0"
+                    style={{
+                        background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
+                    }}
+                >
+                    <div className="flex flex-col text-white w-full max-w-[1216px]">
+                        <div className="flex flex-row mt-20 text-xl text-[#7F7F7F] gap-1 items-center">
+                            <span className="cursor-pointer">프로젝트</span>
+                            <span className="flex items-center">
+                                <DirectoryIcon />
+                            </span>
+                        </div>
+                        <Skeleton className="relative w-full aspect-video mt-8 rounded-2xl" />
+                        <div className="flex flex-col gap-[300px] mt-50">
+                            <div className="w-full text-left text-[24px] mb-35">
+                                프로젝트 정보를 불러오는 중...
+                            </div>
+                            <div className="text-[32px] font-bold mb-4">프로젝트 회고</div>
+                            <div className="text-[32px] font-bold ">같은 기수 프로젝트</div>ㄴ
+                        </div>
+                    </div>
+                </div>
+            </PageLayout>
+        );
+    }
+
+    if (!projectDetailData)
         return (
             <div className="text-white flex justify-center mt-20">프로젝트를 찾을 수 없습니다.</div>
         );
 
+    const data = projectDetailData;
     const imageList = data.imageUrls ?? [];
 
     const handlePrev = () => {
@@ -117,11 +152,24 @@ export default function ProjectDetailPage() {
                         </section>
 
                         <section className="flex flex-col">
-                            {allProjects && (
-                                <OtherProjectSection
-                                    currentProjectId={data.id}
-                                    allProjects={allProjects}
-                                />
+                            {isAllProjectsLoading ? (
+                                <>
+                                    <div className="text-[32px] font-bold leading-[130%] tracking-[-0.02]">
+                                        같은 기수 프로젝트
+                                    </div>
+                                    <div className="flex flex-row gap-4 overflow-hidden mt-4">
+                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
+                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
+                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
+                                    </div>
+                                </>
+                            ) : (
+                                allProjects && (
+                                    <OtherProjectSection
+                                        currentProjectId={data.id}
+                                        allProjects={allProjects}
+                                    />
+                                )
                             )}
                         </section>
                         <QuoteCardList />
