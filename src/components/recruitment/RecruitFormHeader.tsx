@@ -32,12 +32,22 @@ export const RecruitFormHeader = ({
     return (
         <div className="w-full h-24 bg-black flex justify-between items-center px-[110px] relative">
             {/* ← 나가기 버튼 */}
-            <button
-                onClick={step === 1 ? handleLeave : onPrev}
-                className="bg-[#2D2D2D] text-[#A7A7A7] font-bold px-4 py-2 rounded-full"
-            >
-                {step === 1 ? "← 나가기" : "이전으로"}
-            </button>
+            <div className="gap-4 flex">
+                <button
+                    onClick={handleLeave}
+                    className="bg-[#2D2D2D] text-[#A7A7A7] font-bold px-4 py-2 rounded-full"
+                >
+                    ← 나가기
+                </button>
+                {step === 2 && (
+                    <button
+                        onClick={onPrev}
+                        className=" text-[#A7A7A7] font-bold px-4 py-2 rounded-full border border-[#A7A7A7]"
+                    >
+                        ← 파트 선택
+                    </button>
+                )}
+            </div>
 
             <div className="absolute bottom-0 left-0 w-full h-[0.6px] bg-gradient-to-r from-transparent via-white to-transparent opacity-100 pointer-events-none" />
 

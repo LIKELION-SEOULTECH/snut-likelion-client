@@ -23,7 +23,7 @@ export const AnswerBox = ({ questions, onChange }: AnswerBoxProps) => {
                     return (
                         <div
                             key={q.questionId}
-                            className={` w-[850px] text-4 relative  ${!isLastQ ? "mb-[40px]" : ""} font-medium`}
+                            className={` max-w-[850px] text-4 relative  ${!isLastQ ? "mb-[40px]" : ""} font-medium`}
                         >
                             <p className="mb-6 ">{q.label}</p>
                             <textarea
