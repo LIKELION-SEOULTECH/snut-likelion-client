@@ -78,12 +78,12 @@ export const RecruitFormStep2 = ({
             <h4 className="text-[32px] text-white font-bold">기본 질문</h4>
 
             <FormUserInfoBox
-                name={formData.name}
+                name={formData.username}
                 major={formData.major}
                 studentId={formData.studentId}
                 inSchool={formData.inSchool}
                 grade={formData.grade}
-                mobileNumber={formData.mobileNumber}
+                phoneNumber={formData.phoneNumber}
                 onChange={(field, value) => setFormData((prev) => ({ ...prev, [field]: value }))}
             />
 

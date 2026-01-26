@@ -55,7 +55,20 @@ export const GuestMyPage = () => {
             goPreview();
             return;
         }
-        goRecruitForm();
+        if (!appsRes?.[0]) {
+            goRecruitForm();
+            return;
+        }
+        const app = appsRes[0];
+        const isManagerDraft = !!app.departmentType && app.departmentType.trim() !== "";
+
+        navigate(isManagerDraft ? "/recruitform/manager" : "/recruitform/member", {
+            state: {
+                mode: "edit",
+                step: 2,
+                application: app
+            }
+        });
     };
 
     return (

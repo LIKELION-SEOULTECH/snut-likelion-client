@@ -5,7 +5,7 @@ interface FormUserInfoBoxProps {
     name: string;
     major: string;
     studentId: string;
-    mobileNumber: string;
+    phoneNumber: string;
     inSchool: boolean;
     grade: number;
     onChange: (field: keyof FormDataType, value: string | number | boolean) => void;
@@ -32,7 +32,7 @@ export const FormUserInfoBox = ({
     name,
     major,
     studentId,
-    mobileNumber,
+    phoneNumber,
     grade,
     inSchool,
     onChange
@@ -46,7 +46,7 @@ export const FormUserInfoBox = ({
                     <input
                         placeholder="이름"
                         value={name}
-                        onChange={(e) => onChange("name", e.target.value)}
+                        onChange={(e) => onChange("username", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
                     />
                 </div>
@@ -75,8 +75,8 @@ export const FormUserInfoBox = ({
                     <label className="w-[160px] flex align-center">핸드폰 번호</label>
                     <input
                         placeholder="핸드폰 번호"
-                        value={mobileNumber}
-                        onChange={(e) => onChange("mobileNumber", e.target.value)}
+                        value={phoneNumber}
+                        onChange={(e) => onChange("phoneNumber", e.target.value)}
                         className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
                     />
                 </div>

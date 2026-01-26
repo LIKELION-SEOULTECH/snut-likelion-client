@@ -38,7 +38,7 @@ export const fetchQuestions = async (
     return res.data.data;
 };
 
-// 지원서 작성 (임시 저장된 지원서가 없는 경우)
+// 지원서 저장
 type CreateApplicationRequest = {
     major: string;
     studentId: string;

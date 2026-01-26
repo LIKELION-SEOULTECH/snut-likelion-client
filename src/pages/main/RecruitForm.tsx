@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RecruitFormStep1 } from "@/components/recruitment/RecruitFormStep1";
 import { RecruitFormStep2 } from "@/components/recruitment/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/recruitment/RecruitFormHeader";
@@ -6,7 +6,7 @@ import { Footer } from "@/layouts/Footer";
 import { useRecruitmentSchedule, useQuestions } from "@/hooks/useRecruitment";
 import { postApplication } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 interface RecruitFormProps {
@@ -15,30 +15,35 @@ interface RecruitFormProps {
 export interface FormDataType {
     part: string;
     departmentType: string;
-    name: string;
+    username: string;
     major: string;
     studentId: string;
     grade: number;
     inSchool: boolean;
     portfolio: string | null;
     answers: { questionId: number; answer: string }[];
-    mobileNumber: string;
+    phoneNumber: string;
 }
 export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const navState = location.state as
+        | { mode?: "edit"; step?: number; application?: FormDataType }
+        | undefined;
+
     const [step, setStep] = useState(1);
 
     const [formData, setFormData] = useState<FormDataType>({
         part: "",
         departmentType: "",
-        name: "",
+        username: "",
         major: "",
         studentId: "",
         grade: 1,
         inSchool: true,
         portfolio: "",
         answers: [] as { questionId: number; answer: string }[],
-        mobileNumber: ""
+        phoneNumber: ""
     });
 
     const recType = isManeger ? "MANAGER" : "MEMBER";
@@ -59,6 +64,33 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
 
     const isValid = isManeger ? !!formData.part && !!formData.departmentType : !!formData.part;
 
+    useEffect(() => {
+        if (!navState?.application) return;
+
+        const app = navState.application;
+
+        const mappedAnswers =
+            app.answers?.map((a: { questionId: number | string; answer: string }) => ({
+                questionId: Number(a.questionId),
+                answer: a.answer ?? ""
+            })) ?? [];
+
+        setFormData((prev) => ({
+            ...prev,
+            part: app.part ?? "",
+            departmentType: app.departmentType ?? "",
+            username: app.username ?? "",
+            major: app.major ?? "",
+            studentId: app.studentId ?? "",
+            grade: Number(app.grade ?? 1),
+            inSchool: !!app.inSchool,
+            phoneNumber: app.phoneNumber ?? "",
+            portfolio: app.portfolio ?? "",
+            answers: mappedAnswers
+        }));
+
+        setStep(navState.step ?? 2);
+    }, [navState]);
     const applyMutation = useMutation({
         mutationFn: ({ submit }: { submit: boolean }) => {
             if (!recId) throw new Error("recId가 없습니다.");
