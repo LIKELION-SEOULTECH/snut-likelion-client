@@ -94,6 +94,23 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
 
     const isEdit = navState?.mode === "edit" && typeof navState?.appId === "number";
 
+    const validateBeforeSubmit = () => {
+        if (!formData.part) return "파트를 선택해주세요.";
+        if (!formData.major.trim()) return "학과를 입력해주세요.";
+        if (!formData.studentId.trim()) return "학번을 입력해주세요.";
+        if (!formData.username.trim()) return "이름을 입력해주세요.";
+        if (!formData.phoneNumber.trim()) return "전화번호를 입력해주세요.";
+        if (formData.grade == null || Number.isNaN(Number(formData.grade)))
+            return "학년을 입력해주세요.";
+        if (isManeger && !formData.departmentType) return "부서를 선택해주세요.";
+
+        const hasEmptyAnswer = formData.answers.length !== questions?.length;
+        if (formData.answers.length === 0 || hasEmptyAnswer)
+            return "모든 질문에 답변을 작성해주세요.";
+
+        return null;
+    };
+
     const applyMutation = useMutation({
         mutationFn: ({ submit }: { submit: boolean }) => {
             const payload = {
@@ -124,7 +141,15 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     });
 
     const handleTempSave = () => applyMutation.mutate({ submit: false });
-    const handleSubmit = () => applyMutation.mutate({ submit: true });
+    const handleSubmit = () => {
+        const msg = validateBeforeSubmit();
+        if (msg) {
+            alert(msg);
+            return;
+        }
+        applyMutation.mutate({ submit: true });
+    };
+
     return (
         <div
             className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "h-screen " : "min-h-screen"}`}
