@@ -28,7 +28,7 @@ export const GuestMyPage = () => {
     });
 
     const hasApplication = !!appsRes?.[0];
-    const isSubmitted = appsRes?.[0]?.status === "true";
+    const isSubmitted = appsRes?.[0]?.status === "SUBMITTED";
 
     const applicationTitle = useMemo(() => {
         if (!appsRes?.[0]) return "";
@@ -66,6 +66,7 @@ export const GuestMyPage = () => {
             state: {
                 mode: "edit",
                 step: 2,
+                appId: app.id,
                 application: app
             }
         });
@@ -86,7 +87,7 @@ export const GuestMyPage = () => {
                 </span>
             </div>
             <div className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]">
-                {!hasApplication && isSubmitted && (
+                {hasApplication && isSubmitted && (
                     <span className="py-[10px] px-4 mr-4 bg-[#F70] rounded-[120px] text-[16px] text-white">
                         지원 완료
                     </span>

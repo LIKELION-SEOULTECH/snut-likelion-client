@@ -63,5 +63,16 @@ export const postApplication = async (
 };
 
 // 지원서 수정 (임시 저장된 지원서가 있는 경우)
+export const patchApplication = async (
+    appId: number,
+    submit: boolean,
+    payload: CreateApplicationRequest
+) => {
+    const res = await axiosInstance.put(`/applications/${appId}`, payload, {
+        params: { submit }
+    });
+
+    return res.data;
+};
 
 // 지원서 삭제

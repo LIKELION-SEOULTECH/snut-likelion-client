@@ -4,7 +4,7 @@ import { RecruitFormStep2 } from "@/components/recruitment/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/recruitment/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
 import { useRecruitmentSchedule, useQuestions } from "@/hooks/useRecruitment";
-import { postApplication } from "@/apis/main/recruitment";
+import { patchApplication, postApplication } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -28,7 +28,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const navigate = useNavigate();
     const location = useLocation();
     const navState = location.state as
-        | { mode?: "edit"; step?: number; application?: FormDataType }
+        | { mode?: "edit"; step?: number; appId?: number; application?: FormDataType }
         | undefined;
 
     const [step, setStep] = useState(1);
@@ -91,11 +91,12 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
 
         setStep(navState.step ?? 2);
     }, [navState]);
+
+    const isEdit = navState?.mode === "edit" && typeof navState?.appId === "number";
+
     const applyMutation = useMutation({
         mutationFn: ({ submit }: { submit: boolean }) => {
-            if (!recId) throw new Error("recId가 없습니다.");
-
-            return postApplication(recId, submit, {
+            const payload = {
                 major: formData.major,
                 studentId: formData.studentId,
                 grade: formData.grade,
@@ -105,7 +106,12 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 part: formData.part,
                 ...(isManeger ? { departmentType: formData.departmentType } : {}),
                 portfolio: formData.portfolio
-            });
+            };
+            if (isEdit) {
+                return patchApplication(navState!.appId!, submit, payload);
+            }
+            if (!recId) throw new Error("recId가 없습니다.");
+            return postApplication(recId, submit, payload);
         },
         onSuccess: (_, vars) => {
             alert(vars.submit ? "지원서가 제출되었습니다!" : "임시 저장되었습니다!");

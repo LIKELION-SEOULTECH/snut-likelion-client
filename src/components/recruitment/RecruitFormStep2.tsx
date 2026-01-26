@@ -2,6 +2,7 @@ import type { FormDataType } from "@/pages/main/RecruitForm";
 import { AnswerBox } from "./FormAnswerBox";
 import { FormUserInfoBox } from "./FormUserInfoBox";
 import type { QuestionResponse } from "@/types/recruitment";
+import { FormBox } from "./FormBox";
 
 interface RecruitFormStep2Props {
     formData: FormDataType;
@@ -114,6 +115,33 @@ export const RecruitFormStep2 = ({
                     <AnswerBox questions={toItems(deptQs)} onChange={handleAnswerChange} />
                 </>
             )}
+            <>
+                <div className="flex">
+                    <h4 className="text-[32px] text-white font-bold mt-[150px]">포트폴리오 첨부</h4>
+                    <span className="ml-4 mt-[160px] text-[#A7A7A7]">
+                        * 첨부하지 않아도 불이익은 없어요
+                    </span>
+                </div>
+                <div className="pb-20">
+                    <FormBox>
+                        <div className="flex gap-[137px] items-center">
+                            <h4>링크</h4>
+                            <input
+                                type="text"
+                                placeholder="http://"
+                                value={formData.portfolio ?? ""}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        portfolio: e.target.value
+                                    }))
+                                }
+                                className="bg-white rounded-[4px] px-4 py-[14px] max-w-[680px] w-full text-black"
+                            />
+                        </div>
+                    </FormBox>
+                </div>
+            </>
         </div>
     );
 };
