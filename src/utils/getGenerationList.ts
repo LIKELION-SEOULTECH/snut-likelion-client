@@ -4,5 +4,5 @@ export const getGenerationListByYear = (startYear: number, startGeneration: numb
 
     const gens = Array.from({ length: currentGen - startGeneration + 1 }, (_, i) => currentGen - i);
 
-    return gens.map((g) => `${g}기`);
+    return gens.map((g) => `${g}`);
 };

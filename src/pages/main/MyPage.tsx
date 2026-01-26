@@ -34,9 +34,6 @@ export const MyPage = () => {
         placeholderData: keepPreviousData
     });
 
-    const isPageLoading =
-        memberLoading || (!isGuest && activeGeneration !== null && lionInfoLoading);
-
     return (
         <PageLayout>
             <div
@@ -82,13 +79,11 @@ export const MyPage = () => {
 
                     {/* 오른쪽 메인 컨텐츠 */}
                     <div className="flex-1">
-                        {isPageLoading ? (
-                            <div className="text-white h-[60vh] flex justify-center items-center text-xl">
-                                내 정보를 불러오는 중...
-                            </div>
-                        ) : !isGuest && activeGeneration !== null ? (
+                        {!isGuest ? (
                             <MemberMyPage
-                                member={member!}
+                                member={member}
+                                memberLoading={memberLoading}
+                                lionInfoLoading={lionInfoLoading}
                                 lionInfo={lionInfo}
                                 selectedGeneration={activeGeneration}
                                 setSelectedGeneration={setSelectedGeneration}

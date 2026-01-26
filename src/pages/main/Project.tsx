@@ -18,7 +18,7 @@ const categoryMap: Record<string, string> = {
 export default function ProjectPage() {
     const generationTabs = useMemo(() => {
         const gens = getGenerationListByYear(2025, 13);
-        return ["전체", ...gens];
+        return ["전체", ...gens.map((gen) => `${gen}기`)];
     }, []);
     const [projectGeneration, setprojectGeneration] = useState("전체");
     const [projectCategory, setprojectCategory] = useState("전체");
