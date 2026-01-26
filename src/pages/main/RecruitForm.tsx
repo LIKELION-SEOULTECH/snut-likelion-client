@@ -4,7 +4,7 @@ import { RecruitFormStep2 } from "@/components/recruitment/RecruitFormStep2";
 import { RecruitFormHeader } from "@/components/recruitment/RecruitFormHeader";
 import { Footer } from "@/layouts/Footer";
 import { useRecruitmentSchedule, useQuestions } from "@/hooks/useRecruitment";
-import { patchApplication, postApplication } from "@/apis/main/recruitment";
+import { fetchMyApplications, patchApplication, postApplication } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -24,6 +24,7 @@ export interface FormDataType {
     answers: { questionId: number; answer: string }[];
     phoneNumber: string;
 }
+
 export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,8 +32,10 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         | { mode?: "edit" | "preview"; step?: number; appId?: number; application?: FormDataType }
         | undefined;
 
+    const [currentAppId, setCurrentAppId] = useState<number | null>(navState?.appId ?? null);
+
     const isPreview = navState?.mode === "preview";
-    const isEdit = navState?.mode === "edit" && typeof navState?.appId === "number";
+    const [isEdit, setIsEdit] = useState<boolean>(navState?.mode === "edit");
 
     const [step, setStep] = useState(1);
 
@@ -126,12 +129,26 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 portfolio: formData.portfolio
             };
             if (isEdit) {
-                return patchApplication(navState!.appId!, submit, payload);
+                return patchApplication(currentAppId!, submit, payload);
             }
             if (!recId) throw new Error("저장 중 오류가 발생했습니다");
             return postApplication(recId, submit, payload);
         },
-        onSuccess: (_, vars) => {
+        onSuccess: async (_, vars) => {
+            if (currentAppId == null) {
+                try {
+                    const myApps = await fetchMyApplications();
+                    console.log(myApps);
+                    if (myApps[0].id) {
+                        setCurrentAppId(myApps[0].id);
+                        setIsEdit(true);
+                    } else {
+                        console.warn("appId 재조회 실패");
+                    }
+                } catch (e) {
+                    console.error("appId 재조회 실패", e);
+                }
+            }
             alert(vars.submit ? "지원서가 제출되었습니다!" : "임시 저장되었습니다!");
             if (vars.submit) navigate(ROUTES.MYPAGE);
         },
@@ -141,8 +158,16 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         }
     });
 
-    const handleTempSave = () => applyMutation.mutate({ submit: false });
+    const handleTempSave = () => {
+        if (applyMutation.isPending) return;
+        if (formData.answers.length === 0) {
+            alert("하나 이상의 질문에 답변을 작성해야 임시 저장할 수 있어요.");
+            return;
+        }
+        applyMutation.mutate({ submit: false });
+    };
     const handleSubmit = () => {
+        if (applyMutation.isPending) return;
         const msg = validateBeforeSubmit();
         if (msg) {
             alert(msg);
