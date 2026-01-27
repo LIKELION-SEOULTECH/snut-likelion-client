@@ -1,12 +1,33 @@
+import { cn } from "@/libs/cn";
 import { RecruitManagerItem } from "./RecruitManagerItem";
-import type { ManagerData } from "@/types/recruitment";
+import type { ApplicationData } from "@/types/recruitment";
+import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 
-export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
+export const RecruitManagerSearchList = ({
+    data,
+    totalElements,
+    selectedIds,
+    updateMode,
+    onToggleSelect,
+    onToggleSelectAll
+}: {
+    data: ApplicationData[];
+    totalElements: number;
+    selectedIds: number[];
+    updateMode: UpdateMode;
+    onToggleSelect: (app: ApplicationData) => void;
+    onToggleSelectAll: () => void;
+}) => {
+    const { isManageMode } = useRecruitManageStore();
+    const pageIds = data.map((app) => app.id);
+    const isAllChecked = pageIds.length > 0 && pageIds.every((id) => selectedIds.includes(id));
+
     return (
         <div>
             <div className="flex flex-row regular-14 gap-7 mb-4">
                 <div>
-                    전체 <span className="text-orange-400">{data.length}</span>
+                    전체 <span className="text-orange-400">{totalElements}</span>
                 </div>
                 <div>
                     합격 <span className="text-orange-400">{data.length}</span>
@@ -14,7 +35,29 @@ export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
             </div>
             <div className="w-full text-sm rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
-                <div className="grid grid-cols-[60px_100px_1fr_120px_120px_120px_100px] h-10 items-center text-[#666666] font-medium bg-[#FAFAFA] px-6">
+                <div
+                    className={cn(
+                        "grid h-10 items-center text-[#666666] font-medium bg-[#FAFAFA] px-6",
+                        isManageMode
+                            ? "grid-cols-[72px_86px_108px_1fr_110px_146px_82px]"
+                            : "grid-cols-[60px_100px_1fr_120px_120px_100px]"
+                    )}
+                >
+                    {isManageMode && (
+                        <span className="flex items-center justify-start text-center">
+                            <input
+                                type="checkbox"
+                                checked={isAllChecked}
+                                onChange={onToggleSelectAll}
+                                className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
+                                checked:bg-[#FF7700] checked:border-transparent 
+                                checked:after:content-['✓'] checked:after:text-white 
+                                checked:after:text-[16px] checked:after:block 
+                                checked:after:text-center checked:after:leading-[1rem] 
+                                flex items-center justify-center align-middle"
+                            />
+                        </span>
+                    )}
                     <span>No</span>
                     <span>이름</span>
                     <span>이메일</span>
@@ -25,8 +68,15 @@ export const RecruitManagerSearchList = ({ data }: { data: ManagerData[] }) => {
                 </div>
                 {/* 리스트 content */}
                 <div>
-                    {data.map((member, index) => (
-                        <RecruitManagerItem key={member.id} member={member} index={index} />
+                    {data.map((app, index) => (
+                        <RecruitManagerItem
+                            key={app.id}
+                            app={app}
+                            index={index}
+                            updateMode={updateMode}
+                            checked={selectedIds.includes(app.id)}
+                            onToggle={() => onToggleSelect(app)}
+                        />
                     ))}
                 </div>
             </div>

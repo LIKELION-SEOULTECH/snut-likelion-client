@@ -8,11 +8,13 @@ import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
 import type { ApplicationData } from "@/types/recruitment";
+import type { UpdateMode } from "./AdminManagerRecruit";
 
 export const AdminUserRecruitPage = () => {
     const queryClient = useQueryClient();
     const { setManageMode } = useRecruitManageStore();
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [updateMode, setUpdateMode] = useState<UpdateMode>("");
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -20,6 +22,7 @@ export const AdminUserRecruitPage = () => {
         result: "",
         part: ""
     });
+
     const {
         data: userRecruitRes,
         isLoading,
@@ -28,24 +31,39 @@ export const AdminUserRecruitPage = () => {
         queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 1,
+                recId: 1, // 교체
                 page: currentPage - 1,
                 part: filters.part,
                 status: filters.result
             })
     });
 
-    const pageIds = userRecruitRes?.content.map((app: ApplicationData) => app.id) ?? [];
+    const selectableIds =
+        userRecruitRes?.content
+            .filter((app: ApplicationData) =>
+                updateMode === "제출" ? app.status === "제출" : app.status === "서류 합격"
+            )
+            .map((app: ApplicationData) => app.id) ?? [];
 
     const isAllSelected =
-        pageIds.length > 0 && pageIds.every((id: number) => selectedIds.includes(id));
+        selectableIds.length > 0 && selectableIds.every((id: number) => selectedIds.includes(id));
 
     const toggleSelectAll = () => {
         setSelectedIds((prev) =>
             isAllSelected
-                ? prev.filter((id) => !pageIds.includes(id))
-                : Array.from(new Set([...prev, ...pageIds]))
+                ? prev.filter((id) => !selectableIds.includes(id))
+                : Array.from(new Set([...prev, ...selectableIds]))
         );
+    };
+
+    const handleSelectItem = (app: ApplicationData) => {
+        if (!updateMode) {
+            if (app.status === "제출") setUpdateMode("제출");
+            else if (app.status === "서류 합격") setUpdateMode("서류 합격");
+            else return;
+        }
+
+        toggleSelect(app.id);
     };
 
     const toggleSelect = (id: number) => {
@@ -59,6 +77,7 @@ export const AdminUserRecruitPage = () => {
     const applicationResultMutation = useMutation({
         mutationFn: updateApplicationStatus,
         onSuccess: () => {
+            console.log("지원서 상태 변경 성공");
             clearSelection();
             queryClient.invalidateQueries({
                 queryKey: ["submittedApplications"]
@@ -73,11 +92,12 @@ export const AdminUserRecruitPage = () => {
         setFilters(newFilters);
     };
 
-    const handleResult = (status: "FINAL_PASS" | "FAIL" | "PAPER_PASS") => {
+    const handleResult = (status: "FINAL_PASS" | "FAILED" | "PAPER_PASS") => {
         if (selectedIds.length === 0) {
             alert("선택된 지원자가 없습니다.");
             return;
         }
+        console.log("변경 상태", status);
 
         applicationResultMutation.mutate({
             status,
@@ -87,13 +107,17 @@ export const AdminUserRecruitPage = () => {
 
     useEffect(() => {
         setManageMode(false);
+        setUpdateMode("");
     }, [setManageMode]);
 
-    console.log(userRecruitRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">
-                <RecruitUserSearchTool onSearch={handleSearch} onChangeResult={handleResult} />
+                <RecruitUserSearchTool
+                    onSearch={handleSearch}
+                    onChangeResult={handleResult}
+                    updateMode={updateMode}
+                />
             </div>
             {isLoading || isError || userRecruitRes.content.length === 0 ? (
                 <AdminRecruitSkeleton isLoading={isLoading} isManager={false} />
@@ -103,7 +127,8 @@ export const AdminUserRecruitPage = () => {
                         data={userRecruitRes.content}
                         totalElements={userRecruitRes.totalElements}
                         selectedIds={selectedIds}
-                        onToggleSelect={toggleSelect}
+                        updateMode={updateMode}
+                        onToggleSelect={handleSelectItem}
                         onToggleSelectAll={toggleSelectAll}
                     />
                     <div className="mb-[210px]">

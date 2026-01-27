@@ -13,6 +13,7 @@ export type Question = {
 export type QNAItem = {
     questionId?: number;
     questionText: string;
+    questionTarget: string;
     order: number;
     answer: string;
 };
