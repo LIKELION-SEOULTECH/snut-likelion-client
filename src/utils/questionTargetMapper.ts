@@ -1,10 +1,15 @@
-export type ApiQuestionTarget = "COMMON" | "PART" | "DEPARTMENT";
+export type ApiQuestionTarget = "BASIC" | "COMMON" | "PART" | "DEPARTMENT";
 export type ApiQuestionType = "SHORT" | "LONG" | "RADIO_BUTTON";
 export type ApiQuestionPart = "PLANNING" | "DESIGN" | "FRONTEND" | "BACKEND" | "AI";
 export type ApiQuestionDepartmentType = "ACADEMIC" | "MARKETING" | "OPERATION";
 
 export const mapServerToApiQuestionTarget = (target: string): ApiQuestionTarget => {
+    console.log(target);
     switch (target) {
+        case "기본 질문":
+        case "BASIC":
+            return "BASIC";
+
         case "공통 질문":
         case "COMMON":
             return "COMMON";

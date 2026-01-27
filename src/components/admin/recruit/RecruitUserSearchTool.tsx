@@ -10,16 +10,22 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; part: string }) => void;
-    onChangeResult: (status: "FAIL" | "FINAL_PASS" | "PAPER_PASS") => void;
+    onChangeResult: (status: "FAILED" | "FINAL_PASS" | "PAPER_PASS") => void;
+    updateMode: UpdateMode;
 }
 
-export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearchToolProps) => {
+export const RecruitUserSearchTool = ({
+    onSearch,
+    onChangeResult,
+    updateMode
+}: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
-    const [part, setPart] = useState("");
     const [result, setResult] = useState("");
+    const [part, setPart] = useState("");
 
     const handleSearch = () => {
         onSearch({ result, part });
@@ -117,7 +123,9 @@ export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearch
                         불합격
                     </Button>
                     <Button
-                        onClick={() => onChangeResult("PAPER_PASS")}
+                        onClick={() =>
+                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
+                        }
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

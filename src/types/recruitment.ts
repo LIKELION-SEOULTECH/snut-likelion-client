@@ -1,3 +1,5 @@
+import type { QNAItem } from "./apply";
+
 export interface ManagerData {
     id: number;
     username: string;
@@ -14,19 +16,19 @@ export interface ApplicationData {
     email: string;
     part: string;
     submittedAt: string;
-    status: "합격" | "불합격" | "제출" | "서류합격";
+    status: "합격" | "불합격" | "제출" | "서류 합격";
     departmentType?: string;
 }
 
 export interface UpdateQuestionRequest {
-    id?: number; // 기존 질문이면 존재
+    id?: number;
     text: string;
     questionType: string;
     questionTarget: string;
     order: number;
-    part?: string; // questionTarget === "PART"일 때만 사용
-    departmentType?: string; // questionTarget === "DEPARTMENT"일 때만 사용
-    buttonList?: string[]; // questionType === "RADIO_BUTTON"일 때만 사용
+    part?: string;
+    departmentType?: string;
+    buttonList?: string[];
 }
 
 export interface ApplicationAnswer {
@@ -142,4 +144,22 @@ export interface QuestionRequest {
 export interface SubscribeRequest {
     email: string;
     type: string;
+}
+
+// 지원서 세부페이지
+export interface ApplicationDetail {
+    id: number;
+    answers: QNAItem[];
+    departmentType: string;
+    grade: number;
+    major: string;
+    inSchool: boolean;
+    isPersonalInfoConsent?: boolean;
+    part: string;
+    phoneNumber: string;
+    portfolio?: string; // 변경 가능
+    studentId: string;
+    submittedAt: string;
+    username: string;
+    status: "FAILED" | "FINAL_PASS" | "PAPER_PASS" | "SUBMITTED";
 }

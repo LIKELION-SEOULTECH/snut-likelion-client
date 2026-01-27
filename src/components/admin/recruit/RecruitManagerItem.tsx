@@ -42,7 +42,7 @@ export const RecruitManagerItem = ({
                         checked={checked}
                         disabled={
                             (updateMode === "제출" && app.status !== "제출") ||
-                            (updateMode === "서류합격" && app.status !== "서류합격")
+                            (updateMode === "서류 합격" && app.status !== "서류 합격")
                         }
                         onChange={onToggle}
                         className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 

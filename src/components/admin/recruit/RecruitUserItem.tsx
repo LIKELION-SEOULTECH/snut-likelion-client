@@ -3,14 +3,22 @@ import type { ApplicationData } from "@/types/recruitment";
 import { cn } from "@/libs/cn";
 import { formatDateWithHyphen } from "@/utils/formatData";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 interface RecruitManagerItemProps {
     app: ApplicationData;
     index: number;
     checked: boolean;
+    updateMode: UpdateMode;
     onToggle: () => void;
 }
 
-export const RecruitUserItem = ({ app, index, checked, onToggle }: RecruitManagerItemProps) => {
+export const RecruitUserItem = ({
+    app,
+    index,
+    checked,
+    updateMode,
+    onToggle
+}: RecruitManagerItemProps) => {
     const navigate = useNavigate();
     const { isManageMode } = useRecruitManageStore();
 
@@ -31,6 +39,10 @@ export const RecruitUserItem = ({ app, index, checked, onToggle }: RecruitManage
                         type="checkbox"
                         onClick={(e) => e.stopPropagation()}
                         checked={checked}
+                        disabled={
+                            (updateMode === "제출" && app.status !== "제출") ||
+                            (updateMode === "서류 합격" && app.status !== "서류 합격")
+                        }
                         onChange={onToggle}
                         className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
                                 checked:bg-[#FF7700] checked:border-transparent 
@@ -43,8 +55,7 @@ export const RecruitUserItem = ({ app, index, checked, onToggle }: RecruitManage
             )}
             <span>{app.id}</span>
             <span>{app.username}</span>
-            {/* <span>{member.email}</span> */}
-            <span>test@gmail.com</span>
+            <span>{app.email}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
             <span className="px-[9px]">{app.status}</span>

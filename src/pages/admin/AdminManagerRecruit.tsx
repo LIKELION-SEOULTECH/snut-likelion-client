@@ -10,13 +10,13 @@ import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ApplicationData } from "@/types/recruitment";
-export type UpdateMode = "제출" | "서류합격";
+export type UpdateMode = "제출" | "서류 합격" | "";
 
 export const AdminManagerRecruitPage = () => {
     const queryClient = useQueryClient();
     const { setManageMode } = useRecruitManageStore();
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [updateMode, setUpdateMode] = useState<UpdateMode>("제출");
+    const [updateMode, setUpdateMode] = useState<UpdateMode>("");
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -28,6 +28,7 @@ export const AdminManagerRecruitPage = () => {
 
     useEffect(() => {
         setManageMode(false);
+        setUpdateMode("");
     }, [setManageMode]);
 
     const {
@@ -38,7 +39,7 @@ export const AdminManagerRecruitPage = () => {
         queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 2,
+                recId: 2, // 교체
                 page: currentPage - 1,
                 part: filters.part,
                 department: filters.department,
@@ -49,7 +50,7 @@ export const AdminManagerRecruitPage = () => {
     const selectableIds =
         managerRecruitRes?.content
             .filter((app: ApplicationData) =>
-                updateMode === "제출" ? app.status === "제출" : app.status === "서류합격"
+                updateMode === "제출" ? app.status === "제출" : app.status === "서류 합격"
             )
             .map((app: ApplicationData) => app.id) ?? [];
 
@@ -65,17 +66,15 @@ export const AdminManagerRecruitPage = () => {
     };
 
     const handleSelectItem = (app: ApplicationData) => {
-        // 1. status에 따라 updateMode 자동 설정
-        if (app.status === "제출") {
-            setUpdateMode("제출");
-        } else if (app.status === "서류합격") {
-            setUpdateMode("서류합격");
-        } else {
-            return; // FINAL_PASS, FAILED 등은 선택 불가
+        if (!updateMode) {
+            if (app.status === "제출") setUpdateMode("제출");
+            else if (app.status === "서류 합격") setUpdateMode("서류 합격");
+            else return;
         }
 
         toggleSelect(app.id);
     };
+
     const toggleSelect = (id: number) => {
         setSelectedIds((prev) =>
             prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
@@ -108,6 +107,7 @@ export const AdminManagerRecruitPage = () => {
             return;
         }
 
+        console.log("변경 상태", status);
         applicationResultMutation.mutate({
             status,
             ids: selectedIds
@@ -117,7 +117,11 @@ export const AdminManagerRecruitPage = () => {
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">
-                <RecruitManagerSearchTool onSearch={handleSearch} onChangeResult={handleResult} />
+                <RecruitManagerSearchTool
+                    onSearch={handleSearch}
+                    onChangeResult={handleResult}
+                    updateMode={updateMode}
+                />
             </div>
             {isLoading || isError || managerRecruitRes.content.length === 0 ? (
                 <AdminRecruitSkeleton isLoading={isLoading} isManager={true} />

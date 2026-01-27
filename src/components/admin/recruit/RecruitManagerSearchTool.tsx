@@ -10,12 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; part: string; department: string }) => void;
     onChangeResult: (status: "FINAL_PASS" | "PAPER_PASS") => void;
+    updateMode: UpdateMode;
 }
 
-export const RecruitManagerSearchTool = ({ onSearch, onChangeResult }: MemberSearchToolProps) => {
+export const RecruitManagerSearchTool = ({
+    onSearch,
+    onChangeResult,
+    updateMode
+}: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
     const [result, setResult] = useState("");
@@ -44,25 +50,25 @@ export const RecruitManagerSearchTool = ({ onSearch, onChangeResult }: MemberSea
 
                     <SelectContent className="w-[135px] min-w-[135px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="제출"
+                            value="SUBMITTED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             제출
                         </SelectItem>
                         <SelectItem
-                            value="불합격"
+                            value="FAILED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             불합격
                         </SelectItem>
                         <SelectItem
-                            value="서류 합격"
+                            value="PAPER_PASS"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             서류 합격
                         </SelectItem>
                         <SelectItem
-                            value="합격"
+                            value="FINAL_PASS"
                             className="w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             합격
@@ -158,7 +164,9 @@ export const RecruitManagerSearchTool = ({ onSearch, onChangeResult }: MemberSea
                         불합격
                     </Button>
                     <Button
-                        onClick={() => onChangeResult("PAPER_PASS")}
+                        onClick={() =>
+                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
+                        }
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

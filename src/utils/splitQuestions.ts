@@ -7,7 +7,10 @@ export const splitQuestions = (questions: Question[]) => {
     const departmentMap: Record<string, Question[]> = {};
 
     questions.forEach((q) => {
-        if (q.questionTarget === "COMMON" || q.questionTarget === "BASIC") {
+        if (q.questionTarget === "BASIC") {
+            basic.push(q);
+        }
+        if (q.questionTarget === "COMMON") {
             common.push(q);
         }
 

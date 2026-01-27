@@ -2,18 +2,21 @@ import type { ApplicationData } from "@/types/recruitment";
 import { RecruitUserItem } from "./RecruitUserItem";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { cn } from "@/libs/cn";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 
 export const RecruitUserSearchList = ({
     data,
     totalElements,
     selectedIds,
+    updateMode,
     onToggleSelect,
     onToggleSelectAll
 }: {
     data: ApplicationData[];
     totalElements: number;
     selectedIds: number[];
-    onToggleSelect: (id: number) => void;
+    updateMode: UpdateMode;
+    onToggleSelect: (app: ApplicationData) => void;
     onToggleSelectAll: () => void;
 }) => {
     const { isManageMode } = useRecruitManageStore();
@@ -71,8 +74,9 @@ export const RecruitUserSearchList = ({
                             key={app.id}
                             app={app}
                             index={index}
+                            updateMode={updateMode}
                             checked={selectedIds.includes(app.id)}
-                            onToggle={() => onToggleSelect(app.id)}
+                            onToggle={() => onToggleSelect(app)}
                         />
                     ))}
                 </div>
