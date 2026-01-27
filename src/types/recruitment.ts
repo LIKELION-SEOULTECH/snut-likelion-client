@@ -1,11 +1,11 @@
 export interface ManagerData {
     id: number;
-    name: string;
+    username: string;
     email: string;
-    department: string;
+    departmentType: string;
     part: string;
-    applyDate: string;
-    status: "합격" | "불합격";
+    submittedAt: string;
+    status: "합격" | "불합격" | "제출" | "서류합격";
 }
 
 export interface ApplicationData {
@@ -14,7 +14,8 @@ export interface ApplicationData {
     email: string;
     part: string;
     submittedAt: string;
-    status: "합격" | "불합격";
+    status: "합격" | "불합격" | "제출" | "서류합격";
+    departmentType?: string;
 }
 
 export interface UpdateQuestionRequest {

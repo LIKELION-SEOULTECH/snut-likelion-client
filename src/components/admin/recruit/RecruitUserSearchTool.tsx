@@ -113,10 +113,7 @@ export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearch
 
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
-                    <Button
-                        // onClick={() => onChangeResult("FAIL")}
-                        className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
-                    >
+                    <Button className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25">
                         불합격
                     </Button>
                     <Button

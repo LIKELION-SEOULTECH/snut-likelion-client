@@ -89,7 +89,6 @@ export const AdminUserRecruitPage = () => {
         setManageMode(false);
     }, [setManageMode]);
 
-    console.log(userRecruitRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">

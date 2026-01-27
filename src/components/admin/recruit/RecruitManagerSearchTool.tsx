@@ -11,10 +11,11 @@ import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
 interface MemberSearchToolProps {
-    onSearch: (filters: { result: string; department: string; part: string }) => void;
+    onSearch: (filters: { result: string; part: string; department: string }) => void;
+    onChangeResult: (status: "FINAL_PASS" | "PAPER_PASS") => void;
 }
 
-export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) => {
+export const RecruitManagerSearchTool = ({ onSearch, onChangeResult }: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
     const [result, setResult] = useState("");
@@ -153,14 +154,11 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
             </div>
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
-                    <Button
-                        onClick={handleSearch}
-                        className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
-                    >
+                    <Button className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25">
                         불합격
                     </Button>
                     <Button
-                        onClick={handleSearch}
+                        onClick={() => onChangeResult("PAPER_PASS")}
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격
