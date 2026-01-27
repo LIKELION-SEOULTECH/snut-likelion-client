@@ -14,7 +14,7 @@ export const NoticeCardItem = ({ id, type, title, date, isNew }: NoticeCardProps
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/news-content/${id}`);
+        navigate(`/notice-content/${id}`);
     };
 
     return (

@@ -2,12 +2,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
 // import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
 import { ADMIN_ABS, ROUTES } from "@/routes/routes";
-import { useEffect, useState } from "react";
-// import { MyIcon } from "@/components/header/MyIcon";
 import { fetchMyMemberInfo } from "@/apis/main/member";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { MyIcon } from "@/components/Header/MyIcon";
 import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
+import { useQuery } from "@tanstack/react-query";
+import type { MemberDetailResponse } from "@/types/member";
 
 interface HeaderProps {
     white?: boolean;
@@ -17,31 +17,19 @@ export const Header = ({ white = false }: HeaderProps) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
-    const [isGuest, setIsGuest] = useState<boolean | null>(null);
+    const token = localStorage.getItem("accessToken");
+    const role = localStorage.getItem("userRole");
+    const isLoggedIn = !!token;
+    const isGuest = role === "ROLE_GUEST";
 
-    useEffect(() => {
-        const loadProfile = async () => {
-            const token = localStorage.getItem("accessToken");
-            const role = localStorage.getItem("userRole");
+    const { data: member } = useQuery<MemberDetailResponse>({
+        queryKey: ["me"],
+        queryFn: fetchMyMemberInfo,
+        enabled: isLoggedIn && !isGuest,
+        staleTime: 1000 * 60 * 5
+    });
 
-            // 토큰이 없거나, 게스트라면 API 호출x
-            const guest = role === "ROLE_GUEST";
-            setIsLoggedIn(!!token);
-            setIsGuest(guest);
-            if (!token || guest) return;
-
-            try {
-                const res = await fetchMyMemberInfo();
-                setProfileImage(res.profileImageUrl);
-            } catch (err) {
-                console.warn("Header: fetchMyMemberInfo 실패", err);
-            }
-        };
-
-        loadProfile();
-    }, []);
+    const profileImage = member?.profileImageUrl;
 
     const navItems = [
         { name: "모집안내", route: ROUTES.HOME },

@@ -2,11 +2,12 @@ import { StackInput } from "@/components/my-page/StackInput";
 import { NewImageDrop } from "@/components/project/NewImageDrop";
 import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsInput";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProject } from "@/apis/main/project";
 import axios from "axios";
 import { DropDwon } from "@/components/my-page/DropDown";
+import { getGenerationListByYear } from "@/utils/getGenerationList";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -19,6 +20,11 @@ const categoryMap: Record<string, string> = {
 export const NewProjectPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+
+    const generationOptions = useMemo(() => {
+        const gens = getGenerationListByYear(2025, 13);
+        return gens.map(String);
+    }, []);
 
     const [selectedGen, setSelectedGen] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -153,7 +159,7 @@ export const NewProjectPage = () => {
                             {/* 기수  */}
                             <DropDwon
                                 label="기수"
-                                options={["12", "13"]}
+                                options={generationOptions}
                                 selected={selectedGen}
                                 setSelected={setSelectedGen}
                             />

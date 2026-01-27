@@ -24,7 +24,7 @@ export const fetchAllProjects = async (params?: ProjectQueryParams): Promise<Pro
 // 프로젝트 상세 조회
 export const getProjectDetail = async (id: number) => {
     const res = await axiosInstance.get(`/projects/${id}`);
-    return res.data;
+    return res.data.data;
 };
 
 // 프로젝트 삭제

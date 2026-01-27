@@ -1,43 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import BlogTypeTabs from "@/components/blog/BlogTypeTabs";
 import PageLayout from "@/layouts/PageLayout";
 import { BlogCardList } from "@/components/blog/BlogCardList";
 import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { getBlogList } from "@/apis/main/blog";
-import type { Blog } from "@/types/blog";
 import { MainSearchBar } from "@/components/common/MainSearchBar";
+import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 type BlogType = "세션 이야기" | "아기사자 이야기";
 
 export const BlogPage = () => {
     const [blogType, setBlogType] = useState<BlogType>("세션 이야기");
     const [page, setPage] = useState(1);
-    const [blogs, setBlogs] = useState<Blog[]>([]);
-    const [totalPages, setTotalPages] = useState(1);
 
-    useEffect(() => {
-        const category: "OFFICIAL" | "UNOFFICIAL" =
-            blogType === "세션 이야기" ? "OFFICIAL" : "UNOFFICIAL";
-        console.log("📌 blogType 변경:", blogType);
+    const category = useMemo(() => {
+        return blogType === "세션 이야기" ? "OFFICIAL" : "UNOFFICIAL";
+    }, [blogType]);
 
-        const fetchBlogs = async (page: number, category: "OFFICIAL" | "UNOFFICIAL") => {
-            try {
-                const data = await getBlogList(category, page - 1, 12);
-                console.log("✅ API 응답:", data);
-                setBlogs(data.content); // content만 저장
-                setTotalPages(data.totalPages); // 전체 페이지 수도 저장
-            } catch (error) {
-                console.error("블로그 목록 불러오기 실패:", error);
-            }
-        };
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ["blogList", category, page],
+        queryFn: () => getBlogList(category, page - 1, 12),
+        placeholderData: keepPreviousData,
+        staleTime: 1000 * 60 * 5
+    });
 
-        fetchBlogs(page, category); // ✅ 인자를 객체로 구성해서 넘기기
-    }, [blogType, page]); // ✅ page도 의존성에 추가
+    const blogs = data?.content || [];
+    const totalPages = data?.totalPages || 1;
 
     const handleTabSelect = (type: BlogType) => {
         setPage(1);
-        setBlogType((prev) => (prev === type ? "세션 이야기" : type));
+        setBlogType(type);
     };
 
     return (
@@ -47,7 +41,17 @@ export const BlogPage = () => {
                     Blog<span className="text-[#FF7700]">.</span>
                 </div>
                 <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} />
-                <BlogCardList blogs={Array.isArray(blogs) ? blogs : []} />
+                {isLoading ? (
+                    <div className=" grid grid-cols-3 gap-4 mt-12 w-[1217px]">
+                        {Array.from({ length: 9 }).map((_, idx) => (
+                            <ProjectBoxSkeleton key={`skeleton-${idx}`} />
+                        ))}
+                    </div>
+                ) : isError ? (
+                    <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
+                ) : (
+                    <BlogCardList blogs={blogs} />
+                )}
                 <div className="mt-7 w-full">
                     <MainSearchBar />
                 </div>

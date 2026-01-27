@@ -65,13 +65,13 @@ export const NewsContentPage = () => {
                         prev={
                             prevData && {
                                 title: prevData.title,
-                                href: `/news-content/${prevData.noticeId}`
+                                href: `/notice-content/${prevData.noticeId}`
                             }
                         }
                         next={
                             nextData && {
                                 title: nextData.title,
-                                href: `/news-content/${nextData.noticeId}`
+                                href: `/notice-content/${nextData.noticeId}`
                             }
                         }
                     />
