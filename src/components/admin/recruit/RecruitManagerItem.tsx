@@ -29,8 +29,8 @@ export const RecruitManagerItem = ({
             className={cn(
                 "grid grid-cols-[60px_100px_1fr_120px_120px_100px] h-[66px] items-center font-medium px-6 cursor-pointer",
                 isManageMode
-                    ? "grid-cols-[72px_86px_108px_1fr_110px_146px_82px]"
-                    : "grid-cols-[60px_100px_1fr_120px_120px_100px]",
+                    ? "grid-cols-[72px_86px_108px_1fr_95px_103px_146px_58px]"
+                    : "grid-cols-[118px_140px_1fr_95px_103px_146px_58px]",
                 index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"
             )}
         >
@@ -60,7 +60,7 @@ export const RecruitManagerItem = ({
             <span>{app.departmentType}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
-            <span className="px-[9px]">{app.status}</span>
+            <span>{app.status}</span>
         </div>
     );
 };

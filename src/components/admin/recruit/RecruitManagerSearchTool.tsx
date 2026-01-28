@@ -126,13 +126,13 @@ export const RecruitManagerSearchTool = ({
 
                     <SelectContent className="w-[135px] min-w-[135px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="기획"
+                            value="PLANNING"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             기획
                         </SelectItem>
                         <SelectItem
-                            value="디자인"
+                            value="DESIGN"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             디자인
@@ -144,13 +144,13 @@ export const RecruitManagerSearchTool = ({
                             AI
                         </SelectItem>
                         <SelectItem
-                            value="프론트엔드"
+                            value="FRONTEND"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             프론트엔드
                         </SelectItem>
                         <SelectItem
-                            value="백엔드"
+                            value="BACKEND"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             백엔드

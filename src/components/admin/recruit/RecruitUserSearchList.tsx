@@ -33,7 +33,7 @@ export const RecruitUserSearchList = ({
                     합격 <span className="text-orange-400">{data.length}</span>
                 </div>
             </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[567px] bg-white">
                 {/* 리스트 헤더 */}
                 <div
                     className={cn(

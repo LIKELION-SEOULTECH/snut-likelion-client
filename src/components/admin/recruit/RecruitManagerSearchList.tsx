@@ -33,14 +33,14 @@ export const RecruitManagerSearchList = ({
                     합격 <span className="text-orange-400">{data.length}</span>
                 </div>
             </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[567px] bg-white">
                 {/* 리스트 헤더 */}
                 <div
                     className={cn(
                         "grid h-10 items-center text-[#666666] font-medium bg-[#FAFAFA] px-6",
                         isManageMode
-                            ? "grid-cols-[72px_86px_108px_1fr_110px_146px_82px]"
-                            : "grid-cols-[60px_100px_1fr_120px_120px_100px]"
+                            ? "grid-cols-[72px_86px_108px_1fr_95px_103px_146px_58px]"
+                            : "grid-cols-[118px_140px_1fr_95px_103px_146px_58px]"
                     )}
                 >
                     {isManageMode && (
@@ -58,7 +58,7 @@ export const RecruitManagerSearchList = ({
                             />
                         </span>
                     )}
-                    <span>No</span>
+                    <span className={cn(isManageMode ? "pl-[6px]" : "pl-0")}>No</span>
                     <span>이름</span>
                     <span>이메일</span>
                     <span>부서</span>
