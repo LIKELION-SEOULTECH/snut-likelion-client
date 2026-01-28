@@ -6,7 +6,7 @@ interface MemberSearchListProps {
     currentPage: number;
     itemsPerPage: number;
 }
-export const MemberSearchList = ({ members, currentPage, itemsPerPage }: MemberSearchListProps) => {
+export const MemberSearchList = ({ members }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -19,7 +19,7 @@ export const MemberSearchList = ({ members, currentPage, itemsPerPage }: MemberS
         <div>
             <div className="w-full rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
-                <div className="h-10 flex text-medium-14 items-center text-[#666666] font-medium bg-[#FAFAFA]">
+                <div className="h-10 flex text-sm items-center text-[#666666] font-medium bg-[#FAFAFA]">
                     <span className="flex-[1] text-left pl-[30px]">No</span>
                     <span className="flex-[4] text-left">이름</span>
                     <span className="flex-[1.5] text-left">기수</span>
@@ -27,16 +27,14 @@ export const MemberSearchList = ({ members, currentPage, itemsPerPage }: MemberS
                     <span className="flex-[1.5] text-left">역할</span>
                 </div>
                 {/* 리스트 content */}
-                <div>
+                <div className="bg-white text-sm min-h-[567px]">
                     {members?.map((member, index) => (
                         <div
                             key={member.id}
                             onClick={() => handleClick(member)}
                             className={`flex h-[66px] items-center font-medium cursor-pointer ${index % 2 !== 0 ? "bg-[#FAFAFA]" : "bg-white"}`}
                         >
-                            <span className="flex-[1] pl-[30px] text-left">
-                                {(currentPage - 1) * itemsPerPage + index + 1}
-                            </span>
+                            <span className="flex-[1] pl-[30px] text-left">{member.id}</span>
                             <span className="flex-[4] text-left">{member.username}</span>
                             <span className="flex-[1.5] text-left">{member.generation}기</span>
                             <span className="flex-[1.5] text-left">{member.part}</span>

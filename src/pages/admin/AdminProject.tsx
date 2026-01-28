@@ -108,10 +108,10 @@ export const AdminProjectPage = () => {
                     </>
                 ) : (
                     <>
-                        {projects && projects?.content.length > 1 && (
+                        {projects && projects?.content.length > 0 && (
                             <>
                                 <ProjectSearchList
-                                    data={projects}
+                                    data={projects.content}
                                     showCheckboxes={showCheckboxes}
                                     selectedIds={selectedIds}
                                     onToggleSelect={toggleSelect}

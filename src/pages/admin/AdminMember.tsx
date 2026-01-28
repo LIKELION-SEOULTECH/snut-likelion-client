@@ -54,7 +54,6 @@ export const AdminMemberPage = () => {
         }
     });
 
-    console.log(membersRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">

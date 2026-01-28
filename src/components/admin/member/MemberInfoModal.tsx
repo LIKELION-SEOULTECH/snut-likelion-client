@@ -104,6 +104,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
             queryClient.invalidateQueries({ queryKey: ["members"] });
             alert("회원 정보가 삭제되었습니다.");
             onClose();
+            setDeleteConfirm(false);
         },
         onError: (error) => {
             console.error("회원 삭제 실패:", error);

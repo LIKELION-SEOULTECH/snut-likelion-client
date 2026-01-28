@@ -8,13 +8,23 @@ import PageLayout from "@/layouts/PageLayout";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import samplePRf from "@/assets/Member/samplePRFIMG.png";
+import { Button } from "@/components/ui/button";
+import { ArrowUpRight } from "lucide-react";
+import { ADMIN_ABS } from "@/routes/routes";
+import { useNavigate } from "react-router-dom";
 
 export const MyPage = () => {
+    const navigate = useNavigate();
     const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
 
     const isGuest = useMemo(() => {
         const role = localStorage.getItem("userRole");
         return role === "ROLE_GUEST";
+    }, []);
+
+    const isAdmin = useMemo(() => {
+        const role = localStorage.getItem("userRole");
+        return role === "ROLE_ADMIN";
     }, []);
 
     const { data: member, isLoading: memberLoading } = useQuery<MemberDetailResponse>({
@@ -67,7 +77,7 @@ export const MyPage = () => {
                                 <img src={samplePRf} alt="프로필 이미지" width={291} height={281} />
                             </div>
                         ) : null}
-                        <div className="w-[291px] h-[306px]">
+                        <div className="w-[291px]">
                             <MyPageTab
                                 isGuest={!!isGuest}
                                 member={member!}
@@ -75,6 +85,16 @@ export const MyPage = () => {
                                 selectedGeneration={activeGeneration}
                             />
                         </div>
+                        {isAdmin && (
+                            <div className="mt-7">
+                                <Button
+                                    className="w-full h-[70px] text-xl text-gray-25 font-semibold bg-primary-800 border border-primary-400 gap-[6px] cursor-pointer hover:bg-primary-500"
+                                    onClick={() => navigate(ADMIN_ABS.MEMBER)}
+                                >
+                                    어드민 <ArrowUpRight size={20} />
+                                </Button>
+                            </div>
+                        )}
                     </div>
 
                     {/* 오른쪽 메인 컨텐츠 */}

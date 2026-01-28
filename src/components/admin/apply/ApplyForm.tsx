@@ -17,7 +17,17 @@ import { useEffect } from "react";
 import { splitQuestions } from "@/utils/splitQuestions";
 import { fetchQuestionsByRecruitment } from "@/apis/admin/recruitment";
 import { useQuestionListsStore } from "@/stores/useQuestionListStore";
-import { initialQuestions } from "@/constants/admin/initialQuestion";
+import {
+    createDepartmentInitialQuestions,
+    createPartInitialQuestions
+} from "@/constants/admin/initialQuestion";
+import {
+    mapServerToApiDepartmentType,
+    mapServerToApiQuestionPart,
+    mapServerToApiQuestionTarget,
+    mapServerToApiQuestionType
+} from "@/utils/questionTargetMapper";
+import type { Question } from "@/types/apply";
 
 export const ManagerApplyForm = ({ recId }: { recId: number }) => {
     const {
@@ -39,22 +49,39 @@ export const ManagerApplyForm = ({ recId }: { recId: number }) => {
         enabled: !!recId
     });
 
+    const normalizedQuestions = recruitmentQuestions?.data.map((q: Question) => ({
+        ...q,
+        questionTarget: mapServerToApiQuestionTarget(q.questionTarget),
+        questionType: mapServerToApiQuestionType(q.questionType),
+        part: mapServerToApiQuestionPart(q.part),
+        departmentType: mapServerToApiDepartmentType(q.departmentType)
+    }));
+
     useEffect(() => {
         if (!recruitmentQuestions?.data) return;
 
-        const { basic, common, partMap, departmentMap } = splitQuestions(recruitmentQuestions.data);
+        const { basic, common, partMap, departmentMap } = splitQuestions(normalizedQuestions);
 
         setBasicQuestionList(basic);
         setCommonQuestionList(common);
 
-        setPlanQuestionList(partMap.기 ?? initialQuestions);
-        setDesignQuestionList(partMap.디자인 ?? initialQuestions);
-        setFrontendQuestionList(partMap.프론트엔드 ?? initialQuestions);
-        setBackendQuestionList(partMap.백엔드 ?? initialQuestions);
-        setAiQuestionList(partMap.AI ?? initialQuestions);
-        setOperationQuestionList(partMap.운영부 ?? initialQuestions);
-        setMarketingQuestionList(partMap.홍보부 ?? initialQuestions);
-        setAcademicQuestionList(departmentMap.학술부 ?? initialQuestions);
+        // 파트 질문
+        setPlanQuestionList(partMap.PLANNING ?? createPartInitialQuestions("PLANNING"));
+        setDesignQuestionList(partMap.DESIGN ?? createPartInitialQuestions("DESIGN"));
+        setFrontendQuestionList(partMap.FRONTEND ?? createPartInitialQuestions("FRONTEND"));
+        setBackendQuestionList(partMap.BACKEND ?? createPartInitialQuestions("BACKEND"));
+        setAiQuestionList(partMap.AI ?? createPartInitialQuestions("AI"));
+
+        // 부서 질문
+        setOperationQuestionList(
+            departmentMap.OPERATION ?? createDepartmentInitialQuestions("OPERATION")
+        );
+        setMarketingQuestionList(
+            departmentMap.MARKETING ?? createDepartmentInitialQuestions("MARKETING")
+        );
+        setAcademicQuestionList(
+            departmentMap.ACADEMIC ?? createDepartmentInitialQuestions("ACADEMIC")
+        );
     }, [recruitmentQuestions]);
 
     return (
@@ -97,19 +124,23 @@ export const UserApplyForm = ({ recId }: { recId: number }) => {
         enabled: !!recId
     });
 
+    const normalizedQuestions = recruitmentQuestions?.data.map((q: Question) => ({
+        ...q,
+        questionTarget: mapServerToApiQuestionTarget(q.questionTarget)
+    }));
     useEffect(() => {
         if (!recruitmentQuestions?.data) return;
 
-        const { basic, common, partMap } = splitQuestions(recruitmentQuestions.data);
+        const { basic, common, partMap } = splitQuestions(normalizedQuestions);
 
         setBasicQuestionList(basic);
         setCommonQuestionList(common);
 
-        setPlanQuestionList(partMap.기획 ?? initialQuestions);
-        setDesignQuestionList(partMap.디자인 ?? initialQuestions);
-        setFrontendQuestionList(partMap.프론트엔드 ?? initialQuestions);
-        setBackendQuestionList(partMap.백엔드 ?? initialQuestions);
-        setAiQuestionList(partMap.AI ?? initialQuestions);
+        setPlanQuestionList(partMap.기획 ?? createPartInitialQuestions("PLANNING"));
+        setDesignQuestionList(partMap.디자인 ?? createPartInitialQuestions("DESIGN"));
+        setFrontendQuestionList(partMap.프론트엔드 ?? createPartInitialQuestions("FRONTEND"));
+        setBackendQuestionList(partMap.백엔드 ?? createPartInitialQuestions("BACKEND"));
+        setAiQuestionList(partMap.AI ?? createPartInitialQuestions("AI"));
     }, [recruitmentQuestions]);
 
     return (

@@ -23,7 +23,7 @@ export const ProjectSearchList = ({
                 검색결과 <span className="text-orange-400">{length}</span>
             </div>
 
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full text-sm rounded-sm overflow-hidden bg-white min-h-[567px]">
                 {/* 리스트 헤더 */}
                 <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA]">
                     {showCheckboxes && (

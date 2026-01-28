@@ -74,7 +74,7 @@ export const updateRecruitmentQuestions = async (recId: number, questions: Quest
 // 단일 지원서 상세 조회
 export const getAdminApplicationDetail = async (appId: number) => {
     const res = await axiosInstance.get(`/admin/applications/${appId}`);
-    return res.data;
+    return res.data.data;
 };
 
 // 지원서 상태 일괄 변경
@@ -82,7 +82,7 @@ export const updateApplicationStatus = ({
     status,
     ids
 }: {
-    status: "PAPER_PASS" | "FINAL_PASS" | "FAIL";
+    status: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
     ids: number[];
 }) => {
     return axiosInstance.patch("/admin/applications/status", { ids }, { params: { status } });

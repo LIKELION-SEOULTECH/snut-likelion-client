@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
 // import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
-import { ADMIN_ABS, ROUTES } from "@/routes/routes";
+import { ROUTES } from "@/routes/routes";
 import { fetchMyMemberInfo } from "@/apis/main/member";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { MyIcon } from "@/components/Header/MyIcon";
@@ -95,12 +95,7 @@ export const Header = ({ white = false }: HeaderProps) => {
     };
 
     const handleLogoClick = () => {
-        const role = localStorage.getItem("userRole");
-        if (role === "ROLE_MANAGER" || role === "ROLE_ADMIN") {
-            navigate(ADMIN_ABS.MEMBER);
-        } else {
-            navigate(ROUTES.HOME);
-        }
+        navigate(ROUTES.HOME);
     };
 
     return (

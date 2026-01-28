@@ -127,7 +127,9 @@ button {
     --color-gray-25: #f5f5f5;
     --color-gray-0: #ffffff;
 
+    --color-primary-800: #8c4100;
     --color-primary-500: #ff7700;
+    --color-primary-400: #ff9233;
     --color-primary-300: #ffa454;
 
     --color-error: #ea3838;

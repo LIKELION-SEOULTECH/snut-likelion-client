@@ -7,7 +7,7 @@ interface NoticeSearchListProps {
     selectedIds: number[];
     onToggleSelect: (id: number) => void;
     onToggleSelectAll?: (checked: boolean) => void;
-    length: number;
+    totalElements: number;
 }
 
 export const NoticeSearchList = ({
@@ -15,15 +15,15 @@ export const NoticeSearchList = ({
     selectedIds,
     onToggleSelect,
     onToggleSelectAll,
-    length
+    totalElements
 }: NoticeSearchListProps) => {
     return (
         <div>
             <div className="text-sm mb-4">
-                검색결과 <span className="text-orange-400">{length}</span>
+                검색결과 <span className="text-orange-400">{totalElements}</span>
             </div>
 
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full text-sm rounded-sm overflow-hidden bg-white min-h-[567px]">
                 {/* 리스트 헤더 */}
                 <div className="h-10 flex items-center text-[#666666] font-medium bg-[#FAFAFA] px-5">
                     <span className="flex items-center justify-center flex-[1] text-center">

@@ -10,16 +10,22 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; part: string }) => void;
-    onChangeResult: (status: "FAIL" | "FINAL_PASS" | "PAPER_PASS") => void;
+    onChangeResult: (status: "FAILED" | "FINAL_PASS" | "PAPER_PASS") => void;
+    updateMode: UpdateMode;
 }
 
-export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearchToolProps) => {
+export const RecruitUserSearchTool = ({
+    onSearch,
+    onChangeResult,
+    updateMode
+}: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
-    const [part, setPart] = useState("");
     const [result, setResult] = useState("");
+    const [part, setPart] = useState("");
 
     const handleSearch = () => {
         onSearch({ result, part });
@@ -47,6 +53,12 @@ export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearch
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             제출
+                        </SelectItem>
+                        <SelectItem
+                            value="PAPER_PASS"
+                            className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                        >
+                            서류 합격
                         </SelectItem>
                         <SelectItem
                             value="FAILED"
@@ -113,14 +125,13 @@ export const RecruitUserSearchTool = ({ onSearch, onChangeResult }: MemberSearch
 
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
-                    <Button
-                        // onClick={() => onChangeResult("FAIL")}
-                        className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
-                    >
+                    <Button className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25">
                         불합격
                     </Button>
                     <Button
-                        onClick={() => onChangeResult("PAPER_PASS")}
+                        onClick={() =>
+                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
+                        }
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격
