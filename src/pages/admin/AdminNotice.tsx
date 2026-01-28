@@ -117,12 +117,12 @@ export const AdminNoticePage = () => {
                                 selectedIds={selectedIds}
                                 onToggleSelect={toggleSelect}
                                 onToggleSelectAll={handleToggleSelectAll}
-                                length={noticeRes.length}
+                                totalElements={noticeRes.totalElements}
                             />
                             <div className="mb-[210px]">
                                 <Pagination
                                     currentPage={currentPage}
-                                    totalPages={noticeRes.length}
+                                    totalPages={noticeRes.totalPages}
                                     onPageChange={setCurrentPage}
                                 />
                             </div>
