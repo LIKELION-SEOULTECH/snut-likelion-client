@@ -55,6 +55,12 @@ export const RecruitUserSearchTool = ({
                             제출
                         </SelectItem>
                         <SelectItem
+                            value="PAPER_PASS"
+                            className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
+                        >
+                            서류 합격
+                        </SelectItem>
+                        <SelectItem
                             value="FAILED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >

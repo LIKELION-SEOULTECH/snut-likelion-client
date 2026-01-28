@@ -16,7 +16,6 @@ export const AdminManagerRecruitDetailPage = () => {
         enabled: !!appId
     });
 
-    console.log(ApplicationDetailRes);
     return (
         <AdminLayout>
             <div className="flex flex-row items-center pt-12 pb-9 text-sm gap-1 text-[#7F7F7F] ">

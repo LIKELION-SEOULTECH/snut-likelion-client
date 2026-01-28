@@ -19,11 +19,13 @@ export const SidebarList = () => {
     const isRecruitRoot = location.pathname === "/admin/recruit";
     const isManager =
         location.pathname === "/admin/recruit/manager" ||
-        location.pathname === "/admin/recruit/apply-manager";
+        location.pathname === "/admin/recruit/apply-manager" ||
+        location.pathname.startsWith("/admin/recruit/result/manager");
 
     const isUser =
         location.pathname === "/admin/recruit/user" ||
-        location.pathname === "/admin/recruit/apply-user";
+        location.pathname === "/admin/recruit/apply-user" ||
+        location.pathname.startsWith("/admin/recruit/result/user");
 
     useEffect(() => {
         if (location.pathname.startsWith("/admin/recruit")) {

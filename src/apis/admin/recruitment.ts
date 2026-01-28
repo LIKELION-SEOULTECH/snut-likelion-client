@@ -82,7 +82,7 @@ export const updateApplicationStatus = ({
     status,
     ids
 }: {
-    status: "PAPER_PASS" | "FINAL_PASS" | "FAILED";
+    status: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
     ids: number[];
 }) => {
     return axiosInstance.patch("/admin/applications/status", { ids }, { params: { status } });

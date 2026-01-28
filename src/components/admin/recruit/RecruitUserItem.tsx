@@ -4,11 +4,13 @@ import { cn } from "@/libs/cn";
 import { formatDateWithHyphen } from "@/utils/formatData";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
+import { getApplicationStatusLabel } from "@/utils/getApplicationStatusLabel";
 interface RecruitManagerItemProps {
     app: ApplicationData;
     index: number;
     checked: boolean;
     updateMode: UpdateMode;
+    pendingStatus?: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
     onToggle: () => void;
 }
 
@@ -17,6 +19,7 @@ export const RecruitUserItem = ({
     index,
     checked,
     updateMode,
+    pendingStatus,
     onToggle
 }: RecruitManagerItemProps) => {
     const navigate = useNavigate();
@@ -49,7 +52,7 @@ export const RecruitUserItem = ({
                                 checked:after:content-['✓'] checked:after:text-white 
                                 checked:after:text-[16px] checked:after:block 
                                 checked:after:text-center checked:after:leading-[1rem] 
-                                flex items-center justify-center align-middle"
+                                flex items-center justify-center align-middle cursor-pointer"
                     />
                 </span>
             )}
@@ -58,7 +61,9 @@ export const RecruitUserItem = ({
             <span>{app.email}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
-            <span className="px-[9px]">{app.status}</span>
+            <span className="px-[9px]">
+                {getApplicationStatusLabel(pendingStatus ?? app.status)}
+            </span>
         </div>
     );
 };

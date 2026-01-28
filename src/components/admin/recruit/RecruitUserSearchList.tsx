@@ -9,6 +9,7 @@ export const RecruitUserSearchList = ({
     totalElements,
     selectedIds,
     updateMode,
+    pendingStatusMap,
     onToggleSelect,
     onToggleSelectAll
 }: {
@@ -16,6 +17,7 @@ export const RecruitUserSearchList = ({
     totalElements: number;
     selectedIds: number[];
     updateMode: UpdateMode;
+    pendingStatusMap: Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">;
     onToggleSelect: (app: ApplicationData) => void;
     onToggleSelectAll: () => void;
 }) => {
@@ -54,7 +56,7 @@ export const RecruitUserSearchList = ({
                                 checked:after:content-['✓'] checked:after:text-white 
                                 checked:after:text-[16px] checked:after:block 
                                 checked:after:text-center checked:after:leading-[1rem] 
-                                flex items-center justify-center align-middle"
+                                flex items-center justify-center align-middle cursor-pointer"
                             />
                         </span>
                     )}
@@ -75,6 +77,7 @@ export const RecruitUserSearchList = ({
                             app={app}
                             index={index}
                             updateMode={updateMode}
+                            pendingStatus={pendingStatusMap[app.id]}
                             checked={selectedIds.includes(app.id)}
                             onToggle={() => onToggleSelect(app)}
                         />
