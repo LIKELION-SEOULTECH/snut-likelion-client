@@ -5,6 +5,7 @@ interface MemberSearchListProps {
     members: Member[];
     totalElements: number;
 }
+
 export const MemberSearchList = ({ members, totalElements }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);

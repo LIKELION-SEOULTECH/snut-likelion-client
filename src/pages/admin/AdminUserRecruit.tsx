@@ -26,12 +26,10 @@ export const AdminUserRecruitPage = () => {
     const [pendingStatusMap, setPendingStatusMap] = useState<
         Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
     >({});
-
     const [filters, setFilters] = useState({
         result: "",
         part: ""
     });
-
     const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
     const {
