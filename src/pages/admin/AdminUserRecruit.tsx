@@ -30,7 +30,6 @@ export const AdminUserRecruitPage = () => {
         result: "",
         part: ""
     });
-  
     const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
     const {
@@ -41,7 +40,7 @@ export const AdminUserRecruitPage = () => {
         queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 1, // 교체
+                recId: 1,
                 page: currentPage - 1,
                 part: filters.part,
                 status: filters.result
