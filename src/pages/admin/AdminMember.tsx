@@ -11,7 +11,6 @@ import type { MemberFilter } from "@/types/member";
 
 export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
     const [filters, setFilters] = useState<MemberFilter>({
         generation: null,
         part: "",
