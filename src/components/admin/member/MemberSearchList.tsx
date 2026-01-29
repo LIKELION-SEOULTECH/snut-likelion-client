@@ -3,10 +3,9 @@ import type { Member } from "@/types/members";
 import { MemberInfoModal } from "./MemberInfoModal";
 interface MemberSearchListProps {
     members: Member[];
-    currentPage: number;
-    itemsPerPage: number;
+    totalElements: number;
 }
-export const MemberSearchList = ({ members }: MemberSearchListProps) => {
+export const MemberSearchList = ({ members, totalElements }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -17,6 +16,9 @@ export const MemberSearchList = ({ members }: MemberSearchListProps) => {
 
     return (
         <div>
+            <div className="text-sm mb-8">
+                검색결과 <span className="text-orange-400">{totalElements}</span>
+            </div>
             <div className="w-full rounded-sm overflow-hidden">
                 {/* 리스트 헤더 */}
                 <div className="h-10 flex text-sm items-center text-[#666666] font-medium bg-[#FAFAFA]">
@@ -27,7 +29,7 @@ export const MemberSearchList = ({ members }: MemberSearchListProps) => {
                     <span className="flex-[1.5] text-left">역할</span>
                 </div>
                 {/* 리스트 content */}
-                <div className="bg-white text-sm min-h-[567px]">
+                <div className="bg-white text-sm min-h-[527px]">
                     {members?.map((member, index) => (
                         <div
                             key={member.id}

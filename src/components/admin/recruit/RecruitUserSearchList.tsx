@@ -27,7 +27,7 @@ export const RecruitUserSearchList = ({
 
     return (
         <div>
-            <div className="flex flex-row regular-14 mb-4 text-gray-900 gap-7">
+            <div className="flex flex-row regular-14 mb-8 text-gray-900 gap-7">
                 <div>
                     전체 <span className="text-orange-400">{totalElements}</span>
                 </div>
@@ -35,7 +35,7 @@ export const RecruitUserSearchList = ({
                     합격 <span className="text-orange-400">{data.length}</span>
                 </div>
             </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[567px] bg-white">
+            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[527px] bg-white">
                 {/* 리스트 헤더 */}
                 <div
                     className={cn(

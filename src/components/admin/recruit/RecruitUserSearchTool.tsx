@@ -31,8 +31,22 @@ export const RecruitUserSearchTool = ({
         onSearch({ result, part });
     };
 
+    // 엔터키 필터링
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            onSearch({
+                result,
+                part
+            });
+        }
+    };
     return (
-        <div className="h-11 flex flex-row gap-2 justify-between items-center">
+        <div
+            className="h-11 flex flex-row gap-2 justify-between items-center"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+        >
             <div className="h-full flex flex-row gap-[6px]">
                 {/* result */}
                 <Select value={result} onValueChange={setResult}>
@@ -70,7 +84,7 @@ export const RecruitUserSearchTool = ({
                             value="FINAL_PASS"
                             className="w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
-                            합격
+                            최종 합격
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -125,9 +139,6 @@ export const RecruitUserSearchTool = ({
 
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
-                    <Button className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25">
-                        불합격
-                    </Button>
                     <Button
                         onClick={() =>
                             onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")

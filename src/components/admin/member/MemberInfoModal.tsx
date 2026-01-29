@@ -9,6 +9,7 @@ import { CustomSelect } from "../common/custom-select";
 import { Switch } from "@/components/ui/switch";
 import { AlertCircle, CircleCheck, X } from "lucide-react";
 import { toast, Toaster } from "sonner";
+import { departmentToEnumValue, partToEnumValue, roleToEnumValue } from "@/utils/enumLabel";
 
 interface MemberInfoModalProps {
     open: boolean;
@@ -26,29 +27,16 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
     const [authorization, setAuthorization] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
-    const partToEnumValue = (part: string): string => {
-        switch (part) {
-            case "프론트엔드":
-                return "FRONTEND";
-            case "백엔드":
-                return "BACKEND";
-            case "디자인":
-                return "DESIGN";
-            case "기획":
-                return "PLANNING";
-            case "AI":
-                return "AI";
-            default:
-                return "";
-        }
-    };
-
     useEffect(() => {
         if (member) {
             setGeneration(member.generation);
             setPart(partToEnumValue(member.part));
-            setRole(member.role);
-            setDepartment("");
+            setRole(roleToEnumValue(member.role));
+            if ((member.role === "운영진" || member.role === "어드민") && member.department) {
+                setDepartment(departmentToEnumValue(member.department ?? ""));
+            } else {
+                setDepartment("");
+            }
         }
     }, [member]);
 
@@ -59,8 +47,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                 generation: Number(generation),
                 username: member!.username,
                 part,
-                // role,
-                role: "ROLE_ADMIN",
+                role,
                 department: role !== "ROLE_USER" ? department : null
                 // 권한 여부 추가
             }),
@@ -102,7 +89,19 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
         mutationFn: () => deleteMember(member!.id, Number(generation)),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["members"] });
-            alert("회원 정보가 삭제되었습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">회원정보가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             onClose();
             setDeleteConfirm(false);
         },
@@ -119,6 +118,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
 
     if (!member) return null;
 
+    console.log(member);
     return (
         <>
             <Toaster position="top-center" offset={{ top: 120, left: 80 }} />
