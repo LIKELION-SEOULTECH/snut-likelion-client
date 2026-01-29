@@ -11,6 +11,8 @@ import { ProjectDeleteConfirmDialog } from "@/components/admin/project/ProjectDe
 import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminProjectSkeleton } from "@/components/admin/project/ProjectSkeleton";
+import { toast } from "sonner";
+import { CircleCheck } from "lucide-react";
 
 export const AdminProjectPage = () => {
     const queryClient = useQueryClient();
@@ -67,6 +69,19 @@ export const AdminProjectPage = () => {
     const deleteProjectsMutation = useMutation({
         mutationFn: (ids: number[]) => deleteMultipleProjects(ids),
         onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">프로젝트가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             setSelectedIds([]);
             setShowDeleteModal(false);
             setShowDeleteConfirm(true);
@@ -85,6 +100,7 @@ export const AdminProjectPage = () => {
         if (showCheckboxes) {
             if (selectedIds.length === 0) {
                 alert("삭제할 항목을 선택해주세요.");
+                setShowCheckboxes(false);
                 return;
             }
             setShowDeleteModal(true);

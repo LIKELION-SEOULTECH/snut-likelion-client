@@ -18,6 +18,8 @@ import {
 import { getAdminNotices } from "@/apis/admin/notice";
 import type { Notice } from "@/types/notice";
 import { AdminNoticeSkeleton } from "@/components/admin/notice/NoticeSkeleton";
+import { toast } from "sonner";
+import { AlertCircle, CircleCheck } from "lucide-react";
 
 export const AdminNoticePage = () => {
     const queryClient = useQueryClient();
@@ -47,7 +49,19 @@ export const AdminNoticePage = () => {
     const deleteMutation = useMutation({
         mutationFn: (ids: number[]) => Promise.all(ids.map((id) => deleteNotice(id))),
         onSuccess: () => {
-            alert("삭제가 완료되었습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">공지가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             setShowDeleteConfirm(false);
             setSelectedIds([]);
             setIsDeleteMode(false);
@@ -57,12 +71,25 @@ export const AdminNoticePage = () => {
             });
         },
         onError: () => {
-            alert("삭제에 실패했습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <AlertCircle size={20} className="text-red-400" />
+                    <span className="text-sm font-medium">공지 삭제에 실패했습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
         }
     });
 
     const handleSearch = (newFilters: { keyword: string }) => {
         setFilters(newFilters);
+        setSelectedIds([]);
         setCurrentPage(1);
     };
 
@@ -87,11 +114,12 @@ export const AdminNoticePage = () => {
         if (isDeleteMode) {
             if (selectedIds.length === 0) {
                 alert("삭제할 항목을 선택해주세요.");
+                setIsDeleteMode(false);
                 return;
             }
-            setShowDeleteConfirm(true); // 모달 띄우기
+            setShowDeleteConfirm(true);
         } else {
-            setIsDeleteMode(true); // 삭제 모드 진입
+            setIsDeleteMode(true);
         }
     };
 
@@ -115,6 +143,7 @@ export const AdminNoticePage = () => {
                             <NoticeSearchList
                                 data={noticeRes.content}
                                 selectedIds={selectedIds}
+                                isDeleteMode={isDeleteMode}
                                 onToggleSelect={toggleSelect}
                                 onToggleSelectAll={handleToggleSelectAll}
                                 totalElements={noticeRes.totalElements}
