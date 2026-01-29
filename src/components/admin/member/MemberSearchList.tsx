@@ -5,6 +5,7 @@ interface MemberSearchListProps {
     members: Member[];
     totalElements: number;
 }
+
 export const MemberSearchList = ({ members, totalElements }: MemberSearchListProps) => {
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [modalOpen, setModalOpen] = useState(false);
@@ -29,6 +30,7 @@ export const MemberSearchList = ({ members, totalElements }: MemberSearchListPro
                     <span className="flex-[1.5] text-left">역할</span>
                 </div>
                 {/* 리스트 content */}
+
                 <div className="bg-white text-sm min-h-[527px]">
                     {members?.map((member, index) => (
                         <div

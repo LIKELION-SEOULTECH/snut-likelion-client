@@ -26,12 +26,11 @@ export const AdminUserRecruitPage = () => {
     const [pendingStatusMap, setPendingStatusMap] = useState<
         Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
     >({});
-
     const [filters, setFilters] = useState({
         result: "",
         part: ""
     });
-
+  
     const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
     const {
@@ -42,7 +41,7 @@ export const AdminUserRecruitPage = () => {
         queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 1,
+                recId: 1, // 교체
                 page: currentPage - 1,
                 part: filters.part,
                 status: filters.result
