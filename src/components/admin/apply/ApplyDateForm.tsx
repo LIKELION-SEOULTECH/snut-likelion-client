@@ -15,6 +15,8 @@ import { CustomSelect } from "../common/custom-select";
 import type { LatestRecruitment } from "@/types/recruitment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
+import { CircleCheck } from "lucide-react";
 
 export const ApplyDateForm = ({
     latestRecruitment,
@@ -48,6 +50,19 @@ export const ApplyDateForm = ({
         },
 
         onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">기간 수정이 완료되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             queryClient.invalidateQueries({
                 queryKey: ["latestRecruitment", recruitmentType]
             });

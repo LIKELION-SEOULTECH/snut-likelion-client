@@ -7,7 +7,7 @@ export interface ManagerData {
     departmentType: string;
     part: string;
     submittedAt: string;
-    status: "합격" | "불합격" | "제출" | "서류합격";
+    status: "최종 합격" | "불합격" | "제출" | "서류합격";
 }
 
 export interface ApplicationData {
@@ -16,7 +16,7 @@ export interface ApplicationData {
     email: string;
     part: string;
     submittedAt: string;
-    status: "합격" | "불합격" | "제출" | "서류 합격";
+    status: "최종 합격" | "불합격" | "제출" | "서류 합격";
     departmentType?: string;
 }
 

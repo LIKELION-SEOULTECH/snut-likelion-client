@@ -32,8 +32,24 @@ export const RecruitManagerSearchTool = ({
         onSearch({ result, department, part });
     };
 
+    // 엔터키 필터링
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            onSearch({
+                result,
+                department,
+                part
+            });
+        }
+    };
+
     return (
-        <div className="h-11 flex flex-row gap-2 items-center justify-between">
+        <div
+            className="h-11 flex flex-row gap-2 items-center justify-between"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+        >
             <div className="h-full flex flex-row gap-[6px]">
                 {/* result */}
                 <Select value={result} onValueChange={setResult}>
@@ -71,7 +87,7 @@ export const RecruitManagerSearchTool = ({
                             value="FINAL_PASS"
                             className="w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
-                            합격
+                            최종 합격
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -91,19 +107,19 @@ export const RecruitManagerSearchTool = ({
 
                     <SelectContent className="w-[93px] min-w-[93px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="운영부"
+                            value="OPERATION"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             운영부
                         </SelectItem>
                         <SelectItem
-                            value="홍보부"
+                            value="MARKETING"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             홍보부
                         </SelectItem>
                         <SelectItem
-                            value="학술부"
+                            value="ACADEMIC"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             학술부
@@ -160,9 +176,6 @@ export const RecruitManagerSearchTool = ({
             </div>
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
-                    <Button className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25">
-                        불합격
-                    </Button>
                     <Button
                         onClick={() =>
                             onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")

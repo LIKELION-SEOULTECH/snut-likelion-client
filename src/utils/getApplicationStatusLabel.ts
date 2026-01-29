@@ -6,7 +6,7 @@ export const getApplicationStatusLabel = (
         | "FAILED"
         | "제출"
         | "서류 합격"
-        | "합격"
+        | "최종 합격"
         | "불합격"
 ): string => {
     switch (status) {
@@ -17,7 +17,7 @@ export const getApplicationStatusLabel = (
         case "서류 합격":
             return "서류 합격";
         case "FINAL_PASS":
-        case "합격":
+        case "최종 합격":
             return "합격";
         case "FAILED":
         case "불합격":

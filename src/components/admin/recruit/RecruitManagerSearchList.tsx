@@ -9,6 +9,7 @@ export const RecruitManagerSearchList = ({
     totalElements,
     selectedIds,
     updateMode,
+    pendingStatusMap,
     onToggleSelect,
     onToggleSelectAll
 }: {
@@ -16,6 +17,7 @@ export const RecruitManagerSearchList = ({
     totalElements: number;
     selectedIds: number[];
     updateMode: UpdateMode;
+    pendingStatusMap: Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">;
     onToggleSelect: (app: ApplicationData) => void;
     onToggleSelectAll: () => void;
 }) => {
@@ -25,7 +27,7 @@ export const RecruitManagerSearchList = ({
 
     return (
         <div>
-            <div className="flex flex-row regular-14 gap-7 mb-4">
+            <div className="flex flex-row regular-14 gap-7 mb-8">
                 <div>
                     전체 <span className="text-orange-400">{totalElements}</span>
                 </div>
@@ -33,7 +35,7 @@ export const RecruitManagerSearchList = ({
                     합격 <span className="text-orange-400">{data.length}</span>
                 </div>
             </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[567px] bg-white">
+            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[527px] bg-white">
                 {/* 리스트 헤더 */}
                 <div
                     className={cn(
@@ -74,6 +76,7 @@ export const RecruitManagerSearchList = ({
                             app={app}
                             index={index}
                             updateMode={updateMode}
+                            pendingStatus={pendingStatusMap[app.id]}
                             checked={selectedIds.includes(app.id)}
                             onToggle={() => onToggleSelect(app)}
                         />

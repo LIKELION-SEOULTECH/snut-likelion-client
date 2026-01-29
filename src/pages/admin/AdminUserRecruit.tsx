@@ -23,14 +23,15 @@ export const AdminUserRecruitPage = () => {
 
     const [saveModal, setSaveModal] = useState(false);
 
+    const [pendingStatusMap, setPendingStatusMap] = useState<
+        Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
+    >({});
     const [filters, setFilters] = useState({
         result: "",
         part: ""
     });
-
-    const [pendingStatusMap, setPendingStatusMap] = useState<
-        Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
-    >({});
+  
+    const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
     const {
         data: userRecruitRes,
@@ -156,7 +157,16 @@ export const AdminUserRecruitPage = () => {
     }, [setManageMode]);
 
     return (
-        <AdminLayout onSubmit={() => setSaveModal(true)}>
+        <AdminLayout
+            onSubmit={() => {
+                if (hasPendingChanges) {
+                    setSaveModal(true);
+                } else {
+                    alert("변경된 사항이 없습니다.");
+                    setManageMode(false);
+                }
+            }}
+        >
             <Toaster position="top-center" offset={{ top: 120, left: 80 }} />
             <div className="mt-12 mb-8">
                 <RecruitUserSearchTool

@@ -70,8 +70,7 @@ export const AdminMemberPage = () => {
                             <>
                                 <MemberSearchList
                                     members={membersRes.content}
-                                    currentPage={currentPage}
-                                    itemsPerPage={itemsPerPage}
+                                    totalElements={membersRes.totalElements}
                                 />
                                 <div className="mb-[210px]">
                                     <Pagination
