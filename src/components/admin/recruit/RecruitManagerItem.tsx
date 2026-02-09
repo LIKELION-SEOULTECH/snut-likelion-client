@@ -60,7 +60,7 @@ export const RecruitManagerItem = ({
             )}
             <span className="pl-[6px]">{app.id}</span>
             <span>{app.username}</span>
-            <span>{app.email}</span>
+            <span className="min-w-50">{app.email}</span>
             <span>{app.departmentType}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
