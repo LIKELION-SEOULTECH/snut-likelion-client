@@ -7,6 +7,8 @@ import { ADMIN_ABS } from "@/routes/routes";
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { createAdminNotice } from "@/apis/admin/notice";
+import { toast } from "sonner";
+import { CircleCheck } from "lucide-react";
 
 export const AdminNoticeCreatePage = () => {
     const queryClient = useQueryClient();
@@ -63,6 +65,19 @@ export const AdminNoticeCreatePage = () => {
             queryClient.invalidateQueries({
                 queryKey: ["adminNotices"]
             });
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">공지가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
 
             navigate(ADMIN_ABS.NOTICE);
         },

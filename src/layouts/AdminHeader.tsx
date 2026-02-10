@@ -65,11 +65,14 @@ export const AdminHeader = ({
         return "";
     };
 
+    const isRecruitResultPage = path.startsWith("/admin/recruit/result");
+
     const showButtons =
-        path.startsWith("/admin/notice") ||
-        path.startsWith("/admin/blog") ||
-        path.startsWith("/admin/project") ||
-        path.startsWith("/admin/recruit");
+        !isRecruitResultPage &&
+        (path.startsWith("/admin/notice") ||
+            path.startsWith("/admin/blog") ||
+            path.startsWith("/admin/project") ||
+            path.startsWith("/admin/recruit"));
 
     // 뒤로가기 버튼 있는 경우
     const showBackButton =
@@ -83,7 +86,8 @@ export const AdminHeader = ({
         path.startsWith("/admin/recruit/apply-user") ||
         path.startsWith("/admin/recruit/apply-manager") ||
         (path.startsWith("/admin/recruit/manager") && isManageMode) ||
-        (path.startsWith("/admin/recruit/user") && isManageMode);
+        (path.startsWith("/admin/recruit/user") && isManageMode) ||
+        path.startsWith("/admin/recruit/result");
 
     const renderButtons = () => {
         // 소식 업로드 버튼
@@ -126,7 +130,7 @@ export const AdminHeader = ({
             return (
                 <button
                     className="w-[87px] h-11 text-gray-0 rounded-sm bg-primary-500"
-                    onClick={toggleManageMode}
+                    onClick={onSubmit}
                 >
                     저장
                 </button>
@@ -137,7 +141,7 @@ export const AdminHeader = ({
             return (
                 <button
                     className="w-[87px] h-11 text-gray-0 rounded-sm bg-primary-500"
-                    onClick={toggleManageMode}
+                    onClick={onSubmit}
                 >
                     저장
                 </button>

@@ -1,23 +1,46 @@
 import type { Question } from "@/types/apply";
 import { nanoid } from "nanoid";
 
-export const initialQuestions: Question[] = [
+export const createPartInitialQuestions = (part: Question["part"]): Question[] => [
     {
         clientId: nanoid(),
-        text: "공통 질문 보통 뭐 있어요? 대충 써놓을게요",
+        text: "질문을 입력해주세요",
         questionTarget: "PART",
         questionType: "LONG",
-        part: "",
+        part,
         departmentType: "",
         order: 0
     },
     {
         clientId: nanoid(),
-        text: "공통 질문 보통 뭐 있어요? 대충 써놓을게요",
+        text: "질문을 입력해주세요",
         questionTarget: "PART",
         questionType: "LONG",
-        part: "",
+        part,
         departmentType: "",
-        order: 1
+        order: 0
+    }
+];
+
+export const createDepartmentInitialQuestions = (
+    departmentType: Question["departmentType"]
+): Question[] => [
+    {
+        clientId: nanoid(),
+        text: "질문을 입력해주세요",
+        questionTarget: "DEPARTMENT",
+        questionType: "LONG",
+        part: "",
+        departmentType,
+        order: 0
+    },
+    {
+        clientId: nanoid(),
+        text: "질문을 입력해주세요",
+        questionTarget: "DEPARTMENT",
+        questionType: "LONG",
+        part: "",
+        departmentType,
+        order: 0
     }
 ];

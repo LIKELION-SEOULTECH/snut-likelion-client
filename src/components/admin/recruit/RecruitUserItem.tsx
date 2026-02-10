@@ -3,14 +3,25 @@ import type { ApplicationData } from "@/types/recruitment";
 import { cn } from "@/libs/cn";
 import { formatDateWithHyphen } from "@/utils/formatData";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
+import { getApplicationStatusLabel } from "@/utils/getApplicationStatusLabel";
 interface RecruitManagerItemProps {
     app: ApplicationData;
     index: number;
     checked: boolean;
+    updateMode: UpdateMode;
+    pendingStatus?: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
     onToggle: () => void;
 }
 
-export const RecruitUserItem = ({ app, index, checked, onToggle }: RecruitManagerItemProps) => {
+export const RecruitUserItem = ({
+    app,
+    index,
+    checked,
+    updateMode,
+    pendingStatus,
+    onToggle
+}: RecruitManagerItemProps) => {
     const navigate = useNavigate();
     const { isManageMode } = useRecruitManageStore();
 
@@ -31,23 +42,28 @@ export const RecruitUserItem = ({ app, index, checked, onToggle }: RecruitManage
                         type="checkbox"
                         onClick={(e) => e.stopPropagation()}
                         checked={checked}
+                        disabled={
+                            (updateMode === "제출" && app.status !== "제출") ||
+                            (updateMode === "서류 합격" && app.status !== "서류 합격")
+                        }
                         onChange={onToggle}
                         className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
                                 checked:bg-[#FF7700] checked:border-transparent 
                                 checked:after:content-['✓'] checked:after:text-white 
                                 checked:after:text-[16px] checked:after:block 
                                 checked:after:text-center checked:after:leading-[1rem] 
-                                flex items-center justify-center align-middle"
+                                flex items-center justify-center align-middle cursor-pointer"
                     />
                 </span>
             )}
             <span>{app.id}</span>
             <span>{app.username}</span>
-            {/* <span>{member.email}</span> */}
-            <span>test@gmail.com</span>
+            <span>{app.email}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
-            <span className="px-[9px]">{app.status}</span>
+            <span className="px-[9px]">
+                {getApplicationStatusLabel(pendingStatus ?? app.status)}
+            </span>
         </div>
     );
 };

@@ -2,18 +2,23 @@ import type { ApplicationData } from "@/types/recruitment";
 import { RecruitUserItem } from "./RecruitUserItem";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { cn } from "@/libs/cn";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 
 export const RecruitUserSearchList = ({
     data,
     totalElements,
     selectedIds,
+    updateMode,
+    pendingStatusMap,
     onToggleSelect,
     onToggleSelectAll
 }: {
     data: ApplicationData[];
     totalElements: number;
     selectedIds: number[];
-    onToggleSelect: (id: number) => void;
+    updateMode: UpdateMode;
+    pendingStatusMap: Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">;
+    onToggleSelect: (app: ApplicationData) => void;
     onToggleSelectAll: () => void;
 }) => {
     const { isManageMode } = useRecruitManageStore();
@@ -22,7 +27,7 @@ export const RecruitUserSearchList = ({
 
     return (
         <div>
-            <div className="flex flex-row regular-14 mb-4 text-gray-900 gap-7">
+            <div className="flex flex-row regular-14 mb-8 text-gray-900 gap-7">
                 <div>
                     전체 <span className="text-orange-400">{totalElements}</span>
                 </div>
@@ -30,7 +35,7 @@ export const RecruitUserSearchList = ({
                     합격 <span className="text-orange-400">{data.length}</span>
                 </div>
             </div>
-            <div className="w-full text-sm rounded-sm overflow-hidden">
+            <div className="w-full text-sm rounded-sm overflow-hidden min-h-[527px] bg-white">
                 {/* 리스트 헤더 */}
                 <div
                     className={cn(
@@ -51,7 +56,7 @@ export const RecruitUserSearchList = ({
                                 checked:after:content-['✓'] checked:after:text-white 
                                 checked:after:text-[16px] checked:after:block 
                                 checked:after:text-center checked:after:leading-[1rem] 
-                                flex items-center justify-center align-middle"
+                                flex items-center justify-center align-middle cursor-pointer"
                             />
                         </span>
                     )}
@@ -71,8 +76,10 @@ export const RecruitUserSearchList = ({
                             key={app.id}
                             app={app}
                             index={index}
+                            updateMode={updateMode}
+                            pendingStatus={pendingStatusMap[app.id]}
                             checked={selectedIds.includes(app.id)}
-                            onToggle={() => onToggleSelect(app.id)}
+                            onToggle={() => onToggleSelect(app)}
                         />
                     ))}
                 </div>

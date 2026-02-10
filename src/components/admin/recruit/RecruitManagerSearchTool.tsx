@@ -10,11 +10,18 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
+import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 interface MemberSearchToolProps {
-    onSearch: (filters: { result: string; department: string; part: string }) => void;
+    onSearch: (filters: { result: string; part: string; department: string }) => void;
+    onChangeResult: (status: "FINAL_PASS" | "PAPER_PASS") => void;
+    updateMode: UpdateMode;
 }
 
-export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) => {
+export const RecruitManagerSearchTool = ({
+    onSearch,
+    onChangeResult,
+    updateMode
+}: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
 
     const [result, setResult] = useState("");
@@ -25,8 +32,24 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
         onSearch({ result, department, part });
     };
 
+    // 엔터키 필터링
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            onSearch({
+                result,
+                department,
+                part
+            });
+        }
+    };
+
     return (
-        <div className="h-11 flex flex-row gap-2 items-center justify-between">
+        <div
+            className="h-11 flex flex-row gap-2 items-center justify-between"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+        >
             <div className="h-full flex flex-row gap-[6px]">
                 {/* result */}
                 <Select value={result} onValueChange={setResult}>
@@ -43,28 +66,28 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
 
                     <SelectContent className="w-[135px] min-w-[135px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="제출"
+                            value="SUBMITTED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             제출
                         </SelectItem>
                         <SelectItem
-                            value="불합격"
+                            value="FAILED"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             불합격
                         </SelectItem>
                         <SelectItem
-                            value="서류 합격"
+                            value="PAPER_PASS"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             서류 합격
                         </SelectItem>
                         <SelectItem
-                            value="합격"
+                            value="FINAL_PASS"
                             className="w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
-                            합격
+                            최종 합격
                         </SelectItem>
                     </SelectContent>
                 </Select>
@@ -84,19 +107,19 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
 
                     <SelectContent className="w-[93px] min-w-[93px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="운영부"
+                            value="OPERATION"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             운영부
                         </SelectItem>
                         <SelectItem
-                            value="홍보부"
+                            value="MARKETING"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             홍보부
                         </SelectItem>
                         <SelectItem
-                            value="학술부"
+                            value="ACADEMIC"
                             className="w-[93px] min-w-[93px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             학술부
@@ -119,13 +142,13 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
 
                     <SelectContent className="w-[135px] min-w-[135px] rounded-sm border-gray-100 data-[side=bottom]:translate-y-0 data-[state=open]:rounded-t-none data-[state=open]:border-t-0 py-2">
                         <SelectItem
-                            value="기획"
+                            value="PLANNING"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             기획
                         </SelectItem>
                         <SelectItem
-                            value="디자인"
+                            value="DESIGN"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             디자인
@@ -137,13 +160,13 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
                             AI
                         </SelectItem>
                         <SelectItem
-                            value="프론트엔드"
+                            value="FRONTEND"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             프론트엔드
                         </SelectItem>
                         <SelectItem
-                            value="백엔드"
+                            value="BACKEND"
                             className="w-[135px] min-w-[135px] h-9 px-4 data-[state=checked]:font-semibold cursor-pointer"
                         >
                             백엔드
@@ -154,13 +177,9 @@ export const RecruitManagerSearchTool = ({ onSearch }: MemberSearchToolProps) =>
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
                     <Button
-                        onClick={handleSearch}
-                        className="w-[103px] medium-14 border border-gray-500 bg-gray-0 text-gray-900 !h-full rounded-sm hover:bg-gray-25"
-                    >
-                        불합격
-                    </Button>
-                    <Button
-                        onClick={handleSearch}
+                        onClick={() =>
+                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
+                        }
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

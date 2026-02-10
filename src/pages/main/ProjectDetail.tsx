@@ -57,7 +57,7 @@ export default function ProjectDetailPage() {
                             <div className="w-full text-left text-[24px] mb-35">
                                 프로젝트 정보를 불러오는 중...
                             </div>
-                            <div className="text-[32px] font-bold mb-4">프로젝트 회고</div>
+                            <div className="text-[32px] font-bold mb-8">프로젝트 회고</div>
                             <div className="text-[32px] font-bold ">같은 기수 프로젝트</div>ㄴ
                         </div>
                     </div>

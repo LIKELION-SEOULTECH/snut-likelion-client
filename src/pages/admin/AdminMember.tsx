@@ -11,7 +11,6 @@ import type { MemberFilter } from "@/types/member";
 
 export const AdminMemberPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
     const [filters, setFilters] = useState<MemberFilter>({
         generation: null,
         part: "",
@@ -54,7 +53,6 @@ export const AdminMemberPage = () => {
         }
     });
 
-    console.log(membersRes);
     return (
         <AdminLayout>
             <div className="mt-12 mb-8">
@@ -71,8 +69,7 @@ export const AdminMemberPage = () => {
                             <>
                                 <MemberSearchList
                                     members={membersRes.content}
-                                    currentPage={currentPage}
-                                    itemsPerPage={itemsPerPage}
+                                    totalElements={membersRes.totalElements}
                                 />
                                 <div className="mb-[210px]">
                                     <Pagination

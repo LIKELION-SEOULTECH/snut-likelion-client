@@ -56,7 +56,7 @@ export const BlogSearchItem = ({
                     />
                 </span>
             )}
-            <span className="flex-[0.6] pl-[30px] text-left">{blog.id}</span>
+            <span className="flex-[0.6] pl-[24px] text-left">{blog.id}</span>
             <span className="flex-[1] text-left">{categoryText}</span>
             <span className="flex-[4] text-left">
                 <div className="flex justify-between items-center pr-14">

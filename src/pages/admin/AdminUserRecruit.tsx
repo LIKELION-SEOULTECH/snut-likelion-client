@@ -8,18 +8,30 @@ import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
 import type { ApplicationData } from "@/types/recruitment";
+import type { UpdateMode } from "./AdminManagerRecruit";
+import { ApplicationSaveModal } from "@/components/admin/recruit/ApplicationSaveModal";
+import { toast, Toaster } from "sonner";
+import { CircleCheck } from "lucide-react";
 
 export const AdminUserRecruitPage = () => {
     const queryClient = useQueryClient();
     const { setManageMode } = useRecruitManageStore();
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [updateMode, setUpdateMode] = useState<UpdateMode>("");
 
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [saveModal, setSaveModal] = useState(false);
+
+    const [pendingStatusMap, setPendingStatusMap] = useState<
+        Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
+    >({});
     const [filters, setFilters] = useState({
         result: "",
         part: ""
     });
+    const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
+
     const {
         data: userRecruitRes,
         isLoading,
@@ -35,17 +47,32 @@ export const AdminUserRecruitPage = () => {
             })
     });
 
-    const pageIds = userRecruitRes?.content.map((app: ApplicationData) => app.id) ?? [];
+    const selectableIds =
+        userRecruitRes?.content
+            .filter((app: ApplicationData) =>
+                updateMode === "제출" ? app.status === "제출" : app.status === "서류 합격"
+            )
+            .map((app: ApplicationData) => app.id) ?? [];
 
     const isAllSelected =
-        pageIds.length > 0 && pageIds.every((id: number) => selectedIds.includes(id));
+        selectableIds.length > 0 && selectableIds.every((id: number) => selectedIds.includes(id));
 
     const toggleSelectAll = () => {
         setSelectedIds((prev) =>
             isAllSelected
-                ? prev.filter((id) => !pageIds.includes(id))
-                : Array.from(new Set([...prev, ...pageIds]))
+                ? prev.filter((id) => !selectableIds.includes(id))
+                : Array.from(new Set([...prev, ...selectableIds]))
         );
+    };
+
+    const handleSelectItem = (app: ApplicationData) => {
+        if (!updateMode) {
+            if (app.status === "제출") setUpdateMode("제출");
+            else if (app.status === "서류 합격") setUpdateMode("서류 합격");
+            else return;
+        }
+
+        toggleSelect(app.id);
     };
 
     const toggleSelect = (id: number) => {
@@ -59,10 +86,25 @@ export const AdminUserRecruitPage = () => {
     const applicationResultMutation = useMutation({
         mutationFn: updateApplicationStatus,
         onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">합격자 저장에 성공하였습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
+            setPendingStatusMap({});
+            setSelectedIds([]);
             clearSelection();
-            queryClient.invalidateQueries({
-                queryKey: ["submittedApplications"]
-            });
+            setSaveModal(false);
+            setManageMode(false);
+            queryClient.invalidateQueries({ queryKey: ["submittedApplications"] });
         },
         onError: () => {
             alert("결과 변경 실패");
@@ -73,27 +115,64 @@ export const AdminUserRecruitPage = () => {
         setFilters(newFilters);
     };
 
-    const handleResult = (status: "FINAL_PASS" | "FAIL" | "PAPER_PASS") => {
+    const handleSaveResult = () => {
+        const entries = Object.entries(pendingStatusMap);
+
+        if (entries.length === 0) {
+            alert("변경된 항목이 없습니다.");
+            return;
+        }
+
+        const ids = entries.map(([id]) => Number(id));
+        const status = entries[0][1];
+
+        console.log("지원서 변경");
+        applicationResultMutation.mutate({
+            status,
+            ids
+        });
+    };
+
+    const handleResult = (status: "FINAL_PASS" | "FAILED" | "PAPER_PASS") => {
         if (selectedIds.length === 0) {
             alert("선택된 지원자가 없습니다.");
             return;
         }
 
-        applicationResultMutation.mutate({
-            status,
-            ids: selectedIds
+        console.log(pendingStatusMap);
+        console.log(updateMode);
+        setPendingStatusMap((prev) => {
+            const next = { ...prev };
+            selectedIds.forEach((id) => {
+                next[id] = status;
+            });
+            return next;
         });
     };
 
     useEffect(() => {
         setManageMode(false);
+        setUpdateMode("");
     }, [setManageMode]);
 
-    console.log(userRecruitRes);
     return (
-        <AdminLayout>
+        <AdminLayout
+            onSubmit={() => {
+                if (hasPendingChanges) {
+                    setSaveModal(true);
+                } else {
+                    alert("변경된 사항이 없습니다.");
+                    setManageMode(false);
+                }
+            }}
+        >
+            <Toaster position="top-center" offset={{ top: 120, left: 80 }} />
             <div className="mt-12 mb-8">
-                <RecruitUserSearchTool onSearch={handleSearch} onChangeResult={handleResult} />
+                <RecruitUserSearchTool
+                    onSearch={handleSearch}
+                    onChangeResult={handleResult}
+                    updateMode={updateMode}
+                />
             </div>
             {isLoading || isError || userRecruitRes.content.length === 0 ? (
                 <AdminRecruitSkeleton isLoading={isLoading} isManager={false} />
@@ -103,7 +182,9 @@ export const AdminUserRecruitPage = () => {
                         data={userRecruitRes.content}
                         totalElements={userRecruitRes.totalElements}
                         selectedIds={selectedIds}
-                        onToggleSelect={toggleSelect}
+                        updateMode={updateMode}
+                        pendingStatusMap={pendingStatusMap}
+                        onToggleSelect={handleSelectItem}
                         onToggleSelectAll={toggleSelectAll}
                     />
                     <div className="mb-[210px]">
@@ -115,6 +196,12 @@ export const AdminUserRecruitPage = () => {
                     </div>
                 </>
             )}
+            <ApplicationSaveModal
+                open={saveModal}
+                onClose={() => setSaveModal(false)}
+                onConfirm={handleSaveResult}
+                status={updateMode === "제출" ? "서류 합격" : "최종 합격"}
+            />
         </AdminLayout>
     );
 };

@@ -4,10 +4,11 @@ import AdminLayout from "@/layouts/AdminLayout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getNoticeById, updateNotice } from "@/apis/main/notice";
-import type { Editor } from "@tiptap/react";
 import { ADMIN_ABS } from "@/routes/routes";
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { CustomSelect } from "@/components/admin/common/custom-select";
+import { toast } from "sonner";
+import { AlertCircle, CircleCheck } from "lucide-react";
 
 export const AdminNoticeEditPage = () => {
     const queryClient = useQueryClient();
@@ -20,7 +21,6 @@ export const AdminNoticeEditPage = () => {
     const [files, setFiles] = useState<File[]>([]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const editorRef = useRef<Editor | null>(null);
 
     const { data: notice } = useQuery({
         queryKey: ["notice", id],
@@ -73,14 +73,39 @@ export const AdminNoticeEditPage = () => {
             }),
 
         onSuccess: () => {
+            navigate("/admin/notice");
+            console.log("수정성공");
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">게시물이 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             queryClient.invalidateQueries({ queryKey: ["adminNotices"] });
             queryClient.invalidateQueries({ queryKey: ["notice", id] });
-
-            navigate("/admin/notice");
         },
 
         onError: () => {
-            alert("공지 수정에 실패했습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <AlertCircle size={20} className="text-red-400" />
+                    <span className="text-sm font-medium">공지 수정에 실패했습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
         }
     });
 
@@ -89,13 +114,9 @@ export const AdminNoticeEditPage = () => {
     };
 
     const handleUpdate = () => {
-        if (!id || !editorRef.current) return;
-
-        const htmlContent = editorRef.current.getHTML();
-
         updateNoticeMutation.mutate({
             title,
-            content: htmlContent
+            content
         });
     };
 
