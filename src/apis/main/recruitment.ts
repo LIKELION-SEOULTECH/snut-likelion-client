@@ -15,8 +15,8 @@ export const fetchRecentRecruitment = async (recruitmentType: string) => {
 };
 
 // 모집 알림 이메일 등록
-export const subscribeRecruitment = ({ email }: SubscribeRequest) => {
-    const params = new URLSearchParams({ email }).toString();
+export const subscribeRecruitment = ({ email, type }: SubscribeRequest) => {
+    const params = new URLSearchParams({ email, type: type }).toString();
     return axiosInstance.post(`/subscriptions?${params}`);
 };
 

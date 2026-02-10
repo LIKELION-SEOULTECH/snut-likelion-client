@@ -160,9 +160,19 @@ export default function HomePage() {
     ): VisualButtonType => {
         if (managerOpen && managerClose && now >= managerOpen && now <= managerClose) {
             return "MANAGER_APPLY";
-        } else if (memberOpen && memberClose && now >= memberOpen && now <= memberClose) {
+        }
+        if (memberOpen && memberClose && now >= memberOpen && now <= memberClose) {
             return "MEMBER_APPLY";
-        } else {
+        }
+        const managerFutureOpen = managerOpen && now < managerOpen ? managerOpen : null;
+        const memberFutureOpen = memberOpen && now < memberOpen ? memberOpen : null;
+
+        if (managerFutureOpen && memberFutureOpen) {
+            return managerFutureOpen <= memberFutureOpen ? "MANAGER_APPLY" : "MEMBER_APPLY";
+        }
+        if (managerFutureOpen) return "MANAGER_APPLY";
+        if (memberFutureOpen) return "MEMBER_APPLY";
+        else {
             return "NOTIFY";
         }
 

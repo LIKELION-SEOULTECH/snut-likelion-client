@@ -18,13 +18,22 @@ export const NotificationModal = ({
         }
 
         try {
-            await subscribeRecruitment({ email });
+            await Promise.all([
+                subscribeRecruitment({ email, type: "MEMBER" }),
+                subscribeRecruitment({ email, type: "MANAGER" })
+            ]);
             console.log("모집 알림 신청 성공");
 
             alert("알림 신청이 완료되었습니다!");
             onClose(); // 모달 닫기
         } catch (err) {
-            console.error("❌ 모집 알림 신청 실패:", err);
+            const error = err as { response?: { data: { message: string } }; message?: string };
+            if (error.response?.data.message || error.message === "이미 등록된 이메일입니다.") {
+                alert("이미 알림 신청된 이메일입니다.");
+                onClose();
+                return;
+            }
+
             alert("알림 신청에 실패했습니다. 다시 시도해주세요.");
         }
     };
