@@ -30,9 +30,11 @@ export const BottomCTASection = ({
                 </h2>
                 <button
                     onClick={onOpenModal}
-                    className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[155px] sm:w-[269px] h-10 sm:h-[76px]  rounded-[300px] text-base sm:text-[24px]	font-bold cursor-pointer"
+                    className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[180px] sm:w-[280px] h-10 sm:h-[76px] rounded-[300px] font-bold cursor-pointer flex items-center justify-center"
                 >
-                    {text ? text : "모집 알람 받기"}
+                    <span className="max-w-full overflow-hidden text-ellipsis  text-base sm:text-[24px]">
+                        {text || "모집 알람 받기"}
+                    </span>
                 </button>
             </div>
         </div>
