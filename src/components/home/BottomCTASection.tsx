@@ -1,10 +1,15 @@
 import welcomeImg from "../../assets/home/WELCOME.svg";
+import { getRecruitmentButtonText } from "@/utils/getRecruitmentButtonText";
 
 type Props = {
     onOpenModal: () => void;
+    buttonType: "NOTIFY" | "MANAGER_APPLY" | "MEMBER_APPLY" | null;
+    nextGeneration: number | null;
 };
 
-export const BottomCTASection = ({ onOpenModal }: Props) => {
+export const BottomCTASection = ({ onOpenModal, buttonType, nextGeneration }: Props) => {
+    const text = getRecruitmentButtonText(buttonType, nextGeneration);
+
     return (
         <div className="flex flex-col pt-10 sm:pt-[244px] w-full h-auto  bg-[#1b1b1b]">
             <div
@@ -21,7 +26,7 @@ export const BottomCTASection = ({ onOpenModal }: Props) => {
                     onClick={onOpenModal}
                     className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[155px] sm:w-[269px] h-10 sm:h-[76px]  rounded-[300px] text-base sm:text-[24px]	font-bold cursor-pointer"
                 >
-                    14기 모집 알람 받기
+                    {text ? text : "모집 알람 받기"}
                 </button>
             </div>
         </div>
