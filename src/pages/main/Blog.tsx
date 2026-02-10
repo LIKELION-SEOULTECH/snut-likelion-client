@@ -62,8 +62,12 @@ export const BlogPage = () => {
                 <div className="mt-7 w-[598px] ">
                     <MainSearchBar />
                 </div>
+                <div className="h-[20px] mt-12 font-normal">
+                    전체글{" "}
+                    <span className="text-[#f70] font-semibold">{totalCombinedBlogsCount}</span>
+                </div>
                 {isLoading ? (
-                    <div className=" grid grid-cols-3 gap-4 mt-12 w-[1217px]">
+                    <div className=" grid grid-cols-3 gap-4 mt-6 w-[1217px]">
                         {Array.from({ length: 9 }).map((_, idx) => (
                             <ProjectBoxSkeleton key={`skeleton-${idx}`} />
                         ))}

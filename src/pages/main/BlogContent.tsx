@@ -90,7 +90,7 @@ export const BlogContentPage = () => {
                     </div> */}
                     <div className="font-bold text-[50px] mt-5">{blog.title}</div>
                     <div className="text-xl text-[#666666] font-light leading-[150%] mt-[37px]">
-                        {formattedDate}
+                        작성자 {formattedDate}
                     </div>
                     <div className="mt-5 mb-18">
                         <ParticipantTags names={blog.taggedMemberNames} />

@@ -7,7 +7,7 @@ interface BlogCardListProps {
 
 export const BlogCardList = ({ blogs }: BlogCardListProps) => {
     return (
-        <div className="grid grid-cols-3 gap-4 mt-12 w-[1217px]">
+        <div className="grid grid-cols-3 gap-4 mt-6 w-[1217px]">
             {blogs.map((blog) => (
                 <BlogCardItem
                     id={blog.postId}
