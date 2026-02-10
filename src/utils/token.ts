@@ -20,3 +20,7 @@ export const clearTokens = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
 };
+
+export const isAuthenticated = () => {
+    return !!localStorage.getItem("accessToken");
+};
