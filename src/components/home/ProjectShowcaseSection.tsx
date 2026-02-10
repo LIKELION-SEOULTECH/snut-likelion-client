@@ -10,8 +10,10 @@ import type { ProjectData } from "@/types/project";
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Autoplay } from "swiper/modules";
-import { fetchAllProjects } from "@/apis/main/project";
+// import { fetchAllProjects } from "@/apis/main/project";
+import { mock13thProjectData } from "@/constants/mockProjectData";
 import { ProjectBoxSkeleton } from "../project/ProjectBoxSkeleton";
+
 interface ProjectShowcaseSectionProps {
     handleClick: () => void;
 }
@@ -24,12 +26,13 @@ export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionPr
         key: `${item.id}-${i}`
     }));
     useEffect(() => {
-        const fetchProjects = async () => {
-            const data = await fetchAllProjects();
-            setProjectList(data);
-        };
+        // const fetchProjects = async () => {
+        //     const data = await fetchAllProjects();
+        //     setProjectList(data);
+        // };
 
-        fetchProjects();
+        // fetchProjects();
+        setProjectList(mock13thProjectData as ProjectData[]);
     }, []);
 
     return (

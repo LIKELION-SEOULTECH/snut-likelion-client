@@ -2,7 +2,13 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import { subscribeRecruitment } from "@/apis/main/recruitment";
 
-export const NotificationModal = ({ onClose, type }: { onClose: () => void; type: string }) => {
+export const NotificationModal = ({
+    onClose,
+    nextGeneration
+}: {
+    onClose: () => void;
+    nextGeneration: number | null;
+}) => {
     const [email, setEmail] = useState("");
 
     const handleSubscribe = async () => {
@@ -12,13 +18,22 @@ export const NotificationModal = ({ onClose, type }: { onClose: () => void; type
         }
 
         try {
-            await subscribeRecruitment({ email, type }); // 혹은 "MANAGER"
+            await Promise.all([
+                subscribeRecruitment({ email, type: "MEMBER" }),
+                subscribeRecruitment({ email, type: "MANAGER" })
+            ]);
             console.log("모집 알림 신청 성공");
 
             alert("알림 신청이 완료되었습니다!");
             onClose(); // 모달 닫기
         } catch (err) {
-            console.error("❌ 모집 알림 신청 실패:", err);
+            const error = err as { response?: { data: { message: string } }; message?: string };
+            if (error.response?.data.message || error.message === "이미 등록된 이메일입니다.") {
+                alert("이미 알림 신청된 이메일입니다.");
+                onClose();
+                return;
+            }
+
             alert("알림 신청에 실패했습니다. 다시 시도해주세요.");
         }
     };
@@ -57,7 +72,7 @@ export const NotificationModal = ({ onClose, type }: { onClose: () => void; type
                     className="w-full sm:w-72 h-[38px] sm:h-18 rounded-full bg-[#FF7700] text-sm sm:text-[25px] font-bold text-white cursor-pointer"
                     onClick={handleSubscribe}
                 >
-                    14기 모집 알림 받기 →
+                    {nextGeneration ? `${nextGeneration}기 모집 알림 받기 →` : "모집 알림 받기 →"}
                 </button>
             </div>
         </div>

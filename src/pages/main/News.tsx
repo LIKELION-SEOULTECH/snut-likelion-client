@@ -5,6 +5,7 @@ import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNotices } from "@/hooks/useNotice";
 import { MainSearchBar } from "@/components/common/MainSearchBar";
+import { Loader2 } from "lucide-react";
 
 const PAGE_SIZE = 8;
 
@@ -46,22 +47,30 @@ export const NewsPage = () => {
                         <MainSearchBar />
                     </div>
                 </div>
-                {isLoading ? (
-                    <div>로딩 중...</div>
-                ) : error ? (
-                    <div>에러 발생</div>
-                ) : newsList.length === 0 ? (
-                    <div className="text-xl text-gray-500">등록된 뉴스가 없습니다.</div>
-                ) : (
-                    <>
-                        <NoticeCardList newsList={paginatedNews} />
-                        <Pagination
-                            currentPage={page}
-                            totalPages={totalPages}
-                            onPageChange={setPage}
-                        />
-                    </>
-                )}
+
+                <div className="flex flex-col mt-18 w-[1217px] items-center border-t-2 border-[#2D2D2D]">
+                    {isLoading ? (
+                        <div className="flex justify-center items-center h-40">
+                            <Loader2 className="animate-spin h-10 w-10 text-gray-500" />
+                        </div>
+                    ) : error ? (
+                        <div className="flex justify-center items-center h-40">에러 발생</div>
+                    ) : newsList.length === 0 ? (
+                        <div className="flex justify-center items-center h-40 text-xl text-gray-500">
+                            등록된 뉴스가 없습니다.
+                        </div>
+                    ) : (
+                        <>
+                            <NoticeCardList newsList={paginatedNews} />
+
+                            <Pagination
+                                currentPage={page}
+                                totalPages={totalPages}
+                                onPageChange={setPage}
+                            />
+                        </>
+                    )}
+                </div>
             </div>
             <div className="w-full h-[150px] px-28">
                 <QuoteCardList />

@@ -1,69 +1,96 @@
-import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PageLayout from "@/layouts/PageLayout";
+import { useQuery } from "@tanstack/react-query";
 
 import { ParticipantTags } from "@/components/blog/ParticipantsTags";
 import { PostContent } from "@/components/common/PostContent";
 import { PostNavigator } from "@/components/common/PostNavigator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import QuoteCardList from "@/components/project/QuoteCardList";
 import type { BlogDetail } from "@/types/blog";
 import { getBlogDetail } from "@/apis/main/blog";
 
+const BlogContentSkeleton = () => (
+    <PageLayout white={true}>
+        <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
+            <section className="pl-[103px] w-full mt-38 animate-pulse flex flex-col">
+                {/* <Skeleton className="h-8 w-32 bg-gray-200 mb-5" /> */}
+                <Skeleton className="h-12 w-3/4 mt-5 bg-gray-200 mb-[20px]" />
+                <Skeleton className="h-6 w-48 mt-[37px] bg-gray-200" />
+                <div className="mt-5 mb-18 flex gap-2">
+                    <Skeleton className="h-8 w-20 bg-gray-200 rounded-[4px]" />
+                    <Skeleton className="h-8 w-20 bg-gray-200 rounded-[4px]" />
+                    <Skeleton className="h-8 w-20 bg-gray-200 rounded-[4px]" />
+                </div>
+            </section>
+
+            <div className="w-full mt-10 animate-pulse">
+                <div className="space-y-4 pl-[103px]">
+                    <Skeleton className="h-6 w-full bg-gray-200" />
+                    <Skeleton className="h-6 w-full bg-gray-200" />
+                    <Skeleton className="h-6 w-5/6 bg-gray-200" />
+                    <Skeleton className="h-40 w-full bg-gray-200 mt-8" />
+                    <Skeleton className="h-6 w-full bg-gray-200" />
+                    <Skeleton className="h-6 w-3/4 bg-gray-200" />
+                </div>
+            </div>
+        </div>
+    </PageLayout>
+);
+
 export const BlogContentPage = () => {
     const { id } = useParams<{ id: string }>();
-    const [blog, setBlog] = useState<BlogDetail | null>(null); // 타입 지정 필요시 수정
-    const [prevPost, setPrevPost] = useState<BlogDetail | null>(null);
-    const [nextPost, setNextPost] = useState<BlogDetail | null>(null);
+    const currentId = id ? Number(id) : undefined;
 
-    useEffect(() => {
-        if (!id) return;
+    const { data: blog, isLoading: isBlogLoading } = useQuery<BlogDetail, Error>({
+        queryKey: ["blog", currentId],
+        queryFn: async () => {
+            const res = await getBlogDetail(currentId!);
+            return res.data.data;
+        },
+        enabled: !!currentId
+    });
 
-        const fetchBlog = async () => {
-            try {
-                const currentId = Number(id);
+    const { data: prevPost } = useQuery<BlogDetail, Error>({
+        queryKey: ["blog", currentId ? currentId - 1 : undefined],
+        queryFn: async () => {
+            const res = await getBlogDetail(currentId! - 1);
+            return res.data.data;
+        },
+        enabled: !!currentId && currentId > 1,
+        retry: false // Don't retry if a previous post doesn't exist
+    });
 
-                const res = await getBlogDetail(Number(id));
+    const { data: nextPost } = useQuery<BlogDetail, Error>({
+        queryKey: ["blog", currentId ? currentId + 1 : undefined],
+        queryFn: async () => {
+            const res = await getBlogDetail(currentId! + 1);
+            return res.data.data;
+        },
+        enabled: !!currentId,
+        retry: false // Don't retry if a next post doesn't exist
+    });
 
-                setBlog(res.data.data);
+    if (isBlogLoading) {
+        return <BlogContentSkeleton />;
+    }
 
-                if (currentId > 1) {
-                    try {
-                        const prevRes = await getBlogDetail(currentId - 1);
-                        setPrevPost(prevRes.data.data);
-                    } catch {
-                        setPrevPost(null);
-                    }
-                }
+    if (!blog) return <div className="text-white flex justify-center mt-20">404 Not Found</div>;
 
-                try {
-                    const nextRes = await getBlogDetail(currentId + 1);
-                    setNextPost(nextRes.data.data);
-                } catch {
-                    setNextPost(null);
-                }
-            } catch (error) {
-                console.error("❌ 블로그 상세 조회 실패:", error);
-            }
-        };
-
-        fetchBlog();
-    }, [id]);
-
-    if (!blog) return <div>404 Not Found</div>;
     const formattedDate = new Date(blog.updatedAt).toISOString().split("T")[0].replace(/-/g, ".");
-    const displayCategory = blog.category === "OFFICIAL" ? "세션 이야기" : "프로젝트 회고";
+    // const displayCategory = blog.category === "OFFICIAL" ? "세션 이야기" : "아기사자 이야기";
 
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
                 <section className="pl-[103px] w-full mt-33">
-                    <div className="font-bold text-2xl text-[#FFA454] leading-[150%]">
+                    {/* <div className="font-bold text-2xl text-[#FFA454] leading-[150%]">
                         {displayCategory}
-                    </div>
+                    </div> */}
                     <div className="font-bold text-[50px] mt-5">{blog.title}</div>
                     <div className="text-xl text-[#666666] font-light leading-[150%] mt-[37px]">
-                        {formattedDate}
+                        작성자 {formattedDate}
                     </div>
                     <div className="mt-5 mb-18">
                         <ParticipantTags names={blog.taggedMemberNames} />
@@ -79,7 +106,7 @@ export const BlogContentPage = () => {
                             prevPost
                                 ? {
                                       title: prevPost.title,
-                                      href: `/blog-content/${blog.postId - 1}`
+                                      href: `/blog-content/${prevPost.postId}`
                                   }
                                 : undefined
                         }
@@ -87,7 +114,7 @@ export const BlogContentPage = () => {
                             nextPost
                                 ? {
                                       title: nextPost.title,
-                                      href: `/blog-content/${blog.postId + 1}`
+                                      href: `/blog-content/${nextPost.postId}`
                                   }
                                 : undefined
                         }
