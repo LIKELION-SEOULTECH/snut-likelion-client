@@ -22,5 +22,5 @@ export const clearTokens = () => {
 };
 
 export const isAuthenticated = () => {
-    return !!localStorage.getItem("accessToken");
+    return !!localStorage.getItem("userRole");
 };
