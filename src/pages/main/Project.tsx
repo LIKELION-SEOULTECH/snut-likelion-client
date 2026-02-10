@@ -8,14 +8,13 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
 import { mock13thProjectData } from "@/constants/mockProjectData";
 
-type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
+type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY";
 
 const categoryMap: Record<string, string> = {
     전체: "",
     해커톤: "HACKATHON",
     아이디어톤: "IDEATHON",
-    데모데이: "DEMO_DAY",
-    "장기 프로젝트": "LONG_TERM_PROJECT"
+    데모데이: "DEMO_DAY"
 };
 
 export default function ProjectPage() {
