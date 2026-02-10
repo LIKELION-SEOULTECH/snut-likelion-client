@@ -77,6 +77,7 @@ export default function HomePage() {
 
     const [buttonType, setButtonType] = useState<VisualButtonType>(null);
     const [nextGeneration, setNextGeneration] = useState<number | null>(null);
+    const [currentGeneration, setCurrentGeneration] = useState<number | null>(null); // New state for current generation
     useEffect(() => {
         const fetchRecruitments = async () => {
             const fetchSafe = async (type: string) => {
@@ -119,12 +120,6 @@ export default function HomePage() {
             const memberOpen = memberData?.openDate ? new Date(memberData.openDate) : null;
             const memberClose = memberData?.closeDate ? new Date(memberData.closeDate) : null;
 
-            const nextGeneration =
-                getRecruitmentData(managerRes)?.generation + 1 ||
-                getRecruitmentData(memberRes)?.generation + 1;
-
-            setNextGeneration(nextGeneration);
-
             const visualType = getVisualButtonType(
                 now,
                 managerOpen,
@@ -133,6 +128,22 @@ export default function HomePage() {
                 memberClose
             );
 
+            let determinedNextGeneration: number | null = null;
+            let determinedCurrentGeneration: number | null = null;
+
+            if (visualType === "MANAGER_APPLY" && managerData) {
+                determinedCurrentGeneration = managerData.generation;
+                determinedNextGeneration = managerData.generation + 1;
+            } else if (visualType === "MEMBER_APPLY" && memberData) {
+                determinedCurrentGeneration = memberData.generation;
+                determinedNextGeneration = memberData.generation + 1;
+            } else {
+                determinedNextGeneration =
+                    managerData?.generation + 1 || memberData?.generation + 1 || null;
+            }
+
+            setNextGeneration(determinedNextGeneration);
+            setCurrentGeneration(determinedCurrentGeneration);
             setButtonType(visualType);
         };
 
@@ -196,6 +207,7 @@ export default function HomePage() {
                     onOpenModal={openModal}
                     buttonType={buttonType}
                     nextGeneration={nextGeneration}
+                    currentGeneration={currentGeneration}
                 />
                 <img
                     src={Donut}
@@ -233,6 +245,7 @@ export default function HomePage() {
                     onOpenModal={openModal}
                     buttonType={buttonType}
                     nextGeneration={nextGeneration}
+                    currentGeneration={currentGeneration}
                 />
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">

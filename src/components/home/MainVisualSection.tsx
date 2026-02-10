@@ -5,13 +5,15 @@ import { getRecruitmentButtonText } from "@/utils/getRecruitmentButtonText";
 export const MainVisualSection = ({
     onOpenModal,
     buttonType,
-    nextGeneration
+    nextGeneration,
+    currentGeneration
 }: {
     onOpenModal: () => void;
     buttonType: "NOTIFY" | "MANAGER_APPLY" | "MEMBER_APPLY" | null;
     nextGeneration: number | null;
+    currentGeneration: number | null;
 }) => {
-    const text = getRecruitmentButtonText(buttonType, nextGeneration);
+    const text = getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
 
     return (
         <div className="relative w-full overflow-hidden pl-[37px] sm:pl-[110px] text-white">

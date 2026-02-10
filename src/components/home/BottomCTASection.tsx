@@ -5,10 +5,16 @@ type Props = {
     onOpenModal: () => void;
     buttonType: "NOTIFY" | "MANAGER_APPLY" | "MEMBER_APPLY" | null;
     nextGeneration: number | null;
+    currentGeneration: number | null;
 };
 
-export const BottomCTASection = ({ onOpenModal, buttonType, nextGeneration }: Props) => {
-    const text = getRecruitmentButtonText(buttonType, nextGeneration);
+export const BottomCTASection = ({
+    onOpenModal,
+    buttonType,
+    nextGeneration,
+    currentGeneration
+}: Props) => {
+    const text = getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
 
     return (
         <div className="flex flex-col pt-10 sm:pt-[244px] w-full h-auto  bg-[#1b1b1b]">
