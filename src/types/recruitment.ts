@@ -143,7 +143,6 @@ export interface QuestionRequest {
 
 export interface SubscribeRequest {
     email: string;
-    type: string;
 }
 
 // 지원서 세부페이지

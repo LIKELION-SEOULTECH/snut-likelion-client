@@ -3,21 +3,21 @@ import mainBg from "@/assets/home/main-bg.png";
 
 export const MainVisualSection = ({
     onOpenModal,
-    buttonType
+    buttonType,
+    nextGeneration
 }: {
     onOpenModal: () => void;
-    buttonType: "MANAGER_NOTIFY" | "MANAGER_APPLY" | "MEMBER_NOTIFY" | "MEMBER_APPLY" | null;
+    buttonType: "NOTIFY" | "MANAGER_APPLY" | "MEMBER_APPLY" | null;
+    nextGeneration: number | null;
 }) => {
     const renderButtonText = () => {
         switch (buttonType) {
-            case "MANAGER_NOTIFY":
-                return "14기 모집 알림 받기 →";
             case "MANAGER_APPLY":
-                return "14기 운영진 지원하기 →";
-            case "MEMBER_NOTIFY":
-                return "14기 모집 알림 받기 →";
+                return `${nextGeneration && nextGeneration - 1 + "기"} 운영진 지원하기 →`;
+            case "NOTIFY":
+                return `${nextGeneration && nextGeneration + "기"} 모집 알림 받기 →`;
             case "MEMBER_APPLY":
-                return "14기 아기사자 지원하기 →";
+                return `${nextGeneration && nextGeneration - 1 + "기"} 아기사자 지원하기 →`;
             default:
                 return null;
         }
