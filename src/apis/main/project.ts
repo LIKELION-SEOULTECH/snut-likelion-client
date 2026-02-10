@@ -1,5 +1,6 @@
 import axiosInstance from "../axiosInstance";
-import type { Project, ProjectQueryParams } from "@/types/project";
+import type { Project, ProjectQueryParams, RetrospectionResponse } from "@/types/project";
+import { mockProjectRetrospections } from "@/constants/mockProjectData";
 
 // 프로젝트 생성
 export const createProject = async (formData: FormData) => {
@@ -33,7 +34,10 @@ export const deleteProjectById = async (id: number) => {
 };
 
 // 프로젝트 회고 전체 조회
-export const getRetrospections = async (projectId: number) => {
+export const getRetrospections = async (projectId: number): Promise<RetrospectionResponse[]> => {
+    if (mockProjectRetrospections[projectId]) {
+        return Promise.resolve(mockProjectRetrospections[projectId]);
+    }
     const res = await axiosInstance.get(`/projects/${projectId}/retrospections`);
     console.log(res.data);
     return res.data.data;

@@ -20,8 +20,8 @@ export type projectDetail = {
     intro: string;
     description: string;
     websiteUrl?: string;
-    playstoreUrl?: string;
-    appstoreUrl?: string;
+    playstoreUrl?: string | null;
+    appstoreUrl?: string | null;
     members: Participant[];
     tags: string[];
     category: ProjectCategory;
@@ -79,7 +79,7 @@ export interface ProjectDetailResponse {
     intro: string;
     description: string;
     generation: number;
-    websiteUrl: string;
+    websiteUrl: string | null;
     playstoreUrl: string | null;
     appstoreUrl: string | null;
     tags: string[];

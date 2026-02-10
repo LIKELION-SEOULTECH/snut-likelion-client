@@ -4,8 +4,11 @@ import GenerationTabs from "@/components/project/GenerationTabs";
 import PageLayout from "@/layouts/PageLayout";
 import ProjectList from "@/components/project/ProjectList";
 import QuoteCardList from "@/components/project/QuoteCardList";
-import { useAllProjects } from "@/hooks/useAllProjects";
+// import { useAllProjects } from "@/hooks/useAllProjects";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
+import { mock13thProjectData } from "@/constants/mockProjectData";
+
+type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY" | "LONG_TERM_PROJECT";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -31,7 +34,32 @@ export default function ProjectPage() {
         params.category = categoryMap[projectCategory];
     }
 
-    const { data: projects, isLoading, isError } = useAllProjects(params);
+    const allMockProjects = useMemo(() => [...mock13thProjectData], []);
+
+    const projects = useMemo(() => {
+        let filteredProjects = allMockProjects;
+
+        if (projectGeneration !== "전체") {
+            filteredProjects = filteredProjects.filter(
+                (p) => p.generation === Number(projectGeneration.replace("기", ""))
+            );
+        }
+
+        if (projectCategory !== "전체") {
+            filteredProjects = filteredProjects.filter((p) => p.category.includes(projectCategory));
+        }
+
+        // Convert generation to number for each project
+        return filteredProjects.map((p) => ({
+            ...p,
+            generation: typeof p.generation === "string" ? Number(p.generation) : p.generation,
+            category: p.category as ProjectCategory
+        }));
+    }, [allMockProjects, projectGeneration, projectCategory]);
+
+    const isLoading = false;
+    const isError = false;
+    // const { data: projects, isLoading, isError } = useAllProjects(params);
 
     return (
         <PageLayout>
