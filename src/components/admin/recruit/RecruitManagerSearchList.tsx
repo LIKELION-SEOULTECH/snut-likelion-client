@@ -62,7 +62,7 @@ export const RecruitManagerSearchList = ({
                     )}
                     <span className={cn(isManageMode ? "pl-[6px]" : "pl-0")}>No</span>
                     <span>이름</span>
-                    <span>이메일</span>
+                    <span className="min-w-50">이메일</span>
                     <span>부서</span>
                     <span>파트</span>
                     <span>지원날짜</span>

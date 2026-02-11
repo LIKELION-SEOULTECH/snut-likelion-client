@@ -58,7 +58,7 @@ export const RecruitUserItem = ({
             )}
             <span>{app.id}</span>
             <span>{app.username}</span>
-            <span>{app.email}</span>
+            <span className="min-w-50">{app.email}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
             <span className="px-[9px]">

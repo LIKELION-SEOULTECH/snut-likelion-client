@@ -1,4 +1,4 @@
-const categories = ["전체", "아이디어톤", "해커톤", "데모데이", "장기 프로젝트"];
+const categories = ["전체", "아이디어톤", "해커톤", "데모데이"];
 
 type Props = {
     selected: string;

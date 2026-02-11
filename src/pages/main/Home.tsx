@@ -24,18 +24,13 @@ import { toast, Toaster } from "sonner";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
 
-type VisualButtonType =
-    | "MANAGER_NOTIFY"
-    | "MANAGER_APPLY"
-    | "MEMBER_NOTIFY"
-    | "MEMBER_APPLY"
-    | null;
+type VisualButtonType = "MANAGER_APPLY" | "NOTIFY" | "MEMBER_APPLY" | null;
 
 export default function HomePage() {
     //챗봇 버튼. 모집 모달
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [recruitType, setRecruitType] = useState("");
+    // const [recruitType, setRecruitType] = useState("");
     const navigate = useNavigate();
 
     const closeModal = () => setIsModalOpen(false);
@@ -81,7 +76,8 @@ export default function HomePage() {
     // 모집 일정 조회
 
     const [buttonType, setButtonType] = useState<VisualButtonType>(null);
-
+    const [nextGeneration, setNextGeneration] = useState<number | null>(null);
+    const [currentGeneration, setCurrentGeneration] = useState<number | null>(null); // New state for current generation
     useEffect(() => {
         const fetchRecruitments = async () => {
             const fetchSafe = async (type: string) => {
@@ -116,6 +112,7 @@ export default function HomePage() {
 
             const managerData = getRecruitmentData(managerRes);
             const memberData = getRecruitmentData(memberRes);
+
             const now = new Date();
             const managerOpen = managerData?.openDate ? new Date(managerData.openDate) : null;
             const managerClose = managerData?.closeDate ? new Date(managerData.closeDate) : null;
@@ -131,6 +128,22 @@ export default function HomePage() {
                 memberClose
             );
 
+            let determinedNextGeneration: number | null = null;
+            let determinedCurrentGeneration: number | null = null;
+
+            if (visualType === "MANAGER_APPLY" && managerData) {
+                determinedCurrentGeneration = managerData.generation;
+                determinedNextGeneration = managerData.generation + 1;
+            } else if (visualType === "MEMBER_APPLY" && memberData) {
+                determinedCurrentGeneration = memberData.generation;
+                determinedNextGeneration = memberData.generation + 1;
+            } else {
+                determinedNextGeneration =
+                    managerData?.generation + 1 || memberData?.generation + 1 || null;
+            }
+
+            setNextGeneration(determinedNextGeneration);
+            setCurrentGeneration(determinedCurrentGeneration);
             setButtonType(visualType);
         };
 
@@ -148,17 +161,19 @@ export default function HomePage() {
         if (managerOpen && managerClose && now >= managerOpen && now <= managerClose) {
             return "MANAGER_APPLY";
         }
-
         if (memberOpen && memberClose && now >= memberOpen && now <= memberClose) {
             return "MEMBER_APPLY";
         }
+        const managerFutureOpen = managerOpen && now < managerOpen ? managerOpen : null;
+        const memberFutureOpen = memberOpen && now < memberOpen ? memberOpen : null;
 
-        if (managerOpen && now < managerOpen) {
-            return "MANAGER_NOTIFY";
+        if (managerFutureOpen && memberFutureOpen) {
+            return managerFutureOpen <= memberFutureOpen ? "MANAGER_APPLY" : "MEMBER_APPLY";
         }
-
-        if (memberOpen && now < memberOpen) {
-            return "MEMBER_NOTIFY";
+        if (managerFutureOpen) return "MANAGER_APPLY";
+        if (memberFutureOpen) return "MEMBER_APPLY";
+        else {
+            return "NOTIFY";
         }
 
         return null;
@@ -177,16 +192,11 @@ export default function HomePage() {
 
     const openModal = () => {
         switch (buttonType) {
-            case "MANAGER_NOTIFY":
+            case "NOTIFY":
                 setIsModalOpen(true);
-                setRecruitType("MANAGER");
                 break;
             case "MANAGER_APPLY":
                 navigate(ROUTES.RECRUIT_MANAGER);
-                break;
-            case "MEMBER_NOTIFY":
-                setIsModalOpen(true);
-                setRecruitType("MEMBER");
                 break;
             case "MEMBER_APPLY":
                 navigate(ROUTES.RECRUIT_MEMBER);
@@ -203,7 +213,12 @@ export default function HomePage() {
                 <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
-                <MainVisualSection onOpenModal={openModal} buttonType={buttonType} />
+                <MainVisualSection
+                    onOpenModal={openModal}
+                    buttonType={buttonType}
+                    nextGeneration={nextGeneration}
+                    currentGeneration={currentGeneration}
+                />
                 <img
                     src={Donut}
                     alt="donut"
@@ -236,10 +251,15 @@ export default function HomePage() {
 
                 <InterviewSection />
                 <FAQSection />
-                <BottomCTASection onOpenModal={openModal} />
+                <BottomCTASection
+                    onOpenModal={openModal}
+                    buttonType={buttonType}
+                    nextGeneration={nextGeneration}
+                    currentGeneration={currentGeneration}
+                />
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                        <NotificationModal onClose={closeModal} type={recruitType} />
+                        <NotificationModal onClose={closeModal} nextGeneration={nextGeneration} />
                     </div>
                 )}
             </div>

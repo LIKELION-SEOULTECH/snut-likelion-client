@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProjectDetail } from "@/hooks/useProjectDetail";
+// import { useProjectDetail } from "@/hooks/useProjectDetail";
+import { mockProjectDetails } from "@/constants/mockProjectData"; // Import mock data
 
 import PageLayout from "@/layouts/PageLayout";
 import QuoteCardList from "@/components/project/QuoteCardList";
@@ -13,14 +14,16 @@ import ArrowLeft from "@/assets/project/arrow-left.svg?react";
 import ArrowRight from "@/assets/project/arrow-right.svg?react";
 import { useAllProjects } from "@/hooks/useAllProjects";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { ProjectCategory } from "@/types/project";
 
 export default function ProjectDetailPage() {
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
+    const projectId = Number(id);
 
-    const { data: projectDetailData, isLoading: isProjectDetailLoading } = useProjectDetail(
-        Number(id)
-    );
+    const projectDetailData = mockProjectDetails[projectId];
+    const isProjectDetailLoading = false;
+    // const { data: projectDetailData, isLoading: isProjectDetailLoading } = useProjectDetail(projectId);
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
@@ -141,7 +144,15 @@ export default function ProjectDetailPage() {
                     </div>
                     <div className="flex flex-col gap-30">
                         <section className="mt-30">
-                            <ProjectDetailSection project={data} />
+                            <ProjectDetailSection
+                                project={{
+                                    ...data,
+                                    category: data.category as ProjectCategory,
+                                    websiteUrl: data.websiteUrl ?? undefined,
+                                    playstoreUrl: data.playstoreUrl ?? undefined,
+                                    appstoreUrl: data.appstoreUrl ?? undefined
+                                }}
+                            />
                         </section>
 
                         <section className="flex flex-col">

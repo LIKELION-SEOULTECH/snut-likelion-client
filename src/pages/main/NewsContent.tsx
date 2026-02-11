@@ -6,6 +6,29 @@ import { PostNavigator } from "@/components/common/PostNavigator";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { getNoticeById } from "@/apis/main/notice";
 import { formatDate } from "@/utils/formatData";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const NewsContentSkeleton = () => (
+    <PageLayout white={true}>
+        <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
+            <section className="pl-[103px] w-full mt-[135px] animate-pulse">
+                <Skeleton className="h-8 w-24 bg-gray-200 mb-10" />
+                <Skeleton className="h-10 w-3/4 mt-5 bg-gray-200 mb-10" />
+                <Skeleton className="h-6 w-1/4 mt-[55px] mb-18 bg-gray-200" />
+            </section>
+            <div className="w-full animate-pulse">
+                <div className="space-y-4 pl-[103px]">
+                    <Skeleton className="h-6 w-4/6 bg-gray-200" />
+                    <Skeleton className="h-6 w-5/6 bg-gray-200" />
+                    <Skeleton className="h-6 w-5/6 bg-gray-200" />
+                    <Skeleton className="h-40 w-5/6 bg-gray-200 mt-8" />
+                    <Skeleton className="h-6 w-5/6 bg-gray-200" />
+                    <Skeleton className="h-6 w-3/4 bg-gray-200" />
+                </div>
+            </div>
+        </div>
+    </PageLayout>
+);
 
 export const NewsContentPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -36,7 +59,7 @@ export const NewsContentPage = () => {
         enabled: !!noticeId
     });
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <NewsContentSkeleton />;
     if (isError || !notice) return <div>404 Not Found</div>;
 
     return (
@@ -51,7 +74,7 @@ export const NewsContentPage = () => {
                         {notice.pinned ? "공지" : "일반"}
                     </div>
                     <div className="font-bold text-[50px] mt-5">{notice.title}</div>
-                    <div className="flex flex-row gap-5 text-xl text-[#666666] font-light leading-[150%] mt-[37px] mb-18">
+                    <div className="flex flex-row gap-5 text-xl text-[#666666] font-light leading-[150%] mt-[37px] ">
                         <span className="text-black">작성자</span>
                         <span>{formatDate(notice.updatedAt)}</span>
                     </div>

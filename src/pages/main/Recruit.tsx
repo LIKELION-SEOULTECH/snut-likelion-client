@@ -7,6 +7,8 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNavigate } from "react-router-dom";
 import { useRecruitmentSchedule } from "@/hooks/useRecruitment";
 import { NotificationModal } from "@/components/home/NotificationModal";
+import { isAuthenticated } from "@/utils/token";
+import { ROUTES } from "@/routes/routes";
 
 interface RecruitProps {
     isManager?: boolean;
@@ -50,6 +52,11 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
     }
 
     const handleApplyClick = () => {
+        if (!isAuthenticated()) {
+            navigate(ROUTES.LOGIN);
+            return;
+        }
+
         if (!schedule) return;
         if (isApplyOpen) {
             navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
@@ -90,6 +97,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
         : [];
 
     const scheduleData = isManager ? Manager_ScheduleData : Member_ScheduleData;
+    const nextGeneration = schedule ? schedule.data.generation + 1 : null;
 
     return (
         <PageLayout>
@@ -203,7 +211,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
                         <NotificationModal
                             onClose={() => setShowModal(false)}
-                            type={isManager ? "MANAGER" : "MEMBER"}
+                            nextGeneration={nextGeneration}
                         />
                     </div>
                 )}

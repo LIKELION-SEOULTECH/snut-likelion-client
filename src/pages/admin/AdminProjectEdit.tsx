@@ -20,6 +20,13 @@ interface Retro {
     showDropdown: boolean;
 }
 
+const CATEGORY_VALUE_MAP: Record<string, string> = {
+    아이디어톤: "IDEATHON",
+    "중앙 해커톤": "HACKATHON",
+    데모데이: "DEMO_DAY",
+    "장기 프로젝트": "LONG_TERM_PROJECT"
+};
+
 export const AdminProjectEditPage = () => {
     const queryClient = useQueryClient();
 
@@ -60,16 +67,17 @@ export const AdminProjectEditPage = () => {
         enabled: !!projectId
     });
 
+    console.log(projectDetail);
     useEffect(() => {
         if (!projectDetail) return;
 
-        const data = projectDetail.data.data;
+        const data = projectDetail;
 
         setName(data.name);
         setIntro(data.intro);
         setProjectDescription(data.description);
         setGeneration(String(data.generation));
-        setCategory(data.category);
+        setCategory(CATEGORY_VALUE_MAP[data.category]);
         setWebUrl(data.websiteUrl ?? "");
         setAndroidUrl(data.playstoreUrl ?? "");
         setIosUrl(data.appstoreUrl ?? "");
@@ -86,7 +94,7 @@ export const AdminProjectEditPage = () => {
     useEffect(() => {
         if (!retrosData) return;
 
-        const fetched: RetrospectionResponse[] = retrosData.data.data;
+        const fetched: RetrospectionResponse[] = retrosData;
 
         setRetros(
             fetched.map(
