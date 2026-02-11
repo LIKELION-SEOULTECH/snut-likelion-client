@@ -63,7 +63,7 @@ export const RecruitUserSearchList = ({
 
                     <span>No</span>
                     <span>이름</span>
-                    <span>이메일</span>
+                    <span className="min-w-50">이메일</span>
                     <span>파트</span>
                     <span>지원날짜</span>
                     <span className="px-[9px]">결과</span>

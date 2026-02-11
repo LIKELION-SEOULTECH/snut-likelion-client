@@ -110,8 +110,10 @@ export const ApplyDateForm = ({
     const isEndAfterStart = useCallback(() => {
         if (!isValidDate(startDate.year, startDate.month, startDate.day)) return false;
         if (!isValidDate(endDate.year, endDate.month, endDate.day)) return false;
-        const start = new Date(+startDate.year, +startDate.month - 1, +startDate.day);
-        const end = new Date(+endDate.year, +endDate.month - 1, +endDate.day);
+
+        const start = `${startDate.year}${startDate.month}${startDate.day}`;
+        const end = `${endDate.year}${endDate.month}${endDate.day}`;
+
         return end >= start;
     }, [startDate, endDate]);
 
@@ -147,20 +149,40 @@ export const ApplyDateForm = ({
     const handleSubmit = () => {
         if (!generation || error) return;
 
-        const openDate = new Date(
-            Date.UTC(Number(startDate.year), Number(startDate.month) - 1, Number(startDate.day))
-        ).toISOString();
+        const start = new Date(
+            Number(startDate.year),
+            Number(startDate.month) - 1,
+            Number(startDate.day),
+            0,
+            0,
+            0
+        );
 
-        const closeDate = new Date(
-            Date.UTC(Number(endDate.year), Number(endDate.month) - 1, Number(endDate.day))
-        ).toISOString();
+        const end = new Date(
+            Number(endDate.year),
+            Number(endDate.month) - 1,
+            Number(endDate.day),
+            23,
+            59,
+            59
+        );
+
+        if (end < start) {
+            setError("*모집 마감일은 모집 시작일 이후여야 합니다.");
+            return;
+        }
+
+        const isUpdate =
+            latestRecruitment && recruitmentId && generation === latestRecruitment.generation;
+
+        console.log("[SUBMIT MODE]", isUpdate ? "UPDATE" : "CREATE");
 
         recruitmentMutation.mutate({
-            id: recruitmentId ?? undefined,
+            ...(isUpdate ? { id: recruitmentId } : {}),
             generation,
             recruitmentType,
-            openDate,
-            closeDate
+            openDate: start.toISOString(),
+            closeDate: end.toISOString()
         });
     };
 
@@ -201,7 +223,9 @@ export const ApplyDateForm = ({
                                     selectList={[
                                         { label: "12기", value: 12 },
                                         { label: "13기", value: 13 },
-                                        { label: "14기", value: 14 }
+                                        { label: "14기", value: 14 },
+                                        { label: "15기", value: 15 },
+                                        { label: "16기", value: 16 }
                                     ]}
                                 />
                             </div>
