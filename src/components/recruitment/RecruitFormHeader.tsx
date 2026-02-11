@@ -32,7 +32,7 @@ export const RecruitFormHeader = ({
     };
 
     return (
-        <div className="w-full h-24 bg-black flex justify-between items-center px-[110px] relative">
+        <div className="w-full min-w-200 h-24 bg-black flex justify-between items-center px-[7%] relative">
             {/* ← 나가기 버튼 */}
             <div className="gap-4 flex">
                 <button

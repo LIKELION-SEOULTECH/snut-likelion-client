@@ -46,7 +46,7 @@ export default function QuoteCardList() {
     };
 
     return (
-        <div className="relative w-full h-[111px] mx-auto mb-8">
+        <div className="relative w-full min-w-200 h-[111px] mx-auto mb-8">
             {combinedQuotes.map((quote, i) => {
                 const vIndex = getVisualIndex(i);
                 const topOffset = vIndex * 16;

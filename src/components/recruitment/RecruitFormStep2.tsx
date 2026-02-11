@@ -79,7 +79,7 @@ export const RecruitFormStep2 = ({
 
     return (
         <div className="bg-[#1B1B1B] w-full h-auto pt-[72px] px-[112px] space-y-12">
-            <h4 className="text-[32px] text-white font-bold">
+            <h4 className="min-w-100 text-[32px] text-white font-bold">
                 {readOnly ? "지원서 미리보기" : "기본 질문"}
             </h4>
 
@@ -97,7 +97,9 @@ export const RecruitFormStep2 = ({
             {/* 공통 질문 */}
             {commonQs.length > 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold mt-[150px]">공통 질문</h4>
+                    <h4 className="min-w-100 text-[32px] text-white font-bold mt-[150px]">
+                        공통 질문
+                    </h4>
                     <AnswerBox
                         questions={toItems(commonQs)}
                         onChange={handleAnswerChange}
@@ -109,7 +111,7 @@ export const RecruitFormStep2 = ({
             {/* 파트 질문 */}
             {partQs.length > 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold">
+                    <h4 className="text-[32px] text-white font-bold min-w-100">
                         {PART_ID_TO_KO[formData.part]} 질문
                     </h4>
                     <AnswerBox
@@ -123,7 +125,7 @@ export const RecruitFormStep2 = ({
             {/*  부서 질문 운영진꺼요*/}
             {isManeger && deptQs.length > 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold">
+                    <h4 className="text-[32px] text-white font-bold min-w-100">
                         {DEPT_ID_TO_KO[formData.departmentType]} 질문
                     </h4>
                     <AnswerBox
@@ -134,7 +136,7 @@ export const RecruitFormStep2 = ({
                 </>
             )}
             <>
-                <div className="flex">
+                <div className="flex min-w-180">
                     <h4 className="text-[32px] text-white font-bold mt-[150px]">포트폴리오 첨부</h4>
                     <span className="ml-4 mt-[160px] text-[#A7A7A7]">
                         * 첨부하지 않아도 불이익은 없어요
@@ -142,8 +144,8 @@ export const RecruitFormStep2 = ({
                 </div>
                 <div className="pb-20">
                     <FormBox>
-                        <div className="flex gap-[137px] items-center">
-                            <h4>링크</h4>
+                        <div className="flex items-center">
+                            <h4 className="flex justify-start w-40">링크</h4>
                             <input
                                 type="text"
                                 placeholder="http://"

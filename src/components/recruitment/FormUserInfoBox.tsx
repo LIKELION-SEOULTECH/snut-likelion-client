@@ -43,24 +43,24 @@ export const FormUserInfoBox = ({
         <FormBox>
             <div className="flex flex-col gap-6 text-[#C4C4C4]">
                 {/* 이름 */}
-                <div className="max-w-[850px] flex  items-center">
+                <div className="max-w-[850px] flex items-center">
                     <label className="w-[160px] flex align-center">이름</label>
                     <input
                         placeholder="이름"
                         value={name}
                         onChange={(e) => onChange("username", e.target.value)}
-                        className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black"
                         disabled={readOnly}
                     />
                 </div>
                 {/* 학과 */}
-                <div className="max-w-[850px] flex  items-center">
+                <div className="max-w-[850px] flex items-center">
                     <label className="w-[160px] flex align-center">학과</label>
                     <input
                         placeholder="학과"
                         value={major}
                         onChange={(e) => onChange("major", e.target.value)}
-                        className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black"
                         disabled={readOnly}
                     />
                 </div>
@@ -71,7 +71,7 @@ export const FormUserInfoBox = ({
                         placeholder="학번"
                         value={studentId}
                         onChange={(e) => onChange("studentId", e.target.value)}
-                        className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black"
                         disabled={readOnly}
                     />
                 </div>
@@ -82,7 +82,7 @@ export const FormUserInfoBox = ({
                         placeholder="핸드폰 번호"
                         value={phoneNumber}
                         onChange={(e) => onChange("phoneNumber", e.target.value)}
-                        className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                        className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black"
                         disabled={readOnly}
                     />
                 </div>

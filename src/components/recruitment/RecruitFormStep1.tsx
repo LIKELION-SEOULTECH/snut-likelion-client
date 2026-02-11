@@ -40,19 +40,19 @@ export const RecruitFormStep1 = ({
         background: `#6B3200`
     };
     return (
-        <div className="flex flex-col flex-1 w-full bg-[#1B1B1B] text-white ">
-            <div className="flex-1 flex flex-col items-center justify-center px-[112px] pt-[32px] ">
+        <div className="flex flex-col flex-1 bg-[#1B1B1B] text-white">
+            <div className="flex-1 flex flex-col items-center justify-center px-[7.7%] pt-[32px] ">
                 <div className="w-full flex flex-col items-center gap-[60px]">
-                    <div className="w-full">
+                    <div className="w-full min-w-300">
                         {/* 파트 선택 */}
                         <h2 className="text-[32px] font-bold mb-10 self-start">파트 선택</h2>
-                        <div className="grid grid-cols-5 gap-4 ">
+                        <div className="flex flex-row gap-4 justify-between">
                             {PARTS.map((part) => (
                                 <button
                                     style={selectedPart === part.id ? selectedStyle : defaultStyle}
                                     key={part.id}
                                     onClick={() => onSelect("part", part.id)}
-                                    className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[230px] h-[128px]
+                                    className={`flex-1 py-7 px-7 rounded-[12px] text-[32px] font-bold min-w-[230px] h-[128px]
                                 border-[1px] flex flex-col items-start justify-center text-left
                                 ${selectedPart === part.id ? "bg-[#6B3200] border-[#F70]" : ""}`}
                                 >
@@ -66,9 +66,9 @@ export const RecruitFormStep1 = ({
                     </div>
                     {/* 부서 선택 (운영진) */}
                     {isManeger && (
-                        <div className="w-full">
+                        <div className="w-full min-w-300 pt-40">
                             <h2 className="text-[32px] font-bold mb-10">운영 분야 선택</h2>
-                            <div className="grid grid-cols-3 gap-4">
+                            <div className="flex flex-row gap-4 justify-between">
                                 {DEPARTMENTS.map((dept) => (
                                     <button
                                         style={
@@ -78,7 +78,7 @@ export const RecruitFormStep1 = ({
                                         }
                                         key={dept.id}
                                         onClick={() => onSelect("departmentType", dept.id)}
-                                        className={`py-7 px-7 rounded-[12px] text-[32px] font-bold w-[394px] h-[128px]
+                                        className={`flex-1 py-7 px-7 rounded-[12px] text-[32px] font-bold min-w-[394px] h-[128px]
                                         border-[1px] flex flex-col items-start justify-center text-left`}
                                     >
                                         <span>{dept.ko}</span>

@@ -61,6 +61,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         department: isManeger ? formData.departmentType : undefined
     });
 
+    console.log(questions);
     const handleSelect = (field: "part" | "departmentType", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
@@ -178,7 +179,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
 
     return (
         <div
-            className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "h-screen " : "min-h-screen"}`}
+            className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "min-h-screen" : "min-h-screen"}`}
         >
             <RecruitFormHeader
                 isManeger={isManeger}

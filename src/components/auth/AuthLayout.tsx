@@ -27,7 +27,7 @@ export const AuthLayout = ({
                         <span className="font-semibold">SEOULTECH</span>
                     </div>
                 </div>
-                <div className="font-extrabold text-7xl mt-[41px] text-[#FFF]">
+                <div className="font-extrabold text-7xl mt-[41px] text-[#FFF] whitespace-nowrap">
                     {title}
                     <span className="text-[#FF7700]">.</span>
                 </div>
