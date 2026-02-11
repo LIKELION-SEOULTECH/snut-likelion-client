@@ -105,6 +105,7 @@ export interface QuestionResponse {
     part?: string;
     departmentType?: string;
     orderNum: number;
+    buttonList?: string[];
 }
 
 export interface Recruitment {

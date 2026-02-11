@@ -1,6 +1,5 @@
 import type { FormDataType } from "@/pages/main/RecruitForm";
 import { AnswerBox } from "./FormAnswerBox";
-import { FormUserInfoBox } from "./FormUserInfoBox";
 import type { QuestionResponse } from "@/types/recruitment";
 import { FormBox } from "./FormBox";
 
@@ -44,6 +43,11 @@ export const RecruitFormStep2 = ({
         .filter((q) => q.questionTarget === "COMMON")
         .sort((a, b) => a.orderNum - b.orderNum);
 
+    // 기본 질문
+    const defaultQs = questions
+        .filter((q) => q.questionTarget === "DEFAULT")
+        .sort((a, b) => a.orderNum - b.orderNum);
+
     // 파트 질문
     const partQs = questions
         .filter((q) => q.questionTarget === "PART" && q.part === formData.part)
@@ -74,6 +78,8 @@ export const RecruitFormStep2 = ({
         qs.map((q) => ({
             questionId: q.id,
             label: q.text,
+            questionType: q.questionType,
+            buttonList: q.buttonList,
             answer: formData.answers.find((a) => a.questionId === q.id)?.answer || ""
         }));
 
@@ -83,21 +89,19 @@ export const RecruitFormStep2 = ({
                 {readOnly ? "지원서 미리보기" : "기본 질문"}
             </h4>
 
-            <FormUserInfoBox
-                name={formData.username}
-                readOnly={readOnly}
-                major={formData.major}
-                studentId={formData.studentId}
-                inSchool={formData.inSchool}
-                grade={formData.grade}
-                phoneNumber={formData.phoneNumber}
-                onChange={(field, value) => setFormData((prev) => ({ ...prev, [field]: value }))}
-            />
+            {/* 기본 질문 */}
+            {defaultQs.length > 0 && (
+                <AnswerBox
+                    questions={toItems(defaultQs)}
+                    onChange={handleAnswerChange}
+                    readOnly={readOnly}
+                />
+            )}
 
             {/* 공통 질문 */}
             {commonQs.length > 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold mt-[150px]">공통 질문</h4>
+                    <h4 className="text-[32px] text-white font-bold ">공통 질문</h4>
                     <AnswerBox
                         questions={toItems(commonQs)}
                         onChange={handleAnswerChange}
@@ -135,8 +139,8 @@ export const RecruitFormStep2 = ({
             )}
             <>
                 <div className="flex">
-                    <h4 className="text-[32px] text-white font-bold mt-[150px]">포트폴리오 첨부</h4>
-                    <span className="ml-4 mt-[160px] text-[#A7A7A7]">
+                    <h4 className="text-[32px] text-white font-bold ">포트폴리오 첨부</h4>
+                    <span className="ml-4 mt-[10px] text-[#A7A7A7]">
                         * 첨부하지 않아도 불이익은 없어요
                     </span>
                 </div>
