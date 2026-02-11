@@ -80,7 +80,7 @@ export const BasicQuestionList = () => {
             title="기본 질문"
             questions={questions}
             setQuestions={setQuestions}
-            questionTarget="BASIC"
+            questionTarget="DEFAULT"
         />
     );
 };

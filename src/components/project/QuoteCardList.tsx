@@ -31,7 +31,6 @@ export default function QuoteCardList() {
         if (Array.isArray(sayings)) {
             const updated = [...sayings, ...quotes];
             setCombinedQuotes(updated);
-            console.log("✅ sayings 포함 combinedQuotes:", updated);
         }
     }, [sayings]);
 
@@ -45,8 +44,6 @@ export default function QuoteCardList() {
     const getVisualIndex = (i: number) => {
         return (i - activeIndex + combinedQuotes.length) % combinedQuotes.length;
     };
-
-    console.log("✅ combinedQuotes:", combinedQuotes);
 
     return (
         <div className="relative w-full h-[111px] mx-auto mb-8">
