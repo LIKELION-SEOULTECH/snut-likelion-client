@@ -7,14 +7,13 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNavigate } from "react-router-dom";
 import { useRecruitmentSchedule } from "@/hooks/useRecruitment";
 import { NotificationModal } from "@/components/home/NotificationModal";
-import { isAuthenticated } from "@/utils/token";
-import { ROUTES } from "@/routes/routes";
 
 interface RecruitProps {
     isManager?: boolean;
 }
 
 const weekdayMap = ["일", "월", "화", "수", "목", "금", "토"];
+
 function formatDate(dateStr: string, includeYear = true) {
     const d = new Date(dateStr);
     const y = d.getFullYear();
@@ -52,11 +51,6 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
     }
 
     const handleApplyClick = () => {
-        if (!isAuthenticated()) {
-            navigate(ROUTES.LOGIN);
-            return;
-        }
-
         if (!schedule) return;
         if (isApplyOpen) {
             navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {

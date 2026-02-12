@@ -15,8 +15,8 @@ export const LoginForm = () => {
     } = useLogin();
 
     return (
-        <form className="text-white pt-[105px] pb-0 w-[599px] " onSubmit={handleSubmit}>
-            <div>
+        <form className="text-white pt-[105px] pb-0 min-w-150" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-7">
                 <Input
                     label="이메일"
                     placeholder="olivia@untitledui.com"
@@ -24,7 +24,7 @@ export const LoginForm = () => {
                     onChange={handleEmailChange}
                     error={emailError}
                 />
-                <div className="pt-7 "></div>
+
                 <Input
                     label="비밀번호"
                     placeholder="kinglikelion25"
@@ -41,7 +41,7 @@ export const LoginForm = () => {
                 로그인
             </button>
             <div className="flex gap-[17px] text-[#C4C4C4] justify-center ">
-                <Link to="/PasswordReset">
+                <Link to={ROUTES.PASSWORD_RESET}>
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>
                 <span className="text-[#666]">|</span>

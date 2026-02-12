@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 interface RecruitFormHeaderProps {
     isManeger: boolean;
     onNext: () => void;
@@ -9,30 +7,27 @@ interface RecruitFormHeaderProps {
     onTempSave: () => void;
     onSubmit: () => void;
     preview?: boolean;
+    onHandleLeave: () => void;
+    onValidationFail: (message: string) => void;
 }
 
 export const RecruitFormHeader = ({
-    isManeger,
     onNext,
     onPrev,
     isValid,
     step,
     onSubmit,
     onTempSave,
-    preview
+    preview,
+    onHandleLeave,
+    onValidationFail
 }: RecruitFormHeaderProps) => {
-    const navigate = useNavigate();
-
     const handleLeave = () => {
-        const confirmLeave = confirm("선택한 내용이 저장되지 않습니다. 정말 나가시겠어요?");
-        if (confirmLeave) {
-            const target = isManeger ? "/recruitments/manager" : "/recruitments/member";
-            navigate(target);
-        }
+        onHandleLeave();
     };
 
     return (
-        <div className="w-full h-24 bg-black flex justify-between items-center px-[110px] relative">
+        <div className="w-full min-w-200 h-24 bg-black flex justify-between items-center px-[7%] relative">
             {/* ← 나가기 버튼 */}
             <div className="gap-4 flex">
                 <button
@@ -59,7 +54,7 @@ export const RecruitFormHeader = ({
                         <button
                             onClick={() => {
                                 if (!isValid) {
-                                    alert("모든 항목을 선택해주세요.");
+                                    onValidationFail("모든 항목을 선택해주세요.");
                                     return;
                                 }
                                 onNext();

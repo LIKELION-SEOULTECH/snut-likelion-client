@@ -7,6 +7,7 @@ import { useRecruitmentSchedule, useQuestions } from "@/hooks/useRecruitment";
 import { fetchMyApplications, patchApplication, postApplication } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 import { useMutation } from "@tanstack/react-query";
 
 interface RecruitFormProps {
@@ -15,14 +16,8 @@ interface RecruitFormProps {
 export interface FormDataType {
     part: string;
     departmentType: string;
-    username: string;
-    major: string;
-    studentId: string;
-    grade: number;
-    inSchool: boolean;
     portfolio: string | null;
     answers: { questionId: number; answer: string }[];
-    phoneNumber: string;
 }
 
 export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
@@ -42,15 +37,16 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     const [formData, setFormData] = useState<FormDataType>({
         part: "",
         departmentType: "",
-        username: "",
-        major: "",
-        studentId: "",
-        grade: 1,
-        inSchool: true,
         portfolio: "",
-        answers: [] as { questionId: number; answer: string }[],
-        phoneNumber: ""
+        answers: [] as { questionId: number; answer: string }[]
     });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalDescription, setModalDescription] = useState<string | undefined>(undefined);
+    const [onModalConfirm, setOnModalConfirm] = useState<(() => void) | undefined>(undefined);
+    const [modalConfirmText, setModalConfirmText] = useState<string | undefined>(undefined);
+    const [modalCancelText, setModalCancelText] = useState<string | undefined>(undefined);
 
     const recType = isManeger ? "MANAGER" : "MEMBER";
     const { data: recData } = useRecruitmentSchedule(recType);
@@ -61,6 +57,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         department: isManeger ? formData.departmentType : undefined
     });
 
+    console.log(questions);
     const handleSelect = (field: "part" | "departmentType", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
@@ -85,12 +82,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             ...prev,
             part: app.part ?? "",
             departmentType: app.departmentType ?? "",
-            username: app.username ?? "",
-            major: app.major ?? "",
-            studentId: app.studentId ?? "",
-            grade: Number(app.grade ?? 1),
-            inSchool: !!app.inSchool,
-            phoneNumber: app.phoneNumber ?? "",
             portfolio: app.portfolio ?? "",
             answers: mappedAnswers
         }));
@@ -99,13 +90,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
     }, [navState]);
 
     const validateBeforeSubmit = () => {
-        if (!formData.part) return "파트를 선택해주세요.";
-        if (!formData.major.trim()) return "학과를 입력해주세요.";
-        if (!formData.studentId.trim()) return "학번을 입력해주세요.";
-        if (!formData.username.trim()) return "이름을 입력해주세요.";
-        if (!formData.phoneNumber.trim()) return "전화번호를 입력해주세요.";
-        if (formData.grade == null || Number.isNaN(Number(formData.grade)))
-            return "학년을 입력해주세요.";
         if (isManeger && !formData.departmentType) return "부서를 선택해주세요.";
 
         const hasEmptyAnswer = formData.answers.length !== questions?.length;
@@ -115,13 +99,51 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         return null;
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalTitle("");
+        setModalDescription(undefined);
+        setOnModalConfirm(undefined);
+        setModalConfirmText(undefined);
+        setModalCancelText(undefined);
+    };
+
+    const openModal = (
+        title: string,
+        description?: string,
+        onConfirm?: () => void,
+        confirmText?: string,
+        cancelText?: string
+    ) => {
+        setModalTitle(title);
+        setModalDescription(description);
+        setOnModalConfirm(() => onConfirm);
+        setModalConfirmText(confirmText);
+        setModalCancelText(cancelText);
+        setIsModalOpen(true);
+    };
+
+    const openLeaveModal = () => {
+        openModal(
+            "작성 취소",
+            "지원서 작성을 취소하시겠습니까?",
+            () => {
+                const target = isManeger ? "/recruitments/manager" : "/recruitments/member";
+                navigate(target);
+                closeModal();
+            },
+            "예",
+            "아니요"
+        );
+    };
+
+    const openValidationFailModal = (message: string) => {
+        openModal(message, undefined, closeModal, "확인");
+    };
+
     const applyMutation = useMutation({
         mutationFn: ({ submit }: { submit: boolean }) => {
             const payload = {
-                major: formData.major,
-                studentId: formData.studentId,
-                grade: formData.grade,
-                inSchool: formData.inSchool,
                 answers: formData.answers,
                 isPersonalInfoConsent: true,
                 part: formData.part,
@@ -153,32 +175,70 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             if (vars.submit) navigate(ROUTES.MYPAGE);
         },
         onError: (e) => {
+            if (e.message.includes("409")) {
+                alert("이미 제출된 지원서가 있습니다.");
+                navigate(ROUTES.MYPAGE);
+                return;
+            }
+            if (e.message.includes("401")) {
+                console.error(e);
+                alert("로그인 후 이용해주세요.");
+                navigate(ROUTES.LOGIN);
+                return;
+            }
+            alert("지원서 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
             console.error(e);
-            alert("저장 중 오류가 발생했습니다.");
         }
     });
 
     const handleTempSave = () => {
         if (applyMutation.isPending) return;
+
         if (formData.answers.length === 0) {
             alert("하나 이상의 질문에 답변을 작성해야 임시 저장할 수 있어요.");
             return;
         }
+        openModal(
+            "임시저장",
+            "지원서가 저장되었습니다",
+            () => {
+                applyMutation.mutate({ submit: false });
+                closeModal();
+            },
+            "확인",
+            undefined
+        );
         applyMutation.mutate({ submit: false });
     };
+
     const handleSubmit = () => {
         if (applyMutation.isPending) return;
+
         const msg = validateBeforeSubmit();
         if (msg) {
             alert(msg);
             return;
         }
-        applyMutation.mutate({ submit: true });
+
+        openModal(
+            "지원서를 제출하면 이후 수정이 불가합니다.",
+            undefined,
+            () => {
+                applyMutation.mutate({ submit: true });
+                closeModal();
+            },
+            "지원하기",
+            "취소"
+        );
+    };
+
+    const handleValidationFailForHeader = (message: string) => {
+        openValidationFailModal(message);
     };
 
     return (
         <div
-            className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "h-screen " : "min-h-screen"}`}
+            className={`w-full flex flex-col bg-[#1B1B1B] ${step === 1 ? "min-h-screen" : "min-h-screen"}`}
         >
             <RecruitFormHeader
                 isManeger={isManeger}
@@ -189,6 +249,8 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 onSubmit={handleSubmit}
                 step={step}
                 preview={isPreview}
+                onHandleLeave={openLeaveModal}
+                onValidationFail={handleValidationFailForHeader}
             />
             <div className="flex-1 flex overflow-y-auto">
                 {step === 1 && (
@@ -212,6 +274,16 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 )}
             </div>
             <Footer />
+
+            <ConfirmationModal
+                open={isModalOpen}
+                onClose={closeModal}
+                onConfirm={onModalConfirm}
+                title={modalTitle}
+                description={modalDescription}
+                confirmButtonText={modalConfirmText}
+                cancelButtonText={modalCancelText}
+            />
         </div>
     );
 };

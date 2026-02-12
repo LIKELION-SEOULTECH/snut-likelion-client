@@ -13,6 +13,7 @@ import type { ApplicationData } from "@/types/recruitment";
 import { toast, Toaster } from "sonner";
 import { CircleCheck } from "lucide-react";
 import { ApplicationSaveModal } from "@/components/admin/recruit/ApplicationSaveModal";
+import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 
 export type UpdateMode = "제출" | "서류 합격" | "";
 
@@ -38,20 +39,29 @@ export const AdminManagerRecruitPage = () => {
 
     const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
+    const { data: recentRecruitment } = useQuery({
+        queryKey: ["recentRecruitment", "MANAGER"],
+        queryFn: () => fetchRecentRecruitment("MANAGER")
+    });
+
+    const recId = recentRecruitment?.data.id;
+
+    console.log(recentRecruitment);
     const {
         data: managerRecruitRes,
         isLoading,
         isError
     } = useQuery({
-        queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
+        queryKey: ["submittedApplications", recId, filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 2,
+                recId: recId!,
                 page: currentPage - 1,
                 part: filters.part,
                 department: filters.department,
                 status: filters.result
-            })
+            }),
+        enabled: !!recId
     });
 
     const selectableIds =
@@ -178,7 +188,7 @@ export const AdminManagerRecruitPage = () => {
                     updateMode={updateMode}
                 />
             </div>
-            {isLoading || isError || managerRecruitRes.content.length === 0 ? (
+            {!recId || isLoading || isError || managerRecruitRes.content.length === 0 ? (
                 <AdminRecruitSkeleton isLoading={isLoading} isManager={true} />
             ) : (
                 <>
