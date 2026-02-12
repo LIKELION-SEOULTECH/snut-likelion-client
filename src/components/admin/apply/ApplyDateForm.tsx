@@ -181,8 +181,8 @@ export const ApplyDateForm = ({
             ...(isUpdate ? { id: recruitmentId } : {}),
             generation,
             recruitmentType,
-            openDate: start.toISOString(),
-            closeDate: end.toISOString()
+            openDate: `${startDate.year}-${startDate.month}-${startDate.day}T00:00:00`,
+            closeDate: `${endDate.year}-${endDate.month}-${endDate.day}T23:59:59`
         });
     };
 

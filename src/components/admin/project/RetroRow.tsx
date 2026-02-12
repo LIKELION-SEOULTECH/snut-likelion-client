@@ -1,11 +1,11 @@
-import { useMemberSearch } from "@/stores/useMemberSearch";
+import { useMemberSearch } from "@/hooks/useMemberSearch";
 import type { SearchedMember } from "@/types/members";
 import type { Retro } from "@/types/project";
 
 interface RetroRowProps {
     retro: Retro;
     index: number;
-    onChange: (index: number, field: keyof Retro, value: any) => void;
+    onChange: <K extends keyof Retro>(index: number, field: K, value: Retro[K]) => void;
     onSelect: (index: number, member: { id: number; name: string }) => void;
     onRemove?: () => void;
 }

@@ -12,6 +12,7 @@ import type { UpdateMode } from "./AdminManagerRecruit";
 import { ApplicationSaveModal } from "@/components/admin/recruit/ApplicationSaveModal";
 import { toast, Toaster } from "sonner";
 import { CircleCheck } from "lucide-react";
+import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 
 export const AdminUserRecruitPage = () => {
     const queryClient = useQueryClient();
@@ -32,19 +33,27 @@ export const AdminUserRecruitPage = () => {
     });
     const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
+    const { data: recentRecruitment } = useQuery({
+        queryKey: ["recentRecruitment", "MEMBER"],
+        queryFn: () => fetchRecentRecruitment("MEMBER")
+    });
+
+    const recId = recentRecruitment?.data?.id;
+
     const {
         data: userRecruitRes,
         isLoading,
         isError
     } = useQuery({
-        queryKey: ["submittedApplications", filters.part, filters.result, currentPage],
+        queryKey: ["submittedApplications", recId, filters.part, filters.result, currentPage],
         queryFn: () =>
             getSubmittedApplications({
-                recId: 1,
+                recId: recId,
                 page: currentPage - 1,
                 part: filters.part,
                 status: filters.result
-            })
+            }),
+        enabled: !!recId
     });
 
     const selectableIds =
@@ -155,6 +164,7 @@ export const AdminUserRecruitPage = () => {
         setUpdateMode("");
     }, [setManageMode]);
 
+    console.log(userRecruitRes);
     return (
         <AdminLayout
             onSubmit={() => {
@@ -174,7 +184,7 @@ export const AdminUserRecruitPage = () => {
                     updateMode={updateMode}
                 />
             </div>
-            {isLoading || isError || userRecruitRes.content.length === 0 ? (
+            {!recId || isLoading || isError || userRecruitRes.content.length === 0 ? (
                 <AdminRecruitSkeleton isLoading={isLoading} isManager={false} />
             ) : (
                 <>

@@ -15,7 +15,7 @@ import PageLayout from "@/layouts/PageLayout";
 import Donut from "@/assets/home/donut.svg";
 import Shadow from "@/assets/home/shadow.svg?react";
 
-import ChatbotBtn from "@/assets/home/chatbot_btn.svg?react";
+import ChatbotBtn from "@/assets/home/chatbot_btn.svg";
 import ChatbotCloseBtn from "@/assets/home/ChatBotClose.svg?react";
 import { ChatBotContainer } from "@/components/chatbot/ChatBotContainer";
 
@@ -230,7 +230,7 @@ export default function HomePage() {
                     onClick={() => setIsChatOpen((prev) => !prev)}
                     className="hidden sm:block fixed bottom-16 right-28 z-50 cursor-pointer"
                 >
-                    <ChatbotBtn className={`w-[72px] h-[72px] ${isChatOpen ? "hidden" : "flex"}`} />
+                    <img src={ChatbotBtn} className="w-[72px] h-[72px]" />
                     <ChatbotCloseBtn
                         className={`w-[72px] h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
                     />
