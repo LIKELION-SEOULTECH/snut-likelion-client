@@ -40,10 +40,6 @@ export const fetchQuestions = async (
 
 // 지원서 저장
 type CreateApplicationRequest = {
-    major: string;
-    studentId: string;
-    grade: number;
-    inSchool: boolean;
     answers: { questionId: number; answer: string }[];
     isPersonalInfoConsent: boolean;
     portfolio?: string | null;

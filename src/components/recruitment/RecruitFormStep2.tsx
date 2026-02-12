@@ -1,6 +1,5 @@
 import type { FormDataType } from "@/pages/main/RecruitForm";
 import { AnswerBox } from "./FormAnswerBox";
-import { FormUserInfoBox } from "./FormUserInfoBox";
 import type { QuestionResponse } from "@/types/recruitment";
 import { FormBox } from "./FormBox";
 
@@ -44,6 +43,11 @@ export const RecruitFormStep2 = ({
         .filter((q) => q.questionTarget === "COMMON")
         .sort((a, b) => a.orderNum - b.orderNum);
 
+    // 기본 질문
+    const defaultQs = questions
+        .filter((q) => q.questionTarget === "DEFAULT")
+        .sort((a, b) => a.orderNum - b.orderNum);
+
     // 파트 질문
     const partQs = questions
         .filter((q) => q.questionTarget === "PART" && q.part === formData.part)
@@ -74,6 +78,8 @@ export const RecruitFormStep2 = ({
         qs.map((q) => ({
             questionId: q.id,
             label: q.text,
+            questionType: q.questionType,
+            buttonList: q.buttonList,
             answer: formData.answers.find((a) => a.questionId === q.id)?.answer || ""
         }));
 
@@ -83,16 +89,14 @@ export const RecruitFormStep2 = ({
                 {readOnly ? "지원서 미리보기" : "기본 질문"}
             </h4>
 
-            <FormUserInfoBox
-                name={formData.username}
-                readOnly={readOnly}
-                major={formData.major}
-                studentId={formData.studentId}
-                inSchool={formData.inSchool}
-                grade={formData.grade}
-                phoneNumber={formData.phoneNumber}
-                onChange={(field, value) => setFormData((prev) => ({ ...prev, [field]: value }))}
-            />
+            {/* 기본 질문 */}
+            {defaultQs.length > 0 && (
+                <AnswerBox
+                    questions={toItems(defaultQs)}
+                    onChange={handleAnswerChange}
+                    readOnly={readOnly}
+                />
+            )}
 
             {/* 공통 질문 */}
             {commonQs.length > 0 && (
