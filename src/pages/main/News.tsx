@@ -37,18 +37,18 @@ export const NewsPage = () => {
 
     return (
         <PageLayout white={true}>
-            <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 pb-[250px] bg-white">
+            <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 pb-[250px] bg-white min-w-250">
                 <div className="font-extrabold text-7xl h-[86px] mt-[86px] mb-[73px]">
                     News<span className="text-[#FF7700]">.</span>
                 </div>
 
-                <div className="w-full flex justify-start ">
-                    <div className="w-[598px]">
+                <div className="w-full flex justify-start">
+                    <div className="min-w-[598px]">
                         <MainSearchBar />
                     </div>
                 </div>
 
-                <div className="flex flex-col mt-18 w-[1217px] items-center border-t-2 border-[#2D2D2D]">
+                <div className="flex flex-col mt-18 w-full items-center border-t-2 border-[#2D2D2D]">
                     {isLoading ? (
                         <div className="flex justify-center items-center h-40">
                             <Loader2 className="animate-spin h-10 w-10 text-gray-500" />
@@ -60,7 +60,7 @@ export const NewsPage = () => {
                             등록된 뉴스가 없습니다.
                         </div>
                     ) : (
-                        <>
+                        <div className="flex flex-col w-full">
                             <NoticeCardList newsList={paginatedNews} />
 
                             <Pagination
@@ -68,7 +68,7 @@ export const NewsPage = () => {
                                 totalPages={totalPages}
                                 onPageChange={setPage}
                             />
-                        </>
+                        </div>
                     )}
                 </div>
             </div>

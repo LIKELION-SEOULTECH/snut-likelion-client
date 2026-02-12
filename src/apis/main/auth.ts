@@ -1,5 +1,6 @@
+import { useAuthStore } from "@/stores/useAuthStore";
 import axiosInstance from "../axiosInstance";
-import { setAccessToken, setRefreshToken } from "@/utils/token";
+import axios from "axios";
 
 // 회원가입
 export const register = async (payload: {
@@ -22,22 +23,28 @@ export const login = async (email: string, password: string) => {
     });
 
     const { accessToken, refreshToken } = res.data;
-    setAccessToken(accessToken);
-    setRefreshToken(refreshToken);
 
-    const payload = accessToken.split(".")[1];
-    const decoded = JSON.parse(atob(payload));
-    localStorage.setItem("userRole", decoded.role);
+    useAuthStore.getState().setAuth(accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
 
     return res.data;
 };
 
 // 로그아웃
-export const logout = () => {
-    return axiosInstance.post("/auth/logout");
-};
+export const logout = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
 
-// 토큰 갱신
+    await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/logout`,
+
+        {},
+        {
+            headers: {
+                Refresh: `Bearer ${refreshToken}`
+            }
+        }
+    );
+};
 
 // 이메일 인증 코드 전송
 export const sendVerificationCode = async (email: string) => {
@@ -56,7 +63,3 @@ export const sendPwFindCode = async (email: string) => {
     const res = await axiosInstance.post(`/auth/email/send?email=${encodeURIComponent(email)}`);
     return res.data;
 };
-
-// 비밀번호 재설정
-
-// 비밀번호 변경

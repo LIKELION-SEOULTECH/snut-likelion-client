@@ -8,6 +8,7 @@ import { MyIcon } from "@/components/Header/MyIcon";
 import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
 import { useQuery } from "@tanstack/react-query";
 import type { MemberDetailResponse } from "@/types/member";
+import { getRoleFromToken } from "@/utils/auth";
 
 interface HeaderProps {
     white?: boolean;
@@ -17,9 +18,10 @@ export const Header = ({ white = false }: HeaderProps) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const token = localStorage.getItem("accessToken");
-    const role = localStorage.getItem("userRole");
-    const isLoggedIn = !!token;
+    const accessToken = localStorage.getItem("accessToken");
+    const role = getRoleFromToken();
+
+    const isLoggedIn = !!accessToken;
     const isGuest = role === "ROLE_GUEST";
 
     const { data: member } = useQuery<MemberDetailResponse>({
@@ -146,7 +148,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                         {isLoggedIn ? (
                             <div className="flex  gap-4 items-center">
                                 <button
-                                    className="w-[109px] h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded rounded-[100px] cursor-pointer text-[14px] "
+                                    className="w-[109px] h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded-[100px] cursor-pointer text-[14px] "
                                     onClick={
                                         !isGuest
                                             ? () => navigate(ROUTES.BLOG_POST)

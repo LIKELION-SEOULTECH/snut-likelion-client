@@ -66,12 +66,8 @@ export const NewsContentPage = () => {
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
                 <section className="pl-[103px] w-full mt-33">
-                    <div
-                        className={`font-bold text-2xl leading-[150%] ${
-                            notice.pinned ? "text-[#FFA454]" : "text-[#A7A7A7]"
-                        }`}
-                    >
-                        {notice.pinned ? "공지" : "일반"}
+                    <div className={`font-bold text-2xl leading-[150%] ${"text-[#FFA454]"}`}>
+                        공지
                     </div>
                     <div className="font-bold text-[50px] mt-5">{notice.title}</div>
                     <div className="flex flex-row gap-5 text-xl text-[#666666] font-light leading-[150%] mt-[37px] ">

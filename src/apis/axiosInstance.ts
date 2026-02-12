@@ -1,36 +1,36 @@
+import { ROUTES } from "@/routes/routes";
+import { useAuthStore } from "@/stores/useAuthStore";
 import axios from "axios";
-import { getAccessToken } from "@/utils/token";
 
-// axios 인스턴스 생성
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
-    withCredentials: true,
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true
 });
 
-// 요청 인터셉터 추가
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("accessToken");
+        const token = useAuthStore.getState().accessToken || localStorage.getItem("accessToken");
 
-        if (token) {
+        if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
         }
 
         return config;
     },
+    (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+    (response) => response,
     (error) => {
+        if (error.response?.status === 401) {
+            useAuthStore.getState().clearAuth();
+            window.location.href = ROUTES.LOGIN;
+        }
+
         return Promise.reject(error);
     }
 );
 
-// accessToken 헤더에 자동 주입
-axiosInstance.interceptors.request.use((config) => {
-    const token = getAccessToken();
-    if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-});
 export default axiosInstance;

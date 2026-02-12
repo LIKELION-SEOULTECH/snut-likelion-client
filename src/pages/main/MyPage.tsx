@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { fetchMyMemberInfo, fetchLionInfo } from "@/apis/main/member";
 import { MemberMyPage } from "@/components/my-page/MemberMyPage";
 import { GuestMyPage } from "@/components/my-page/GuestMyPage";
@@ -12,20 +12,16 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { ADMIN_ABS } from "@/routes/routes";
 import { useNavigate } from "react-router-dom";
+import { getRoleFromToken } from "@/utils/auth";
 
 export const MyPage = () => {
     const navigate = useNavigate();
     const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
 
-    const isGuest = useMemo(() => {
-        const role = localStorage.getItem("userRole");
-        return role === "ROLE_GUEST";
-    }, []);
+    const role = getRoleFromToken();
 
-    const isAdmin = useMemo(() => {
-        const role = localStorage.getItem("userRole");
-        return role === "ROLE_ADMIN";
-    }, []);
+    const isGuest = role === "ROLE_GUEST";
+    const isAdmin = role === "ROLE_ADMIN" || role === "ROLE_MANAGER";
 
     const { data: member, isLoading: memberLoading } = useQuery<MemberDetailResponse>({
         queryKey: ["me"],
