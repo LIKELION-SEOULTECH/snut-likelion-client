@@ -20,8 +20,8 @@ export const RegisterPage = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-row mt-[41px] gap-[273px]">
-                    <div>
+                <div className="flex flex-row justify-between mt-[41px]">
+                    <div className="flex-1 pr-10">
                         <div className="font-extrabold text-7xl">
                             <span className="text-white">Welcome</span>
                             <span className="text-[#FF7700]">.</span>
@@ -33,7 +33,7 @@ export const RegisterPage = () => {
                         </Link>
                     </div>
                     {/* 회원가입 폼 */}
-                    <div className="w-150">
+                    <div className="flex-1 w-150">
                         <RegisterForm />
                     </div>
                 </div>

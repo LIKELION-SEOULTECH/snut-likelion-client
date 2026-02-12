@@ -105,7 +105,6 @@ export const MemberMyPage = ({
                                 </div>
                             ) : (
                                 // 기수 한개
-
                                 <OrangeBtn
                                     tag={`${member?.generations?.[0] ?? ""}기`}
                                     isNotButton={true}

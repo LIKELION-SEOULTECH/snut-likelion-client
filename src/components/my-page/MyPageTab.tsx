@@ -1,6 +1,9 @@
+import { logout } from "@/apis/main/auth";
 import { deleteMyAccount } from "@/apis/main/member";
 import { ROUTES } from "@/routes/routes";
+import { useAuthStore } from "@/stores/useAuthStore";
 import type { LionInfoDetailsResponse, MemberDetailResponse } from "@/types/member";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +23,26 @@ export const MyPageTab = ({
     const [activeTab, setActiveTab] = useState<string | null>(isGuest ? "계정설정" : null);
     const [isAccountOpen, setIsAccountOpen] = useState(isGuest);
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const logoutMutation = useMutation({
+        mutationFn: logout,
+
+        onSuccess: () => {
+            useAuthStore.getState().clearAuth();
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+
+            queryClient.clear();
+
+            navigate(ROUTES.HOME, { replace: true });
+        },
+
+        onError: (error) => {
+            console.error("로그아웃 실패", error);
+            alert("로그아웃에 실패했습니다.");
+        }
+    });
 
     const toggleTab = (tab: string) => {
         if (tab === "계정설정") {
@@ -38,14 +61,7 @@ export const MyPageTab = ({
                 }
             });
         }
-        if (tab === "비밀번호 변경") navigate("/PasswordChange");
-
-        if (tab === "로그아웃") {
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("userRole");
-            navigate(ROUTES.HOME);
-        }
+        if (tab === "비밀번호 변경") navigate(ROUTES.PASSWORD_RESET);
     };
 
     const isActive = (tab: string) => activeTab === tab;
@@ -115,8 +131,10 @@ export const MyPageTab = ({
                         비밀번호 변경
                     </button>
                     <button
-                        onClick={() => toggleTab("로그아웃")}
                         className={`${baseBtnClass} hover:bg-black`}
+                        onClick={() => {
+                            logoutMutation.mutate();
+                        }}
                     >
                         로그아웃
                     </button>
