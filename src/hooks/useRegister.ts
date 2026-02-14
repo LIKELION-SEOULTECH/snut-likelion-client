@@ -49,8 +49,7 @@ export const useRegister = () => {
                 phoneNumber: normalizePhoneNumber(phoneNumber),
                 isEmailVerified
             }),
-        onSuccess: (res) => {
-            console.log("회원가입 성공", res);
+        onSuccess: () => {
             alert("회원가입이 완료되었습니다!");
             navigate(ROUTES.LOGIN);
         },
@@ -83,7 +82,6 @@ export const useRegister = () => {
         try {
             await sendVerificationCode(email);
             setCodeSent(true);
-            console.log("인증 코드 전송 완료");
 
             setVerificationStatus(null); // 이전 인증 결과 초기화
             setTimer(120); // 2분 타이머...
@@ -96,7 +94,6 @@ export const useRegister = () => {
         if (!verificationCode) return;
         try {
             await verifyEmailCode(email, verificationCode);
-            console.log("인증 성공");
             setIsEmailVerified(true);
             setVerificationStatus("success");
             setTimer(0);

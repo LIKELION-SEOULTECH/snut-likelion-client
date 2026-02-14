@@ -152,15 +152,9 @@ export interface ApplicationDetail {
     id: number;
     answers: QNAItem[];
     departmentType: string;
-    grade: number;
-    major: string;
-    inSchool: boolean;
     isPersonalInfoConsent?: boolean;
     part: string;
-    phoneNumber: string;
-    portfolio?: string; // 변경 가능
-    studentId: string;
+    portfolio?: string;
     submittedAt: string;
-    username: string;
     status: "FAILED" | "FINAL_PASS" | "PAPER_PASS" | "SUBMITTED";
 }

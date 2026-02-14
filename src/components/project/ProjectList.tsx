@@ -23,8 +23,6 @@ export default function ProjectList({ projects, isLoading }: ProjectListProps) {
         ? projects.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
         : [];
 
-    console.log(projects);
-
     return (
         <>
             <div className="grid grid-cols-3 gap-4 mt-12 w-[1216px]">

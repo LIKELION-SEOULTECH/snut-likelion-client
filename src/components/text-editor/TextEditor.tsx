@@ -23,11 +23,7 @@ const extensions = [
     Image.configure({
         allowBase64: true
     }),
-    CustomImage.configure({
-        onUpload: (url: string) => {
-            console.log("업로드된 이미지 URL:", url);
-        }
-    }),
+    CustomImage.configure({}),
     Mention.configure({
         suggestion: mentionSuggestionOptions,
         HTMLAttributes: {
@@ -54,7 +50,6 @@ const TextEditor = ({ content, setContent, setImages }: TextEditorProps) => {
         onUpdate({ editor }) {
             const html = editor.getHTML();
             setContent(html);
-            console.log("Editor content:", html);
         }
     });
 

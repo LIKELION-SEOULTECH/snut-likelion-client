@@ -26,7 +26,6 @@ export const RecruitManagerItem = ({
     const navigate = useNavigate();
     const { isManageMode } = useRecruitManageStore();
 
-    console.log(app.status);
     return (
         <div
             onClick={() => navigate(`/admin/recruit/result/manager/${app.id}`)}

@@ -27,8 +27,7 @@ export const useCreateNotice = () => {
     return useMutation({
         mutationFn: (data: { title: string; content: string; pinned: boolean }) =>
             createNotice(data),
-        onSuccess: (data) => {
-            console.log("✅ 공지 등록 성공:", data);
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["notices"] });
         },
         onError: (error) => {

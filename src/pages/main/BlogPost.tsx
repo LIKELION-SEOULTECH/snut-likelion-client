@@ -27,8 +27,6 @@ export const BlogPostPage = () => {
     const isUploadEnabled = title.trim() !== "" && tags.length > 0 && content.trim() !== "";
 
     const handleSubmit = async (submit: boolean) => {
-        console.log("images 상태:", images);
-
         try {
             await createBlog(
                 {

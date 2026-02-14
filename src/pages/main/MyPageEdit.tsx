@@ -10,7 +10,6 @@ import { useState } from "react";
 import { ImageCropper } from "@/components/my-page/ImageCropper";
 
 import samplePRf from "@/assets/Member/samplePRFIMG.png";
-import axiosInstance from "@/apis/axiosInstance";
 
 export const MyPageEdit = () => {
     const navigate = useNavigate();
@@ -70,16 +69,6 @@ export const MyPageEdit = () => {
             formData.append(`portfolioLinks[${index}].url`, link.url);
         });
         try {
-            const response = await axiosInstance.patch(`/members/${member.id}`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            console.log("PATCH 응답:", response);
-            for (const pair of formData.entries()) {
-                console.log(`${pair[0]}: ${pair[1]}`);
-            }
             alert("수정되었습니다!");
             navigate("/mypage");
         } catch (error) {

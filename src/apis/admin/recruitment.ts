@@ -30,7 +30,6 @@ export const getApplicationDetail = (appId: number) => {
 
 export const getRecruitmentByType = async (type: "MEMBER" | "MANAGER") => {
     const res = await axiosInstance.get(`/recruitments?recruitmentType=${type}`);
-    console.log(res.data);
     return res.data;
 };
 

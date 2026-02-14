@@ -81,11 +81,9 @@ export const AdminBlogPage = () => {
     };
 
     const handleDeleteConfirm = () => {
-        console.log("삭제 시도:", selectedIds);
         deleteSelectedBlogs(selectedIds);
     };
 
-    console.log("blog res", blogsRes);
     return (
         <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={isDeleteMode}>
             {!isDeleteMode && (

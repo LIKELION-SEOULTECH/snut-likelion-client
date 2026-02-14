@@ -20,7 +20,6 @@ export const getBlogList = async (
 // 블로그 글 단건 조회
 export const getBlogDetail = async (postId: number) => {
     const res = await axiosInstance.get(`/blogs/${postId}`);
-    console.log(res.data.data);
     return res;
 };
 
@@ -44,7 +43,6 @@ export const deleteBlog = (postId: number) => {
 // 내가 쓴 글 불러오기
 export const getMyBlog = async () => {
     const res = await axiosInstance.get(`/blogs/me`);
-    console.log(res.data.data);
     return res.data.data.content;
 };
 
@@ -73,6 +71,5 @@ export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
             "Content-Type": "multipart/form-data"
         }
     });
-    console.log("image s3 urls 요청 결과", res.data.data);
     return res.data.data.urls;
 };

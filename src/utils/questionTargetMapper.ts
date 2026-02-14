@@ -4,7 +4,6 @@ export type ApiQuestionPart = "PLANNING" | "DESIGN" | "FRONTEND" | "BACKEND" | "
 export type ApiQuestionDepartmentType = "ACADEMIC" | "MARKETING" | "OPERATION";
 
 export const mapServerToApiQuestionTarget = (target: string): ApiQuestionTarget => {
-    console.log(target);
     switch (target) {
         case "기본 질문":
         case "DEFAULT":

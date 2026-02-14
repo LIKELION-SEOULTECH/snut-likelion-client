@@ -29,7 +29,6 @@ export function TagEditor({ setTags }: { setTags: (tags: number[]) => void }) {
                 class: "w-full h-10 items-center text-xl focus:outline-none focus:border-none"
             },
             handleKeyDown(view, event) {
-                console.log(view);
                 if (event.key === "Enter") {
                     event.preventDefault();
                     return true;
