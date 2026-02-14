@@ -23,7 +23,6 @@ export const subscribeRecruitment = ({ email, type }: SubscribeRequest) => {
 // 내 지원서 목록 조회
 export const fetchMyApplications = async (): Promise<MyApplicationsResponse[]> => {
     const res = await axiosInstance.get("/applications/me");
-    console.log(res);
     return res.data.data;
 };
 

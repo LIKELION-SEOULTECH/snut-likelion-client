@@ -118,7 +118,6 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
 
     if (!member) return null;
 
-    console.log(member);
     return (
         <>
             <Toaster position="top-center" offset={{ top: 120, left: 80 }} />

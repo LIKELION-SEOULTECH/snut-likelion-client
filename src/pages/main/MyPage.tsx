@@ -11,11 +11,9 @@ import samplePRf from "@/assets/Member/samplePRFIMG.png";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { ADMIN_ABS } from "@/routes/routes";
-import { useNavigate } from "react-router-dom";
 import { getRoleFromToken } from "@/utils/auth";
 
 export const MyPage = () => {
-    const navigate = useNavigate();
     const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
 
     const role = getRoleFromToken();
@@ -85,7 +83,13 @@ export const MyPage = () => {
                             <div className="mt-7">
                                 <Button
                                     className="w-full h-[70px] text-xl text-gray-25 font-semibold bg-primary-800 border border-primary-400 gap-[6px] cursor-pointer hover:bg-primary-500"
-                                    onClick={() => navigate(ADMIN_ABS.MEMBER)}
+                                    onClick={() =>
+                                        window.open(
+                                            ADMIN_ABS.MEMBER,
+                                            "_blank",
+                                            "noopener,noreferrer"
+                                        )
+                                    }
                                 >
                                     어드민 <ArrowUpRight size={20} />
                                 </Button>

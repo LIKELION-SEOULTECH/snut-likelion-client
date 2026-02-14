@@ -134,14 +134,13 @@ export const ChatBotContainer = () => {
                 };
 
                 setMessages((prev) => [...prev.filter((m) => m.role !== "loading"), botMsg]);
-            } catch (error) {
+            } catch {
                 const botMsg: ChatMessage = {
                     id: Date.now() + 2,
                     role: "bot",
                     message: "오류가 발생했어요. 다시 시도해주세요 🙏"
                 };
                 setMessages((prev) => [...prev.filter((m) => m.role !== "loading"), botMsg]);
-                console.log(error);
             }
         }, 1000);
     };

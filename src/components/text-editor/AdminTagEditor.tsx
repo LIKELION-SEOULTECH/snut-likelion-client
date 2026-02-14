@@ -62,7 +62,6 @@ export function AdminTagEditor({
         onUpdate: ({ editor }) => {
             const json = editor.getJSON();
             const newTags: MentionSuggestion[] = [];
-            console.log("변경된 content:", JSON.stringify(json, null, 2)); // ← 여기에서도 출력 가능
 
             const extractMentions = (node: JSONContent) => {
                 if (

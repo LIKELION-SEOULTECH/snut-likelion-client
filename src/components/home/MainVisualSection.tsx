@@ -44,7 +44,7 @@ export const MainVisualSection = ({
                         </span>
                         <span className="relative flex items-center top-[6px]">
                             <ReactTyped
-                                className="text-5xl sm:text-[120px] font-[900] bg-gradient-to-r from-[#FF5100] via-[#FF7700] to-[#FFC08A] bg-clip-text text-transparent"
+                                className="text-5xl sm:text-[120px] font-[900] bg-gradient-to-r from-[#FF5100] via-[#FF7700] to-[#FFC08A] bg-clip-text text-transparent leading-[1.2]"
                                 strings={["Developer", "Designer", "Planner"]}
                                 typeSpeed={100}
                                 backSpeed={60}

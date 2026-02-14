@@ -100,7 +100,6 @@ export default function HomePage() {
                     recruitmentType: string;
                 };
             }) => {
-                console.log(">>>", res);
                 if (!res) return null;
 
                 if (res.data) {

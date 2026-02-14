@@ -30,7 +30,6 @@ export const MenuBar = ({
             const urls = await uploadBlogImages(fileList); // 다중 업로드 요청
             setImages((prev) => [...prev, ...urls]);
 
-            console.log(urls);
             urls.forEach((imageUrl) => {
                 editor
                     .chain()

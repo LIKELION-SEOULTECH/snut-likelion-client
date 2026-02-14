@@ -57,7 +57,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         department: isManeger ? formData.departmentType : undefined
     });
 
-    console.log(questions);
     const handleSelect = (field: "part" | "departmentType", value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
     };
@@ -160,7 +159,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             if (currentAppId == null) {
                 try {
                     const myApps = await fetchMyApplications();
-                    console.log(myApps);
                     if (myApps[0].id) {
                         setCurrentAppId(myApps[0].id);
                         setIsEdit(true);

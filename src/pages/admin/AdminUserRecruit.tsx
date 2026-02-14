@@ -135,7 +135,6 @@ export const AdminUserRecruitPage = () => {
         const ids = entries.map(([id]) => Number(id));
         const status = entries[0][1];
 
-        console.log("지원서 변경");
         applicationResultMutation.mutate({
             status,
             ids
@@ -148,8 +147,6 @@ export const AdminUserRecruitPage = () => {
             return;
         }
 
-        console.log(pendingStatusMap);
-        console.log(updateMode);
         setPendingStatusMap((prev) => {
             const next = { ...prev };
             selectedIds.forEach((id) => {
@@ -164,7 +161,6 @@ export const AdminUserRecruitPage = () => {
         setUpdateMode("");
     }, [setManageMode]);
 
-    console.log(userRecruitRes);
     return (
         <AdminLayout
             onSubmit={() => {
