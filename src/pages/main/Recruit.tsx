@@ -7,6 +7,8 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNavigate } from "react-router-dom";
 import { useRecruitmentSchedule } from "@/hooks/useRecruitment";
 import { NotificationModal } from "@/components/home/NotificationModal";
+import { getRoleFromToken } from "@/utils/auth";
+import { ROUTES } from "@/routes/routes";
 
 interface RecruitProps {
     isManager?: boolean;
@@ -51,7 +53,17 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
     }
 
     const handleApplyClick = () => {
+        const role = getRoleFromToken();
+
+        if (!role) {
+            navigate(ROUTES.LOGIN, {
+                state: { from: location.pathname }
+            });
+            return;
+        }
+
         if (!schedule) return;
+
         if (isApplyOpen) {
             navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
                 state: { recId: schedule.id }
@@ -166,7 +178,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
 
                     {/* 지원하기 버튼 */}
                     <button
-                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer font-bold  px-10 py-5 align-center leading-[130%] font-pretendard ${isApplyOpen ? " bg-[#F70] text-white" : "bg-[#3A3A3A] text-[#666]"}`}
+                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer font-bold  px-10 py-5 align-center leading-[130%] whitespace-nowrap font-pretendard ${isApplyOpen ? " bg-[#F70] text-white" : "bg-[#3A3A3A] text-[#666]"}`}
                         onClick={handleApplyClick}
                     >
                         지원하기 →
