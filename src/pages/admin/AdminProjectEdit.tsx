@@ -67,7 +67,6 @@ export const AdminProjectEditPage = () => {
         enabled: !!projectId
     });
 
-    console.log(projectDetail);
     useEffect(() => {
         if (!projectDetail) return;
 

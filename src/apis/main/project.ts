@@ -18,7 +18,6 @@ export const fetchAllProjects = async (params?: ProjectQueryParams): Promise<Pro
         params
     });
 
-    console.log(res.data);
     return res.data.data;
 };
 
@@ -39,7 +38,6 @@ export const getRetrospections = async (projectId: number): Promise<Retrospectio
         return Promise.resolve(mockProjectRetrospections[projectId]);
     }
     const res = await axiosInstance.get(`/projects/${projectId}/retrospections`);
-    console.log(res.data);
     return res.data.data;
 };
 

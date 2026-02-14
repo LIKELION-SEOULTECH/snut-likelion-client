@@ -9,7 +9,6 @@ export const getAdminProjects = async (params?: {
     const res = await axiosInstance.get("/admin/projects", {
         params
     });
-    console.log(res.data.data);
     return res.data.data;
 };
 
@@ -23,7 +22,6 @@ export const deleteMultipleProjects = async (ids: number[]) => {
 
 // 프로젝트 업로드
 export const createAdminProject = async (formData: FormData): Promise<void> => {
-    console.log(formData);
     const res = await axiosInstance.post("/admin/projects", formData, {
         headers: {
             "Content-Type": "multipart/form-data"
@@ -34,7 +32,6 @@ export const createAdminProject = async (formData: FormData): Promise<void> => {
 
 // 프로젝트 수정
 export const updateAdminProject = (id: number, data: FormData) => {
-    console.log(data);
     return axiosInstance.patch(`/admin/projects/${id}`, data);
 };
 

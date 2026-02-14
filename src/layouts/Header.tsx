@@ -55,14 +55,6 @@ export const Header = ({ white = false }: HeaderProps) => {
             const uOpen = new Date(memberRes.data.openDate);
             const uClose = new Date(memberRes.data.closeDate);
 
-            // 기간
-            console.log(
-                `[운영진] ${managerRes.data.generation}기 → open: ${mOpen.toLocaleString()}, close: ${mClose.toLocaleString()}`
-            );
-            console.log(
-                `[멤버]     ${memberRes.data.generation}기 → open: ${uOpen.toLocaleString()}, close: ${uClose.toLocaleString()}`
-            );
-
             // 운영진 지원 가능
             if (mOpen <= now && now <= mClose) {
                 navigate(ROUTES.RECRUIT_MANAGER);

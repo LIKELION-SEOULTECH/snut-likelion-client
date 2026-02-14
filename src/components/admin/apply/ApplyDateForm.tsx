@@ -68,7 +68,6 @@ export const ApplyDateForm = ({
             });
 
             setIsEditing(false);
-            console.log("모집 등록 성공");
         },
 
         onError: (err) => {
@@ -174,8 +173,6 @@ export const ApplyDateForm = ({
 
         const isUpdate =
             latestRecruitment && recruitmentId && generation === latestRecruitment.generation;
-
-        console.log("[SUBMIT MODE]", isUpdate ? "UPDATE" : "CREATE");
 
         recruitmentMutation.mutate({
             ...(isUpdate ? { id: recruitmentId } : {}),

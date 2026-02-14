@@ -22,7 +22,6 @@ export const NotificationModal = ({
                 subscribeRecruitment({ email, type: "MEMBER" }),
                 subscribeRecruitment({ email, type: "MANAGER" })
             ]);
-            console.log("모집 알림 신청 성공");
 
             alert("알림 신청이 완료되었습니다!");
             onClose(); // 모달 닫기

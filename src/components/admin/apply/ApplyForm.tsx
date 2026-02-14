@@ -60,7 +60,6 @@ export const ManagerApplyForm = ({ recId }: { recId: number }) => {
     useEffect(() => {
         if (!recruitmentQuestions?.data) return;
 
-        console.log(normalizedQuestions);
         const { basic, common, partMap, departmentMap } = splitQuestions(normalizedQuestions);
 
         setBasicQuestionList(basic);

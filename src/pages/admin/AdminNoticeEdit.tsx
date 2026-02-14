@@ -74,7 +74,6 @@ export const AdminNoticeEditPage = () => {
 
         onSuccess: () => {
             navigate("/admin/notice");
-            console.log("수정성공");
             toast(
                 <div className="flex items-center gap-2">
                     <CircleCheck size={20} className="text-green-400" />

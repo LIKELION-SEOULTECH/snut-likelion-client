@@ -46,7 +46,6 @@ export const AdminManagerRecruitPage = () => {
 
     const recId = recentRecruitment?.data.id;
 
-    console.log(recentRecruitment);
     const {
         data: managerRecruitRes,
         isLoading,
