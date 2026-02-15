@@ -230,6 +230,14 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         );
     };
 
+    const handleLeave = () => {
+        if (isPreview) {
+            navigate(-1);
+        } else {
+            openLeaveModal();
+        }
+    };
+
     const handleValidationFailForHeader = (message: string) => {
         openValidationFailModal(message);
     };
@@ -247,7 +255,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 onSubmit={handleSubmit}
                 step={step}
                 preview={isPreview}
-                onHandleLeave={openLeaveModal}
+                onHandleLeave={handleLeave}
                 onValidationFail={handleValidationFailForHeader}
             />
             <div className="flex-1 flex overflow-y-auto">
