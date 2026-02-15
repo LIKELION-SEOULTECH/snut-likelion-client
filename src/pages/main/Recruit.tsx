@@ -9,6 +9,8 @@ import { useRecruitmentSchedule } from "@/hooks/useRecruitment";
 import { NotificationModal } from "@/components/home/NotificationModal";
 import { getRoleFromToken } from "@/utils/auth";
 import { ROUTES } from "@/routes/routes";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMyApplications } from "@/apis/main/recruitment";
 
 interface RecruitProps {
     isManager?: boolean;
@@ -38,6 +40,19 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
     const recruitmentType = isManager ? "MANAGER" : "MEMBER";
     const { data: schedule, isLoading, isError } = useRecruitmentSchedule(recruitmentType);
 
+    const { data: appsRes } = useQuery({
+        queryKey: ["myApplications"],
+        queryFn: fetchMyApplications,
+        staleTime: 1000 * 30
+    });
+
+    const isSubmitted = appsRes?.[0]?.status === "SUBMITTED";
+    if (isSubmitted && showModal) {
+        setShowModal(false);
+        alert("이미 지원서를 제출하였습니다");
+        navigate(ROUTES.MYPAGE);
+    }
+
     const isApplyOpen = useMemo(() => {
         if (!schedule) return false;
         const now = new Date();
@@ -63,6 +78,11 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
         }
 
         if (!schedule) return;
+
+        if (isSubmitted) {
+            setShowModal(true);
+            return;
+        }
 
         if (isApplyOpen) {
             navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
