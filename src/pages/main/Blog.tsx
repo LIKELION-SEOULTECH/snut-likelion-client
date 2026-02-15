@@ -53,31 +53,32 @@ export const BlogPage = () => {
 
     return (
         <PageLayout white={true}>
-            <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white">
+            <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white ">
                 <div className="font-extrabold text-7xl h-[86px] mt-[86px] mb-[73px] text-center">
                     Blog<span className="text-[#FF7700]">.</span>
                 </div>
 
                 {/* <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} /> */}
-                <div className="mt-7 w-[598px] ">
-                    <MainSearchBar />
-                </div>
-                <div className="h-[20px] mt-12 font-normal">
-                    전체글{" "}
-                    <span className="text-[#f70] font-semibold">{totalCombinedBlogsCount}</span>
-                </div>
-                {isLoading ? (
-                    <div className=" grid grid-cols-3 gap-4 mt-6 w-[1217px]">
-                        {Array.from({ length: 9 }).map((_, idx) => (
-                            <ProjectBoxSkeleton key={`skeleton-${idx}`} />
-                        ))}
+                <div className="flex mx-auto flex-col">
+                    <div className="mt-7 w-[598px] ">
+                        <MainSearchBar />
                     </div>
-                ) : isError ? (
-                    <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
-                ) : (
-                    <BlogCardList blogs={blogsForCurrentPage} />
-                )}
-
+                    <div className="h-[20px] mt-12 font-normal">
+                        전체글{" "}
+                        <span className="text-[#f70] font-semibold">{totalCombinedBlogsCount}</span>
+                    </div>
+                    {isLoading ? (
+                        <div className=" grid grid-cols-3 gap-4 mt-6 w-[1217px]">
+                            {Array.from({ length: 9 }).map((_, idx) => (
+                                <ProjectBoxSkeleton key={`skeleton-${idx}`} />
+                            ))}
+                        </div>
+                    ) : isError ? (
+                        <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
+                    ) : (
+                        <BlogCardList blogs={blogsForCurrentPage} />
+                    )}
+                </div>
                 <div>
                     <Pagination
                         currentPage={page}
