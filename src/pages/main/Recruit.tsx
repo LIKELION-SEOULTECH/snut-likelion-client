@@ -67,6 +67,8 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
         return d.toISOString();
     }
 
+    const isDraft = appsRes?.[0]?.status === "DRAFT";
+
     const handleApplyClick = () => {
         const role = getRoleFromToken();
 
@@ -83,7 +85,17 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
             setShowModal(true);
             return;
         }
-
+        if (isDraft) {
+            navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
+                state: {
+                    mode: "edit",
+                    step: 2,
+                    appId: appsRes?.[0].id,
+                    application: appsRes?.[0]
+                }
+            });
+            return;
+        }
         if (isApplyOpen) {
             navigate(isManager ? "/recruitform/manager" : "/recruitform/member", {
                 state: { recId: schedule.id }
