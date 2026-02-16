@@ -9,35 +9,28 @@ import { getSubmittedApplications, updateApplicationStatus } from "@/apis/admin/
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import { AdminRecruitSkeleton } from "@/components/admin/recruit/RecruitSkeleton";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { ApplicationData } from "@/types/recruitment";
+import type { ApplicationData, ApplicationStatus } from "@/types/recruitment";
 import { toast, Toaster } from "sonner";
 import { CircleCheck } from "lucide-react";
 import { ApplicationSaveModal } from "@/components/admin/recruit/ApplicationSaveModal";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
-
-export type UpdateMode = "제출" | "서류 합격" | "";
+import { useManagerPassStore } from "@/stores/useManagerPassStore";
 
 export const AdminManagerRecruitPage = () => {
     const queryClient = useQueryClient();
     const { setManageMode } = useRecruitManageStore();
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [updateMode, setUpdateMode] = useState<UpdateMode>("");
+    const { passIds, baseStatus, clear } = useManagerPassStore();
 
+    const [checkedIds, setCheckedIds] = useState<number[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [saveModal, setSaveModal] = useState(false);
-
-    const [pendingStatusMap, setPendingStatusMap] = useState<
-        Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">
-    >({});
 
     const [filters, setFilters] = useState({
         result: "",
         department: "",
         part: ""
     });
-
-    const hasPendingChanges = Object.keys(pendingStatusMap).length > 0;
 
     const { data: recentRecruitment } = useQuery({
         queryKey: ["recentRecruitment", "MANAGER"],
@@ -63,41 +56,17 @@ export const AdminManagerRecruitPage = () => {
         enabled: !!recId
     });
 
-    const selectableIds =
-        managerRecruitRes?.content
-            .filter((app: ApplicationData) =>
-                updateMode === "제출" ? app.status === "제출" : app.status === "서류 합격"
-            )
-            .map((app: ApplicationData) => app.id) ?? [];
-
-    const isAllSelected =
-        selectableIds.length > 0 && selectableIds.every((id: number) => selectedIds.includes(id));
-
-    const toggleSelectAll = () => {
-        setSelectedIds((prev) =>
-            isAllSelected
-                ? prev.filter((id) => !selectableIds.includes(id))
-                : Array.from(new Set([...prev, ...selectableIds]))
-        );
-    };
-
     const handleSelectItem = (app: ApplicationData) => {
-        if (!updateMode) {
-            if (app.status === "제출") setUpdateMode("제출");
-            else if (app.status === "서류 합격") setUpdateMode("서류 합격");
-            else return;
-        }
-
-        toggleSelect(app.id);
-    };
-
-    const toggleSelect = (id: number) => {
-        setSelectedIds((prev) =>
-            prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id]
+        setCheckedIds((prev) =>
+            prev.includes(app.id) ? prev.filter((id) => id !== app.id) : [...prev, app.id]
         );
     };
 
-    const clearSelection = () => setSelectedIds([]);
+    const handleToggleAll = () => {
+        if (!managerRecruitRes) return;
+
+        setCheckedIds(managerRecruitRes.content.map((app: ApplicationData) => app.id));
+    };
 
     const applicationResultMutation = useMutation({
         mutationFn: updateApplicationStatus,
@@ -115,11 +84,10 @@ export const AdminManagerRecruitPage = () => {
                     }
                 }
             );
-            setPendingStatusMap({});
-            setSelectedIds([]);
-            clearSelection();
+            clear();
             setSaveModal(false);
             setManageMode(false);
+            setCheckedIds([]);
             queryClient.invalidateQueries({ queryKey: ["submittedApplications"] });
         },
         onError: () => {
@@ -132,50 +100,45 @@ export const AdminManagerRecruitPage = () => {
     };
 
     const handleSaveResult = () => {
-        const entries = Object.entries(pendingStatusMap);
-
-        if (entries.length === 0) {
-            alert("변경된 항목이 없습니다.");
-            return;
-        }
-
-        const ids = entries.map(([id]) => Number(id));
-        const status = entries[0][1];
-
-        applicationResultMutation.mutate({
-            status,
-            ids
-        });
-    };
-
-    const handleResult = (status: "FINAL_PASS" | "FAILED" | "PAPER_PASS") => {
-        if (selectedIds.length === 0) {
+        if (passIds.length === 0 || !baseStatus) {
             alert("선택된 지원자가 없습니다.");
             return;
         }
 
-        setPendingStatusMap((prev) => {
-            const next = { ...prev };
-            selectedIds.forEach((id) => {
-                next[id] = status;
-            });
-            return next;
+        let nextStatus: ApplicationStatus;
+
+        if (baseStatus === "서류 합격") {
+            nextStatus = "FINAL_PASS";
+        } else {
+            nextStatus = "PAPER_PASS";
+        }
+
+        applicationResultMutation.mutate({
+            status: nextStatus,
+            ids: passIds
         });
+    };
+
+    const getDisplayStatus = (app: ApplicationData) => {
+        if (passIds.includes(app.id)) {
+            if (baseStatus === "서류 합격") return "FINAL_PASS";
+            return "PAPER_PASS";
+        }
+
+        return app.status;
     };
 
     useEffect(() => {
         setManageMode(false);
-        setUpdateMode("");
     }, [setManageMode]);
 
     return (
         <AdminLayout
             onSubmit={() => {
-                if (hasPendingChanges) {
+                if (passIds.length > 0) {
                     setSaveModal(true);
                 } else {
                     alert("변경된 사항이 없습니다.");
-                    setManageMode(false);
                 }
             }}
         >
@@ -183,8 +146,14 @@ export const AdminManagerRecruitPage = () => {
             <div className="mt-12 mb-8">
                 <RecruitManagerSearchTool
                     onSearch={handleSearch}
-                    onChangeResult={handleResult}
-                    updateMode={updateMode}
+                    checkedItemsOnPage={
+                        managerRecruitRes?.content
+                            ?.filter((app: ApplicationData) => checkedIds.includes(app.id))
+                            .map((app: ApplicationData) => ({
+                                id: app.id,
+                                status: app.status as ApplicationStatus
+                            })) ?? []
+                    }
                 />
             </div>
             {!recId || isLoading || isError || managerRecruitRes.content.length === 0 ? (
@@ -192,13 +161,15 @@ export const AdminManagerRecruitPage = () => {
             ) : (
                 <>
                     <RecruitManagerSearchList
-                        data={managerRecruitRes.content}
+                        data={managerRecruitRes.content.map((app: ApplicationData) => ({
+                            ...app,
+                            displayStatus: getDisplayStatus(app)
+                        }))}
                         totalElements={managerRecruitRes.totalElements}
-                        selectedIds={selectedIds}
-                        updateMode={updateMode}
-                        pendingStatusMap={pendingStatusMap}
+                        finalPassCount={managerRecruitRes.finalPassCount}
+                        checkedIds={checkedIds}
                         onToggleSelect={handleSelectItem}
-                        onToggleSelectAll={toggleSelectAll}
+                        onToggleSelectAll={handleToggleAll}
                     />
                     <div className="mb-[210px]">
                         <Pagination
@@ -213,7 +184,7 @@ export const AdminManagerRecruitPage = () => {
                 open={saveModal}
                 onClose={() => setSaveModal(false)}
                 onConfirm={handleSaveResult}
-                status={updateMode === "제출" ? "서류 합격" : "최종 합격"}
+                status={baseStatus === "서류 합격" ? "최종 합격" : "서류 합격"}
             />
         </AdminLayout>
     );
