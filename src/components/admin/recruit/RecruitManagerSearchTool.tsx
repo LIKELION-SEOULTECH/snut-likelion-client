@@ -40,15 +40,6 @@ export const RecruitManagerSearchTool = ({
 
         const status = checkedItemsOnPage[0].status;
 
-        console.log("=================================");
-        console.log("🎯 합격 버튼 클릭");
-        console.log(
-            "현재 페이지 체크된 id:",
-            checkedItemsOnPage.map((i) => i.id)
-        );
-        console.log("기준 상태:", status);
-        console.log("=================================");
-
         addMany(
             checkedItemsOnPage.map((i) => i.id),
             status

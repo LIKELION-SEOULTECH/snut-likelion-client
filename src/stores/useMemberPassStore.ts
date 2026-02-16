@@ -23,16 +23,11 @@ export const useMemberPassStore = create<MemberPassStore>((set, get) => ({
                 passIds: [id],
                 baseStatus: status
             });
-
-            console.log("Member 최초 선택");
-            console.log("기준 상태:", status);
-            console.log("현재 passIds:", [id]);
             return;
         }
 
         // 다른 상태 선택 불가
         if (baseStatus !== status) {
-            console.log("Member 다른 상태 선택 불가");
             return;
         }
 
@@ -48,9 +43,6 @@ export const useMemberPassStore = create<MemberPassStore>((set, get) => ({
             passIds: nextIds,
             baseStatus: nextIds.length === 0 ? null : baseStatus
         });
-
-        console.log("🔁 Member toggle");
-        console.log("현재 passIds:", nextIds);
     },
 
     addMany: (ids, status) => {
@@ -62,29 +54,20 @@ export const useMemberPassStore = create<MemberPassStore>((set, get) => ({
                 passIds: ids,
                 baseStatus: status
             });
-
-            console.log("Member addMany 최초 설정");
-            console.log("기준 상태:", status);
-            console.log("현재 passIds:", ids);
             return;
         }
 
         // 상태 다르면 막기
         if (baseStatus !== status) {
-            console.log("다른 상태의 id는 추가할 수 없음");
             return;
         }
 
         set((state) => ({
             passIds: Array.from(new Set([...state.passIds, ...ids]))
         }));
-
-        console.log("➕ Member addMany");
-        console.log("현재 passIds:", get().passIds);
     },
 
     clear: () => {
-        console.log("🧹 Member 초기화");
         set({ passIds: [], baseStatus: null });
     }
 }));
