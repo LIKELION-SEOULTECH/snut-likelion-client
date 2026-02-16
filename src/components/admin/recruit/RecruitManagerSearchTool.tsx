@@ -10,19 +10,19 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
-import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
-interface MemberSearchToolProps {
+import type { KorApplicationStatus } from "@/stores/useMemberPassStore";
+import { useManagerPassStore } from "@/stores/useManagerPassStore";
+interface ManagerSearchToolProps {
     onSearch: (filters: { result: string; part: string; department: string }) => void;
-    onChangeResult: (status: "FINAL_PASS" | "PAPER_PASS") => void;
-    updateMode: UpdateMode;
+    checkedItemsOnPage: { id: number; status: KorApplicationStatus }[];
 }
 
 export const RecruitManagerSearchTool = ({
     onSearch,
-    onChangeResult,
-    updateMode
-}: MemberSearchToolProps) => {
+    checkedItemsOnPage
+}: ManagerSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
+    const { addMany } = useManagerPassStore();
 
     const [result, setResult] = useState("");
     const [part, setPart] = useState("");
@@ -30,6 +30,29 @@ export const RecruitManagerSearchTool = ({
 
     const handleSearch = () => {
         onSearch({ result, department, part });
+    };
+
+    const handlePassClick = () => {
+        if (checkedItemsOnPage.length === 0) {
+            alert("선택된 지원자가 없습니다.");
+            return;
+        }
+
+        const status = checkedItemsOnPage[0].status;
+
+        console.log("=================================");
+        console.log("🎯 합격 버튼 클릭");
+        console.log(
+            "현재 페이지 체크된 id:",
+            checkedItemsOnPage.map((i) => i.id)
+        );
+        console.log("기준 상태:", status);
+        console.log("=================================");
+
+        addMany(
+            checkedItemsOnPage.map((i) => i.id),
+            status
+        );
     };
 
     // 엔터키 필터링
@@ -177,9 +200,7 @@ export const RecruitManagerSearchTool = ({
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
                     <Button
-                        onClick={() =>
-                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
-                        }
+                        onClick={handlePassClick}
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

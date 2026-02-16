@@ -3,15 +3,23 @@ import type { ApplicationData } from "@/types/recruitment";
 import { cn } from "@/libs/cn";
 import { formatDateWithHyphen } from "@/utils/formatData";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
-import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
 import { getApplicationStatusLabel } from "@/utils/getApplicationStatusLabel";
+import { useManagerPassStore } from "@/stores/useManagerPassStore";
 
 interface RecruitManagerItemProps {
     app: ApplicationData;
     index: number;
     checked: boolean;
-    updateMode: UpdateMode;
-    pendingStatus?: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
+    displayStatus:
+        | "SUBMITTED"
+        | "PAPER_PASS"
+        | "FINAL_PASS"
+        | "FAILED"
+        | "제출"
+        | "서류 합격"
+        | "최종 합격"
+        | "불합격"
+        | undefined;
     onToggle: () => void;
 }
 
@@ -19,12 +27,14 @@ export const RecruitManagerItem = ({
     app,
     index,
     checked,
-    updateMode,
-    pendingStatus,
+    displayStatus,
     onToggle
 }: RecruitManagerItemProps) => {
     const navigate = useNavigate();
     const { isManageMode } = useRecruitManageStore();
+    const { baseStatus } = useManagerPassStore();
+
+    const isSelectable = !baseStatus || baseStatus === app.status;
 
     return (
         <div
@@ -43,12 +53,9 @@ export const RecruitManagerItem = ({
                         type="checkbox"
                         onClick={(e) => e.stopPropagation()}
                         checked={checked}
-                        disabled={
-                            (updateMode === "제출" && app.status !== "제출") ||
-                            (updateMode === "서류 합격" && app.status !== "서류 합격")
-                        }
+                        disabled={!isSelectable}
                         onChange={onToggle}
-                        className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs 
+                        className="w-4 h-4 appearance-none border border-[#BCC3CE] rounded-xs
                                 checked:bg-[#FF7700] checked:border-transparent 
                                 checked:after:content-['✓'] checked:after:text-white 
                                 checked:after:text-[16px] checked:after:block 
@@ -63,7 +70,7 @@ export const RecruitManagerItem = ({
             <span>{app.departmentType}</span>
             <span>{app.part}</span>
             <span>{formatDateWithHyphen(app.submittedAt)}</span>
-            <span>{getApplicationStatusLabel(pendingStatus ?? app.status)}</span>
+            <span>{getApplicationStatusLabel(displayStatus)}</span>
         </div>
     );
 };

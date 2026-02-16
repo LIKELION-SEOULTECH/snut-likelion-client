@@ -18,6 +18,7 @@ export interface ApplicationData {
     submittedAt: string;
     status: "최종 합격" | "불합격" | "제출" | "서류 합격";
     departmentType?: string;
+    displayStatus?: ApplicationStatus | "제출" | "서류 합격" | "최종 합격" | "불합격";
 }
 
 export interface UpdateQuestionRequest {
@@ -156,5 +157,7 @@ export interface ApplicationDetail {
     part: string;
     portfolio?: string;
     submittedAt: string;
-    status: "FAILED" | "FINAL_PASS" | "PAPER_PASS" | "SUBMITTED";
+    status: ApplicationStatus;
 }
+
+export type ApplicationStatus = "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
