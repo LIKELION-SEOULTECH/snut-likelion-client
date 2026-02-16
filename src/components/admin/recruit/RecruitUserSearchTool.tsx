@@ -10,19 +10,15 @@ import { Button } from "@/components/ui/button";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
 import TriggerClose from "@/assets/admin/trigger-close.svg?react";
 import TriggerOpen from "@/assets/admin/trigger-open.svg?react";
-import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
+import { useMemberPassStore, type KorApplicationStatus } from "@/stores/useMemberPassStore";
 interface MemberSearchToolProps {
     onSearch: (filters: { result: string; part: string }) => void;
-    onChangeResult: (status: "FAILED" | "FINAL_PASS" | "PAPER_PASS") => void;
-    updateMode: UpdateMode;
+    checkedItemsOnPage: { id: number; status: KorApplicationStatus }[];
 }
 
-export const RecruitUserSearchTool = ({
-    onSearch,
-    onChangeResult,
-    updateMode
-}: MemberSearchToolProps) => {
+export const RecruitUserSearchTool = ({ onSearch, checkedItemsOnPage }: MemberSearchToolProps) => {
     const { isManageMode } = useRecruitManageStore();
+    const { addMany } = useMemberPassStore();
 
     const [result, setResult] = useState("");
     const [part, setPart] = useState("");
@@ -31,16 +27,28 @@ export const RecruitUserSearchTool = ({
         onSearch({ result, part });
     };
 
+    const handlePassClick = () => {
+        if (checkedItemsOnPage.length === 0) {
+            alert("선택된 지원자가 없습니다.");
+            return;
+        }
+
+        const status = checkedItemsOnPage[0].status;
+
+        addMany(
+            checkedItemsOnPage.map((i) => i.id),
+            status
+        );
+    };
+
     // 엔터키 필터링
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === "Enter") {
             e.preventDefault();
-            onSearch({
-                result,
-                part
-            });
+            handleSearch();
         }
     };
+
     return (
         <div
             className="h-11 flex flex-row gap-2 justify-between items-center"
@@ -140,9 +148,7 @@ export const RecruitUserSearchTool = ({
             {isManageMode ? (
                 <div className="h-full flex flex-row gap-3">
                     <Button
-                        onClick={() =>
-                            onChangeResult(updateMode === "제출" ? "PAPER_PASS" : "FINAL_PASS")
-                        }
+                        onClick={handlePassClick}
                         className="w-[103px] medium-14 bg-gray-500 text-gray-0 !h-full rounded-sm"
                     >
                         합격

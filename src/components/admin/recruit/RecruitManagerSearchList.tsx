@@ -2,29 +2,28 @@ import { cn } from "@/libs/cn";
 import { RecruitManagerItem } from "./RecruitManagerItem";
 import type { ApplicationData } from "@/types/recruitment";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
-import type { UpdateMode } from "@/pages/admin/AdminManagerRecruit";
+import { useManagerPassStore } from "@/stores/useManagerPassStore";
 
 export const RecruitManagerSearchList = ({
     data,
     totalElements,
-    selectedIds,
-    updateMode,
-    pendingStatusMap,
+    finalPassCount,
+    checkedIds,
     onToggleSelect,
     onToggleSelectAll
 }: {
     data: ApplicationData[];
     totalElements: number;
-    selectedIds: number[];
-    updateMode: UpdateMode;
-    pendingStatusMap: Record<number, "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED">;
+    finalPassCount: number;
+    checkedIds: number[];
     onToggleSelect: (app: ApplicationData) => void;
     onToggleSelectAll: () => void;
 }) => {
     const { isManageMode } = useRecruitManageStore();
-    const pageIds = data.map((app) => app.id);
-    const isAllChecked = pageIds.length > 0 && pageIds.every((id) => selectedIds.includes(id));
+    const { passIds } = useManagerPassStore();
 
+    const pageIds = data.map((app) => app.id);
+    const isAllChecked = pageIds.length > 0 && pageIds.every((id) => passIds.includes(id));
     return (
         <div>
             <div className="flex flex-row regular-14 gap-7 mb-8">
@@ -32,7 +31,7 @@ export const RecruitManagerSearchList = ({
                     전체 <span className="text-orange-400">{totalElements}</span>
                 </div>
                 <div>
-                    합격 <span className="text-orange-400">{data.length}</span>
+                    합격 <span className="text-orange-400">{finalPassCount}</span>
                 </div>
             </div>
             <div className="w-full text-sm rounded-sm overflow-hidden min-h-[527px] bg-white">
@@ -75,9 +74,8 @@ export const RecruitManagerSearchList = ({
                             key={app.id}
                             app={app}
                             index={index}
-                            updateMode={updateMode}
-                            pendingStatus={pendingStatusMap[app.id]}
-                            checked={selectedIds.includes(app.id)}
+                            displayStatus={app.displayStatus}
+                            checked={checkedIds.includes(app.id)}
                             onToggle={() => onToggleSelect(app)}
                         />
                     ))}
