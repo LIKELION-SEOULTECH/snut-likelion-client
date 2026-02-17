@@ -1,5 +1,5 @@
 import type { ProjectDetailResponse, RetrospectionResponse } from "@/types/project";
-import sampleIMG from "@/assets/common/sampleBox.png";
+
 import idea1_1 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 1.png";
 import idea1_2 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 2.png";
 import idea1_3 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 3.png";
