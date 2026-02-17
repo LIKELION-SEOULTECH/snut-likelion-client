@@ -60,7 +60,7 @@ export const MyPageTab = ({
                 }
             });
         }
-        if (tab === "비밀번호 변경") navigate(ROUTES.PASSWORD_RESET);
+        if (tab === "비밀번호 변경") navigate(ROUTES.MYPAGE_PASSWORD_CHANGE);
     };
 
     const isActive = (tab: string) => activeTab === tab;
