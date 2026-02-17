@@ -4,16 +4,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type {
     LionInfoDetailsResponse,
     MemberDetailResponse,
-    SimplePortfolioLink
+    SimplePortfolioLink,
+    UpdateProfile
 } from "@/types/member";
 import { useState } from "react";
 import { ImageCropper } from "@/components/my-page/ImageCropper";
 
 import samplePRf from "@/assets/Member/samplePRFIMG.png";
+import { useMutation } from "@tanstack/react-query";
+import { updateUserProfile } from "@/apis/main/member";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const MyPageEdit = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const queryClient = useQueryClient();
 
     const state = location.state as {
         member: MemberDetailResponse;
@@ -46,35 +51,65 @@ export const MyPageEdit = () => {
         }
     };
 
-    const handleSubmit = async () => {
-        const formData = new FormData();
+    // const handleSubmit = async () => {
+    //     const formData = new FormData();
 
-        // 이미지
+    //     // 이미지
 
-        if (croppedImageFile) {
-            formData.append("profileImage", croppedImageFile);
-        }
+    //     if (croppedImageFile) {
+    //         formData.append("profileImage", croppedImageFile);
+    //     }
 
-        formData.append("intro", intro);
-        formData.append("description", description);
-        formData.append("saying", quote);
-        formData.append("email", email);
+    //     formData.append("intro", intro);
+    //     formData.append("description", description);
+    //     formData.append("saying", quote);
+    //     formData.append("email", email);
 
-        // formData.append("major", member.major || "");
+    //     // formData.append("major", member.major || "");
 
-        stackList.forEach((stack) => formData.append("stacks", stack));
+    //     stackList.forEach((stack) => formData.append("stacks", stack));
 
-        portfolioLinks.forEach((link, index) => {
-            formData.append(`portfolioLinks[${index}].name`, link.name);
-            formData.append(`portfolioLinks[${index}].url`, link.url);
-        });
-        try {
+    //     portfolioLinks.forEach((link, index) => {
+    //         formData.append(`portfolioLinks[${index}].name`, link.name);
+    //         formData.append(`portfolioLinks[${index}].url`, link.url);
+    //     });
+
+    //     try {
+    //         alert("수정되었습니다!");
+    //         navigate("/mypage");
+    //     } catch (error) {
+    //         console.error("업데이트 실패", error);
+    //         alert("수정 중 오류가 발생했습니다.");
+    //     }
+    // };
+
+    const { mutate } = useMutation({
+        mutationFn: (data: UpdateProfile) => updateUserProfile(member.id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["memberDetail"] });
+
             alert("수정되었습니다!");
-            navigate("/mypage");
-        } catch (error) {
-            console.error("업데이트 실패", error);
+            window.location.href = "/mypage";
+        },
+        onError: (error) => {
+            console.error("업데이트 실패:", error);
             alert("수정 중 오류가 발생했습니다.");
         }
+    });
+
+    // json 형태
+    const handleSubmit = () => {
+        const payload = {
+            profileImage: "",
+            intro,
+            description,
+            saying: quote,
+            stacks: stackList,
+            portfolioLinks: portfolioLinks.filter((link) => link.name && link.url)
+        };
+        console.log(croppedImageFile);
+
+        mutate(payload);
     };
 
     return (

@@ -12,7 +12,7 @@ export const ProjectDetailSection = ({ project }: { project: projectDetail }) =>
                 </div>
             </div>
             <div className="text-[50px] font-bold text-white mt-6"> {project.name}</div>
-            <div className="flex flex-row gap-3 mt-6">
+            <div className="flex flex-row gap-3 mt-6 flex-wrap">
                 {project.tags?.map((e, idx) => {
                     return (
                         <div

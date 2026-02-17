@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import type { MemberDetailResponse, MemberResponse } from "@/types/members";
-import type { LionInfoDetailsResponse, MemberQueryParams } from "@/types/member";
+import type { LionInfoDetailsResponse, MemberQueryParams, UpdateProfile } from "@/types/member";
 
 // 기수 및 역할별 멤버 조회
 export const fetchMembers = async (params: MemberQueryParams): Promise<MemberResponse[]> => {
@@ -21,13 +21,13 @@ export const fetchMemberDetail = async (id: number): Promise<MemberDetailRespons
 };
 
 // 유저 정보 수정
-export const updateUserProfile = async (memberId: number, data: FormData) => {
+export const updateUserProfile = async (memberId: number, data: UpdateProfile) => {
     const token = localStorage.getItem("accessToken");
 
     return await axiosInstance.patch(`/members/${memberId}`, data, {
         headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data"
+            Authorization: `Bearer ${token}`
+            // "Content-Type": "multipart/form-data"
         }
     });
 };

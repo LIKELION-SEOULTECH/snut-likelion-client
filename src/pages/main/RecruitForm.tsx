@@ -169,8 +169,12 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                     console.error("appId 재조회 실패", e);
                 }
             }
-            alert(vars.submit ? "지원서가 제출되었습니다!" : "임시 저장되었습니다!");
-            if (vars.submit) navigate(ROUTES.MYPAGE);
+            if (vars.submit) {
+                alert("지원서가 제출되었습니다!");
+                navigate(ROUTES.MYPAGE);
+            } else {
+                openModal("임시저장", "지원서가 저장되었습니다.", closeModal, "확인");
+            }
         },
         onError: (e) => {
             if (e.message.includes("409")) {
@@ -196,16 +200,6 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
             alert("하나 이상의 질문에 답변을 작성해야 임시 저장할 수 있어요.");
             return;
         }
-        openModal(
-            "임시저장",
-            "지원서가 저장되었습니다",
-            () => {
-                applyMutation.mutate({ submit: false });
-                closeModal();
-            },
-            "확인",
-            undefined
-        );
         applyMutation.mutate({ submit: false });
     };
 
@@ -230,6 +224,14 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
         );
     };
 
+    const handleLeave = () => {
+        if (isPreview) {
+            navigate(-1);
+        } else {
+            openLeaveModal();
+        }
+    };
+
     const handleValidationFailForHeader = (message: string) => {
         openValidationFailModal(message);
     };
@@ -247,7 +249,7 @@ export const RecruitForm = ({ isManeger }: RecruitFormProps) => {
                 onSubmit={handleSubmit}
                 step={step}
                 preview={isPreview}
-                onHandleLeave={openLeaveModal}
+                onHandleLeave={handleLeave}
                 onValidationFail={handleValidationFailForHeader}
             />
             <div className="flex-1 flex overflow-y-auto">
