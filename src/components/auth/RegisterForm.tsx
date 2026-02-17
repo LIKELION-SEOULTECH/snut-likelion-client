@@ -183,7 +183,6 @@ export const RegisterForm = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setConfirmPassword(e.target.value)
                     }
-                    error={errors.confirmPassword}
                 />
                 {confirmPassword.length > 0 && confirmPassword !== password && (
                     <p className="text-[14px] h-5 text-red-500">*비밀번호와 일치하지 않습니다.</p>
