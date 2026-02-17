@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import type { ProjectCategory } from "@/types/project";
 import sample from "@/assets/common/sampleBox.png";
 
-interface ProjectBoxProps {
+export interface ProjectBoxProps {
     id: number;
     name: string;
     description?: string;

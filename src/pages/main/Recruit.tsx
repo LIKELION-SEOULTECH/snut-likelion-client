@@ -118,17 +118,17 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
               },
               {
                   title: "서류 발표",
-                  date: formatDate(addDays(schedule.data.closeDate, 7), true),
+                  date: formatDate(addDays(schedule.data.closeDate, 3), true),
                   note: "메일로 개별 발표"
               },
               {
                   title: "면접",
-                  date: `${formatDate(addDays(schedule.data.closeDate, 12))} ~ ${formatDate(addDays(schedule.data.closeDate, 16))}`,
+                  date: `${formatDate(addDays(schedule.data.closeDate, 5))} ~ ${formatDate(addDays(schedule.data.closeDate, 7))}`,
                   note: "개별 안내되는 일정에 따라 대면 진행"
               },
               {
                   title: "최종 발표",
-                  date: formatDate(addDays(schedule.data.closeDate, 20)),
+                  date: formatDate(addDays(schedule.data.closeDate, 10)),
                   note: "메일로 개별 발표"
               }
           ]
@@ -261,17 +261,19 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
 // 샘플... 임시..
 
 const Member_ScheduleData = [
+    { title: "• 전체 OT: 3/18 (수)", orangeText: "비대면", note: "* 불참 시 수료 불가" },
     {
-        title: "• 학교 자체 OT: 3/20 (목)",
+        title: "• 학교 자체 OT: 3/19 (목)",
         orangeText: "대면",
         note: "* 불참 시 수료 불가"
     },
-    { title: "• 전체 OT: 3/26 (수)", orangeText: "비대면", note: "* 불참 시 수료 불가" },
+
     {
-        title: "• 정기 세션: 3월 ~ 12월",
+        title: "• 정기 세션: 3월 ~ 5월",
         orangeText: "매주 목요일 2시간 가량 대면",
         note: "* 2회 불참 시 수료 불가"
     },
-    { title: "• 중앙 해커톤", orangeText: "무박 2일", note: "* 불참시 수료 불가" }
+    { title: "• 중앙 해커톤", orangeText: "무박 2일", note: "* 불참 시 수료 불가" },
+    { title: "• 학교 연합 해커톤", orangeText: "1호선톤, 4호선톤", note: "* 참여 희망자 모집" }
 ];
 const Manager_ScheduleData = Member_ScheduleData;
