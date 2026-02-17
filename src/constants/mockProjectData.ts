@@ -1,5 +1,152 @@
 import type { ProjectDetailResponse, RetrospectionResponse } from "@/types/project";
 import sampleIMG from "@/assets/common/sampleBox.png";
+import idea1_1 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 1.png";
+import idea1_2 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 2.png";
+import idea1_3 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 3.png";
+import idea1_4 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 4.png";
+import idea1_5 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 5.png";
+import idea1_6 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 6.png";
+import idea1_7 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 7.png";
+import idea1_8 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 8.png";
+import idea1_9 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 9.png";
+import idea1_10 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 10.png";
+import idea1_11 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 11.png";
+import idea1_12 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 12.png";
+import idea1_13 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 13.png";
+import idea1_14 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 14.png";
+import idea1_15 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 15.png";
+import idea1_16 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 16.png";
+import idea1_17 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 17.png";
+
+import idea2_1 from "@/assets/project/mockImg/pillMyRithm/1.png";
+import idea2_2 from "@/assets/project/mockImg/pillMyRithm/2.png";
+import idea2_3 from "@/assets/project/mockImg/pillMyRithm/3.png";
+import idea2_4 from "@/assets/project/mockImg/pillMyRithm/4.png";
+import idea2_5 from "@/assets/project/mockImg/pillMyRithm/5.png";
+import idea2_6 from "@/assets/project/mockImg/pillMyRithm/6.png";
+import idea2_7 from "@/assets/project/mockImg/pillMyRithm/7.png";
+import idea2_8 from "@/assets/project/mockImg/pillMyRithm/8.png";
+import idea2_9 from "@/assets/project/mockImg/pillMyRithm/9.png";
+import idea2_10 from "@/assets/project/mockImg/pillMyRithm/10.png";
+import idea2_11 from "@/assets/project/mockImg/pillMyRithm/11.png";
+import idea2_12 from "@/assets/project/mockImg/pillMyRithm/12.png";
+import idea2_13 from "@/assets/project/mockImg/pillMyRithm/13.png";
+import idea2_14 from "@/assets/project/mockImg/pillMyRithm/14.png";
+import idea2_15 from "@/assets/project/mockImg/pillMyRithm/15.png";
+import idea2_16 from "@/assets/project/mockImg/pillMyRithm/16.png";
+import idea2_17 from "@/assets/project/mockImg/pillMyRithm/17.png";
+import idea2_18 from "@/assets/project/mockImg/pillMyRithm/18.png";
+import idea2_19 from "@/assets/project/mockImg/pillMyRithm/19.png";
+import idea2_20 from "@/assets/project/mockImg/pillMyRithm/20.png";
+import idea2_21 from "@/assets/project/mockImg/pillMyRithm/21.png";
+import idea2_22 from "@/assets/project/mockImg/pillMyRithm/22.png";
+import idea2_23 from "@/assets/project/mockImg/pillMyRithm/23.png";
+import idea2_24 from "@/assets/project/mockImg/pillMyRithm/24.png";
+
+import idea3_1 from "@/assets/project/mockImg/haearim/1.png";
+import idea3_2 from "@/assets/project/mockImg/haearim/2.png";
+import idea3_3 from "@/assets/project/mockImg/haearim/3.png";
+import idea3_4 from "@/assets/project/mockImg/haearim/4.png";
+import idea3_5 from "@/assets/project/mockImg/haearim/5.png";
+import idea3_6 from "@/assets/project/mockImg/haearim/6.png";
+import idea3_7 from "@/assets/project/mockImg/haearim/7.png";
+import idea3_8 from "@/assets/project/mockImg/haearim/8.png";
+import idea3_9 from "@/assets/project/mockImg/haearim/9.png";
+import idea3_10 from "@/assets/project/mockImg/haearim/10.png";
+import idea3_11 from "@/assets/project/mockImg/haearim/11.png";
+import idea3_12 from "@/assets/project/mockImg/haearim/12.png";
+import idea3_13 from "@/assets/project/mockImg/haearim/13.png";
+import idea3_14 from "@/assets/project/mockImg/haearim/14.png";
+import idea3_15 from "@/assets/project/mockImg/haearim/15.png";
+import idea3_16 from "@/assets/project/mockImg/haearim/16.png";
+import idea3_17 from "@/assets/project/mockImg/haearim/17.png";
+import idea3_18 from "@/assets/project/mockImg/haearim/18.png";
+import idea3_19 from "@/assets/project/mockImg/haearim/19.png";
+import idea3_20 from "@/assets/project/mockImg/haearim/20.png";
+import idea3_21 from "@/assets/project/mockImg/haearim/21.png";
+import idea3_22 from "@/assets/project/mockImg/haearim/22.png";
+import idea3_23 from "@/assets/project/mockImg/haearim/23.png";
+import idea3_24 from "@/assets/project/mockImg/haearim/24.png";
+import idea3_25 from "@/assets/project/mockImg/haearim/25.png";
+import idea3_26 from "@/assets/project/mockImg/haearim/26.png";
+
+import idea4_1 from "@/assets/project/mockImg/idea-bab/1.png";
+import idea4_2 from "@/assets/project/mockImg/idea-bab/2.png";
+import idea4_3 from "@/assets/project/mockImg/idea-bab/3.png";
+import idea4_4 from "@/assets/project/mockImg/idea-bab/4.png";
+import idea4_5 from "@/assets/project/mockImg/idea-bab/5.png";
+import idea4_6 from "@/assets/project/mockImg/idea-bab/6.png";
+import idea4_7 from "@/assets/project/mockImg/idea-bab/7.png";
+import idea4_8 from "@/assets/project/mockImg/idea-bab/8.png";
+import idea4_9 from "@/assets/project/mockImg/idea-bab/9.png";
+import idea4_10 from "@/assets/project/mockImg/idea-bab/10.png";
+import idea4_11 from "@/assets/project/mockImg/idea-bab/11.png";
+import idea4_12 from "@/assets/project/mockImg/idea-bab/12.png";
+import idea4_13 from "@/assets/project/mockImg/idea-bab/13.png";
+import idea4_14 from "@/assets/project/mockImg/idea-bab/14.png";
+import idea4_15 from "@/assets/project/mockImg/idea-bab/15.png";
+import idea4_16 from "@/assets/project/mockImg/idea-bab/16.png";
+import idea4_17 from "@/assets/project/mockImg/idea-bab/17.png";
+import idea4_18 from "@/assets/project/mockImg/idea-bab/18.png";
+import idea4_19 from "@/assets/project/mockImg/idea-bab/19.png";
+import idea4_20 from "@/assets/project/mockImg/idea-bab/20.png";
+import idea4_21 from "@/assets/project/mockImg/idea-bab/21.png";
+
+import idea5_1 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0001 1.png";
+import idea5_2 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0002 1.png";
+import idea5_3 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0003 1.png";
+import idea5_4 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0004 1.png";
+import idea5_5 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0005 1.png";
+import idea5_6 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0006 1.png";
+import idea5_7 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0007 1.png";
+import idea5_8 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0008 1.png";
+import idea5_9 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0009 1.png";
+import idea5_10 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0010 1.png";
+
+import idea6_1 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998 1.png";
+import idea6_2 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_01 1.png";
+import idea6_3 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_02 1.png";
+import idea6_4 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_03 1.png";
+import idea6_5 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_04 1.png";
+import idea6_6 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_05 1.png";
+import idea6_7 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_06 1.png";
+import idea6_8 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_07 1.png";
+
+import idea7_1 from "@/assets/project/mockImg/EMOD/1.png";
+import idea7_2 from "@/assets/project/mockImg/EMOD/2.png";
+import idea7_3 from "@/assets/project/mockImg/EMOD/3.png";
+import idea7_4 from "@/assets/project/mockImg/EMOD/4.png";
+import idea7_5 from "@/assets/project/mockImg/EMOD/5.png";
+import idea7_6 from "@/assets/project/mockImg/EMOD/6.png";
+import idea7_7 from "@/assets/project/mockImg/EMOD/7.png";
+import idea7_8 from "@/assets/project/mockImg/EMOD/8.png";
+
+import idea8_1 from "@/assets/project/mockImg/구석구석/1.png";
+import idea8_2 from "@/assets/project/mockImg/구석구석/2.png";
+import idea8_3 from "@/assets/project/mockImg/구석구석/3.png";
+import idea8_4 from "@/assets/project/mockImg/구석구석/4.png";
+import idea8_5 from "@/assets/project/mockImg/구석구석/5.png";
+import idea8_6 from "@/assets/project/mockImg/구석구석/6.png";
+import idea8_7 from "@/assets/project/mockImg/구석구석/7.png";
+import idea8_8 from "@/assets/project/mockImg/구석구석/8.png";
+
+import idea9_1 from "@/assets/project/mockImg/ITGO/1.png";
+import idea9_2 from "@/assets/project/mockImg/ITGO/2.png";
+import idea9_3 from "@/assets/project/mockImg/ITGO/3.png";
+import idea9_4 from "@/assets/project/mockImg/ITGO/4.png";
+import idea9_5 from "@/assets/project/mockImg/ITGO/5.png";
+import idea9_6 from "@/assets/project/mockImg/ITGO/6.png";
+import idea9_7 from "@/assets/project/mockImg/ITGO/7.png";
+import idea9_8 from "@/assets/project/mockImg/ITGO/8.png";
+
+import idea10_1 from "@/assets/project/mockImg/h-bab/1.png";
+import idea10_2 from "@/assets/project/mockImg/h-bab/2.png";
+import idea10_3 from "@/assets/project/mockImg/h-bab/3.png";
+import idea10_4 from "@/assets/project/mockImg/h-bab/4.png";
+import idea10_5 from "@/assets/project/mockImg/h-bab/5.png";
+import idea10_6 from "@/assets/project/mockImg/h-bab/6.png";
+import idea10_7 from "@/assets/project/mockImg/h-bab/7.png";
+import idea10_8 from "@/assets/project/mockImg/h-bab/8.png";
 
 export const mock13thProjectData = [
     //아이디어톤
@@ -9,7 +156,7 @@ export const mock13thProjectData = [
         description: "이동이 불편한 교통약자를 위한 사용자 참여형 길찾기 & 제보 플랫폼",
         generation: 13,
         category: "아이디어톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea1_1,
         tags: ["web", "ai"]
     },
     {
@@ -18,7 +165,7 @@ export const mock13thProjectData = [
         description: "유학생에게 두통약이 필요한 순간",
         generation: 13,
         category: "아이디어톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea2_1,
         tags: ["web", "app"]
     },
     {
@@ -27,7 +174,7 @@ export const mock13thProjectData = [
         description: "슬픔 속 마지막 절차를 함께 돕는 조력자가 되어줄 서비스",
         generation: 13,
         category: "아이디어톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea3_1,
         tags: ["app"]
     },
     {
@@ -36,7 +183,7 @@ export const mock13thProjectData = [
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
         category: "아이디어톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea4_1,
         tags: ["app"]
     },
     {
@@ -45,7 +192,7 @@ export const mock13thProjectData = [
         description: "아이디어가 떠오르지 않는 순간을 위한 AI 아이데이션 어시스턴트",
         generation: 13,
         category: "아이디어톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea5_1,
         tags: ["app"]
     },
     //해커톤
@@ -55,7 +202,7 @@ export const mock13thProjectData = [
         description: "유휴시간을 공간 공유로 채우는 지역 상권 활성화 서비스",
         generation: 13,
         category: "해커톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea6_1,
         tags: ["app"]
     },
     {
@@ -64,7 +211,7 @@ export const mock13thProjectData = [
         description: "자폐 스펙트럼 아동을 위한 대화형 AI 일기 & 표정 훈련 서비스",
         generation: 13,
         category: "해커톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea7_1,
         tags: ["web", "app"]
     },
     {
@@ -73,7 +220,7 @@ export const mock13thProjectData = [
         description: "정성・정량 데이터를 한 눈에! 예비 창업자를 위한 똑똑한 지역 상권 분석 서비스",
         generation: 13,
         category: "해커톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea8_1,
         tags: ["app"]
     },
     {
@@ -82,7 +229,7 @@ export const mock13thProjectData = [
         description: "소상공인의 잉여재고를 효율적으로 공유·활용하도록 돕는 재고 나눔 플랫폼 ",
         generation: 13,
         category: "해커톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea9_1,
         tags: ["app"]
     },
     {
@@ -91,7 +238,7 @@ export const mock13thProjectData = [
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
         category: "해커톤",
-        thumbnailUrl: "",
+        thumbnailUrl: idea10_1,
         tags: ["app"]
     }
 ];
@@ -115,7 +262,25 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [
+            idea1_1,
+            idea1_2,
+            idea1_3,
+            idea1_4,
+            idea1_5,
+            idea1_6,
+            idea1_7,
+            idea1_8,
+            idea1_9,
+            idea1_10,
+            idea1_11,
+            idea1_12,
+            idea1_13,
+            idea1_14,
+            idea1_15,
+            idea1_16,
+            idea1_17
+        ]
     },
     102: {
         id: 102,
@@ -134,7 +299,32 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [
+            idea2_1,
+            idea2_2,
+            idea2_3,
+            idea2_4,
+            idea2_5,
+            idea2_6,
+            idea2_7,
+            idea2_8,
+            idea2_9,
+            idea2_10,
+            idea2_11,
+            idea2_12,
+            idea2_13,
+            idea2_14,
+            idea2_15,
+            idea2_16,
+            idea2_17,
+            idea2_18,
+            idea2_19,
+            idea2_20,
+            idea2_21,
+            idea2_22,
+            idea2_23,
+            idea2_24
+        ]
     },
     103: {
         id: 103,
@@ -153,7 +343,34 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [
+            idea3_1,
+            idea3_2,
+            idea3_3,
+            idea3_4,
+            idea3_5,
+            idea3_6,
+            idea3_7,
+            idea3_8,
+            idea3_9,
+            idea3_10,
+            idea3_11,
+            idea3_12,
+            idea3_13,
+            idea3_14,
+            idea3_15,
+            idea3_16,
+            idea3_17,
+            idea3_18,
+            idea3_19,
+            idea3_20,
+            idea3_21,
+            idea3_22,
+            idea3_23,
+            idea3_24,
+            idea3_25,
+            idea3_26
+        ]
     },
     104: {
         id: 104,
@@ -172,7 +389,29 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [
+            idea4_1,
+            idea4_2,
+            idea4_3,
+            idea4_4,
+            idea4_5,
+            idea4_6,
+            idea4_7,
+            idea4_8,
+            idea4_9,
+            idea4_10,
+            idea4_11,
+            idea4_12,
+            idea4_13,
+            idea4_14,
+            idea4_15,
+            idea4_16,
+            idea4_17,
+            idea4_18,
+            idea4_19,
+            idea4_20,
+            idea4_21
+        ]
     },
     105: {
         id: 105,
@@ -191,7 +430,18 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [
+            idea5_1,
+            idea5_2,
+            idea5_3,
+            idea5_4,
+            idea5_5,
+            idea5_6,
+            idea5_7,
+            idea5_8,
+            idea5_9,
+            idea5_10
+        ]
     },
     //해커톤
     201: {
@@ -211,7 +461,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [idea6_1, idea6_2, idea6_3, idea6_4, idea6_5, idea6_6, idea6_7, idea6_8]
     },
     202: {
         id: 202,
@@ -230,7 +480,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [idea7_1, idea7_2, idea7_3, idea7_4, idea7_5, idea7_6, idea7_7, idea7_8]
     },
     203: {
         id: 203,
@@ -249,7 +499,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [idea8_1, idea8_2, idea8_3, idea8_4, idea8_5, idea8_6, idea8_7, idea8_8]
     },
     204: {
         id: 204,
@@ -268,7 +518,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [idea9_1, idea9_2, idea9_3, idea9_4, idea9_5, idea9_6, idea9_7, idea9_8]
     },
     205: {
         id: 205,
@@ -286,7 +536,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 301, username: "멋쟁이" }
         ],
         category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        imageUrls: [idea10_1, idea10_2, idea10_3, idea10_4, idea10_5, idea10_6, idea10_7, idea10_8]
     }
 };
 
