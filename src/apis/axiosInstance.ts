@@ -24,7 +24,10 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
+        // 어드민 페이지 401 발생 시, 로그인 페이지로 이동
+        const isAdminRoute = window.location.pathname.startsWith("/admin");
+
+        if (error.response?.status === 401 && isAdminRoute) {
             useAuthStore.getState().clearAuth();
             window.location.href = ROUTES.LOGIN;
         }

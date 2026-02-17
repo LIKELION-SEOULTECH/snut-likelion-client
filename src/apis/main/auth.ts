@@ -63,3 +63,34 @@ export const sendPwFindCode = async (email: string) => {
     const res = await axiosInstance.post(`/auth/email/send?email=${encodeURIComponent(email)}`);
     return res.data;
 };
+
+// 비밀번호 찾기 이메일 인증 코드 전송
+export const sendPwResetVerificationCode = async (email: string) => {
+    const res = await axiosInstance.post(`/auth/password/find?email=${encodeURIComponent(email)}`);
+    return res.data;
+};
+
+// 비밀번호 찾기
+export const findPassword = async (payload: {
+    code: string;
+    email: string;
+    newPassword: string;
+    newPasswordConfirm: string;
+    passwordMatching: boolean;
+}) => {
+    const res = await axiosInstance.patch("/auth/password/reset", payload);
+    return res.data;
+};
+
+export interface PasswordChangeRequest {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+    passwordMatching: boolean;
+}
+
+// 비밀번호 재설정 요청
+export const changePassword = async (data: PasswordChangeRequest) => {
+    const res = await axiosInstance.patch("/auth/password/change", data);
+    return res.data;
+};

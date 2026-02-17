@@ -41,7 +41,7 @@ export const LoginForm = () => {
                 로그인
             </button>
             <div className="flex gap-[17px] text-[#C4C4C4] justify-center ">
-                <Link to={ROUTES.PASSWORD_RESET}>
+                <Link to={ROUTES.LOGIN}>
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>
                 <span className="text-[#666]">|</span>
