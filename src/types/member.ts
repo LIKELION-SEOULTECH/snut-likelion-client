@@ -114,3 +114,14 @@ export interface MemberFilter {
     role: string;
     keyword: string;
 }
+
+// 멤버 정보 업데이트
+export interface UpdateProfile {
+    profileImage: string;
+    intro: string;
+    description: string;
+    saying: string;
+    // major: string;
+    stacks: string[];
+    portfolioLinks: { name: string; url: string }[];
+}

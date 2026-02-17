@@ -13,6 +13,9 @@ export const PostNavigator = ({ prev, next }: PostNavigatorProps) => {
         if (location.pathname.includes("blog-content")) {
             navigate("/blog");
         }
+        if (location.pathname.includes("notice-content")) {
+            navigate("/notice");
+        }
     };
 
     return (

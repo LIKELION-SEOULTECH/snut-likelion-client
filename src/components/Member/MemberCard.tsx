@@ -69,10 +69,10 @@ export const MemberCard = ({
                     </div>
                     {/* 아랫부분 */}
                     <div className="h-[68px] ">
-                        <div className="flex flex-col gap-4 ">
+                        <div className="flex flex-col gap-4 flex-wrap ">
                             <div className="font-medium text-[16px] text-[#FFD5B0]">{major}</div>
-                            <div className="flex gap-3 flex-wrap">
-                                {portfolioLinks.map((link, idx) => (
+                            <div className="flex gap-3  overflow-hidden ">
+                                {portfolioLinks.slice(0, 2).map((link, idx) => (
                                     <a
                                         key={idx}
                                         href={link.url}
@@ -80,7 +80,7 @@ export const MemberCard = ({
                                         rel="noopener noreferrer"
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold">
+                                        <button className="h-[36px] bg-[#FFC08A] text-[#F70] px-[16px] border-1 border-[#FFD5B0] rounded-full text-[16px] font-semibold shrink-0 whitespace-nowrap">
                                             {nameMap[link.name] ?? link.name} →
                                         </button>
                                     </a>

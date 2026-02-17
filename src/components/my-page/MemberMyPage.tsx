@@ -190,7 +190,7 @@ export const MemberMyPage = ({
                         </div>
                     )}
                     {!lionInfoLoading && lionInfo?.projects?.length === 0 && (
-                        <div className="w-full pt-30 text-center text-[#A7A7A7] text-[24px]">
+                        <div className="w-full pb-30 text-center text-[#A7A7A7] text-[24px]">
                             업로드한 프로젝트가 없습니다
                         </div>
                     )}

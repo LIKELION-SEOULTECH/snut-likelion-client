@@ -1,14 +1,13 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import LikeLionLogo from "@/assets/Header/likelion_logo.svg?react";
-// import { LoginSignupBtn } from "@/components/header/LoginSignupBtn";
 import { ROUTES } from "@/routes/routes";
 import { fetchMyMemberInfo } from "@/apis/main/member";
-import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { MyIcon } from "@/components/Header/MyIcon";
 import { LoginSignupBtn } from "@/components/Header/LoginSignupBtn";
 import { useQuery } from "@tanstack/react-query";
 import type { MemberDetailResponse } from "@/types/member";
 import { getRoleFromToken } from "@/utils/auth";
+import { useCombinedRecruitment } from "@/hooks/useCombinedRecruitment";
 
 interface HeaderProps {
     white?: boolean;
@@ -28,7 +27,7 @@ export const Header = ({ white = false }: HeaderProps) => {
         queryKey: ["me"],
         queryFn: fetchMyMemberInfo,
         enabled: isLoggedIn && !isGuest,
-        staleTime: 1000 * 60 * 5
+        staleTime: 1000 * 60 * 5,
     });
 
     const profileImage = member?.profileImageUrl;
@@ -38,53 +37,17 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "블로그", route: ROUTES.BLOG },
         { name: "멤버", route: ROUTES.MEMBER },
-        { name: "소식", route: ROUTES.NOTICE }
+        { name: "소식", route: ROUTES.NOTICE },
     ];
 
-    const handleGuestRecruit = async () => {
-        try {
             // MEMBER, MANAGER 모집일정
-            const [memberRes, managerRes] = await Promise.all([
-                fetchRecentRecruitment("MEMBER"),
-                fetchRecentRecruitment("MANAGER")
-            ]);
+    const { buttonType } = useCombinedRecruitment();
 
-            const now = new Date();
-            const mOpen = new Date(managerRes.data.openDate);
-            const mClose = new Date(managerRes.data.closeDate);
-            const uOpen = new Date(memberRes.data.openDate);
-            const uClose = new Date(memberRes.data.closeDate);
-
-            // 운영진 지원 가능
-            if (mOpen <= now && now <= mClose) {
-                navigate(ROUTES.RECRUIT_MANAGER);
-                return;
-            }
-            // 멤버 지원 가능 기간
-            if (uOpen <= now && now <= uClose) {
-                navigate(ROUTES.RECRUIT_MEMBER);
-                return;
-            }
-
-            // 지원기간 ㄴㄴ
-            const upcoming: Array<{ type: "MANAGER" | "MEMBER"; open: Date }> = [];
-            if (mOpen > now) upcoming.push({ type: "MANAGER", open: mOpen });
-            if (uOpen > now) upcoming.push({ type: "MEMBER", open: uOpen });
-
-            if (upcoming.length > 0) {
-                // openDate 기준  → 가장 가까운 기간에 모집인곳
-                upcoming.sort((a, b) => a.open.getTime() - b.open.getTime());
-                const next = upcoming[0];
-                if (next.type === "MANAGER") {
-                    navigate(ROUTES.RECRUIT_MANAGER);
-                } else {
-                    navigate(ROUTES.RECRUIT_MEMBER);
-                }
-                return;
-            }
+    const handleApplyButtonClick = () => {
+        if (buttonType === "MANAGER_APPLY") {
+            navigate(ROUTES.RECRUIT_MANAGER);
+        } else {
             navigate(ROUTES.RECRUIT_MEMBER);
-        } catch (err) {
-            console.error(err);
         }
     };
 
@@ -128,7 +91,11 @@ export const Header = ({ white = false }: HeaderProps) => {
                                                       ? "text-white font-bold"
                                                       : "text-white/60"
                                             }                                            
-                                               ${white ? "hover:text-black hover:font-bold" : "hover:text-white hover:font-bold"}
+                                               ${
+                                                   white
+                                                       ? "hover:text-black hover:font-bold"
+                                                       : "hover:text-white hover:font-bold"
+                                               }
 `}
                                         onClick={() => navigate(item.route)}
                                     >
@@ -144,7 +111,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                                     onClick={
                                         !isGuest
                                             ? () => navigate(ROUTES.BLOG_POST)
-                                            : handleGuestRecruit
+                                            : handleApplyButtonClick
                                     }
                                 >
                                     {!isGuest ? "블로그 글쓰기" : "지원하기"}

@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchLionInfo, fetchMemberDetail } from "@/apis/main/member";
-import { ProjectBox } from "@/components/home/ProjectBox";
+import { ProjectBox, type ProjectBoxProps } from "@/components/home/ProjectBox";
 import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/Member/SmallBtn";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,6 +14,7 @@ import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
 import samplePRF from "@/assets/Member/samplePRFIMG.png";
 import type { MemberDetailResponse } from "@/types/members";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
+import { mock13thProjectData, mockMemberProjectMapping } from "@/constants/mockProjectData";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -78,13 +79,26 @@ export const MemberDetailPage = () => {
         queryFn: () => fetchLionInfo(numericId!, fallbackData.generation),
         enabled: !!numericId && !!fallbackData?.generation
     });
+    console.log("멤버 상세 정보:", lionInfo);
 
     const member: (MemberDetailResponse & { part?: string; role?: string }) | null = useMemo(() => {
         if (!memberData) return null;
         return { ...fallbackData, ...memberData };
     }, [memberData, fallbackData]);
 
-    const projects = lionInfo?.projects ?? [];
+    // const projects = lionInfo?.projects ?? [];
+    const gen = 13; //임시로 13기로 고정, API 수정되면 제거 예정
+
+    const projects = useMemo(() => {
+        if (!numericId) return [];
+
+        const projectIds = mockMemberProjectMapping[numericId] || [];
+
+        return projectIds
+            .map((projectId) => mock13thProjectData.find((p) => p.id === projectId))
+            .filter((p): p is NonNullable<typeof p> => !!p);
+    }, [numericId]);
+    console.log("멤버가 참여한 프로젝트들:", projects);
 
     return (
         <PageLayout>
@@ -180,8 +194,12 @@ export const MemberDetailPage = () => {
                                                 .map((project) => (
                                                     <ProjectBox
                                                         key={project.id}
-                                                        generation={fallbackData.generation}
+                                                        // generation={fallbackData.generation}
                                                         {...project}
+                                                        generation={gen}
+                                                        category={
+                                                            project.category as ProjectBoxProps["category"]
+                                                        }
                                                     />
                                                 ))
                                         ) : (

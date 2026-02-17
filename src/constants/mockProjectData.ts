@@ -1,5 +1,160 @@
 import type { ProjectDetailResponse, RetrospectionResponse } from "@/types/project";
-import sampleIMG from "@/assets/common/sampleBox.png";
+
+import idea1_1 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 1.png";
+import idea1_2 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 2.png";
+import idea1_3 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 3.png";
+import idea1_4 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 4.png";
+import idea1_5 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 5.png";
+import idea1_6 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 6.png";
+import idea1_7 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 7.png";
+import idea1_8 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 8.png";
+import idea1_9 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 9.png";
+import idea1_10 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 10.png";
+import idea1_11 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 11.png";
+import idea1_12 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 12.png";
+import idea1_13 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 13.png";
+import idea1_14 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 14.png";
+import idea1_15 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 15.png";
+import idea1_16 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 16.png";
+import idea1_17 from "@/assets/project/mockImg/가치가용/Slide 16_9 - 17.png";
+
+import idea2_1 from "@/assets/project/mockImg/pillMyRithm/1.png";
+import idea2_2 from "@/assets/project/mockImg/pillMyRithm/2.png";
+import idea2_3 from "@/assets/project/mockImg/pillMyRithm/3.png";
+import idea2_4 from "@/assets/project/mockImg/pillMyRithm/4.png";
+import idea2_5 from "@/assets/project/mockImg/pillMyRithm/5.png";
+import idea2_6 from "@/assets/project/mockImg/pillMyRithm/6.png";
+import idea2_7 from "@/assets/project/mockImg/pillMyRithm/7.png";
+import idea2_8 from "@/assets/project/mockImg/pillMyRithm/8.png";
+import idea2_9 from "@/assets/project/mockImg/pillMyRithm/9.png";
+import idea2_10 from "@/assets/project/mockImg/pillMyRithm/10.png";
+import idea2_11 from "@/assets/project/mockImg/pillMyRithm/11.png";
+import idea2_12 from "@/assets/project/mockImg/pillMyRithm/12.png";
+import idea2_13 from "@/assets/project/mockImg/pillMyRithm/13.png";
+import idea2_14 from "@/assets/project/mockImg/pillMyRithm/14.png";
+import idea2_15 from "@/assets/project/mockImg/pillMyRithm/15.png";
+import idea2_16 from "@/assets/project/mockImg/pillMyRithm/16.png";
+import idea2_17 from "@/assets/project/mockImg/pillMyRithm/17.png";
+import idea2_18 from "@/assets/project/mockImg/pillMyRithm/18.png";
+import idea2_19 from "@/assets/project/mockImg/pillMyRithm/19.png";
+import idea2_20 from "@/assets/project/mockImg/pillMyRithm/20.png";
+import idea2_21 from "@/assets/project/mockImg/pillMyRithm/21.png";
+import idea2_22 from "@/assets/project/mockImg/pillMyRithm/22.png";
+import idea2_23 from "@/assets/project/mockImg/pillMyRithm/23.png";
+import idea2_24 from "@/assets/project/mockImg/pillMyRithm/24.png";
+
+import idea3_1 from "@/assets/project/mockImg/haearim/1.png";
+import idea3_2 from "@/assets/project/mockImg/haearim/2.png";
+import idea3_3 from "@/assets/project/mockImg/haearim/3.png";
+import idea3_4 from "@/assets/project/mockImg/haearim/4.png";
+import idea3_5 from "@/assets/project/mockImg/haearim/5.png";
+import idea3_6 from "@/assets/project/mockImg/haearim/6.png";
+import idea3_7 from "@/assets/project/mockImg/haearim/7.png";
+import idea3_8 from "@/assets/project/mockImg/haearim/8.png";
+import idea3_9 from "@/assets/project/mockImg/haearim/9.png";
+import idea3_10 from "@/assets/project/mockImg/haearim/10.png";
+import idea3_11 from "@/assets/project/mockImg/haearim/11.png";
+import idea3_12 from "@/assets/project/mockImg/haearim/12.png";
+import idea3_13 from "@/assets/project/mockImg/haearim/13.png";
+import idea3_14 from "@/assets/project/mockImg/haearim/14.png";
+import idea3_15 from "@/assets/project/mockImg/haearim/15.png";
+import idea3_16 from "@/assets/project/mockImg/haearim/16.png";
+import idea3_17 from "@/assets/project/mockImg/haearim/17.png";
+import idea3_18 from "@/assets/project/mockImg/haearim/18.png";
+import idea3_19 from "@/assets/project/mockImg/haearim/19.png";
+import idea3_20 from "@/assets/project/mockImg/haearim/20.png";
+import idea3_21 from "@/assets/project/mockImg/haearim/21.png";
+import idea3_22 from "@/assets/project/mockImg/haearim/22.png";
+import idea3_23 from "@/assets/project/mockImg/haearim/23.png";
+import idea3_24 from "@/assets/project/mockImg/haearim/24.png";
+import idea3_25 from "@/assets/project/mockImg/haearim/25.png";
+import idea3_26 from "@/assets/project/mockImg/haearim/26.png";
+
+import idea4_1 from "@/assets/project/mockImg/idea-bab/1.png";
+import idea4_2 from "@/assets/project/mockImg/idea-bab/2.png";
+import idea4_3 from "@/assets/project/mockImg/idea-bab/3.png";
+import idea4_4 from "@/assets/project/mockImg/idea-bab/4.png";
+import idea4_5 from "@/assets/project/mockImg/idea-bab/5.png";
+import idea4_6 from "@/assets/project/mockImg/idea-bab/6.png";
+import idea4_7 from "@/assets/project/mockImg/idea-bab/7.png";
+import idea4_8 from "@/assets/project/mockImg/idea-bab/8.png";
+import idea4_9 from "@/assets/project/mockImg/idea-bab/9.png";
+import idea4_10 from "@/assets/project/mockImg/idea-bab/10.png";
+import idea4_11 from "@/assets/project/mockImg/idea-bab/11.png";
+import idea4_12 from "@/assets/project/mockImg/idea-bab/12.png";
+import idea4_13 from "@/assets/project/mockImg/idea-bab/13.png";
+import idea4_14 from "@/assets/project/mockImg/idea-bab/14.png";
+import idea4_15 from "@/assets/project/mockImg/idea-bab/15.png";
+import idea4_16 from "@/assets/project/mockImg/idea-bab/16.png";
+import idea4_17 from "@/assets/project/mockImg/idea-bab/17.png";
+import idea4_18 from "@/assets/project/mockImg/idea-bab/18.png";
+import idea4_19 from "@/assets/project/mockImg/idea-bab/19.png";
+import idea4_20 from "@/assets/project/mockImg/idea-bab/20.png";
+import idea4_21 from "@/assets/project/mockImg/idea-bab/21.png";
+
+import idea5_1 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0001 1.png";
+import idea5_2 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0002 1.png";
+import idea5_3 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0003 1.png";
+import idea5_4 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0004 1.png";
+import idea5_5 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0005 1.png";
+import idea5_6 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0006 1.png";
+import idea5_7 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0007 1.png";
+import idea5_8 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0008 1.png";
+import idea5_9 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0009 1.png";
+import idea5_10 from "@/assets/project/mockImg/openframe/2025 멋사 아이디어톤-2_page-0010 1.png";
+
+import idea6_1 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998 1.png";
+import idea6_2 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_01 1.png";
+import idea6_3 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_02 1.png";
+import idea6_4 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_03 1.png";
+import idea6_5 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_04 1.png";
+import idea6_6 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_05 1.png";
+import idea6_7 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_06 1.png";
+import idea6_8 from "@/assets/project/mockImg/워닛/KakaoTalk_20260214_004003998_07 1.png";
+
+import idea7_1 from "@/assets/project/mockImg/EMOD/1.png";
+import idea7_2 from "@/assets/project/mockImg/EMOD/2.png";
+import idea7_3 from "@/assets/project/mockImg/EMOD/3.png";
+import idea7_4 from "@/assets/project/mockImg/EMOD/4.png";
+import idea7_5 from "@/assets/project/mockImg/EMOD/5.png";
+import idea7_6 from "@/assets/project/mockImg/EMOD/6.png";
+import idea7_7 from "@/assets/project/mockImg/EMOD/7.png";
+import idea7_8 from "@/assets/project/mockImg/EMOD/8.png";
+
+import idea8_1 from "@/assets/project/mockImg/구석구석/1.png";
+import idea8_2 from "@/assets/project/mockImg/구석구석/2.png";
+import idea8_3 from "@/assets/project/mockImg/구석구석/3.png";
+import idea8_4 from "@/assets/project/mockImg/구석구석/4.png";
+import idea8_5 from "@/assets/project/mockImg/구석구석/5.png";
+import idea8_6 from "@/assets/project/mockImg/구석구석/6.png";
+import idea8_7 from "@/assets/project/mockImg/구석구석/7.png";
+import idea8_8 from "@/assets/project/mockImg/구석구석/8.png";
+
+import idea9_1 from "@/assets/project/mockImg/ITGO/1.png";
+import idea9_2 from "@/assets/project/mockImg/ITGO/2.png";
+import idea9_3 from "@/assets/project/mockImg/ITGO/3.png";
+import idea9_4 from "@/assets/project/mockImg/ITGO/4.png";
+import idea9_5 from "@/assets/project/mockImg/ITGO/5.png";
+import idea9_6 from "@/assets/project/mockImg/ITGO/6.png";
+import idea9_7 from "@/assets/project/mockImg/ITGO/7.png";
+import idea9_8 from "@/assets/project/mockImg/ITGO/8.png";
+
+import idea10_1 from "@/assets/project/mockImg/h-bab/1.png";
+import idea10_2 from "@/assets/project/mockImg/h-bab/2.png";
+import idea10_3 from "@/assets/project/mockImg/h-bab/3.png";
+import idea10_4 from "@/assets/project/mockImg/h-bab/4.png";
+import idea10_5 from "@/assets/project/mockImg/h-bab/5.png";
+import idea10_6 from "@/assets/project/mockImg/h-bab/6.png";
+import idea10_7 from "@/assets/project/mockImg/h-bab/7.png";
+import idea10_8 from "@/assets/project/mockImg/h-bab/8.png";
+
+// key: 멤버 ID, value: 프로젝트 ID 리스트
+export const mockMemberProjectMapping: Record<number, number[]> = {
+    1: [105, 204], // 노경인: OpenFrame, 잇고
+    3: [101, 103, 201, 204], // 공통 ID 테스트용
+    5: [102, 204], // 박조아: Pill My Rithm, 잇고
+    10: [102, 202] // 이예한: Pill My Rithm, EMO:D
+};
 
 export const mock13thProjectData = [
     //아이디어톤
@@ -8,8 +163,8 @@ export const mock13thProjectData = [
         name: "가치가요",
         description: "이동이 불편한 교통약자를 위한 사용자 참여형 길찾기 & 제보 플랫폼",
         generation: 13,
-        category: "아이디어톤",
-        thumbnailUrl: "",
+        category: "IDEATHON",
+        thumbnailUrl: idea1_1,
         tags: ["web", "ai"]
     },
     {
@@ -17,8 +172,8 @@ export const mock13thProjectData = [
         name: "Pill My Rithm",
         description: "유학생에게 두통약이 필요한 순간",
         generation: 13,
-        category: "아이디어톤",
-        thumbnailUrl: "",
+        category: "IDEATHON",
+        thumbnailUrl: idea2_1,
         tags: ["web", "app"]
     },
     {
@@ -26,8 +181,8 @@ export const mock13thProjectData = [
         name: "Haearim",
         description: "슬픔 속 마지막 절차를 함께 돕는 조력자가 되어줄 서비스",
         generation: 13,
-        category: "아이디어톤",
-        thumbnailUrl: "",
+        category: "IDEATHON",
+        thumbnailUrl: idea3_1,
         tags: ["app"]
     },
     {
@@ -35,8 +190,8 @@ export const mock13thProjectData = [
         name: "밥은 먹고 댕기나",
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
-        category: "아이디어톤",
-        thumbnailUrl: "",
+        category: "IDEATHON",
+        thumbnailUrl: idea4_1,
         tags: ["app"]
     },
     {
@@ -44,8 +199,8 @@ export const mock13thProjectData = [
         name: "OpenFrame",
         description: "아이디어가 떠오르지 않는 순간을 위한 AI 아이데이션 어시스턴트",
         generation: 13,
-        category: "아이디어톤",
-        thumbnailUrl: "",
+        category: "IDEATHON",
+        thumbnailUrl: idea5_1,
         tags: ["app"]
     },
     //해커톤
@@ -54,8 +209,8 @@ export const mock13thProjectData = [
         name: "워닛",
         description: "유휴시간을 공간 공유로 채우는 지역 상권 활성화 서비스",
         generation: 13,
-        category: "해커톤",
-        thumbnailUrl: "",
+        category: "HACKATHON",
+        thumbnailUrl: idea6_1,
         tags: ["app"]
     },
     {
@@ -63,8 +218,8 @@ export const mock13thProjectData = [
         name: "EMO:D",
         description: "자폐 스펙트럼 아동을 위한 대화형 AI 일기 & 표정 훈련 서비스",
         generation: 13,
-        category: "해커톤",
-        thumbnailUrl: "",
+        category: "HACKATHON",
+        thumbnailUrl: idea7_1,
         tags: ["web", "app"]
     },
     {
@@ -72,8 +227,8 @@ export const mock13thProjectData = [
         name: "구석구석",
         description: "정성・정량 데이터를 한 눈에! 예비 창업자를 위한 똑똑한 지역 상권 분석 서비스",
         generation: 13,
-        category: "해커톤",
-        thumbnailUrl: "",
+        category: "HACKATHON",
+        thumbnailUrl: idea8_1,
         tags: ["app"]
     },
     {
@@ -81,8 +236,8 @@ export const mock13thProjectData = [
         name: "잇고",
         description: "소상공인의 잉여재고를 효율적으로 공유·활용하도록 돕는 재고 나눔 플랫폼 ",
         generation: 13,
-        category: "해커톤",
-        thumbnailUrl: "",
+        category: "HACKATHON",
+        thumbnailUrl: idea9_1,
         tags: ["app"]
     },
     {
@@ -90,8 +245,8 @@ export const mock13thProjectData = [
         name: "밥먹댕",
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
-        category: "해커톤",
-        thumbnailUrl: "",
+        category: "HACKATHON",
+        thumbnailUrl: idea10_1,
         tags: ["app"]
     }
 ];
@@ -108,14 +263,49 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["길찾기", "교통약자", "웹"],
+        tags: [
+            "Figma",
+            "Notion",
+            "Flutter",
+            "Dart",
+            "Spring Boot",
+            "MySQL",
+            "Docker",
+            "GitHub Actions",
+            "Scikit-learn",
+            "TensorFlow",
+            "PyTorch",
+            "OpenCV",
+            "YOLO",
+            "QGIS",
+            "Neo4j",
+            "Kubernetes"
+        ],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "IDEATHON",
+        imageUrls: [
+            idea1_1,
+            idea1_2,
+            idea1_3,
+            idea1_4,
+            idea1_5,
+            idea1_6,
+            idea1_7,
+            idea1_8,
+            idea1_9,
+            idea1_10,
+            idea1_11,
+            idea1_12,
+            idea1_13,
+            idea1_14,
+            idea1_15,
+            idea1_16,
+            idea1_17
+        ]
     },
     102: {
         id: 102,
@@ -127,14 +317,54 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: [
+            "Figma",
+            "Notion",
+            "Swift",
+            "Kotlin",
+            "Xcode",
+            "Android Studio",
+            "Spring",
+            "MySQL",
+            "Docker",
+            "Java",
+            "AWS",
+            "OpenCV",
+            "Scikit-learn",
+            "Python"
+        ],
         members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
+            { id: 5, username: "박조아" },
+            { id: 10, username: "이예한" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "IDEATHON",
+        imageUrls: [
+            idea2_1,
+            idea2_2,
+            idea2_3,
+            idea2_4,
+            idea2_5,
+            idea2_6,
+            idea2_7,
+            idea2_8,
+            idea2_9,
+            idea2_10,
+            idea2_11,
+            idea2_12,
+            idea2_13,
+            idea2_14,
+            idea2_15,
+            idea2_16,
+            idea2_17,
+            idea2_18,
+            idea2_19,
+            idea2_20,
+            idea2_21,
+            idea2_22,
+            idea2_23,
+            idea2_24
+        ]
     },
     103: {
         id: 103,
@@ -146,14 +376,41 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: ["Figma", "Notion", "Swift", "Flutter", "Spring", "MySQL", "MongoDB", "PyTorch"],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "IDEATHON",
+        imageUrls: [
+            idea3_1,
+            idea3_2,
+            idea3_3,
+            idea3_4,
+            idea3_5,
+            idea3_6,
+            idea3_7,
+            idea3_8,
+            idea3_9,
+            idea3_10,
+            idea3_11,
+            idea3_12,
+            idea3_13,
+            idea3_14,
+            idea3_15,
+            idea3_16,
+            idea3_17,
+            idea3_18,
+            idea3_19,
+            idea3_20,
+            idea3_21,
+            idea3_22,
+            idea3_23,
+            idea3_24,
+            idea3_25,
+            idea3_26
+        ]
     },
     104: {
         id: 104,
@@ -165,14 +422,53 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: [
+            "Figma",
+            "Notion",
+            "Jira",
+            "Zustand",
+            "Tailwind CSS",
+            "React",
+            "Vercel",
+            "Playwright",
+            "Spring",
+            "MySQL",
+            "Docker",
+            "Redis",
+            "Swagger",
+            "Hugging Face",
+            "NumPy",
+            "OpenCV"
+        ],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "IDEATHON",
+        imageUrls: [
+            idea4_1,
+            idea4_2,
+            idea4_3,
+            idea4_4,
+            idea4_5,
+            idea4_6,
+            idea4_7,
+            idea4_8,
+            idea4_9,
+            idea4_10,
+            idea4_11,
+            idea4_12,
+            idea4_13,
+            idea4_14,
+            idea4_15,
+            idea4_16,
+            idea4_17,
+            idea4_18,
+            idea4_19,
+            idea4_20,
+            idea4_21
+        ]
     },
     105: {
         id: 105,
@@ -184,14 +480,36 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
-        members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
+        tags: [
+            "Figma",
+            "Notion",
+            "Zustand",
+            "React",
+            "Recoil",
+            "Canvas",
+            "Spring",
+            "MySQL",
+            "Amazon EC2",
+            "Amazon DynamoDB",
+            "Amazon S3",
+            "Amazon CloudFormation",
+            "LangChain",
+            "OpenAI"
         ],
-        category: "아이디어톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        members: [{ id: 1, username: "노경인" }],
+        category: "IDEATHON",
+        imageUrls: [
+            idea5_1,
+            idea5_2,
+            idea5_3,
+            idea5_4,
+            idea5_5,
+            idea5_6,
+            idea5_7,
+            idea5_8,
+            idea5_9,
+            idea5_10
+        ]
     },
     //해커톤
     201: {
@@ -204,14 +522,29 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: [
+            "Adobe After Effects",
+            "Adobe Illustrator",
+            "Figma",
+            "Notion",
+            "Zustand",
+            "Swift",
+            "SwiftUI",
+            "Xcode",
+            "Spring",
+            "MySQL",
+            "Docker",
+            "IntelliJ IDEA",
+            "Visual Studio Code",
+            "OpenCV"
+        ],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "HACKATHON",
+        imageUrls: [idea6_1, idea6_2, idea6_3, idea6_4, idea6_5, idea6_6, idea6_7, idea6_8]
     },
     202: {
         id: 202,
@@ -223,14 +556,19 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
-        members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
+        tags: [
+            "Adobe Illustrator",
+            "Figma",
+            "Notion",
+            "Kotlin",
+            "Java",
+            "Spring",
+            "OpenAI",
+            "PyTorch"
         ],
-        category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        members: [{ id: 10, username: "이예한" }],
+        category: "HACKATHON",
+        imageUrls: [idea7_1, idea7_2, idea7_3, idea7_4, idea7_5, idea7_6, idea7_7, idea7_8]
     },
     203: {
         id: 203,
@@ -242,14 +580,33 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: [
+            "Adobe Illustrator",
+            "Figma",
+            "Notion",
+            "Tailwind CSS",
+            "React",
+            "TypeScript",
+            "Vite",
+            "Java",
+            "Spring",
+            "MySQL",
+            "MongoDB",
+            "Docker",
+            "Nginx",
+            "Swagger",
+            "AWS",
+            "Playwright",
+            "Visual Studio Code",
+            "OpenCV"
+        ],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "HACKATHON",
+        imageUrls: [idea8_1, idea8_2, idea8_3, idea8_4, idea8_5, idea8_6, idea8_7, idea8_8]
     },
     204: {
         id: 204,
@@ -261,14 +618,38 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
-        members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
+        tags: [
+            "Figma",
+            "Notion",
+            "Zustand",
+            "Tailwind CSS",
+            "React",
+            "Vercel",
+            "shadcn/ui",
+            "Spring",
+            "Java",
+            "Node.js",
+            "MySQL",
+            "Redis",
+            "Swagger",
+            "Docker",
+            "Jenkins",
+            "AWS",
+            "Hugging Face",
+            "Three.js",
+            "Matplotlib",
+            "NumPy",
+            "TensorFlow",
+            "Scikit-learn",
+            "Pandas",
+            "Python"
         ],
-        category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        members: [
+            { id: 5, username: "박조아" },
+            { id: 1, username: "노경인" }
+        ],
+        category: "HACKATHON",
+        imageUrls: [idea9_1, idea9_2, idea9_3, idea9_4, idea9_5, idea9_6, idea9_7, idea9_8]
     },
     205: {
         id: 205,
@@ -279,14 +660,31 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
         websiteUrl: null,
         playstoreUrl: null,
         appstoreUrl: null,
-        tags: ["공간공유", "소상공인", "앱"],
+        tags: [
+            "Figma",
+            "Notion",
+            "Jira",
+            "Zustand",
+            "Tailwind CSS",
+            "React",
+            "Vercel",
+            "Playwright",
+            "Spring",
+            "MySQL",
+            "Docker",
+            "Redis",
+            "Swagger",
+            "Hugging Face",
+            "NumPy",
+            "OpenCV"
+        ],
         members: [
             { id: 101, username: "멋쟁이" },
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
-        imageUrls: [sampleIMG, sampleIMG]
+        category: "HACKATHON",
+        imageUrls: [idea10_1, idea10_2, idea10_3, idea10_4, idea10_5, idea10_6, idea10_7, idea10_8]
     }
 };
 
@@ -329,7 +727,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 적용한 프로젝트를 처음 해봤는데, 아이디어를 구상하는 과정부터 정말 재미있었습니다. 다른 팀들의 아이디어에 대해 피드백을 주고받으면서 서로 배우는 점도 많았고, 분위기도 굉장히 좋았어요. 멋쟁이사자처럼 본사에도 직접 가볼 수 있어서 전반적으로 더 기억에 남는 경험이었습니다!",
             writer: {
-                id: 3,
+                id: 10,
                 name: "이예한",
                 part: "Design"
             }
@@ -339,7 +737,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 활용하는 여러 아이디어를 자유롭게 내보고, 팀원들과 함께 기획을 구체화해 나가는 과정이 재미있었습니다. 서로의 아이디어를 공유하고 발전시키면서 다양한 관점을 배울 수 있었고, 짧은 시간이었지만 기획 전반을 경험해볼 수 있어 의미 있는 시간이었습니다.",
             writer: {
-                id: 3,
+                id: 5,
                 name: "박조아",
                 part: "Front-end"
             }
@@ -406,7 +804,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 이용한 실생활 속 문제 해결이라는 주제 아래, 하나의 아이디어를 정답처럼 정하기보다 팀원들의 다양한 시각을 듣고 함께 확장해 나가는 과정이 기억에 남았습니다. 같은 문제를 두고도 접근 방식이 달라 여러 방향으로 고민해볼 수 있었고, 그 과정 자체가 즐겁고 의미 있었습니다.",
             writer: {
-                id: 3,
+                id: 1,
                 name: "노경인",
                 part: "Front-end"
             }
@@ -451,7 +849,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "이모디 프로젝트를 장기적으로 이어가면서 팀원들과 계속해서 피드백을 주고받는 과정이 정말 재미있었습니다. 협업하면서 다양한 아이디어를 자유롭게 나눌 수 있었고, 유니버설 디자인이라는 주제를 중심으로 프로젝트를 진행한 점도 새롭고 의미 있게 느껴졌어요. 함께 고생한 팀원들 모두 정말 감사합니다!",
             writer: {
-                id: 3,
+                id: 10,
                 name: "이예한",
                 part: "Design"
             }
@@ -485,7 +883,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "팀원들과 함께 밤을 새우며 정해진 시간 안에 기능을 구현하고 서비스를 완성해 나갔습니다. 개발을 진행하면서 필요한 부분을 계속 이야기하고 조율하며 작업을 이어갔고, 그 과정에서 협업하며 만들어가는 프로젝트의 흐름을 경험할 수 있었습니다.",
             writer: {
-                id: 3,
+                id: 5,
                 name: "박조아",
                 part: "Front-end"
             }
@@ -515,7 +913,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "기획과 개발 전반에서 팀원들과 소통하며 서비스를 완성해가는 과정이 재밌었습니다. 협업 과정에서 효과적인 소통 방식과 팀워크의 중요성을 배우며 함께 성장할 수 있었던 의미 있는 경험이었습니다.",
             writer: {
-                id: 3,
+                id: 1,
                 name: "노경인",
                 part: "Front-end"
             }
