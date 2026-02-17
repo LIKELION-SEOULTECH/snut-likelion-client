@@ -45,7 +45,9 @@ export default function ProjectPage() {
         }
 
         if (projectCategory !== "전체") {
-            filteredProjects = filteredProjects.filter((p) => p.category.includes(projectCategory));
+            const englishCategory = categoryMap[projectCategory];
+            // filteredProjects = filteredProjects.filter((p) => p.category.includes(projectCategory));
+            filteredProjects = filteredProjects.filter((p) => p.category === englishCategory);
         }
 
         // Convert generation to number for each project

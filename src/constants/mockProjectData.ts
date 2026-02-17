@@ -148,6 +148,14 @@ import idea10_6 from "@/assets/project/mockImg/h-bab/6.png";
 import idea10_7 from "@/assets/project/mockImg/h-bab/7.png";
 import idea10_8 from "@/assets/project/mockImg/h-bab/8.png";
 
+// key: 멤버 ID, value: 프로젝트 ID 리스트
+export const mockMemberProjectMapping: Record<number, number[]> = {
+    1: [105, 204], // 노경인: OpenFrame, 잇고
+    3: [101, 103, 201, 204], // 공통 ID 테스트용
+    5: [102, 204], // 박조아: Pill My Rithm, 잇고
+    10: [102, 202] // 이예한: Pill My Rithm, EMO:D
+};
+
 export const mock13thProjectData = [
     //아이디어톤
     {
@@ -155,7 +163,7 @@ export const mock13thProjectData = [
         name: "가치가요",
         description: "이동이 불편한 교통약자를 위한 사용자 참여형 길찾기 & 제보 플랫폼",
         generation: 13,
-        category: "아이디어톤",
+        category: "IDEATHON",
         thumbnailUrl: idea1_1,
         tags: ["web", "ai"]
     },
@@ -164,7 +172,7 @@ export const mock13thProjectData = [
         name: "Pill My Rithm",
         description: "유학생에게 두통약이 필요한 순간",
         generation: 13,
-        category: "아이디어톤",
+        category: "IDEATHON",
         thumbnailUrl: idea2_1,
         tags: ["web", "app"]
     },
@@ -173,7 +181,7 @@ export const mock13thProjectData = [
         name: "Haearim",
         description: "슬픔 속 마지막 절차를 함께 돕는 조력자가 되어줄 서비스",
         generation: 13,
-        category: "아이디어톤",
+        category: "IDEATHON",
         thumbnailUrl: idea3_1,
         tags: ["app"]
     },
@@ -182,7 +190,7 @@ export const mock13thProjectData = [
         name: "밥은 먹고 댕기나",
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
-        category: "아이디어톤",
+        category: "IDEATHON",
         thumbnailUrl: idea4_1,
         tags: ["app"]
     },
@@ -191,7 +199,7 @@ export const mock13thProjectData = [
         name: "OpenFrame",
         description: "아이디어가 떠오르지 않는 순간을 위한 AI 아이데이션 어시스턴트",
         generation: 13,
-        category: "아이디어톤",
+        category: "IDEATHON",
         thumbnailUrl: idea5_1,
         tags: ["app"]
     },
@@ -201,7 +209,7 @@ export const mock13thProjectData = [
         name: "워닛",
         description: "유휴시간을 공간 공유로 채우는 지역 상권 활성화 서비스",
         generation: 13,
-        category: "해커톤",
+        category: "HACKATHON",
         thumbnailUrl: idea6_1,
         tags: ["app"]
     },
@@ -210,7 +218,7 @@ export const mock13thProjectData = [
         name: "EMO:D",
         description: "자폐 스펙트럼 아동을 위한 대화형 AI 일기 & 표정 훈련 서비스",
         generation: 13,
-        category: "해커톤",
+        category: "HACKATHON",
         thumbnailUrl: idea7_1,
         tags: ["web", "app"]
     },
@@ -219,7 +227,7 @@ export const mock13thProjectData = [
         name: "구석구석",
         description: "정성・정량 데이터를 한 눈에! 예비 창업자를 위한 똑똑한 지역 상권 분석 서비스",
         generation: 13,
-        category: "해커톤",
+        category: "HACKATHON",
         thumbnailUrl: idea8_1,
         tags: ["app"]
     },
@@ -228,7 +236,7 @@ export const mock13thProjectData = [
         name: "잇고",
         description: "소상공인의 잉여재고를 효율적으로 공유·활용하도록 돕는 재고 나눔 플랫폼 ",
         generation: 13,
-        category: "해커톤",
+        category: "HACKATHON",
         thumbnailUrl: idea9_1,
         tags: ["app"]
     },
@@ -237,7 +245,7 @@ export const mock13thProjectData = [
         name: "밥먹댕",
         description: "혼밥보다는 함께 식사하고 싶은 순간을 위한 서비스",
         generation: 13,
-        category: "해커톤",
+        category: "HACKATHON",
         thumbnailUrl: idea10_1,
         tags: ["app"]
     }
@@ -278,7 +286,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
+        category: "IDEATHON",
         imageUrls: [
             idea1_1,
             idea1_2,
@@ -326,11 +334,11 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             "Python"
         ],
         members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
+            { id: 5, username: "박조아" },
+            { id: 10, username: "이예한" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
+        category: "IDEATHON",
         imageUrls: [
             idea2_1,
             idea2_2,
@@ -374,7 +382,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
+        category: "IDEATHON",
         imageUrls: [
             idea3_1,
             idea3_2,
@@ -437,7 +445,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "아이디어톤",
+        category: "IDEATHON",
         imageUrls: [
             idea4_1,
             idea4_2,
@@ -488,12 +496,8 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             "LangChain",
             "OpenAI"
         ],
-        members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
-        ],
-        category: "아이디어톤",
+        members: [{ id: 1, username: "노경인" }],
+        category: "IDEATHON",
         imageUrls: [
             idea5_1,
             idea5_2,
@@ -539,7 +543,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
+        category: "HACKATHON",
         imageUrls: [idea6_1, idea6_2, idea6_3, idea6_4, idea6_5, idea6_6, idea6_7, idea6_8]
     },
     202: {
@@ -562,12 +566,8 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             "OpenAI",
             "PyTorch"
         ],
-        members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
-        ],
-        category: "해커톤",
+        members: [{ id: 10, username: "이예한" }],
+        category: "HACKATHON",
         imageUrls: [idea7_1, idea7_2, idea7_3, idea7_4, idea7_5, idea7_6, idea7_7, idea7_8]
     },
     203: {
@@ -605,7 +605,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
+        category: "HACKATHON",
         imageUrls: [idea8_1, idea8_2, idea8_3, idea8_4, idea8_5, idea8_6, idea8_7, idea8_8]
     },
     204: {
@@ -645,11 +645,10 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             "Python"
         ],
         members: [
-            { id: 101, username: "멋쟁이" },
-            { id: 201, username: "멋쟁이" },
-            { id: 301, username: "멋쟁이" }
+            { id: 5, username: "박조아" },
+            { id: 1, username: "노경인" }
         ],
-        category: "해커톤",
+        category: "HACKATHON",
         imageUrls: [idea9_1, idea9_2, idea9_3, idea9_4, idea9_5, idea9_6, idea9_7, idea9_8]
     },
     205: {
@@ -684,7 +683,7 @@ export const mockProjectDetails: Record<number, ProjectDetailResponse> = {
             { id: 201, username: "멋쟁이" },
             { id: 301, username: "멋쟁이" }
         ],
-        category: "해커톤",
+        category: "HACKATHON",
         imageUrls: [idea10_1, idea10_2, idea10_3, idea10_4, idea10_5, idea10_6, idea10_7, idea10_8]
     }
 };
@@ -728,7 +727,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 적용한 프로젝트를 처음 해봤는데, 아이디어를 구상하는 과정부터 정말 재미있었습니다. 다른 팀들의 아이디어에 대해 피드백을 주고받으면서 서로 배우는 점도 많았고, 분위기도 굉장히 좋았어요. 멋쟁이사자처럼 본사에도 직접 가볼 수 있어서 전반적으로 더 기억에 남는 경험이었습니다!",
             writer: {
-                id: 3,
+                id: 10,
                 name: "이예한",
                 part: "Design"
             }
@@ -738,7 +737,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 활용하는 여러 아이디어를 자유롭게 내보고, 팀원들과 함께 기획을 구체화해 나가는 과정이 재미있었습니다. 서로의 아이디어를 공유하고 발전시키면서 다양한 관점을 배울 수 있었고, 짧은 시간이었지만 기획 전반을 경험해볼 수 있어 의미 있는 시간이었습니다.",
             writer: {
-                id: 3,
+                id: 5,
                 name: "박조아",
                 part: "Front-end"
             }
@@ -805,7 +804,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "AI를 이용한 실생활 속 문제 해결이라는 주제 아래, 하나의 아이디어를 정답처럼 정하기보다 팀원들의 다양한 시각을 듣고 함께 확장해 나가는 과정이 기억에 남았습니다. 같은 문제를 두고도 접근 방식이 달라 여러 방향으로 고민해볼 수 있었고, 그 과정 자체가 즐겁고 의미 있었습니다.",
             writer: {
-                id: 3,
+                id: 1,
                 name: "노경인",
                 part: "Front-end"
             }
@@ -850,7 +849,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "이모디 프로젝트를 장기적으로 이어가면서 팀원들과 계속해서 피드백을 주고받는 과정이 정말 재미있었습니다. 협업하면서 다양한 아이디어를 자유롭게 나눌 수 있었고, 유니버설 디자인이라는 주제를 중심으로 프로젝트를 진행한 점도 새롭고 의미 있게 느껴졌어요. 함께 고생한 팀원들 모두 정말 감사합니다!",
             writer: {
-                id: 3,
+                id: 10,
                 name: "이예한",
                 part: "Design"
             }
@@ -884,7 +883,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "팀원들과 함께 밤을 새우며 정해진 시간 안에 기능을 구현하고 서비스를 완성해 나갔습니다. 개발을 진행하면서 필요한 부분을 계속 이야기하고 조율하며 작업을 이어갔고, 그 과정에서 협업하며 만들어가는 프로젝트의 흐름을 경험할 수 있었습니다.",
             writer: {
-                id: 3,
+                id: 5,
                 name: "박조아",
                 part: "Front-end"
             }
@@ -914,7 +913,7 @@ export const mockProjectRetrospections: Record<number, RetrospectionResponse[]> 
             content:
                 "기획과 개발 전반에서 팀원들과 소통하며 서비스를 완성해가는 과정이 재밌었습니다. 협업 과정에서 효과적인 소통 방식과 팀워크의 중요성을 배우며 함께 성장할 수 있었던 의미 있는 경험이었습니다.",
             writer: {
-                id: 3,
+                id: 1,
                 name: "노경인",
                 part: "Front-end"
             }
