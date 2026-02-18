@@ -229,7 +229,10 @@ export default function HomePage() {
                     onClick={() => setIsChatOpen((prev) => !prev)}
                     className="hidden sm:block fixed bottom-16 right-28 z-50 cursor-pointer"
                 >
-                    <img src={ChatbotBtn} className="w-[72px] h-[72px]" />
+                    <img
+                        src={ChatbotBtn}
+                        className={`w-[72px] h-[72px] ${!isChatOpen ? "flex" : "hidden"}`}
+                    />
                     <ChatbotCloseBtn
                         className={`w-[72px] h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
                     />
