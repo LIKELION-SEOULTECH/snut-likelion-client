@@ -13,8 +13,11 @@ export const MainVisualSection = ({
     nextGeneration: number | null;
     currentGeneration: number | null;
 }) => {
-    const text = getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
+    const text =
+        currentGeneration &&
+        getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
 
+    console.log(text, currentGeneration);
     return (
         <div className="relative w-full overflow-hidden pl-[37px] sm:pl-[110px] text-white">
             {/* 배경화면 */}
