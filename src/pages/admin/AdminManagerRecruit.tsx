@@ -65,11 +65,20 @@ export const AdminManagerRecruitPage = () => {
     const handleToggleAll = () => {
         if (!managerRecruitRes) return;
 
-        setCheckedIds(managerRecruitRes.content.map((app: ApplicationData) => app.id));
+        const pageIds = managerRecruitRes.content.map((app: ApplicationData) => app.id);
+
+        const isAllChecked = pageIds.every((id: number) => checkedIds.includes(id));
+
+        if (isAllChecked) {
+            setCheckedIds((prev) => prev.filter((id) => !pageIds.includes(id)));
+        } else {
+            setCheckedIds((prev) => [...new Set([...prev, ...pageIds])]);
+        }
     };
 
-    const applicationResultMutation = useMutation({
+    const { mutate: updateStatus, isPending } = useMutation({
         mutationFn: updateApplicationStatus,
+        retry: false,
         onSuccess: () => {
             toast(
                 <div className="flex items-center gap-2">
@@ -100,6 +109,8 @@ export const AdminManagerRecruitPage = () => {
     };
 
     const handleSaveResult = () => {
+        if (isPending) return;
+
         if (passIds.length === 0 || !baseStatus) {
             alert("선택된 지원자가 없습니다.");
             return;
@@ -113,7 +124,7 @@ export const AdminManagerRecruitPage = () => {
             nextStatus = "PAPER_PASS";
         }
 
-        applicationResultMutation.mutate({
+        updateStatus({
             status: nextStatus,
             ids: passIds
         });
@@ -184,6 +195,7 @@ export const AdminManagerRecruitPage = () => {
                 open={saveModal}
                 onClose={() => setSaveModal(false)}
                 onConfirm={handleSaveResult}
+                isLoading={isPending}
                 status={baseStatus === "서류 합격" ? "최종 합격" : "서류 합격"}
             />
         </AdminLayout>

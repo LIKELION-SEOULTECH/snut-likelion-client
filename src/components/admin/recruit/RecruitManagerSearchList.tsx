@@ -2,7 +2,7 @@ import { cn } from "@/libs/cn";
 import { RecruitManagerItem } from "./RecruitManagerItem";
 import type { ApplicationData } from "@/types/recruitment";
 import { useRecruitManageStore } from "@/stores/useRecruitManageStore";
-import { useManagerPassStore } from "@/stores/useManagerPassStore";
+// import { useManagerPassStore } from "@/stores/useManagerPassStore";
 
 export const RecruitManagerSearchList = ({
     data,
@@ -20,10 +20,10 @@ export const RecruitManagerSearchList = ({
     onToggleSelectAll: () => void;
 }) => {
     const { isManageMode } = useRecruitManageStore();
-    const { passIds } = useManagerPassStore();
+    // const { passIds } = useManagerPassStore();
 
     const pageIds = data.map((app) => app.id);
-    const isAllChecked = pageIds.length > 0 && pageIds.every((id) => passIds.includes(id));
+    const isAllChecked = pageIds.length > 0 && pageIds.every((id) => checkedIds.includes(id));
     return (
         <div>
             <div className="flex flex-row regular-14 gap-7 mb-8">
