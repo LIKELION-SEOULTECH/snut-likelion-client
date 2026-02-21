@@ -15,6 +15,7 @@ import samplePRF from "@/assets/Member/samplePRFIMG.png";
 import type { MemberDetailResponse } from "@/types/members";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
 import { mock13thProjectData, mockMemberProjectMapping } from "@/constants/mockProjectData";
+import { memberImageMap } from "@/assets/member/memberImage";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -74,6 +75,7 @@ export const MemberDetailPage = () => {
         enabled: !!numericId
     });
 
+    console.log(memberData);
     const { data: lionInfo, isLoading: isLionInfoLoading } = useQuery({
         queryKey: ["lionInfo", numericId, fallbackData?.generation],
         queryFn: () => fetchLionInfo(numericId!, fallbackData.generation),
@@ -87,7 +89,7 @@ export const MemberDetailPage = () => {
     }, [memberData, fallbackData]);
 
     // const projects = lionInfo?.projects ?? [];
-    const gen = 13; //임시로 13기로 고정, API 수정되면 제거 예정
+    const gen = 13; // 임시로 13기로 고정, API 수정되면 제거 예정
 
     const projects = useMemo(() => {
         if (!numericId) return [];
@@ -98,7 +100,10 @@ export const MemberDetailPage = () => {
             .map((projectId) => mock13thProjectData.find((p) => p.id === projectId))
             .filter((p): p is NonNullable<typeof p> => !!p);
     }, [numericId]);
-    console.log("멤버가 참여한 프로젝트들:", projects);
+
+    const dummyImage = numericId ? memberImageMap[String(numericId)] : undefined;
+
+    const profileSrc = member?.profileImageUrl || dummyImage || samplePRF;
 
     return (
         <PageLayout>
@@ -111,7 +116,7 @@ export const MemberDetailPage = () => {
                 ) : member ? (
                     <div className="flex w-full h-auto gap-[119px]">
                         <div className=" relative w-[291px]">
-                            <div className="flex flex-row absolute -top-8 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
+                            <div className="flex flex-row absolute -top-16 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
                                 <span
                                     className="cursor-pointer"
                                     onClick={() => navigate(ROUTES.MEMBER)}
@@ -124,20 +129,11 @@ export const MemberDetailPage = () => {
                                 <span>{member.name}</span>
                             </div>
                             <div className="w-[291px] h-[281px] flex overflow-hidden">
-                                {member.profileImageUrl ? (
-                                    <img
-                                        className="w-full h-full object-contain"
-                                        src={member.profileImageUrl}
-                                        alt="프로필 이미지"
-                                    />
-                                ) : (
-                                    <img
-                                        src={samplePRF}
-                                        alt="프로필 이미지"
-                                        width={291}
-                                        height={281}
-                                    />
-                                )}
+                                <img
+                                    className="w-full h-full object-contain"
+                                    src={profileSrc}
+                                    alt="프로필 이미지"
+                                />
                             </div>
                         </div>
                         <div className="flex flex-col flex-1">
