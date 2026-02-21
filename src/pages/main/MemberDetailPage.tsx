@@ -11,11 +11,10 @@ import PageLayout from "@/layouts/PageLayout";
 import { ROUTES } from "@/routes/routes";
 
 import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
-import samplePRF from "@/assets/Member/samplePRFIMG.png";
 import type { MemberDetailResponse } from "@/types/members";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
 import { mock13thProjectData, mockMemberProjectMapping } from "@/constants/mockProjectData";
-import { memberImageMap } from "@/utils/memberImage";
+import { getProfileImage } from "@/utils/getProfileImage";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -101,9 +100,7 @@ export const MemberDetailPage = () => {
             .filter((p): p is NonNullable<typeof p> => !!p);
     }, [numericId]);
 
-    const dummyImage = numericId ? memberImageMap[String(numericId)] : undefined;
-
-    const profileSrc = member?.profileImageUrl || dummyImage || samplePRF;
+    const profileSrc = getProfileImage(member?.id, member?.profileImageUrl);
 
     return (
         <PageLayout>

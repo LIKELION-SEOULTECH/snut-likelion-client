@@ -1,6 +1,6 @@
 import type { MemberResponse } from "@/types/members";
 import samplePrf from "@/assets/Member/samplePRFIMG.png";
-import { memberImageMap } from "@/utils/memberImage";
+import { getProfileImage } from "@/utils/getProfileImage";
 
 const nameMap = {
     GITHUB: "GitHub",
@@ -30,8 +30,7 @@ export const MemberCard = ({
     profileImageUrl,
     portfolioLinks
 }: MemberResponse) => {
-    const dummyImage = memberImageMap[String(id)];
-    const imageSrc = profileImageUrl || dummyImage || samplePrf;
+    const imageSrc = getProfileImage(id, profileImageUrl);
 
     return (
         <div className="whitespace-pre-line leading-snug relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
