@@ -63,7 +63,7 @@ const FAQAnswer = ({ isOpen, children }: { isOpen: boolean; children: React.Reac
             className="overflow-hidden transition-[height,opacity] duration-500 ease-in-out"
             style={{ height: 0, opacity: 0 }}
         >
-            <div className="py-2 sm:py-[12px]">{children}</div>
+            <div className="py-2 sm:pt-[12px] sm:pb-[0px]">{children}</div>
         </div>
     );
 };

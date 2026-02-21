@@ -1,5 +1,5 @@
 import closedIcon from "../../assets/home/Vector.svg";
-
+import ReactMarkdown from "react-markdown";
 interface FAQBlockProps {
     tag: "Q" | "A";
     content: string;
@@ -29,7 +29,7 @@ export const FAQBlock = ({ tag, content, isOpen = false, onClick }: FAQBlockProp
                             : "text-[#ECECEC] mt-0 sm:mt-[4px]"
                     }`}
                 >
-                    {content}
+                    <ReactMarkdown>{content}</ReactMarkdown>
                 </span>
             </div>
             <img
