@@ -79,10 +79,16 @@ export const getAdminApplicationDetail = async (appId: number) => {
 // 지원서 상태 일괄 변경
 export const updateApplicationStatus = ({
     status,
+    recId,
     ids
 }: {
     status: "SUBMITTED" | "PAPER_PASS" | "FINAL_PASS" | "FAILED";
+    recId: number;
     ids: number[];
 }) => {
-    return axiosInstance.patch("/admin/applications/status", { ids }, { params: { status } });
+    return axiosInstance.patch(
+        "/admin/applications/status",
+        { ids, recId },
+        { params: { status } }
+    );
 };

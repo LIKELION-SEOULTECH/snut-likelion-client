@@ -126,6 +126,7 @@ export const AdminManagerRecruitPage = () => {
 
         updateStatus({
             status: nextStatus,
+            recId,
             ids: passIds
         });
     };

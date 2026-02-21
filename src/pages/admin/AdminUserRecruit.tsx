@@ -113,6 +113,7 @@ export const AdminUserRecruitPage = () => {
         }
 
         updateStatus({
+            recId: recId,
             status: nextStatus,
             ids: passIds
         });
