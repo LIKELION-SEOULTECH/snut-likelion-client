@@ -1,6 +1,6 @@
 import type { MemberResponse } from "@/types/members";
 import samplePrf from "@/assets/Member/samplePRFIMG.png";
-import { memberImageMap } from "@/assets/member/memberImage";
+import { memberImageMap } from "@/utils/memberImage";
 
 const nameMap = {
     GITHUB: "GitHub",
