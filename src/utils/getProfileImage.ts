@@ -1,12 +1,10 @@
+import { memberImageMap } from "./memberImage";
+import samplePRF from "@/assets/member/samplePRFIMG.png";
+
 export const getProfileImage = (id?: number, profileImageUrl?: string | null) => {
-    // 서버 이미지 있으면 그거 우선
     if (profileImageUrl) return profileImageUrl;
 
-    if (!id) return new URL("../assets/Member/samplePRFIMG.png", import.meta.url).href;
+    if (!id) return samplePRF;
 
-    try {
-        return new URL(`../assets/member/profile/${id}.png`, import.meta.url).href;
-    } catch {
-        return new URL("../assets/Member/samplePRFIMG.png", import.meta.url).href;
-    }
+    return memberImageMap[String(id)] ?? samplePRF;
 };

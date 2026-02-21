@@ -31,7 +31,6 @@ export const MemberCard = ({
     portfolioLinks
 }: MemberResponse) => {
     const imageSrc = getProfileImage(id, profileImageUrl);
-
     return (
         <div className="whitespace-pre-line leading-snug relative w-[292px] h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
             <div className="w-full h-full flex flex-col items-center rounded-[16px] py-[36px] px-[28px]  z-1">
