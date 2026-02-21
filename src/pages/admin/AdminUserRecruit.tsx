@@ -64,8 +64,9 @@ export const AdminUserRecruitPage = () => {
         setCheckedIds(userRecruitRes.content.map((app: ApplicationData) => app.id));
     };
 
-    const applicationResultMutation = useMutation({
+    const { mutate: updateStatus, isPending } = useMutation({
         mutationFn: updateApplicationStatus,
+        retry: false,
         onSuccess: () => {
             toast(
                 <div className="flex items-center gap-2">
@@ -96,6 +97,8 @@ export const AdminUserRecruitPage = () => {
     };
 
     const handleSaveResult = () => {
+        if (isPending) return;
+
         if (passIds.length === 0 || !baseStatus) {
             alert("선택된 지원자가 없습니다.");
             return;
@@ -109,7 +112,7 @@ export const AdminUserRecruitPage = () => {
             nextStatus = "PAPER_PASS";
         }
 
-        applicationResultMutation.mutate({
+        updateStatus({
             status: nextStatus,
             ids: passIds
         });
@@ -179,6 +182,7 @@ export const AdminUserRecruitPage = () => {
             <ApplicationSaveModal
                 open={saveModal}
                 onClose={() => setSaveModal(false)}
+                isLoading={isPending}
                 onConfirm={handleSaveResult}
                 status={baseStatus === "서류 합격" ? "최종 합격" : "서류 합격"}
             />

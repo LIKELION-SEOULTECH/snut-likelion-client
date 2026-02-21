@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 interface ApplicationSaveModalProps {
     open: boolean;
     onClose: () => void;
+    isLoading: boolean;
     onConfirm: () => void;
     status: string;
 }
@@ -10,6 +11,7 @@ interface ApplicationSaveModalProps {
 export const ApplicationSaveModal = ({
     open,
     onClose,
+    isLoading,
     onConfirm,
     status
 }: ApplicationSaveModalProps) => {
@@ -32,13 +34,16 @@ export const ApplicationSaveModal = ({
 
                 <div className="flex h-11 justify-center gap-2 mt-4">
                     <button
+                        type="button"
                         className="w-[169px] h-full text-sm border border-[#ff7700] text-black rounded-sm cursor-pointer"
                         onClick={onConfirm}
+                        disabled={isLoading}
                     >
                         저장하기
                     </button>
 
                     <button
+                        type="button"
                         onClick={onClose}
                         className="w-[157px] h-full text-sm bg-[#FF7700] text-white rounded-sm cursor-pointer"
                     >
