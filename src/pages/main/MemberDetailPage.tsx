@@ -15,7 +15,7 @@ import samplePRF from "@/assets/Member/samplePRFIMG.png";
 import type { MemberDetailResponse } from "@/types/members";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
 import { mock13thProjectData, mockMemberProjectMapping } from "@/constants/mockProjectData";
-import { memberImageMap } from "@/assets/member/memberImage";
+import { memberImageMap } from "@/utils/memberImage";
 
 const nameMap = {
     GITHUB: "GitHub",
