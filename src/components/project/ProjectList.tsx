@@ -25,15 +25,21 @@ export default function ProjectList({ projects, isLoading }: ProjectListProps) {
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-4 mt-12 w-[1216px]">
-                {isLoading || projects.length === 0
-                    ? Array.from({ length: 12 }).map((_, idx) => (
-                          <ProjectBoxSkeleton key={`skeleton-${idx}`} />
-                      ))
-                    : currentProjects.map((project) => (
-                          <ProjectBox key={project.id} {...project} />
-                      ))}
-            </div>
+            {projects.length === 0 ? (
+                <section className="w-full flex justify-center items-center min-h-147">
+                    <span className="text-gray-200 font-medium text-2xl">검색결과가 없습니다</span>
+                </section>
+            ) : (
+                <div className="grid grid-cols-3 gap-4 mt-12 w-[1216px]">
+                    {isLoading
+                        ? Array.from({ length: 12 }).map((_, idx) => (
+                              <ProjectBoxSkeleton key={`skeleton-${idx}`} />
+                          ))
+                        : currentProjects.map((project) => (
+                              <ProjectBox key={project.id} {...project} />
+                          ))}
+                </div>
+            )}
 
             {!isLoading && projects.length > 0 && totalPages > 1 && (
                 <div className="mt-8">
