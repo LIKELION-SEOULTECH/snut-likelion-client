@@ -25,11 +25,11 @@ const nameMap = {
     OTHER: "Other"
 };
 const partMap: Record<string, string> = {
-    BACKEND: "back-end",
-    FRONTEND: "front-end",
-    DESIGN: "designer",
-    AI: "A.I",
-    PLANNING: "planner"
+    BACKEND: "Backend",
+    FRONTEND: "Frontend",
+    DESIGN: "Designer",
+    AI: "AI",
+    PLANNING: "Planner"
 };
 
 const MemberDetailSkeleton = () => (
