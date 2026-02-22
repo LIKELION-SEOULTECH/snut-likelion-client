@@ -5,7 +5,7 @@ import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNotices } from "@/hooks/useNotice";
 import { MainSearchBar } from "@/components/common/MainSearchBar";
-import { Loader2 } from "lucide-react";
+import { NoticeSkeleton } from "@/components/notice/NoticeSkeleton";
 
 const PAGE_SIZE = 8;
 
@@ -35,6 +35,7 @@ export const NewsPage = () => {
     const totalPages = Math.ceil(newsList.length / PAGE_SIZE);
     const paginatedNews = newsList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+    console.log(newsList);
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 pb-[250px] bg-white min-w-250">
@@ -48,27 +49,30 @@ export const NewsPage = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col mt-18 w-full items-center border-t-2 border-[#2D2D2D]">
+                <div className="flex flex-col mt-18 w-full items-center">
                     {isLoading ? (
-                        <div className="flex justify-center items-center h-40">
-                            <Loader2 className="animate-spin h-10 w-10 text-gray-500" />
+                        <div className="w-full flex flex-col justify-center items-center min-h-40">
+                            <NoticeSkeleton />
                         </div>
                     ) : error ? (
-                        <div className="flex justify-center items-center h-40">에러 발생</div>
+                        <div className="w-full flex justify-center items-center h-40 text-xl text-red-500 border-y-2 border-[#2D2D2D] min-h-147">
+                            서버 연결 실패
+                        </div>
                     ) : newsList.length === 0 ? (
-                        <div className="flex justify-center items-center h-40 text-xl text-gray-500">
-                            등록된 뉴스가 없습니다.
+                        <div className="w-full flex justify-center items-center h-40 text-xl text-gray-200 border-y-2 border-[#2D2D2D] min-h-147">
+                            아직 작성된 소식이 없어요.
                         </div>
                     ) : (
-                        <div className="flex flex-col w-full">
-                            <NoticeCardList newsList={paginatedNews} />
-
+                        <>
+                            <div className="flex flex-col w-full border-t-2 border-b-1 border-[#2D2D2D]">
+                                <NoticeCardList newsList={paginatedNews} />
+                            </div>
                             <Pagination
                                 currentPage={page}
                                 totalPages={totalPages}
                                 onPageChange={setPage}
                             />
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
