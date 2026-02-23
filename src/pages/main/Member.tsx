@@ -46,7 +46,7 @@ export const MemberPage = () => {
                 />
 
                 {isError && <div className="text-white mt-12">멤버를 불러오는데 실패했습니다.</div>}
-                <MemberCardList MemberData={members ?? []} isLoading={isLoading} />
+                <MemberCardList MemberData={members} isLoading={isLoading} />
                 <div className="w-full mt-24">
                     <QuoteCardList />
                 </div>
