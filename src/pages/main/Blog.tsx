@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import BlogTypeTabs from "@/components/blog/BlogTypeTabs";
 import PageLayout from "@/layouts/PageLayout";
 import { BlogCardList } from "@/components/blog/BlogCardList";
 import { Pagination } from "@/components/common/Pagination";
@@ -8,8 +7,6 @@ import { getBlogList } from "@/apis/main/blog";
 import { MainSearchBar } from "@/components/common/MainSearchBar";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
 import { useQueries, keepPreviousData } from "@tanstack/react-query";
-
-// type BlogType = "세션 이야기" | "아기사자 이야기";
 
 export const BlogPage = () => {
     const [page, setPage] = useState(1);
@@ -51,6 +48,7 @@ export const BlogPage = () => {
     const endIndex = startIndex + pageSize;
     const blogsForCurrentPage = allCombinedBlogs.slice(startIndex, endIndex);
 
+    console.log(blogsForCurrentPage);
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white ">
@@ -59,12 +57,12 @@ export const BlogPage = () => {
                 </div>
 
                 {/* <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} /> */}
-                <div className="flex mx-auto flex-col">
+                <div className="w-full flex mx-auto flex-col">
                     <div className="mt-7 w-[598px] ">
                         <MainSearchBar />
                     </div>
-                    <div className="h-[20px] mt-12 font-normal">
-                        전체글{" "}
+                    <div className="flex h-[20px] mt-12 font-normal gap-1">
+                        전체글
                         <span className="text-[#f70] font-semibold">{totalCombinedBlogsCount}</span>
                     </div>
                     {isLoading ? (
@@ -75,6 +73,12 @@ export const BlogPage = () => {
                         </div>
                     ) : isError ? (
                         <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
+                    ) : blogsForCurrentPage.length === 0 ? (
+                        <section className="w-full flex justify-center items-center min-h-147">
+                            <span className="text-gray-200 font-medium text-2xl leading-[130%]">
+                                아직 작성된 블로그가 없어요
+                            </span>
+                        </section>
                     ) : (
                         <BlogCardList blogs={blogsForCurrentPage} />
                     )}
