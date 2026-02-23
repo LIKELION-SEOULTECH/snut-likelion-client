@@ -9,9 +9,9 @@ interface RecruitFormStep1Props {
 const PARTS = [
     { ko: "기획자", en: "Planner", id: "PLANNING" },
     { ko: "디자이너", en: "Designer", id: "DESIGN" },
-    { ko: "프론트엔드", en: "Front-end", id: "FRONTEND" },
-    { ko: "백엔드", en: "Back-end", id: "BACKEND" },
-    { ko: "인공지능", en: "A.I", id: "AI" }
+    { ko: "프론트엔드", en: "Frontend", id: "FRONTEND" },
+    { ko: "백엔드", en: "Backend", id: "BACKEND" },
+    { ko: "인공지능", en: "AI", id: "AI" }
 ];
 
 const DEPARTMENTS = [

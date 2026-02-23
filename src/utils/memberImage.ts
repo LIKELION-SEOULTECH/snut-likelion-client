@@ -3,9 +3,6 @@ const modules = import.meta.glob("/src/assets/Member/profile/*.{png,jpg,jpeg,web
     import: "default"
 }) as Record<string, string>;
 
-console.log("📦 glob raw modules:", modules);
-console.log("📦 glob module count:", Object.keys(modules).length);
-
 export const memberImageMap: Record<string, string> = Object.fromEntries(
     Object.entries(modules).map(([path, src]) => {
         const file = path.split("/").pop()!;
@@ -13,5 +10,3 @@ export const memberImageMap: Record<string, string> = Object.fromEntries(
         return [id, src];
     })
 );
-
-console.log("🗺️ memberImageMap keys:", Object.keys(memberImageMap));

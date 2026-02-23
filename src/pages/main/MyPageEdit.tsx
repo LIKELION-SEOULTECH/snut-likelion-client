@@ -30,7 +30,7 @@ export const MyPageEdit = () => {
 
     const [profileImage, setProfileImage] = useState<string>(member.profileImageUrl || samplePRf);
     const [rawImage, setRawImage] = useState<string | null>(null);
-    const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
+    const [, setCroppedImageFile] = useState<File | null>(null);
 
     const [stackList, setStackList] = useState(member.stacks || []);
     const [portfolioLinks, setPortfolioLinks] = useState<SimplePortfolioLink[]>(
@@ -107,7 +107,6 @@ export const MyPageEdit = () => {
             stacks: stackList,
             portfolioLinks: portfolioLinks.filter((link) => link.name && link.url)
         };
-        console.log(croppedImageFile);
 
         mutate(payload);
     };
