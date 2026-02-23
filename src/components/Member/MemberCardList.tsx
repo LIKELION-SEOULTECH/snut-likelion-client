@@ -4,13 +4,13 @@ import type { MemberResponse } from "@/types/members";
 import { MemberCardSkeleton } from "./MemberCardSkeleton";
 
 interface MemberCardProps {
-    MemberData: MemberResponse[];
+    MemberData?: MemberResponse[];
     isLoading: boolean;
 }
 export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
     return (
         <>
-            {MemberData.length === 0 ? (
+            {MemberData?.length === 0 ? (
                 <section className="w-full flex justify-center items-center min-h-147">
                     <span className="text-gray-200 font-medium text-2xl">검색결과가 없습니다</span>
                 </section>
@@ -20,7 +20,7 @@ export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
                         ? Array.from({ length: 12 }).map((_, idx) => (
                               <MemberCardSkeleton key={`member-skeleton-${idx}`} />
                           ))
-                        : MemberData.map((member) => (
+                        : MemberData?.map((member) => (
                               <Link key={member.id} to={`/members/${member.id}`} state={{ member }}>
                                   <MemberCard {...member} />
                               </Link>
