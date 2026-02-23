@@ -85,7 +85,7 @@ export default function ProjectPage() {
                 {isError ? (
                     <div className="text-white mt-12">프로젝트를 불러오는데 실패했습니다.</div>
                 ) : (
-                    <ProjectList projects={projects || []} isLoading={isLoading} />
+                    <ProjectList projects={projects} isLoading={isLoading} />
                 )}
 
                 <div className="w-full mt-24">
