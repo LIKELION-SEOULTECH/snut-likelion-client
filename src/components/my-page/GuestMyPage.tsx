@@ -90,7 +90,7 @@ export const GuestMyPage = () => {
                 </span>
             </div>
             <div
-                className="bg-[#404040] h-[98px] py-[35px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]"
+                className="flex items-center bg-[#404040] h-[98px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]"
                 onClick={handleGuestRecruit}
             >
                 {hasApplication && isSubmitted && (

@@ -27,19 +27,13 @@ export const MyPageTab = ({
 
     const logoutMutation = useMutation({
         mutationFn: logout,
-
-        onSuccess: () => {
+        onSettled: () => {
             useAuthStore.getState().clearAuth();
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-
             queryClient.clear();
-
             navigate(ROUTES.HOME, { replace: true });
         },
-
         onError: () => {
-            alert("로그아웃에 실패했습니다.");
+            console.log("서버 로그아웃 실패(토큰 만료 가능). 로컬 로그아웃 처리됨");
         }
     });
 
