@@ -7,7 +7,9 @@ interface MemberCardProps {
     MemberData?: MemberResponse[];
     isLoading: boolean;
 }
+
 export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
+    console.log(MemberData);
     return (
         <>
             {MemberData?.length === 0 ? (
@@ -20,7 +22,7 @@ export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
                         ? Array.from({ length: 12 }).map((_, idx) => (
                               <MemberCardSkeleton key={`member-skeleton-${idx}`} />
                           ))
-                        : MemberData?.map((member) => (
+                        : MemberData?.filter((member) => member.id !== 3).map((member) => (
                               <Link key={member.id} to={`/members/${member.id}`} state={{ member }}>
                                   <MemberCard {...member} />
                               </Link>
