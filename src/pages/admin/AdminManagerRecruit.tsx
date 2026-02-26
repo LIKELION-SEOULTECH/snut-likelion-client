@@ -15,6 +15,7 @@ import { CircleCheck } from "lucide-react";
 import { ApplicationSaveModal } from "@/components/admin/recruit/ApplicationSaveModal";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { useManagerPassStore } from "@/stores/useManagerPassStore";
+import { useSearchParams } from "react-router-dom";
 
 export const AdminManagerRecruitPage = () => {
     const queryClient = useQueryClient();
@@ -22,8 +23,8 @@ export const AdminManagerRecruitPage = () => {
     const { passIds, baseStatus, clear } = useManagerPassStore();
 
     const [checkedIds, setCheckedIds] = useState<number[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get("page") || 1);
     const [saveModal, setSaveModal] = useState(false);
 
     const [filters, setFilters] = useState({
@@ -187,7 +188,12 @@ export const AdminManagerRecruitPage = () => {
                         <Pagination
                             currentPage={currentPage}
                             totalPages={managerRecruitRes.totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
+                            onPageChange={(page) =>
+                                setSearchParams((prev) => {
+                                    prev.set("page", String(page));
+                                    return prev;
+                                })
+                            }
                         />
                     </div>
                 </>
