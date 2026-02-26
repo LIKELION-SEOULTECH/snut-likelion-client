@@ -136,10 +136,10 @@ export const UserApplyForm = ({ recId }: { recId: number }) => {
         setBasicQuestionList(basic);
         setCommonQuestionList(common);
 
-        setPlanQuestionList(partMap.기획 ?? createPartInitialQuestions("PLANNING"));
-        setDesignQuestionList(partMap.디자인 ?? createPartInitialQuestions("DESIGN"));
-        setFrontendQuestionList(partMap.프론트엔드 ?? createPartInitialQuestions("FRONTEND"));
-        setBackendQuestionList(partMap.백엔드 ?? createPartInitialQuestions("BACKEND"));
+        setPlanQuestionList(partMap.PLANNING ?? createPartInitialQuestions("PLANNING"));
+        setDesignQuestionList(partMap.DESIGN ?? createPartInitialQuestions("DESIGN"));
+        setFrontendQuestionList(partMap.FRONTEND ?? createPartInitialQuestions("FRONTEND"));
+        setBackendQuestionList(partMap.BACKEND ?? createPartInitialQuestions("BACKEND"));
         setAiQuestionList(partMap.AI ?? createPartInitialQuestions("AI"));
     }, [recruitmentQuestions]);
 

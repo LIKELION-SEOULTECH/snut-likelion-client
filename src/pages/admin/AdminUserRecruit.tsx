@@ -13,6 +13,7 @@ import { toast, Toaster } from "sonner";
 import { CircleCheck } from "lucide-react";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { useMemberPassStore } from "@/stores/useMemberPassStore";
+import { useSearchParams } from "react-router-dom";
 
 export const AdminUserRecruitPage = () => {
     const queryClient = useQueryClient();
@@ -20,8 +21,10 @@ export const AdminUserRecruitPage = () => {
     const { passIds, baseStatus, clear } = useMemberPassStore();
 
     const [checkedIds, setCheckedIds] = useState<number[]>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const currentPage = Number(searchParams.get("page") || 1);
+
     const [saveModal, setSaveModal] = useState(false);
 
     const [filters, setFilters] = useState({
@@ -175,7 +178,12 @@ export const AdminUserRecruitPage = () => {
                         <Pagination
                             currentPage={currentPage}
                             totalPages={userRecruitRes.totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
+                            onPageChange={(page) =>
+                                setSearchParams((prev) => {
+                                    prev.set("page", String(page));
+                                    return prev;
+                                })
+                            }
                         />
                     </div>
                 </>

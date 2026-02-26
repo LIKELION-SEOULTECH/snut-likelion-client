@@ -35,7 +35,6 @@ export const NewsPage = () => {
     const totalPages = Math.ceil(newsList.length / PAGE_SIZE);
     const paginatedNews = newsList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-    console.log(newsList);
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 pb-[250px] bg-white min-w-250">
