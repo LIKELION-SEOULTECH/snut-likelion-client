@@ -33,7 +33,10 @@ export const AdminManagerRecruitDetailPage = () => {
                 <span>{userName}</span>
             </div>
             {ApplicationDetailRes && (
-                <ManagerApplyResult applicationDetail={ApplicationDetailRes} />
+                <ManagerApplyResult
+                    applicationDetail={ApplicationDetailRes}
+                    portfolio={ApplicationDetailRes.portfolio}
+                />
             )}
         </AdminLayout>
     );

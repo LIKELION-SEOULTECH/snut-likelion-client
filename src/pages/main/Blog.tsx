@@ -48,7 +48,6 @@ export const BlogPage = () => {
     const endIndex = startIndex + pageSize;
     const blogsForCurrentPage = allCombinedBlogs.slice(startIndex, endIndex);
 
-    console.log(blogsForCurrentPage);
     return (
         <PageLayout white={true}>
             <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white ">

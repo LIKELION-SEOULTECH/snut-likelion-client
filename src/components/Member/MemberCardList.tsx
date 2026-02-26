@@ -9,7 +9,6 @@ interface MemberCardProps {
 }
 
 export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
-    console.log(MemberData);
     return (
         <>
             {MemberData?.length === 0 ? (
