@@ -31,7 +31,12 @@ export const AdminUsererRecruitDetailPage = () => {
                 <Chevright />
                 <span>{userName}</span>
             </div>
-            {ApplicationDetailRes && <UserApplyResult applicationDetail={ApplicationDetailRes} />}
+            {ApplicationDetailRes && (
+                <UserApplyResult
+                    applicationDetail={ApplicationDetailRes}
+                    portfolio={ApplicationDetailRes.portfolio}
+                />
+            )}
         </AdminLayout>
     );
 };
