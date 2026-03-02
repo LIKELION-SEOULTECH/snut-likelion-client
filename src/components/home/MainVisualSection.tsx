@@ -14,8 +14,9 @@ export const MainVisualSection = ({
     currentGeneration: number | null;
 }) => {
     const text =
-        currentGeneration &&
-        getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
+        buttonType && nextGeneration
+            ? getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration)
+            : null;
 
     return (
         <div className="relative w-full overflow-hidden pl-[37px] sm:pl-[110px] text-white">
