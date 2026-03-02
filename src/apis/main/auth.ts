@@ -94,3 +94,14 @@ export const changePassword = async (data: PasswordChangeRequest) => {
     const res = await axiosInstance.patch("/auth/password/change", data);
     return res.data;
 };
+
+// 토큰 재발급
+export const refreshAccessToken = async () => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/refresh`, {
+        refreshToken: `Bearer ${refreshToken}`
+    });
+
+    return response.data.accessToken;
+};
