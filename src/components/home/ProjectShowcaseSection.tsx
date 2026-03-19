@@ -58,7 +58,7 @@ export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionPr
                 </Swiper>
             </div>
 
-            {/* ✅ 데스크톱 전용 Grid */}
+            {/* 데스크톱 전용 Grid */}
             <div className="hidden sm:grid sm:grid-cols-3 gap-[16px] w-[1216px] mx-auto relative">
                 {projectList.length === 0
                     ? Array.from({ length: 9 }).map((_, idx) => (
@@ -81,7 +81,7 @@ export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionPr
                 </Link>
             </div>
 
-            {/* ✅ 모바일 더보기 버튼 */}
+            {/* 모바일 더보기 버튼 */}
             <button
                 className="sm:hidden text-sm w-[69px] h-[33px] bg-[#1B1B1B] font-bold mx-auto mt-10 border-[0.4px] rounded-full cursor-pointer hover:bg-[#2D2D2D] block"
                 onClick={handleClick}

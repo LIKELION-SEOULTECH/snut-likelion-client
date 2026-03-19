@@ -72,8 +72,8 @@ export const RegisterForm = () => {
     };
 
     return (
-        <form className="flex flex-col gap-10 w-150" onSubmit={handleRegisterSubmit}>
-            <div className="flex flex-col gap-5">
+        <form className="flex flex-col gap-10 sm:w-150" onSubmit={handleRegisterSubmit}>
+            <div className="flex flex-col gap-2 sm:gap-5">
                 <Input
                     label="이름"
                     placeholder="이름을 입력하세요"
@@ -83,10 +83,10 @@ export const RegisterForm = () => {
                     }
                     error={errors.username}
                 />
-                <div className="text-[14px] h-5 text-[#ECECEC] mb-6">*실명을 입력해주세요</div>
+                <div className="text-[14px] h-5 text-[#ECECEC] sm:mb-6">*실명을 입력해주세요</div>
             </div>
 
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2 sm:gap-4">
                 <Input
                     label="이메일"
                     placeholder="olivia@untitledui.com"
@@ -96,7 +96,7 @@ export const RegisterForm = () => {
                 />
                 <button
                     type="button"
-                    className={`w-[173px] h-14 text-xl font-medium rounded-lg mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
                     style={{
                         backgroundColor: email ? "#666666" : "#2D2D2D",
                         color: email ? "white" : "#666666"
@@ -107,7 +107,7 @@ export const RegisterForm = () => {
                     인증코드 전송
                 </button>
             </div>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-2 sm:gap-4">
                 <div className="flex flex-col flex-1">
                     <div className="relative">
                         <Input
@@ -127,20 +127,21 @@ export const RegisterForm = () => {
                             </div>
                         )}
                     </div>
-
-                    <p
-                        className={`${verificationStatus === "success" ? "text-green-400" : "text-red-500"} text-sm h-1 mt-5`}
-                    >
-                        {verificationStatus === "success"
-                            ? "* 인증이 완료되었습니다"
-                            : verificationStatus === "fail"
-                              ? "* 인증코드가 일치하지 않습니다"
-                              : ""}
-                    </p>
+                    {verificationStatus && (
+                        <p
+                            className={`${verificationStatus === "success" ? "text-green-400" : "text-red-500"} text-sm h-1 mt-5`}
+                        >
+                            {verificationStatus === "success"
+                                ? "* 인증이 완료되었습니다"
+                                : verificationStatus === "fail"
+                                  ? "* 인증코드가 일치하지 않습니다"
+                                  : ""}
+                        </p>
+                    )}
                 </div>
                 <button
                     type="button"
-                    className={`w-[173px] h-14 text-xl font-medium rounded-lg mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
                     style={{
                         backgroundColor: verificationCode ? "#666666" : "#2D2D2D",
                         color: verificationCode ? "white" : "#666666"
@@ -173,21 +174,25 @@ export const RegisterForm = () => {
                         isValid={password.length === 0 ? null : pwRules.comboRule}
                     />
                 </div>
+
+                <div className="flex flex-col gap-5 mt-1 sm:mt-5">
+                    <Input
+                        label="비밀번호 확인"
+                        placeholder="비밀번호를 입력해주세요"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            setConfirmPassword(e.target.value)
+                        }
+                    />
+                    {confirmPassword.length > 0 && confirmPassword !== password && (
+                        <p className="text-[14px] h-5 text-red-500">
+                            *비밀번호와 일치하지 않습니다.
+                        </p>
+                    )}
+                </div>
             </div>
-            <div className="flex flex-col gap-5">
-                <Input
-                    label="비밀번호 확인"
-                    placeholder="비밀번호를 입력해주세요"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setConfirmPassword(e.target.value)
-                    }
-                />
-                {confirmPassword.length > 0 && confirmPassword !== password && (
-                    <p className="text-[14px] h-5 text-red-500">*비밀번호와 일치하지 않습니다.</p>
-                )}
-            </div>
+
             <div className="flex flex-col gap-5">
                 <Input
                     label="휴대폰 번호"
@@ -215,7 +220,7 @@ export const RegisterForm = () => {
             <button
                 disabled={!isFormValid}
                 type="submit"
-                className={`w-full h-14 flex justify-center items-center  rounded-lg font-bold text-xl mt-5 mb-71 ${
+                className={`w-full h-14 flex justify-center items-center  rounded-lg font-bold text-xl sm:mt-5 mb-[169px] sm:mb-71 ${
                     isFormValid
                         ? "bg-[#ff7700] text-white cursor-pointer"
                         : "bg-[#2D2D2D] text-[#666666] cursor-not-allowed"

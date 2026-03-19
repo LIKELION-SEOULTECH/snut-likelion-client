@@ -15,7 +15,10 @@ export const LoginForm = () => {
     } = useLogin();
 
     return (
-        <form className="text-white pt-[105px] pb-0 min-w-150" onSubmit={handleSubmit}>
+        <form
+            className="text-white pt-[54px] sm:pt-[105px] pb-0 sm:min-w-150"
+            onSubmit={handleSubmit}
+        >
             <div className="flex flex-col gap-7">
                 <Input
                     label="이메일"
@@ -36,11 +39,11 @@ export const LoginForm = () => {
             </div>
             <button
                 type="submit"
-                className="w-full h-14 flex justify-center items-center bg-[#ff7700] rounded-lg font-bold text-xl text-white mt-[48px] mb-[28px] cursor-pointer"
+                className="w-full h-14 flex justify-center items-center bg-[#ff7700] rounded-lg font-bold text-xl text-white mt-10 sm:mt-16 mb-10 sm:mb-[28px] cursor-pointer"
             >
                 로그인
             </button>
-            <div className="flex gap-[17px] text-[#C4C4C4] justify-center ">
+            <div className="flex gap-[17px] text-gray-100 justify-center text-sm sm:text-base">
                 <Link to={ROUTES.LOGIN}>
                     <span className="cursor-pointer">비밀번호 찾기</span>
                 </Link>

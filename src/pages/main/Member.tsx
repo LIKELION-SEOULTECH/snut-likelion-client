@@ -26,13 +26,18 @@ export const MemberPage = () => {
     return (
         <PageLayout>
             <div
-                className="w-full  flex flex-col text-white bg-[#111111] items-center px-28"
+                className="w-full  flex flex-col text-white bg-[#111111] items-center px-5 sm:px-28"
                 style={{
                     background: "linear-gradient(180deg, #000 0%, #1B1B1B 29.27%)"
                 }}
             >
-                <div className="font-extrabold text-7xl mt-[85px] mb-18">
-                    LikeLion Member<span className="text-[#FF7700]">.</span>
+                <div className="font-extrabold text-[35px] sm:text-7xl mt-[50px] sm:mt-[85px] mb-[38px] sm:mb-18">
+                    <span className="flex flex-col sm:flex-row sm:gap-5">
+                        LikeLion
+                        <span className="flex flex-row">
+                            Member <span className="text-[#FF7700]">.</span>
+                        </span>
+                    </span>
                 </div>
                 <GenerationTabs
                     generations={generationList}
@@ -47,7 +52,7 @@ export const MemberPage = () => {
 
                 {isError && <div className="text-white mt-12">멤버를 불러오는데 실패했습니다.</div>}
                 <MemberCardList MemberData={members} isLoading={isLoading} />
-                <div className="w-full mt-24">
+                <div className="hidden sm:block w-full mt-24">
                     <QuoteCardList />
                 </div>
             </div>

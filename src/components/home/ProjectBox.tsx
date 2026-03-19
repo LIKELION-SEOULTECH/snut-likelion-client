@@ -29,7 +29,7 @@ export const ProjectBox = ({
         <div className="relative text-[#ffffff] rounded-[16px]">
             <div
                 onClick={() => navigate(`/project/${id}`)}
-                className="w-60 sm:w-[395px] h-[170px] sm:h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer"
+                className="w-full sm:w-[395px] aspect-[335/243] sm:h-[286px] text-[#ffffff] rounded-[16px] cursor-pointer"
             >
                 <img
                     // *** 여기 주석 부분 3줄 ****//
