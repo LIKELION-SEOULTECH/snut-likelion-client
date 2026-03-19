@@ -14,7 +14,7 @@ export const RoleList = () => {
 
 export const ManegerRoleLIst = () => {
     return (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-[6px] sm:gap-4 mx-5">
             {manegerMockCardData.map((card: RoleCardProps, index: number) => (
                 <RoleCard isManeger={true} key={index} {...card} />
             ))}

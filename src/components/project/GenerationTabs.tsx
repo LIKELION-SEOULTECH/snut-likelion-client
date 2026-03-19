@@ -6,14 +6,14 @@ type Props = {
 
 export default function GenerationTabs({ selected, onSelect, tabs }: Props) {
     return (
-        <div className="flex gap-7 px-[21px] py-3 font-medium">
+        <div className="flex gap-5 sm:gap-7 px-[21px] py-3 font-medium">
             {tabs.map((gen) => (
                 <button
                     key={gen}
                     onClick={() => onSelect(gen)}
-                    className={`w-21 h-12 px-4 py-1 rounded-full text-2xl cursor-pointer ${
+                    className={`h-[33.5px] sm:h-12 px-[15.31px] sm:px-[21px] rounded-full text-base sm:text-2xl cursor-pointer whitespace-nowrap ${
                         selected === gen
-                            ? "bg-orange-500 text-black font-bold"
+                            ? "bg-orange-500 text-black font-semibold sm:font-bold"
                             : "bg-neutral-600 text-black"
                     }`}
                 >

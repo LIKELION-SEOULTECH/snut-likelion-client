@@ -12,7 +12,7 @@ export const OrangeBtn = ({ tag, selected, onSelect, isNotButton }: OrangeBtnPro
             onClick={() => {
                 if (!isNotButton && onSelect) onSelect(tag);
             }}
-            className={`w-auto h-12 px-4 py-1 rounded-full text-2xl cursor-pointer ${
+            className={`w-auto h-[33.5px] sm:h-12 px-[15.31px] sm:px-4 rounded-full text-base sm:text-2xl cursor-pointer ${
                 selected === tag || isNotButton
                     ? "bg-orange-500 text-black font-bold"
                     : "bg-neutral-600 text-[#1b1b1b]"

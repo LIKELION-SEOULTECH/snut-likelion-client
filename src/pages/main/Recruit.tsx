@@ -141,7 +141,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
         <PageLayout>
             <div className="w-full flex flex-col  bg-[#1B1B1B]">
                 {/* Top Visual */}
-                <div className="w-full h-[261px] relative mb-[120px] ">
+                <div className="w-full aspect-[375/106] sm:h-[261px] relative mb-[22px] sm:mb-[120px]">
                     <img
                         src={joinUs}
                         alt="join us"
@@ -155,48 +155,51 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                         }}
                     />
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
-                        <div className="font-extrabold text-7xl text-white">
+                        <div className="font-extrabold text-[35px] sm:text-7xl text-white">
                             Join us<span className="text-[#FF7700]">.</span>
                         </div>
                     </div>
                 </div>
 
                 {/* 모집 일정 + 지원 버튼 */}
-                <div className="mb-[180px] mx-[112px] flex">
-                    <div className="flex-1 ">
-                        <h4 className="text-[32px] text-white font-[700] mb-[44px]">모집 일정</h4>
-                        <div className="w-[908px] flex flex-col gap-y-3 mb-[180px]">
+                <div className="mb-[180px] mx-5 sm:mx-[112px] flex">
+                    <div className="w-full flex-1 sm:min-w-[910px]">
+                        <h4 className="text-xl sm:text-[32px] text-white font-[700] mb-[25px] sm:mb-[44px]">
+                            모집 일정
+                        </h4>
+                        <div className="w-full sm:w-[908px] flex flex-col gap-y-3 mb-[52.36px] sm:mb-[180px]">
                             {isLoading && <div>Loading...</div>}
                             {isError && <div>Error fetching schedule.</div>}
                             {infoData.map((e, i) => (
-                                <div key={i} className="flex gap-x-4 w-full">
-                                    <div className="w-[148px] text-center">
+                                <div key={i} className="flex gap-x-4">
+                                    <div className="w-[86px] sm:w-[148px] text-center">
                                         <InfoBox text={e.title} centered={true} />
                                     </div>
+
                                     <InfoBox text={e.date} note={e.note} />
                                 </div>
                             ))}
                         </div>
 
-                        <h4 className="text-[32px] text-white font-[700] mb-[44px]">
+                        <h4 className="text-xl sm:text-[32px] text-white font-[700] mb-[25px] sm:mb-[44px]">
                             지원 자격 및 모집 대상
                         </h4>
-                        <div className="w-[908px] flex flex-col gap-y-3 ">
+                        <div className="w-full sm:w-[908px] flex flex-col gap-y-3">
                             <InfoBox
                                 text={
-                                    <>
+                                    <span className="flex flex-col text-base items-center">
                                         <b>서울과학기술대학교 재학생 및 휴학생이면서</b>
                                         {isManager
                                             ? " 차기 멋쟁이 사자처럼을 이끌어가고 싶으신 분"
                                             : " 아래 일정에 적극적으로 참여하실 수 있는 분"}
-                                    </>
+                                    </span>
                                 }
                             />
-                            <div className="py-[23px] bg-[#ECECEC] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex flex-col flex-1 leading-[180%] ">
+                            <div className="py-[15px] sm:py-[23px] bg-[#ECECEC] font-medium px-[15px] sm:px-[28px] h-auto rounded-[8px] text-sm sm:text-[20px] flex flex-col flex-1 leading-[180%] ">
                                 {scheduleData.map((item, idx) => (
                                     <div key={idx} className="mb-2">
-                                        <span className="font-semibold">
-                                            {item.title}{" "}
+                                        <span className="flex font-semibold gap-1">
+                                            {item.title}
                                             <span className="text-[#f70]">{item.orangeText}</span>
                                         </span>
                                         <div className="text-[#666] pl-4 font-medium">
@@ -210,7 +213,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
 
                     {/* 지원하기 버튼 */}
                     <button
-                        className={`w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer font-bold  px-10 py-5 align-center leading-[130%] whitespace-nowrap font-pretendard ${isApplyOpen ? " bg-[#F70] text-white" : "bg-[#3A3A3A] text-[#666]"}`}
+                        className={`hidden sm:block w-auto h-[71px] rounded-[250px] text-[24px] cursor-pointer font-bold  px-10 py-5 align-center leading-[130%] whitespace-nowrap font-pretendard ${isApplyOpen ? " bg-[#F70] text-white" : "bg-[#3A3A3A] text-[#666]"}`}
                         onClick={handleApplyClick}
                     >
                         지원하기 →
@@ -218,17 +221,17 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                 </div>
 
                 {/* 모집 파트 */}
-                <h4 className="text-[32px] text-white font-[700] mb-[44px] mx-[112px] flex">
+                <h4 className="text-xl sm:text-[32px] text-white font-[700] mb-[25px] sm:mb-[44px] mx-5 sm:mx-[112px] flex">
                     파트 모집 분야
                 </h4>
-                <div className="relative flex flex-col items-center ">
+                <div className="relative flex flex-col items-center mb-[180px] sm:mb-0">
                     <div className="relative z-5 text-white">
                         <RoleList />
                     </div>
                 </div>
                 {isManager && (
                     <>
-                        <h4 className="text-[32px] mt-[180px] text-white font-[700] mb-[44px] mx-[112px] flex">
+                        <h4 className="text-xl sm:text-[32px] sm:mt-[180px] text-white font-[700] mb-[25px] sm:mb-[44px] mx-5 sm:mx-[112px] flex">
                             운영진 모집 분야
                         </h4>
                         <div className="relative flex flex-col items-center ">
@@ -240,7 +243,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                 )}
 
                 {/* Quote */}
-                <div className="w-full h-[150px] mt-[320px] px-28 bg-[#1B1B1B]">
+                <div className="hidden sm:block w-full h-[150px] mt-[320px] px-28 bg-[#1B1B1B]">
                     <QuoteCardList />
                 </div>
 

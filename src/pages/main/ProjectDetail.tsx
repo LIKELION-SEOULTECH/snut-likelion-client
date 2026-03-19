@@ -99,8 +99,8 @@ export default function ProjectDetailPage() {
                     background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
                 }}
             >
-                <div className=" flex flex-col px-28 text-white ">
-                    <div className="flex  flex-row mt-20 text-xl text-[#7F7F7F] gap-1">
+                <div className="w-full flex flex-col px-5 sm:px-28 text-white">
+                    <div className="hidden sm:flex flex-row mt-20 text-xl text-[#7F7F7F] gap-1">
                         <span
                             className="cursor-pointer"
                             onClick={() => {
@@ -114,7 +114,8 @@ export default function ProjectDetailPage() {
                         </span>
                         <span>{data.name}</span>
                     </div>
-                    <div className="relative w-304 h-172 mt-8 overflow-hidden rounded-2xl">
+
+                    <div className="relative w-full sm:w-304 aspect-[335/243] sm:aspect-[1216/684] mt-[38px] sm:mt-8 overflow-hidden rounded-2xl">
                         <div ref={slideRef} className="flex overflow-hidden w-full h-full">
                             {imageList.map((img: string, i: number) => (
                                 <img
@@ -125,9 +126,10 @@ export default function ProjectDetailPage() {
                                 />
                             ))}
                         </div>
+
                         {currentImageIndex > 0 && (
                             <button
-                                className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md w-13 h-13 rounded-full flex items-center justify-center cursor-pointer"
+                                className="hidden sm:flex absolute left-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md w-13 h-13 rounded-full items-center justify-center cursor-pointer"
                                 onClick={handlePrev}
                             >
                                 <ArrowLeft />
@@ -135,15 +137,16 @@ export default function ProjectDetailPage() {
                         )}
                         {currentImageIndex < imageList.length - 1 && (
                             <button
-                                className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md w-13 h-13 rounded-full flex items-center justify-center cursor-pointer"
+                                className="hidden sm:flex absolute right-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md w-13 h-13 rounded-full items-center justify-center cursor-pointer"
                                 onClick={handleNext}
                             >
                                 <ArrowRight />
                             </button>
                         )}
                     </div>
-                    <div className="flex flex-col gap-30">
-                        <section className="mt-30">
+
+                    <div className="flex flex-col gap-[148px] sm:gap-30">
+                        <section className="mt-[30px] sm:mt-30">
                             <ProjectDetailSection
                                 project={{
                                     ...data,
@@ -183,8 +186,10 @@ export default function ProjectDetailPage() {
                                 )
                             )}
                         </section>
-                        <QuoteCardList />
                     </div>
+                    <span className="hidden sm:block">
+                        <QuoteCardList />
+                    </span>
                 </div>
             </div>
         </PageLayout>

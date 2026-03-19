@@ -3,10 +3,12 @@ import MainRoutes from "@/routes/MainRoute";
 import AdminRoutes from "@/routes/AdminRoute";
 import { Toaster } from "sonner";
 import AdminAccess from "./routes/AdminAccess";
+import { ScrollToTop } from "./utils/scrollToTop";
 
 export default function App() {
     return (
         <BrowserRouter>
+            <ScrollToTop />
             <Toaster position="top-center" offset={{ top: 120 }} />
             <Routes>
                 {/* 메인 섹션 라우트 */}
