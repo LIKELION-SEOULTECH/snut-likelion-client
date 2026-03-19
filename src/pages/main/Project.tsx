@@ -65,13 +65,16 @@ export default function ProjectPage() {
     return (
         <PageLayout>
             <div
-                className="w-full flex flex-col text-white items-center px-28"
+                className="w-full flex flex-col text-white items-center px-5 sm:px-28"
                 style={{
                     background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
                 }}
             >
-                <div className="font-extrabold text-7xl mt-[85px] mb-18">
-                    Project Archive<span className="text-[#FF7700] ">.</span>
+                <div className="flex flex-col sm:flex-row sm:gap-5 font-extrabold text-[35px] sm:text-7xl mt-10 mb-[38px] sm:mt-[85px] sm:mb-18 sm:whitespace-nowrap">
+                    <span className="flex items-center justify-center h-[42px]">Project</span>
+                    <span className="flex items-center h-[42px]">
+                        Archive<span className="text-[#FF7700] ">.</span>
+                    </span>
                 </div>
 
                 <GenerationTabs
@@ -88,7 +91,7 @@ export default function ProjectPage() {
                     <ProjectList projects={projects} isLoading={isLoading} />
                 )}
 
-                <div className="w-full mt-24">
+                <div className="hidden sm:block w-full mt-24">
                     <QuoteCardList />
                 </div>
             </div>

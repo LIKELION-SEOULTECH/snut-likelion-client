@@ -25,18 +25,18 @@ export const ProjectReminderSection = ({ projectId, projectGen }: ProjectReminde
     return (
         <div className="flex flex-col gap-8">
             <div
-                className="font-bold text-[32px] leading-[130%] tracking-[-0.02em]
+                className="font-bold text-[28px] sm:text-[32px] leading-[1] sm:leading-[130%] tracking-[-0.02em]
 "
             >
                 프로젝트 회고
             </div>
             {isRetrospectionLoading ? (
-                <div className="grid grid-cols-2 gap-4 w-[1216px]">
+                <div className="grid grid-cols-2 gap-4 w-full min-w-[1216px]">
                     <Skeleton className="h-[150px] w-full rounded-md" />
                     <Skeleton className="h-[150px] w-full rounded-md" />
                 </div>
             ) : (
-                <div className="grid grid-cols-2 gap-4 w-[1216px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:min-w-[1216px]">
                     {retrospections?.map((item) => (
                         <ProjectReminderBox
                             key={item.id}

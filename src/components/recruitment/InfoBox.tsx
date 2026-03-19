@@ -12,10 +12,10 @@ export const InfoBox = ({ text, note, centered }: InfoBoxProps) => {
 
     return (
         <div
-            className={`py-[23px] font-medium px-[28px] h-auto rounded-[8px] text-[20px] flex ${bgColor} ${noteText} ${textAlign} flex-1`}
+            className={`h-full flex-col sm:flex-row py-[9px] sm:py-[23px] font-medium px-3 sm:px-[28px] rounded-[2.95px] sm:rounded-[8px] text-sm sm:text-[20px] flex ${bgColor} ${noteText} ${textAlign} flex-1`}
         >
-            <span className="text-[20px] ">{text}</span>
-            {note && <span className=" text-[#666]">{note}</span>}
+            <span className="text-sm sm:text-[20px]">{text}</span>
+            {note && <span className="text-[#666]">{note}</span>}
         </div>
     );
 };

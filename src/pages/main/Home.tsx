@@ -36,15 +36,7 @@ export default function HomePage() {
     const closeModal = () => setIsModalOpen(false);
 
     const handleToastClick = () => {
-        toast("자세한 프로젝트 보기는 PC로만 가능합니다!", {
-            unstyled: true,
-            duration: 3000,
-            classNames: {
-                toast: "bg-[#333334cc] shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-[12px] text-white px-4 py-[10.5px] rounded-sm",
-                title: "text-white text-sm font-mediumt",
-                description: "text-red-400"
-            }
-        });
+        navigate(ROUTES.PROJECT);
     };
 
     useEffect(() => {

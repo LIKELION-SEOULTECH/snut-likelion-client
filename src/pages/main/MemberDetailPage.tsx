@@ -104,15 +104,15 @@ export const MemberDetailPage = () => {
     return (
         <PageLayout>
             <div
-                className="whitespace-pre-line leading-snug w-full flex flex-col text-white items-center px-[112px] py-[132px]"
+                className="whitespace-pre-line leading-snug w-full flex flex-col text-white items-center px-5 sm:px-[112px] pt-[130px] pb-14 sm:py-[132px]"
                 style={{ background: "linear-gradient(180deg, #000 0%, #1B1B1B 29.27%)" }}
             >
                 {isMemberLoading ? (
                     <MemberDetailSkeleton />
                 ) : member ? (
-                    <div className="flex w-full h-auto gap-[119px]">
-                        <div className=" relative w-[291px]">
-                            <div className="flex flex-row absolute -top-16 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
+                    <div className="flex flex-col sm:flex-row w-full h-auto gap-[43px] sm:gap-[119px]">
+                        <div className="relative w-[291px]">
+                            <div className="flex flex-row absolute -top-[100px] sm:-top-16 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
                                 <span
                                     className="cursor-pointer"
                                     onClick={() => navigate(ROUTES.MEMBER)}
@@ -124,7 +124,8 @@ export const MemberDetailPage = () => {
                                 </span>
                                 <span>{member.name}</span>
                             </div>
-                            <div className="w-[291px] h-[281px] flex overflow-hidden">
+
+                            <div className="w-42 sm:w-[291px] h-[162px] sm:h-[281px] flex overflow-hidden">
                                 <img
                                     className="w-full h-full object-contain"
                                     src={profileSrc}
@@ -132,9 +133,10 @@ export const MemberDetailPage = () => {
                                 />
                             </div>
                         </div>
+
                         <div className="flex flex-col flex-1">
                             <div className="flex flex-col">
-                                <div className="flex gap-4 pb-6">
+                                <div className="flex gap-3 sm:gap-4 sm:pb-[41.06px] pb-6">
                                     <OrangeBtn
                                         tag={`${member.generations?.[0] ?? ""}기`}
                                         isNotButton={true}
@@ -149,11 +151,11 @@ export const MemberDetailPage = () => {
                                         />
                                     )}
                                 </div>
-                                <h1 className="text-[50px] my-0 text-[#fff] font-bold pb-10">
+                                <h1 className="text-[38px] sm:text-[50px] my-0 text-[#fff] font-bold pb-[25px] sm:pb-10">
                                     {member.name}
                                 </h1>
-                                <div className="min-h-[200px]">
-                                    <div className="text-[#ECECEC] text-[24px] pb-3 font-medium">
+                                <div className="min-h-10 sm:min-h-[200px]">
+                                    <div className="text-[#ECECEC] text-xl sm:text-2xl pb-3 font-medium">
                                         {member.intro}
                                     </div>
                                     <div className="text-[#C4C4C4] text-[20px] pb-[32px] font-light">
@@ -161,15 +163,15 @@ export const MemberDetailPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-[8px] pb-30 flex-wrap">
+                                <div className="flex gap-[8px] pb-[113.92px] sm:pb-30 flex-wrap">
                                     {member.stacks?.map((stack, index) => (
                                         <SmallBtn key={index} tag={stack} shape="square" />
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="flex flex-col mt-10">
-                                <h1 className="text-[32px] my-0 text-[#fff] font-bold pb-[32px]">
+                            <div className="flex flex-col mt-0 sm:mt-10">
+                                <h1 className="text-[28px] sm:text-[32px] my-0 text-[#fff] font-bold pb-[32px]">
                                     참여한 프로젝트
                                 </h1>
                                 {isLionInfoLoading ? (
@@ -178,7 +180,7 @@ export const MemberDetailPage = () => {
                                         <Skeleton className="h-[300px] w-full rounded-lg" />
                                     </div>
                                 ) : (
-                                    <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
+                                    <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-10 sm:pb-40">
                                         {projects.length > 0 ? (
                                             projects
                                                 .slice() // Create a shallow copy to avoid mutating the original array
@@ -218,7 +220,7 @@ export const MemberDetailPage = () => {
                                 </div>
                                 <a
                                     href={`mailto:${member.email}`}
-                                    className="text-[56px] w-[390px] h-[73px] font-bold cursor-pointer hover:border-b-6 px-0"
+                                    className="text-[45px] sm:text-[56px] w-full sm:w-[390px] h-[73px] font-bold cursor-pointer hover:border-b-6 px-0"
                                 >
                                     Contact me<span className="text-[#F70]">.</span> →
                                 </a>

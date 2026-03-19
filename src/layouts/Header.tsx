@@ -27,7 +27,7 @@ export const Header = ({ white = false }: HeaderProps) => {
         queryKey: ["me"],
         queryFn: fetchMyMemberInfo,
         enabled: isLoggedIn && !isGuest,
-        staleTime: 1000 * 60 * 5,
+        staleTime: 1000 * 60 * 5
     });
 
     const profileImage = member?.profileImageUrl;
@@ -37,10 +37,10 @@ export const Header = ({ white = false }: HeaderProps) => {
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "블로그", route: ROUTES.BLOG },
         { name: "멤버", route: ROUTES.MEMBER },
-        { name: "소식", route: ROUTES.NOTICE },
+        { name: "소식", route: ROUTES.NOTICE }
     ];
 
-            // MEMBER, MANAGER 모집일정
+    // MEMBER, MANAGER 모집일정
     const { buttonType } = useCombinedRecruitment();
 
     const handleApplyButtonClick = () => {
@@ -57,7 +57,7 @@ export const Header = ({ white = false }: HeaderProps) => {
 
     return (
         <div
-            className={`w-full min-w-330 h-[54px] sm:h-24 flex flex-row justify-start px-auto sm:px-0 sm:justify-center relative ${
+            className={`w-full min-w-330 h-[54px] sm:h-24 flex flex-row justify-start px-5 sm:px-0 sm:justify-center relative ${
                 white
                     ? "bg-white/60 border-b border-[#ECECEC] backdrop-blur-[35px]"
                     : "bg-[#000000]"

@@ -7,14 +7,16 @@ type Props = {
 
 export default function CategoryTabs({ selected, onSelect }: Props) {
     return (
-        <div className="flex text-2xl gap-18 text-xl text-neutral-400 mt-12">
+        <div className="w-full flex text-base sm:text-2xl gap-[14px] sm:gap-18 text-neutral-400 mt-[45px] sm:mt-12">
             {categories.map((cat) => (
                 <button
                     key={cat}
                     onClick={() => onSelect(cat)}
-                    className={`pb-[10px] ${
-                        selected === cat ? "text-white border-b-2 border-white" : ""
-                    } cursor-pointer`}
+                    className={`flex-1 pb-[10px] ${
+                        selected === cat
+                            ? "text-white border-b-[0.87px] sm:border-b-2 border-white"
+                            : ""
+                    } cursor-pointer whitespace-nowrap`}
                 >
                     {cat}
                 </button>
