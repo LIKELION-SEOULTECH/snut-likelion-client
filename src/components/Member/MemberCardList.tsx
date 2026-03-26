@@ -16,9 +16,9 @@ export const MemberCardList = ({ MemberData, isLoading }: MemberCardProps) => {
                     <span className="text-gray-200 font-medium text-2xl">검색결과가 없습니다</span>
                 </section>
             ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-[43.6px] min-w-[310px] sm:mt-12 sm:w-[1216px] pb-[120px]">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-[43.6px] w-full sm:mt-12 sm:w-[1216px] pb-[92px]">
                     {isLoading
-                        ? Array.from({ length: 12 }).map((_, idx) => (
+                        ? Array.from({ length: 8 }).map((_, idx) => (
                               <MemberCardSkeleton key={`member-skeleton-${idx}`} />
                           ))
                         : MemberData?.filter((member) => member.id !== 3).map((member) => (

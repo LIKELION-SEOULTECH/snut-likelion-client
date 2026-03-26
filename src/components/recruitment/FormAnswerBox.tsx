@@ -33,7 +33,7 @@ const radioStyle = `
 
 export const AnswerBox = ({ questions, onChange, readOnly }: AnswerBoxProps) => {
     return (
-        <div className="pb-[120px] ">
+        <div className="sm:pb-[120px]">
             {/* 장문 */}
             <FormBox>
                 {questions.map((q, idx) => {
@@ -43,9 +43,9 @@ export const AnswerBox = ({ questions, onChange, readOnly }: AnswerBoxProps) => 
                         return (
                             <div
                                 key={q.questionId}
-                                className={` max-w-[850px] text-4 relative  ${!isLastQ ? "mb-[40px]" : ""} font-medium`}
+                                className={`max-w-[850px] text-4 relative  ${!isLastQ ? "mb-[40px]" : ""} font-medium`}
                             >
-                                <p className="mb-6 ">{q.label}</p>
+                                <p className="mb-6">{q.label}</p>
                                 <textarea
                                     className="w-full h-24 p-2 text-black placeholder-[#A7A7A7] bg-[#fff] rounded"
                                     value={q.answer}
@@ -102,7 +102,7 @@ export const AnswerBox = ({ questions, onChange, readOnly }: AnswerBoxProps) => 
                                     placeholder="답변을 입력해주세요"
                                     value={q.answer}
                                     onChange={(e) => onChange(q.questionId, e.target.value)}
-                                    className="py-3 px-4 flex-1 bg-white rounded rounded-[4px] text-black"
+                                    className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black"
                                     disabled={readOnly}
                                 />
                             </div>

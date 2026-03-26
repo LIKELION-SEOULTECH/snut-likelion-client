@@ -84,13 +84,14 @@ export const RecruitFormStep2 = ({
         }));
 
     return (
-        <div className="bg-[#1B1B1B] w-full h-auto pt-[72px] px-[112px] space-y-12">
-            <h4 className="min-w-100 text-[32px] text-white font-bold">
+        // 질문 개수 0보다 큰 경우에만 보이도록 추후에 수정 필요
+        <div className="bg-[#1B1B1B] w-full h-auto pt-10 sm:pt-[72px] px-5 sm:px-[112px] space-y-6 sm:space-y-12">
+            <h4 className="sm:min-w-100 text-[20px] sm:text-[32px] text-white font-bold">
                 {readOnly ? "지원서 미리보기" : "기본 질문"}
             </h4>
 
             {/* 기본 질문 */}
-            {defaultQs.length > 0 && (
+            {defaultQs.length >= 0 && (
                 <AnswerBox
                     questions={toItems(defaultQs)}
                     onChange={handleAnswerChange}
@@ -99,9 +100,9 @@ export const RecruitFormStep2 = ({
             )}
 
             {/* 공통 질문 */}
-            {commonQs.length > 0 && (
+            {commonQs.length >= 0 && (
                 <>
-                    <h4 className="min-w-100 text-[32px] text-white font-bold mt-[150px]">
+                    <h4 className="sm:min-w-100 text-[20px] sm:text-[32px] text-white font-bold sm:mt-[150px]">
                         공통 질문
                     </h4>
                     <AnswerBox
@@ -113,9 +114,9 @@ export const RecruitFormStep2 = ({
             )}
 
             {/* 파트 질문 */}
-            {partQs.length > 0 && (
+            {partQs.length >= 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold min-w-100">
+                    <h4 className="text-[20px] sm:text-[32px] text-white font-bold sm:min-w-100">
                         {PART_ID_TO_KO[formData.part]} 질문
                     </h4>
                     <AnswerBox
@@ -127,9 +128,9 @@ export const RecruitFormStep2 = ({
             )}
 
             {/*  부서 질문 운영진꺼요*/}
-            {isManeger && deptQs.length > 0 && (
+            {isManeger && deptQs.length >= 0 && (
                 <>
-                    <h4 className="text-[32px] text-white font-bold min-w-100">
+                    <h4 className="text-[20px] sm:text-[32px] text-white font-bold sm:min-w-100">
                         {DEPT_ID_TO_KO[formData.departmentType]} 질문
                     </h4>
                     <AnswerBox
@@ -140,16 +141,18 @@ export const RecruitFormStep2 = ({
                 </>
             )}
             <>
-                <div className="flex min-w-180">
-                    <h4 className="text-[32px] text-white font-bold mt-[150px]">포트폴리오 첨부</h4>
-                    <span className="ml-4 mt-[160px] text-[#A7A7A7]">
+                <div className="flex sm:min-w-180">
+                    <h4 className="text-[20px] sm:text-[32px] text-white font-bold mt-[60px] sm:mt-[150px]">
+                        포트폴리오 첨부
+                    </h4>
+                    <span className="text-xs sm:text-base ml-4 mt-[70px] sm:mt-[160px] text-[#A7A7A7]">
                         * 첨부하지 않아도 불이익은 없어요
                     </span>
                 </div>
                 <div className="pb-20">
                     <FormBox>
                         <div className="flex items-center">
-                            <h4 className="flex justify-start w-40">링크</h4>
+                            <h4 className="flex justify-start w-15 text-sm sm:w-40">링크</h4>
                             <input
                                 type="text"
                                 placeholder="http://"
@@ -160,7 +163,7 @@ export const RecruitFormStep2 = ({
                                         portfolio: e.target.value
                                     }))
                                 }
-                                className="bg-white rounded-[4px] px-4 py-[14px] max-w-[680px] w-full text-black"
+                                className="bg-white text-sm sm:text-base rounded-[4px] px-2 sm:px-4 py-2 sm:py-[14px] max-w-[680px] w-full text-black"
                                 disabled={readOnly}
                             />
                         </div>

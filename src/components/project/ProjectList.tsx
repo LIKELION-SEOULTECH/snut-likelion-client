@@ -30,7 +30,7 @@ export default function ProjectList({ projects, isLoading }: ProjectListProps) {
                     <span className="text-gray-200 font-medium text-2xl">검색결과가 없습니다</span>
                 </section>
             ) : (
-                <div className="w-full grid sm:grid-cols-3 gap-[25px] sm:gap-4 mt-12 mb-[64.6px] sm:mb-0 sm:w-[1216px]">
+                <div className="w-full grid sm:grid-cols-3 gap-[25px] sm:gap-4 mt-12 mb-[36.6px] sm:mb-0 sm:w-[1216px]">
                     {isLoading
                         ? Array.from({ length: 12 }).map((_, idx) => (
                               <ProjectBoxSkeleton key={`skeleton-${idx}`} />

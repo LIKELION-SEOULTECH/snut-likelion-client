@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { ADMIN_ABS } from "@/routes/routes";
 import { getRoleFromToken } from "@/utils/auth";
+import { MobileAccontSettingTab } from "@/components/my-page/MobileAccountSettingTab";
 
 export const MyPage = () => {
     const [selectedGeneration, setSelectedGeneration] = useState<number | null>(null);
@@ -47,14 +48,14 @@ export const MyPage = () => {
                 }}
             >
                 {isGuest ? (
-                    <div className="font-extrabold text-7xl my-[85px]">
+                    <div className="font-extrabold text-[35px] sm:text-7xl mt-[22px] mb-10 sm:my-[85px]">
                         My Page<span className="text-[#FF7700]">.</span>
                     </div>
                 ) : (
                     <span className="my-[85px]" />
                 )}
 
-                <div className="px-[112px] w-full flex gap-[120px]">
+                <div className="px-5 sm:px-[112px] w-full flex sm:gap-[120px]">
                     {/* 왼쪽 사이드바 */}
                     <div className="flex flex-col">
                         {!isGuest && member?.profileImageUrl && (
@@ -71,10 +72,10 @@ export const MyPage = () => {
                                 <img src={samplePRf} alt="프로필 이미지" width={291} height={281} />
                             </div>
                         ) : null}
-                        <div className="w-[291px]">
+                        <div className="hidden sm:block w-[291px]">
                             <MyPageTab
                                 isGuest={!!isGuest}
-                                member={member!}
+                                member={member}
                                 lionInfo={lionInfo!}
                                 selectedGeneration={activeGeneration}
                             />
@@ -113,9 +114,10 @@ export const MyPage = () => {
                         )}
                     </div>
                 </div>
+                <MobileAccontSettingTab member={member} />
 
                 {/* 아래 명언 카드 */}
-                <div className="px-[112px] mt-[300px] w-full">
+                <div className="hidden sm:block px-[112px] mt-[300px] w-full">
                     <QuoteCardList />
                 </div>
             </div>
