@@ -167,16 +167,16 @@ export default function ProjectDetailPage() {
 
                         <section className="flex flex-col">
                             {isAllProjectsLoading ? (
-                                <>
-                                    <div className="text-[32px] font-bold leading-[130%] tracking-[-0.02]">
+                                <div className="mb-[109px] sm:mb-30">
+                                    <div className="text-[28px] sm:text-[32px] text-center sm:text-start font-bold leading-[130%] tracking-[-0.02] mb-10 sm:mb-0">
                                         같은 기수 프로젝트
                                     </div>
-                                    <div className="flex flex-row gap-4 overflow-hidden mt-4">
-                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
-                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
-                                        <Skeleton className="min-w-[395px] h-[300px] rounded-lg" />
+                                    <div className="flex flex-row gap-4 justify-center sm:overflow-hidden mt-4">
+                                        <Skeleton className="min-w-[221px] aspect-[221/160] sm:min-w-[395px] sm:h-[300px] rounded-lg" />
+                                        <Skeleton className="min-w-[221px] aspect-[221/160] sm:min-w-[395px] sm:h-[300px] rounded-lg" />
+                                        <Skeleton className="min-w-[221px] aspect-[221/160] sm:min-w-[395px] sm:h-[300px] rounded-lg" />
                                     </div>
-                                </>
+                                </div>
                             ) : (
                                 allProjects && (
                                     <OtherProjectSection

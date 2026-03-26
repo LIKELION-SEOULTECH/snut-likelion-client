@@ -77,10 +77,10 @@ export const GuestMyPage = () => {
 
     return (
         <div className="flex flex-1 flex-col">
-            <div className="flex justify-between mb-[29px]">
-                <h4 className="text-[32px] text-white font-bold">지원서</h4>
+            <div className="flex justify-between mb-5 sm:mb-[29px]">
+                <h4 className="text-[20px] sm:text-[32px] text-white font-bold">지원서</h4>
                 <span
-                    className={`text-[20px] cursor-pointer text-[#f70] ${
+                    className={`hidden sm:block text-[20px] cursor-pointer text-[#f70] ${
                         hasApplication ? "text-[#7F7F7F]" : "text-[#F70]"
                     }`}
                     onClick={handleGuestRecruit}
@@ -90,7 +90,7 @@ export const GuestMyPage = () => {
                 </span>
             </div>
             <div
-                className="flex items-center bg-[#404040] h-[98px] px-[40px] cursor-pointer text-[24px] rounded-[12px] text-[#7F7F7F]"
+                className="flex items-center bg-[#404040] h-[110px] sm:h-[98px] px-5 sm:px-[40px] cursor-pointer text-base sm:text-[24px] rounded-[12px] text-[#7F7F7F]"
                 onClick={handleGuestRecruit}
             >
                 {hasApplication && isSubmitted && (

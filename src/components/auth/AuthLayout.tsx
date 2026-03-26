@@ -37,7 +37,7 @@ export const AuthLayout = ({
                     </div>
                 )}
                 {title == "비밀번호 변경" && (
-                    <div onClick={() => navigate(-1)} className="pt-[72px] flex">
+                    <div onClick={() => navigate(-1)} className="hidden sm:flex pt-[72px]">
                         <SmallBtn tag="← 마이페이지로" shape="round" />
                     </div>
                 )}

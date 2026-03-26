@@ -12,7 +12,7 @@ export const RoleCard = ({
 }: RoleCardProps) => {
     return (
         <div
-            className={`cursor-pointer group flex flex-col ${isManeger ? "flex-1 h-[264px] sm:h-[615px] sm:w-[395px] hover:w-[498px] mb-[246px] sm:mb-0" : "w-[98px] sm:w-[231px] h-[264px] sm:h-[615px] max-w-[478px] hover:w-[332px] sm:hover:w-[498px]"} border border-[#666666] flex-shrink-0 transition-all duration-500 px-3 sm:px-5 py-5 sm:py-[26px] rounded-[8px] sm:rounded-[12px] backdrop-blur-[20px] bg-[linear-gradient(180deg,rgba(0,0,0,0.24)_0%,rgba(198,105,25,0.36)_100%)] overflow-hidden`}
+            className={`cursor-pointer group flex flex-col ${isManeger ? "flex-1 sm:flex-none h-[264px] sm:h-[615px] sm:w-[395px] hover:w-[498px] sm:mb-0" : "w-[33%] sm:w-[231px] h-[264px] sm:h-[615px] max-w-[478px] hover:w-[332px] sm:hover:w-[498px]"} border border-[#666666] flex-shrink-0 transition-all duration-500 px-3 sm:px-5 py-5 sm:py-[26px] rounded-[8px] sm:rounded-[12px] backdrop-blur-[20px] bg-[linear-gradient(180deg,rgba(0,0,0,0.24)_0%,rgba(198,105,25,0.36)_100%)] overflow-hidden`}
         >
             <div>
                 {/* Title & subtitle */}
