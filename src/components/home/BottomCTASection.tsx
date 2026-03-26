@@ -14,7 +14,10 @@ export const BottomCTASection = ({
     nextGeneration,
     currentGeneration
 }: Props) => {
-    const text = getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration);
+    const text =
+        buttonType && nextGeneration
+            ? getRecruitmentButtonText(buttonType, nextGeneration, currentGeneration)
+            : null;
 
     return (
         <div className="flex flex-col pt-10 sm:pt-[244px] w-full h-auto  bg-[#1b1b1b]">
@@ -33,7 +36,7 @@ export const BottomCTASection = ({
                     className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[180px] sm:w-[280px] h-10 sm:h-[76px] rounded-[300px] font-bold cursor-pointer flex items-center justify-center"
                 >
                     <span className="max-w-full overflow-hidden text-ellipsis  text-base sm:text-[24px]">
-                        {text || "모집 알람 받기"}
+                        {text ? text : "14기 모집 알림 받기 →"}
                     </span>
                 </button>
             </div>

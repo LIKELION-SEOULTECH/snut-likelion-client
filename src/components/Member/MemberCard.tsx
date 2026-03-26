@@ -32,9 +32,9 @@ export const MemberCard = ({
 }: MemberResponse) => {
     const imageSrc = getProfileImage(id, profileImageUrl);
     return (
-        <div className="whitespace-pre-line leading-snug relative w-40 sm:w-[292px] h-53 sm:h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
+        <div className="whitespace-pre-line leading-snug relative aspect-[40/53] w-full min-w-40 sm:w-[292px] sm:h-[380px] bg-[#121212] border-1 border-[#3A3A3A] rounded-[16px] cursor-pointer">
             <div className="w-full h-full flex flex-col items-center rounded-[16px] py-[18.56px] sm:py-[36px] px-0 sm:px-[28px] z-1">
-                <div className="w-[132.35px] sm:w-[218px] h-[120.85px] sm:h-[216px] overflow-hidden ">
+                <div className="w-full aspect-square min-w-[132.35px] max-w-50 sm:w-[218px] sm:h-[216px] overflow-hidden ">
                     {imageSrc !== null ? (
                         <img className="w-full h-full object-contain" src={imageSrc} alt={name} />
                     ) : (

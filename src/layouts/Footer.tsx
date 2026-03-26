@@ -8,7 +8,7 @@ interface FooterProps {
 export const Footer = ({ white = false }: FooterProps) => {
     return (
         <div
-            className={`h-28 sm:h-[97px] px-5 sm:px-[111px] sm:justify-between flex flex-col sm:flex-row sm:items-center text-[#666666] text-xs sm:text-[14px]  gap-6 sm:gap-0 ${
+            className={`h-28 sm:h-[97px] px-5 sm:px-[111px] sm:justify-between flex flex-col sm:flex-row sm:items-center text-[#666666] text-xs sm:text-[14px] pt-7 sm:pt-0 gap-6 sm:gap-0 ${
                 white ? "bg-white" : "bg-[#1B1B1B]"
             }`}
         >

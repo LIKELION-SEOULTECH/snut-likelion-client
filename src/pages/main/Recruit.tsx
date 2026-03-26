@@ -139,7 +139,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
 
     return (
         <PageLayout>
-            <div className="w-full flex flex-col  bg-[#1B1B1B]">
+            <div className="w-full flex flex-col bg-[#1B1B1B] pb-[106px] sm:pb-0">
                 {/* Top Visual */}
                 <div className="w-full aspect-[375/106] sm:h-[261px] relative mb-[22px] sm:mb-[120px]">
                     <img
@@ -162,13 +162,13 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                 </div>
 
                 {/* 모집 일정 + 지원 버튼 */}
-                <div className="mb-[180px] mx-5 sm:mx-[112px] flex">
+                <div className="mb-[66px] sm:mb-[180px] mx-5 sm:mx-[112px] flex">
                     <div className="w-full flex-1 sm:min-w-[910px]">
                         <h4 className="text-xl sm:text-[32px] text-white font-[700] mb-[25px] sm:mb-[44px]">
                             모집 일정
                         </h4>
                         <div className="w-full sm:w-[908px] flex flex-col gap-y-3 mb-[52.36px] sm:mb-[180px]">
-                            {isLoading && <div>Loading...</div>}
+                            {isLoading && <div className="text-white">Loading...</div>}
                             {isError && <div>Error fetching schedule.</div>}
                             {infoData.map((e, i) => (
                                 <div key={i} className="flex gap-x-4">
@@ -224,7 +224,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                 <h4 className="text-xl sm:text-[32px] text-white font-[700] mb-[25px] sm:mb-[44px] mx-5 sm:mx-[112px] flex">
                     파트 모집 분야
                 </h4>
-                <div className="relative flex flex-col items-center mb-[180px] sm:mb-0">
+                <div className="relative flex flex-col items-center mb-[66px] sm:mb-0">
                     <div className="relative z-5 text-white">
                         <RoleList />
                     </div>
