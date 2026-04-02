@@ -6,6 +6,7 @@ import Text from "@tiptap/extension-text";
 import { CustomAdminMention } from "@/extensions/customAdminMention";
 import Placeholder from "@tiptap/extension-placeholder";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
+import { useEffect, useRef } from "react";
 
 type MentionSuggestion = {
     id: string;
@@ -50,6 +51,8 @@ export function AdminTagEditor({
     tags: MentionSuggestion[];
     setTags: (tags: MentionSuggestion[]) => void;
 }) {
+    const isInitialized = useRef(false);
+
     const editor = useEditor({
         extensions,
         content: tagsToContent(tags),
@@ -88,6 +91,16 @@ export function AdminTagEditor({
             setTags(uniqueTags);
         }
     });
+
+    useEffect(() => {
+        if (!editor) return;
+
+        // 초기 1번만
+        if (!isInitialized.current && tags.length > 0) {
+            editor.commands.setContent(tagsToContent(tags));
+            isInitialized.current = true;
+        }
+    }, [editor, tags]);
 
     return <EditorContent editor={editor} />;
 }

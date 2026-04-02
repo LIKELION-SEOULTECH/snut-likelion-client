@@ -27,18 +27,16 @@ export const MyBlog = () => {
                             navigate(`/blog-content/${post.postId}`);
                         }}
                     >
-                        <div className="flex justify-between items-center py-4">
+                        <div className="flex justify-between items-center py-4 text-sm sm:text-[20px]">
                             <div className="flex gap-4">
-                                <span className="text-[18px] text-[#ECECEC] w-[120px]">
+                                <span className="text-[#ECECEC] w-[120px]">
                                     {post.blogCategory == "OFFICIAL"
                                         ? "세션이야기"
                                         : "아기사자이야기"}
                                 </span>
-                                <span className="text-[18px] text-[#C4C4C4] font-medium">
-                                    {post.title}
-                                </span>
+                                <span className="text-[#C4C4C4] font-medium">{post.title}</span>
                             </div>
-                            <div className="text-[18px] text-[#C4C4C4] font-light">
+                            <div className="text-[#C4C4C4] font-light">
                                 {new Date(post.updatedAt).toLocaleDateString("ko-KR", {
                                     year: "numeric",
                                     month: "2-digit",

@@ -1,3 +1,4 @@
+import type { CreateProjectRequest } from "@/types/project";
 import axiosInstance from "../axiosInstance";
 
 // 프로젝트 리스트 조회
@@ -21,12 +22,8 @@ export const deleteMultipleProjects = async (ids: number[]) => {
 };
 
 // 프로젝트 업로드
-export const createAdminProject = async (formData: FormData): Promise<void> => {
-    const res = await axiosInstance.post("/admin/projects", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
+export const createAdminProject = async (data: CreateProjectRequest): Promise<void> => {
+    const res = await axiosInstance.post("/admin/projects", data);
     return res.data;
 };
 

@@ -3,12 +3,20 @@ import type { Project, ProjectQueryParams, RetrospectionResponse } from "@/types
 import { mockProjectRetrospections } from "@/constants/mockProjectData";
 
 // 프로젝트 생성
-export const createProject = async (formData: FormData) => {
-    const res = await axiosInstance.post("/projects", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
+export const createProject = async (payload: {
+    name: string;
+    intro: string;
+    description: string;
+    generation: number;
+    category: string;
+    imageStoredFileNames: string[];
+    tags: string[];
+    websiteUrl?: string;
+    playstoreUrl?: string;
+    appstoreUrl?: string;
+    retrospections: { memberId: number; content: string }[];
+}) => {
+    const res = await axiosInstance.post("/projects", payload);
     return res.data;
 };
 
@@ -28,8 +36,8 @@ export const getProjectDetail = async (id: number) => {
 };
 
 // 프로젝트 삭제
-export const deleteProjectById = async (id: number) => {
-    return await axiosInstance.delete(`/projects/${id}`);
+export const deleteProject = async (projectId: number) => {
+    await axiosInstance.delete(`/projects/${projectId}`);
 };
 
 // 프로젝트 회고 전체 조회
