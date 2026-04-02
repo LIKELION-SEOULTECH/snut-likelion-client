@@ -35,7 +35,7 @@ export interface CreateBlogRequest {
     contentHtml: string;
     category: BlogCategory;
     taggedMemberIds?: number[];
-    images?: string[];
+    imageStoredFileNames?: string[];
 }
 
 export interface MyBlogType {

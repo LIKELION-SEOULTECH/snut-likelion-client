@@ -116,3 +116,20 @@ export interface Retro {
     filtered: { id: number; name: string }[];
     showDropdown: boolean;
 }
+
+export type CreateProjectRequest = {
+    name: string;
+    intro: string;
+    description: string;
+    generation: number;
+    category: string;
+    imageStoredFileNames: string[];
+    websiteUrl?: string;
+    appstoreUrl?: string;
+    playstoreUrl?: string;
+    tags: string[];
+    retrospections: {
+        memberId: number | null;
+        content: string;
+    }[];
+};

@@ -14,6 +14,8 @@ import samplePRf from "@/assets/Member/samplePRFIMG.png";
 import { useMutation } from "@tanstack/react-query";
 import { updateUserProfile } from "@/apis/main/member";
 import { useQueryClient } from "@tanstack/react-query";
+import { uploadImage } from "@/apis/main/file";
+import { extractKeyFromUrl } from "@/utils/file";
 
 export const MyPageEdit = () => {
     const navigate = useNavigate();
@@ -30,7 +32,7 @@ export const MyPageEdit = () => {
 
     const [profileImage, setProfileImage] = useState<string>(member.profileImageUrl || samplePRf);
     const [rawImage, setRawImage] = useState<string | null>(null);
-    const [, setCroppedImageFile] = useState<File | null>(null);
+    const [croppedImageFile, setCroppedImageFile] = useState<File | null>(null);
 
     const [stackList, setStackList] = useState(member.stacks || []);
     const [portfolioLinks, setPortfolioLinks] = useState<SimplePortfolioLink[]>(
@@ -51,38 +53,6 @@ export const MyPageEdit = () => {
         }
     };
 
-    // const handleSubmit = async () => {
-    //     const formData = new FormData();
-
-    //     // 이미지
-
-    //     if (croppedImageFile) {
-    //         formData.append("profileImage", croppedImageFile);
-    //     }
-
-    //     formData.append("intro", intro);
-    //     formData.append("description", description);
-    //     formData.append("saying", quote);
-    //     formData.append("email", email);
-
-    //     // formData.append("major", member.major || "");
-
-    //     stackList.forEach((stack) => formData.append("stacks", stack));
-
-    //     portfolioLinks.forEach((link, index) => {
-    //         formData.append(`portfolioLinks[${index}].name`, link.name);
-    //         formData.append(`portfolioLinks[${index}].url`, link.url);
-    //     });
-
-    //     try {
-    //         alert("수정되었습니다!");
-    //         navigate("/mypage");
-    //     } catch (error) {
-    //         console.error("업데이트 실패", error);
-    //         alert("수정 중 오류가 발생했습니다.");
-    //     }
-    // };
-
     const { mutate } = useMutation({
         mutationFn: (data: UpdateProfile) => updateUserProfile(member.id, data),
         onSuccess: () => {
@@ -97,20 +67,36 @@ export const MyPageEdit = () => {
         }
     });
 
-    // json 형태
-    const handleSubmit = () => {
-        const payload = {
-            profileImage: "",
-            intro,
-            description,
-            saying: quote,
-            stacks: stackList,
-            portfolioLinks: portfolioLinks.filter((link) => link.name && link.url)
-        };
+    const handleSubmit = async () => {
+        try {
+            let profileImageKey = extractKeyFromUrl(member.profileImageUrl);
 
-        mutate(payload);
+            if (croppedImageFile) {
+                console.log("📌 프로필 이미지 업로드 시작");
+
+                const { storedName } = await uploadImage(croppedImageFile, "MEMBER");
+                profileImageKey = storedName;
+
+                console.log("📌 업로드된 key:", profileImageKey);
+            }
+
+            const payload = {
+                profileImage: profileImageKey,
+                intro,
+                description,
+                saying: quote,
+                stacks: stackList,
+                portfolioLinks: portfolioLinks.filter((link) => link.name && link.url)
+            };
+
+            console.log("🚀 PATCH 요청:", payload);
+
+            mutate(payload);
+        } catch (error) {
+            console.error("❌ 프로필 업로드 실패", error);
+            alert("이미지 업로드 실패");
+        }
     };
-
     return (
         <div className="w-full flex flex-col">
             {/* //헤더.. */}
@@ -134,9 +120,10 @@ export const MyPageEdit = () => {
                     </button>
                 </div>
             </div>
+
             {/* 아래 */}
             <div
-                className="text-white px-[116px] pt-[72px] text-[32px] font-bold pb-[395px]"
+                className="text-white px-[116px] pt-[72px] text-[32px] font-medium pb-[395px]"
                 style={{
                     background: "linear-gradient(180deg, #000000 0%, #1B1B1B 29.27%)"
                 }}
@@ -152,10 +139,10 @@ export const MyPageEdit = () => {
                         fontSize: "20px",
                         display: "flex"
                     }}
-                    className="pt-10 pl-11 pr-[34px] pb-15"
+                    className="min-w-[950px] pt-10 pl-11 pr-[34px] pb-15"
                 >
                     {/* 왼쪽 영역 - 사진 */}
-                    <div className="w-[215px] mr-[112px] flex  flex-col overflow-hidden">
+                    <div className="w-[215px] min-w-[215px] mr-[112px] flex flex-col overflow-hidden">
                         {rawImage && (
                             <ImageCropper
                                 image={rawImage}
@@ -190,7 +177,7 @@ export const MyPageEdit = () => {
                         <input
                             className="hidden"
                             type="file"
-                            accept="image/png"
+                            accept="image/*"
                             id="profile-upload"
                             onChange={(e) => {
                                 const file = e.target.files?.[0];
@@ -221,6 +208,7 @@ export const MyPageEdit = () => {
                             1:1 사이즈, png, 이미지 용량 50mb 이하
                         </span>
                     </div>
+
                     {/* 오른쪽 영역 - 입력폼*/}
                     <div className="flex-1 flex flex-col text-[#C4C4C4] text-[14px] gap-[32px]">
                         <div className="flex">
@@ -228,7 +216,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={`${selectedGeneration}기`}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-whiterounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-[17px] text-sm flex-1 font-normal text-[#C4C4C4] border border-gray-100 rounded-sm bg-gray-50"
                             />
                         </div>
                         <div className="flex">
@@ -236,7 +224,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={lionInfo.part}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] font-normal text-[#C4C4C4] border border-gray-100"
                             />
                         </div>
                         <div className="flex">
@@ -244,7 +232,7 @@ export const MyPageEdit = () => {
                             <input
                                 value={member.name}
                                 readOnly
-                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-[#C4C4C4] border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white rounded-[4px] font-normal text-[#C4C4C4] border-1 border-[#C4C4C4]"
                             />
                         </div>
                         {/* <div className="flex">
@@ -264,7 +252,7 @@ export const MyPageEdit = () => {
                                 onChange={(e) => setIntro(e.target.value)}
                                 value={intro}
                                 placeholder="한줄 소개"
-                                className="py-3 px-4 flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 flex-1 bg-white font-normal rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">
@@ -276,7 +264,7 @@ export const MyPageEdit = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="소개"
-                                className="py-3 px-4 h-[140px] flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
+                                className="py-3 px-4 h-[140px] flex-1 font-normal bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]"
                             />
                         </div>
                         <div className="flex">

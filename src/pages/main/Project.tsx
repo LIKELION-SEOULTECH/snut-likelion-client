@@ -6,9 +6,10 @@ import ProjectList from "@/components/project/ProjectList";
 import QuoteCardList from "@/components/project/QuoteCardList";
 // import { useAllProjects } from "@/hooks/useAllProjects";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
-import { mock13thProjectData } from "@/constants/mockProjectData";
+import { useAllProjects } from "@/hooks/useAllProjects";
+// import { mock13thProjectData } from "@/constants/mockProjectData";
 
-type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY";
+// type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -33,34 +34,7 @@ export default function ProjectPage() {
         params.category = categoryMap[projectCategory];
     }
 
-    const allMockProjects = useMemo(() => [...mock13thProjectData], []);
-
-    const projects = useMemo(() => {
-        let filteredProjects = allMockProjects;
-
-        if (projectGeneration !== "전체") {
-            filteredProjects = filteredProjects.filter(
-                (p) => p.generation === Number(projectGeneration.replace("기", ""))
-            );
-        }
-
-        if (projectCategory !== "전체") {
-            const englishCategory = categoryMap[projectCategory];
-            // filteredProjects = filteredProjects.filter((p) => p.category.includes(projectCategory));
-            filteredProjects = filteredProjects.filter((p) => p.category === englishCategory);
-        }
-
-        // Convert generation to number for each project
-        return filteredProjects.map((p) => ({
-            ...p,
-            generation: typeof p.generation === "string" ? Number(p.generation) : p.generation,
-            category: p.category as ProjectCategory
-        }));
-    }, [allMockProjects, projectGeneration, projectCategory]);
-
-    const isLoading = false;
-    const isError = false;
-    // const { data: projects, isLoading, isError } = useAllProjects(params);
+    const { data: projects, isLoading, isError } = useAllProjects(params);
 
     return (
         <PageLayout>
@@ -88,7 +62,7 @@ export default function ProjectPage() {
                 {isError ? (
                     <div className="text-white mt-12">프로젝트를 불러오는데 실패했습니다.</div>
                 ) : (
-                    <ProjectList projects={projects} isLoading={isLoading} />
+                    <>{projects && <ProjectList projects={projects} isLoading={isLoading} />}</>
                 )}
 
                 <div className="hidden sm:block w-full mt-24">

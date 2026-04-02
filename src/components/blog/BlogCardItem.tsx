@@ -18,7 +18,7 @@ export const BlogCardItem = ({ id, imageUrl, title, date }: BlogCardProps) => {
 
     return (
         <div
-            className="relative rounded-[15px] overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-102"
+            className="relative rounded-[15px] overflow-hidden cursor-pointer transform transition-transform duration-300 hover:scale-102 min-w-[395px]"
             onClick={handleClick}
         >
             <img src={imageUrl || sample} alt={title} className="w-full h-[286px] object-cover" />

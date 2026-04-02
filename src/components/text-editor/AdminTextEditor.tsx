@@ -3,15 +3,15 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { AdminMenuBar } from "./AdminMenuBar";
 
-import Image from "@tiptap/extension-image";
+// import Image from "@tiptap/extension-image";
 import { CustomImage } from "@/extensions/customImage";
 import Mention from "@tiptap/extension-mention";
 import TextAlign from "@tiptap/extension-text-align";
 import { mentionSuggestionOptions } from "@/extensions/suggestion";
 import { forwardRef, useImperativeHandle } from "react";
-import { uploadBlogImages } from "@/apis/main/blog";
 import { CustomHorizontalRule } from "@/extensions/customHorizontalRule";
 import { CustomBlockQuote } from "@/extensions/customBlockQuote";
+import { uploadImages } from "@/apis/main/file";
 
 export interface AdminEditorHandle {
     getFinalHtmlAndImages: () => Promise<{
@@ -29,9 +29,7 @@ const extensions = [
     StarterKit,
     CustomBlockQuote,
     CustomHorizontalRule,
-    Image.configure({
-        allowBase64: false
-    }),
+
     CustomImage,
 
     Mention.configure({
@@ -72,34 +70,54 @@ const AdminTextEditor = forwardRef<AdminEditorHandle | null, Props>(
                 const html = editor.getHTML();
                 const dom = new DOMParser().parseFromString(html, "text/html");
 
-                const imgEls = Array.from(
-                    dom.querySelectorAll<HTMLImageElement>("img[data-temp-id]")
-                );
+                const imgEls = Array.from(dom.querySelectorAll<HTMLImageElement>("img"));
 
-                const filesWithId = imgEls
-                    .map((img) => {
-                        const tempId = img.getAttribute("data-temp-id")!;
+                const newImages: { tempId: string; file: File; img: HTMLImageElement }[] = [];
+                const existingImages: string[] = [];
+
+                imgEls.forEach((img) => {
+                    const tempId = img.getAttribute("data-temp-id");
+
+                    if (tempId) {
                         const file = imageFileMap.current[tempId];
-                        return file ? { tempId, file, img } : null;
-                    })
-                    .filter(Boolean) as { tempId: string; file: File; img: HTMLImageElement }[];
-
-                if (filesWithId.length === 0) {
-                    return { html, imageUrls: [] };
-                }
-
-                // 업로드 (순서 유지)
-                const urls = await uploadBlogImages(filesWithId.map((f) => f.file));
-
-                // 정확히 매칭해서 치환
-                filesWithId.forEach((item, i) => {
-                    item.img.setAttribute("src", urls[i]);
-                    item.img.removeAttribute("data-temp-id");
+                        if (file) {
+                            newImages.push({ tempId, file, img });
+                        }
+                    } else {
+                        const src = img.getAttribute("src");
+                        if (src) {
+                            try {
+                                const url = new URL(src);
+                                const key = url.pathname.replace(/^\//, "");
+                                existingImages.push(key);
+                            } catch {
+                                console.warn("잘못된 이미지 URL:", src);
+                            }
+                        }
+                    }
                 });
+
+                let newStoredNames: string[] = [];
+                let fileUrls: string[] = [];
+
+                if (newImages.length > 0) {
+                    const result = await uploadImages(
+                        newImages.map((f) => f.file),
+                        "BLOG"
+                    );
+
+                    newStoredNames = result.storedNames;
+                    fileUrls = result.fileUrls;
+
+                    newImages.forEach((item, i) => {
+                        item.img.setAttribute("src", fileUrls[i]);
+                        item.img.removeAttribute("data-temp-id");
+                    });
+                }
 
                 return {
                     html: dom.body.innerHTML,
-                    imageUrls: urls
+                    imageUrls: [...existingImages, ...newStoredNames] // 🔥 핵심
                 };
             }
         }));

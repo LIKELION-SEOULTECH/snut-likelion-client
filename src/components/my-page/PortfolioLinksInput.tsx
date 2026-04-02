@@ -1,3 +1,5 @@
+import { CustomSelect } from "../admin/common/custom-select";
+
 interface PortfolioLinksInputProps {
     value: { name: string; url: string }[];
     onChange: (newLinks: { name: string; url: string }[]) => void;
@@ -24,30 +26,36 @@ export const PortfolioLinksInput = ({ value, onChange }: PortfolioLinksInputProp
     return (
         <div className="flex flex-1 flex-col gap-3">
             {value.map((link, index) => (
-                <div key={index} className="gap-2 flex flex-1">
-                    <select
-                        value={link.name}
-                        onChange={(e) => handleChange(index, "name", e.target.value)}
-                        className="py-3 px-4 w-[118px] bg-white text-[#47484B] font-normal border border-[#C4C4C4] rounded-[4px]"
-                    >
-                        <option value="">링크 이름</option>
-                        <option value="BLOG">Blog</option>
-                        <option value="GITHUB">Github</option>
-                        <option value="BEHANCE">Behance</option>
-                        <option value="INSTAGRAM">Instagram</option>
-                        <option value="NOTION">Notion</option>
-                        <option value="OTHER">Other</option>
-                    </select>
+                <div key={index} className="h-11 gap-2 flex flex-1">
+                    <div className="w-[118px]">
+                        <CustomSelect
+                            value={link.name}
+                            onValueChange={(value) => {
+                                if (typeof value === "function") return;
+                                handleChange(index, "name", value);
+                            }}
+                            placeholder={"링크 이름"}
+                            selectList={[
+                                { label: "Blog", value: "BLOG" },
+                                { label: "Github", value: "GITHUB" },
+                                { label: "Behance", value: "BEHANCE" },
+                                { label: "Instagram", value: "INSTAGRAM" },
+                                { label: "Notion", value: "NOTION" },
+                                { label: "Other", value: "OTHER" }
+                            ]}
+                        />
+                    </div>
+
                     <input
                         value={link.url}
                         onChange={(e) => handleChange(index, "url", e.target.value)}
                         placeholder="https://"
-                        className="py-3 px-4 flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
+                        className="h-full py-3 px-4 flex-1 bg-white text-black border border-[#C4C4C4] rounded-[4px]"
                     />
                     {value.length > 1 && index === value.length - 1 && (
                         <button
                             onClick={() => handleRemove(index)}
-                            className="w-[64px] text-[14px] border border-[#C4C4C4] rounded-[4px] text-[#666] bg-[#FFF]"
+                            className="w-[64px] h-full text-[14px] border border-[#C4C4C4] rounded-[4px] text-[#666] bg-[#FFF]"
                         >
                             삭제
                         </button>

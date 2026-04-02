@@ -52,6 +52,7 @@ export const BlogContentPage = () => {
         enabled: !!currentId
     });
 
+    console.log("블로그 내용", blog);
     const { data: prevPost } = useQuery<BlogDetail, Error>({
         queryKey: ["blog", currentId ? currentId - 1 : undefined],
         queryFn: async () => {
@@ -83,16 +84,18 @@ export const BlogContentPage = () => {
 
     return (
         <PageLayout white={true}>
-            <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white">
+            <div className="w-full flex flex-col text-[#1b1b1b] items-center px-28 bg-white min-w-250">
                 <section className="pl-[103px] w-full mt-33">
-                    {/* <div className="font-bold text-2xl text-[#FFA454] leading-[150%]">
-                        {displayCategory}
-                    </div> */}
                     <div className="font-bold text-[50px] mt-5">{blog.title}</div>
-                    <div className="text-xl text-[#666666] font-light leading-[150%] mt-[37px]">
-                        작성자 {formattedDate}
+                    <div className="flex gap-5 items-center mt-[37px]">
+                        <span className="text-xl text-gray-700 font-light leading-[100%] ">
+                            {blog.authorName}
+                        </span>
+                        <span className="text-xl text-gray-400 font-light leading-[150%]">
+                            {formattedDate}
+                        </span>
                     </div>
-                    <div className="mt-5 mb-18">
+                    <div className="mt-5">
                         <ParticipantTags names={blog.taggedMemberNames} />
                     </div>
                 </section>

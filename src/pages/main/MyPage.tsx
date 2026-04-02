@@ -55,7 +55,7 @@ export const MyPage = () => {
                     <span className="my-[85px]" />
                 )}
 
-                <div className="px-5 sm:px-[112px] w-full flex sm:gap-[120px]">
+                <div className="px-5 sm:px-[112px] w-full flex flex-col sm:flex-row items-center sm:items-start sm:gap-[120px]">
                     {/* 왼쪽 사이드바 */}
                     <div className="flex flex-col">
                         {!isGuest && member?.profileImageUrl && (
@@ -81,7 +81,7 @@ export const MyPage = () => {
                             />
                         </div>
                         {isAdmin && (
-                            <div className="mt-7">
+                            <div className="hidden sm:block mt-7">
                                 <Button
                                     className="w-full h-[70px] text-xl text-gray-25 font-semibold bg-primary-800 border border-primary-400 gap-[6px] cursor-pointer hover:bg-primary-500"
                                     onClick={() =>
@@ -99,7 +99,7 @@ export const MyPage = () => {
                     </div>
 
                     {/* 오른쪽 메인 컨텐츠 */}
-                    <div className="flex-1">
+                    <div className="w-full">
                         {!isGuest ? (
                             <MemberMyPage
                                 member={member}
@@ -110,11 +110,13 @@ export const MyPage = () => {
                                 setSelectedGeneration={setSelectedGeneration}
                             />
                         ) : (
-                            <GuestMyPage />
+                            <>
+                                <GuestMyPage />
+                                <MobileAccontSettingTab member={member} />
+                            </>
                         )}
                     </div>
                 </div>
-                <MobileAccontSettingTab member={member} />
 
                 {/* 아래 명언 카드 */}
                 <div className="hidden sm:block px-[112px] mt-[300px] w-full">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import PageLayout from "@/layouts/PageLayout";
 import { ChevronDown } from "lucide-react";
 import TextEditor from "@/components/text-editor/TextEditor";
@@ -14,13 +14,14 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { createBlog } from "@/apis/main/blog";
+import { uploadImages } from "@/apis/main/file";
 
 export const BlogPostPage = () => {
     const [type, setType] = useState<BlogCategory>("OFFICIAL");
 
     const [title, setTitle] = useState("");
     const [tags, setTags] = useState<number[]>([]);
-    const [images, setImages] = useState<string[]>([]);
+    const pendingImageMap = useRef<Record<string, File>>({});
 
     const [content, setContent] = useState("");
     const navigate = useNavigate();
@@ -28,16 +29,54 @@ export const BlogPostPage = () => {
 
     const handleSubmit = async (submit: boolean) => {
         try {
+            const dom = new DOMParser().parseFromString(content, "text/html");
+
+            const imgEls = Array.from(dom.querySelectorAll<HTMLImageElement>("img[data-temp-id]"));
+
+            let uploadedImages: string[] = [];
+
+            if (imgEls.length > 0) {
+                const files = imgEls
+                    .map((img) => {
+                        const tempId = img.getAttribute("data-temp-id");
+                        if (!tempId) return null;
+                        return pendingImageMap.current[tempId] ?? null;
+                    })
+                    .filter((file): file is File => file !== null);
+
+                const { storedNames, fileUrls } = await uploadImages(files, "BLOG");
+                console.log("📌 storedNames:", storedNames);
+                console.log("📌 fileUrls:", fileUrls);
+                // src 치환
+                imgEls.forEach((img, i) => {
+                    img.setAttribute("src", fileUrls[i]);
+                    img.removeAttribute("data-temp-id");
+                });
+
+                uploadedImages = storedNames; // 또는 fileUrls (서버 요구에 따라)
+            }
+
+            const finalHtml = dom.body.innerHTML;
+
             await createBlog(
                 {
                     title,
-                    contentHtml: content,
+                    contentHtml: finalHtml,
                     category: type,
                     taggedMemberIds: tags,
-                    images
+                    imageStoredFileNames: uploadedImages
                 },
                 submit
             );
+
+            console.log("🚀 createBlog 요청:", {
+                title,
+                contentHtml: finalHtml,
+                category: type,
+                taggedMemberIds: tags,
+                imageStoredFileNames: uploadedImages
+            });
+
             navigate("/blog");
         } catch (error) {
             console.error(error);
@@ -85,7 +124,11 @@ export const BlogPostPage = () => {
 
                 <TagEditor setTags={setTags} />
                 <div className="mt-25">
-                    <TextEditor content={content} setContent={setContent} setImages={setImages} />
+                    <TextEditor
+                        content={content}
+                        setContent={setContent}
+                        pendingImageMap={pendingImageMap}
+                    />
                 </div>
             </div>
         </PageLayout>

@@ -5,50 +5,54 @@ import DividerBtn from "@/assets/text-editor/divider.svg?react";
 import ImageBtn from "@/assets/text-editor/image.svg?react";
 import OpenBtn from "@/assets/text-editor/open-btn.svg?react";
 import CloseBtn from "@/assets/text-editor/close-btn.svg?react";
-import { useState } from "react";
-import { uploadBlogImages } from "@/apis/main/blog";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type RefObject } from "react";
 
 export const MenuBar = ({
     editor,
-    setImages
+    pendingImageMap
 }: {
     editor: Editor | null;
-    setImages: Dispatch<SetStateAction<string[]>>; // ✅ 이걸로!
+    pendingImageMap: RefObject<Record<string, File>>;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     if (!editor) {
         return null;
     }
 
-    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
 
-        try {
-            const fileList = Array.from(files); // 여러 개 파일 배열로 변환
-            const urls = await uploadBlogImages(fileList); // 다중 업로드 요청
-            setImages((prev) => [...prev, ...urls]);
+        Array.from(files).forEach((file) => {
+            const tempId = crypto.randomUUID();
 
-            urls.forEach((imageUrl) => {
-                editor
-                    .chain()
-                    .focus("end")
-                    .insertContent({
-                        type: "customImage",
-                        attrs: {
-                            src: imageUrl,
-                            alt: "uploaded image",
-                            isThumbnail: false
-                        }
-                    })
-                    .run();
-            });
-        } catch (err) {
-            console.error("이미지 업로드 실패", err);
-        } finally {
-            e.target.value = "";
-        }
+            // 🔥 file 저장
+            pendingImageMap.current[tempId] = file;
+
+            // 🔥 preview URL
+            const previewUrl = URL.createObjectURL(file);
+
+            console.log("📌 선택된 파일:", file.name);
+
+            console.log("📌 생성된 tempId:", tempId);
+
+            console.log("📌 pendingImageMap:", pendingImageMap.current);
+
+            editor.commands.insertContentAt(editor.state.doc.content.size, [
+                {
+                    type: "customImage",
+                    attrs: {
+                        src: previewUrl,
+                        alt: file.name,
+                        isThumbnail: false,
+                        tempId
+                    }
+                },
+                { type: "paragraph" }
+            ]);
+        });
+
+        e.target.value = "";
     };
 
     return (

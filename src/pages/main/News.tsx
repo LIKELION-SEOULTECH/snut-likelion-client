@@ -4,7 +4,7 @@ import { NoticeCardList } from "@/components/notice/NoticeCardList";
 import { Pagination } from "@/components/common/Pagination";
 import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNotices } from "@/hooks/useNotice";
-import { MainSearchBar } from "@/components/common/MainSearchBar";
+// import { MainSearchBar } from "@/components/common/MainSearchBar";
 import { NoticeSkeleton } from "@/components/notice/NoticeSkeleton";
 
 const PAGE_SIZE = 8;
@@ -43,9 +43,7 @@ export const NewsPage = () => {
                 </div>
 
                 <div className="w-full flex justify-start">
-                    <div className="min-w-[598px]">
-                        <MainSearchBar />
-                    </div>
+                    <div className="min-w-[598px]">{/* <MainSearchBar /> */}</div>
                 </div>
 
                 <div className="flex flex-col mt-18 w-full items-center">
