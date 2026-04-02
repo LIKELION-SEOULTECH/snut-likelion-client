@@ -1,14 +1,15 @@
-import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
-import { useState, useEffect } from "react";
+import AdminTextEditor, { type AdminEditorHandle } from "@/components/text-editor/AdminTextEditor";
+import { useState, useEffect, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import AdminTagEditor from "@/components/text-editor/AdminTagEditor";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import sample from "@/assets/home/sample.png";
 import sample1 from "@/assets/home/sample1.png";
 import { getBlogDetail } from "@/apis/main/blog";
 import { ADMIN_ABS } from "@/routes/routes";
 import { CustomSelect } from "@/components/admin/common/custom-select";
+import { updateAdminBlog } from "@/apis/admin/blog";
 
 type MentionSuggestion = {
     id: string;
@@ -23,6 +24,7 @@ export const AdminBlogEditPage = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState<MentionSuggestion[]>([]);
+    const editorRef = useRef<AdminEditorHandle>(null);
 
     const numericPostId = Number(id);
 
@@ -34,19 +36,48 @@ export const AdminBlogEditPage = () => {
         enabled: !!numericPostId && !isNaN(numericPostId)
     });
 
+    const updateBlogMutation = useMutation({
+        mutationFn: async () => {
+            if (!editorRef.current) throw new Error("Editor not ready");
+
+            const { html, imageUrls } = await editorRef.current.getFinalHtmlAndImages();
+
+            return updateAdminBlog(numericPostId, {
+                title,
+                category: type,
+                contentHtml: html,
+                newImageStoredFileNames: imageUrls,
+                taggedMemberIds: tags.map((t) => Number(t.id))
+            });
+        },
+        onSuccess: () => {
+            alert("수정 완료");
+            navigate(ADMIN_ABS.BLOG);
+        },
+        onError: (e) => {
+            console.error(e);
+            alert("수정 실패");
+        }
+    });
+
     useEffect(() => {
         if (adminBlog) {
             setTitle(adminBlog.data.data.title);
             setContent(adminBlog.data.data.contentHtml);
             setType(adminBlog.data.data.category);
 
+            // const tagData: MentionSuggestion[] =
+            //     adminBlog.data.data.taggedMemberIds?.map((tag: string, index: number) => ({
+            //         id: `${index}`,
+            //         mentionLabel: tag,
+            //         avatarUrl: index % 2 === 0 ? sample : sample1
+            //     })) || [];
             const tagData: MentionSuggestion[] =
-                adminBlog.data.data.taggedMemberIds?.map((tag: string, index: number) => ({
-                    id: `${index}`,
-                    mentionLabel: tag,
+                adminBlog.data.data.taggedMemberNames?.map((name: string, index: number) => ({
+                    id: `${index}-${name}`,
+                    mentionLabel: name,
                     avatarUrl: index % 2 === 0 ? sample : sample1
                 })) || [];
-
             setTags(tagData);
         }
     }, [adminBlog]);
@@ -60,7 +91,8 @@ export const AdminBlogEditPage = () => {
             isFormValid={isFormValid}
             onClickBackBtn={handleBackBtn}
             onSubmit={() => {
-                alert("수정로직 추가");
+                if (!isFormValid || updateBlogMutation.isPending) return;
+                updateBlogMutation.mutate();
             }}
         >
             <div className="w-full flex flex-col bg-white mt-11 rounded-sm p-12 mb-12 pl-[33px] pr-10 py-10 gap-8">
@@ -97,7 +129,11 @@ export const AdminBlogEditPage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor content={content} setContent={setContent} />
+                        <AdminTextEditor
+                            ref={editorRef}
+                            content={content}
+                            setContent={setContent}
+                        />
                     </div>
                 </div>
             </div>

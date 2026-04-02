@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import type { DropResult } from "@hello-pangea/dnd";
 import ImageUploadIcon from "@/assets/admin/image-upload.svg?react";
@@ -15,7 +15,7 @@ interface ImageUploadProps {
     initialUrls?: string[]; // 추가
 }
 
-export const ImageUpload = ({ onImagesChange }: ImageUploadProps) => {
+export const ImageUpload = ({ onImagesChange, initialUrls = [] }: ImageUploadProps) => {
     const [images, setImages] = useState<ImageItem[]>([]);
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -31,7 +31,7 @@ export const ImageUpload = ({ onImagesChange }: ImageUploadProps) => {
 
         const updated = [...images, ...newImages];
         setImages(updated);
-        onImagesChange(updated.map((img) => img.file));
+        onImagesChange(updated.map((img) => img.file).filter(Boolean) as File[]);
 
         e.target.value = ""; // 재업로드 허용
     };
@@ -45,8 +45,22 @@ export const ImageUpload = ({ onImagesChange }: ImageUploadProps) => {
     };
 
     const handleRemove = (id: string) => {
-        setImages((prev) => prev.filter((img) => img.id !== id));
+        const updated = images.filter((img) => img.id !== id);
+        setImages(updated);
+        onImagesChange(updated.map((img) => img.file).filter(Boolean) as File[]);
     };
+
+    useEffect(() => {
+        if (initialUrls.length === 0) return;
+
+        const initialImages: ImageItem[] = initialUrls.map((url) => ({
+            id: crypto.randomUUID(),
+            url,
+            file: null as unknown as File // 기존 이미지는 file 없음
+        }));
+
+        setImages(initialImages);
+    }, [initialUrls]);
 
     return (
         <div className="flex-1">

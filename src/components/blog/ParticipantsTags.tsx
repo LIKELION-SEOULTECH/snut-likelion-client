@@ -4,7 +4,7 @@ interface ParticipantTagsProps {
 
 export const ParticipantTags = ({ names }: ParticipantTagsProps) => {
     return (
-        <div className="w-full flex flex-wrap gap-2 mt-4">
+        <div className="w-full flex flex-wrap gap-2">
             {names.map((name) => (
                 <span
                     key={name}

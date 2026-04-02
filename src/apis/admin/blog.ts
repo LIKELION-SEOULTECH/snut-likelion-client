@@ -23,6 +23,18 @@ export const createAdminBlog = (data: CreateBlogRequest) => {
 };
 
 // 블로그 수정
+export const updateAdminBlog = async (
+    postId: number,
+    payload: {
+        title: string;
+        category: string;
+        contentHtml: string;
+        newImageStoredFileNames: string[];
+        taggedMemberIds: number[];
+    }
+) => {
+    return axiosInstance.patch(`/admin/blogs/${postId}`, payload);
+};
 
 // 블로그 단건 삭제
 export const deleteAdminBlogs = async (ids: number[]) => {

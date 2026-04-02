@@ -10,8 +10,9 @@ import { ProjectCreateCancelModal } from "@/components/admin/project/ProjectCrea
 import { ADMIN_ABS } from "@/routes/routes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CustomSelect } from "@/components/admin/common/custom-select";
-import type { Retro } from "@/types/project";
+import type { CreateProjectRequest, Retro } from "@/types/project";
 import { RetroRow } from "@/components/admin/project/RetroRow";
+import { uploadImages } from "@/apis/main/file";
 
 export const AdminProjectCreatePage = () => {
     const queryClient = useQueryClient();
@@ -102,13 +103,10 @@ export const AdminProjectCreatePage = () => {
         images.length >= 0;
 
     const createProjectMutation = useMutation({
-        mutationFn: (formData: FormData) => createAdminProject(formData),
+        mutationFn: (data: CreateProjectRequest) => createAdminProject(data),
 
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["adminProjects"]
-            });
-
+            queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
             navigate(ADMIN_ABS.PROJECT);
         },
 
@@ -117,33 +115,45 @@ export const AdminProjectCreatePage = () => {
         }
     });
 
-    const handleCreateProject = () => {
-        const formData = new FormData();
+    const handleCreateProject = async () => {
+        try {
+            // ✅ 1. 이미지 업로드
+            let storedNames: string[] = [];
 
-        formData.append("name", name);
-        formData.append("intro", intro);
-        formData.append("description", projectDescription);
-        formData.append("generation", String(Number(generation)));
-        formData.append("category", category);
+            if (images.length > 0) {
+                const result = await uploadImages(images, "PROJECT");
+                //  아래에서 함수 수정해줄거임
 
-        if (webUrl) formData.append("websiteUrl", webUrl);
-        if (iosUrl) formData.append("appstoreUrl", iosUrl);
-        if (androidUrl) formData.append("playstoreUrl", androidUrl);
+                storedNames = result.storedNames;
 
-        tags.forEach((tag) => formData.append("tags", tag));
-
-        retros.forEach((retro, index) => {
-            if (retro.memberId !== null) {
-                formData.append(`retrospections[${index}].memberId`, String(retro.memberId));
-                formData.append(`retrospections[${index}].content`, retro.comment);
+                console.log("📌 업로드된 이미지 keys:", storedNames);
             }
-        });
 
-        images.forEach((img) => {
-            formData.append("images", img);
-        });
+            // 2. payload 생성 (FormData )
+            const payload = {
+                name,
+                intro,
+                description: projectDescription,
+                generation: Number(generation),
+                category,
+                imageStoredFileNames: storedNames, // 핵심
+                websiteUrl: webUrl || undefined,
+                appstoreUrl: iosUrl || undefined,
+                playstoreUrl: androidUrl || undefined,
+                tags,
+                retrospections: retros.map((r) => ({
+                    memberId: r.memberId,
+                    content: r.comment
+                }))
+            };
 
-        createProjectMutation.mutate(formData);
+            console.log("🚀 create project payload:", payload);
+
+            createProjectMutation.mutate(payload);
+        } catch (error) {
+            console.error("❌ 프로젝트 생성 실패", error);
+            alert("프로젝트 생성 실패");
+        }
     };
 
     const handleBackBtn = () => {

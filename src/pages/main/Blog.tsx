@@ -10,19 +10,21 @@ import { useQueries, keepPreviousData } from "@tanstack/react-query";
 
 export const BlogPage = () => {
     const [page, setPage] = useState(1);
+    const [keyword, setKeyword] = useState("");
+    const [searchKeyword, setSearchKeyword] = useState(""); // 실제 검색
     const pageSize = 12;
 
     const results = useQueries({
         queries: [
             {
-                queryKey: ["blogList", "OFFICIAL"],
-                queryFn: () => getBlogList("OFFICIAL", 0, 1000),
+                queryKey: ["blogList", "OFFICIAL", searchKeyword],
+                queryFn: () => getBlogList("OFFICIAL", 0, 1000, searchKeyword),
                 placeholderData: keepPreviousData,
                 staleTime: 1000 * 60 * 5
             },
             {
-                queryKey: ["blogList", "UNOFFICIAL"],
-                queryFn: () => getBlogList("UNOFFICIAL", 0, 1000),
+                queryKey: ["blogList", "UNOFFICIAL", searchKeyword],
+                queryFn: () => getBlogList("UNOFFICIAL", 0, 1000, searchKeyword),
                 placeholderData: keepPreviousData,
                 staleTime: 1000 * 60 * 5
             }
@@ -50,37 +52,50 @@ export const BlogPage = () => {
 
     return (
         <PageLayout white={true}>
-            <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white ">
+            <div className="w-full flex flex-col text-[#1b1b1b] px-28 bg-white">
                 <div className="font-extrabold text-7xl h-[86px] mt-[86px] mb-[73px] text-center">
                     Blog<span className="text-[#FF7700]">.</span>
                 </div>
 
-                {/* <BlogTypeTabs selected={blogType} onSelect={handleTabSelect} /> */}
-                <div className="w-full flex mx-auto flex-col">
-                    <div className="mt-7 w-[598px] ">
-                        <MainSearchBar />
-                    </div>
-                    <div className="flex h-[20px] mt-12 font-normal gap-1">
-                        전체글
-                        <span className="text-[#f70] font-semibold">{totalCombinedBlogsCount}</span>
-                    </div>
-                    {isLoading ? (
-                        <div className=" grid grid-cols-3 gap-4 mt-6 w-[1217px]">
-                            {Array.from({ length: 9 }).map((_, idx) => (
-                                <ProjectBoxSkeleton key={`skeleton-${idx}`} />
-                            ))}
+                <div className="w-full flex flex-col justify-center items-center">
+                    <div className="w-full max-w-[1217px]">
+                        <div className="mt-7 w-[598px]">
+                            <MainSearchBar
+                                value={keyword}
+                                onChange={setKeyword}
+                                onSearch={() => {
+                                    setPage(1);
+                                    setSearchKeyword(keyword);
+                                }}
+                            />
                         </div>
-                    ) : isError ? (
-                        <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
-                    ) : blogsForCurrentPage.length === 0 ? (
-                        <section className="w-full flex justify-center items-center min-h-147">
-                            <span className="text-gray-200 font-medium text-2xl leading-[130%]">
-                                아직 작성된 블로그가 없어요
+
+                        <div className="flex h-[20px] mt-12 font-normal gap-1">
+                            전체글
+                            <span className="text-[#f70] font-semibold">
+                                {totalCombinedBlogsCount}
                             </span>
-                        </section>
-                    ) : (
-                        <BlogCardList blogs={blogsForCurrentPage} />
-                    )}
+                        </div>
+                    </div>
+                    <div className="w-full flex justify-center max-w-[1217px]">
+                        {isLoading ? (
+                            <div className=" grid grid-cols-3 gap-4 mt-6 w-[1217px]">
+                                {Array.from({ length: 9 }).map((_, idx) => (
+                                    <ProjectBoxSkeleton key={`skeleton-${idx}`} />
+                                ))}
+                            </div>
+                        ) : isError ? (
+                            <div className="text-red-500">블로그를 불러오는데 실패했습니다.</div>
+                        ) : blogsForCurrentPage.length === 0 ? (
+                            <section className="w-full flex justify-center items-center min-h-147">
+                                <span className="text-gray-200 font-medium text-2xl leading-[130%]">
+                                    아직 작성된 블로그가 없어요
+                                </span>
+                            </section>
+                        ) : (
+                            <BlogCardList blogs={blogsForCurrentPage} />
+                        )}
+                    </div>
                 </div>
                 <div>
                     <Pagination

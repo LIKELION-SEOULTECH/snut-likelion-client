@@ -5,13 +5,15 @@ import axiosInstance from "../axiosInstance";
 export const getBlogList = async (
     category: "OFFICIAL" | "UNOFFICIAL",
     page: number = 1,
-    size: number = 100
+    size: number = 100,
+    keyword?: string
 ) => {
     const res = await axiosInstance.get("/blogs", {
         params: {
             category,
             page,
-            size
+            size,
+            keyword: keyword || undefined
         }
     });
     return res.data.data;
@@ -59,17 +61,4 @@ export const saveDraft = (data: { title: string; content: string }) => {
 // 임시저장 삭제
 export const deleteDraft = () => {
     return axiosInstance.delete("/blogs/drafts/me");
-};
-
-// 이미지 업로드 (URL 반환)
-export const uploadBlogImages = async (files: File[]): Promise<string[]> => {
-    const formData = new FormData();
-    files.forEach((file) => formData.append("files", file));
-
-    const res = await axiosInstance.post("/blogs/images", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
-    return res.data.data.urls;
 };

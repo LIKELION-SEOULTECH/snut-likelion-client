@@ -41,7 +41,7 @@ export const AdminBlogCreatePage = () => {
                 title,
                 category: type,
                 contentHtml: html,
-                images: imageUrls,
+                imageStoredFileNames: imageUrls,
                 taggedMemberIds: tags.map((t) => Number(t.id))
             });
         },
@@ -54,6 +54,7 @@ export const AdminBlogCreatePage = () => {
             alert("블로그 등록 실패");
         }
     });
+
     const handleSubmit = () => {
         if (!isFormValid || createBlogMutation.isPending) return;
         createBlogMutation.mutate();

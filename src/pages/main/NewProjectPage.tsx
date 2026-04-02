@@ -8,7 +8,7 @@ import { createProject } from "@/apis/main/project";
 import axios from "axios";
 import { DropDwon } from "@/components/my-page/DropDown";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
-
+import { uploadImages } from "@/apis/main/file"; // 이미 만들어둔거
 const categoryMap: Record<string, string> = {
     전체: "",
     중앙해커톤: "HACKATHON",
@@ -68,42 +68,52 @@ export const NewProjectPage = () => {
         }
     };
 
-    const handleSubmit = () => {
-        // 필수 입력 유효성 검사
+    const handleSubmit = async () => {
         if (!name || !intro || !description || !selectedGen || !selectedCategory) {
             alert("모든 필수 항목을 작성해주세요.");
             return;
         }
 
-        // 회고가 하나라도 있어야 하고, 그 내용도 입력되어야 함
         const validRetrospections = retrospections.filter(
             (r) => r.memberId !== 0 && r.content.trim() !== ""
         );
+
         if (validRetrospections.length === 0) {
             alert("회고를 작성해주세요.");
             return;
         }
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("intro", intro);
-        formData.append("description", description);
-        formData.append("category", categoryMap[selectedCategory]);
-        if (websiteUrl) formData.append("websiteUrl", websiteUrl);
-        if (playstoreUrl) formData.append("playstoreUrl", playstoreUrl);
-        if (appstoreUrl) formData.append("appstoreUrl", appstoreUrl);
-        formData.append("generation", String(selectedGen));
-        tags.forEach((tag) => {
-            formData.append("tags", tag);
-        });
+        try {
+            //  이미지 presigned 업로드
+            let storedNames: string[] = [];
 
-        imageFiles.forEach((file) => formData.append("images", file));
-        retrospections.forEach((retro, idx) => {
-            formData.append(`retrospections[${idx}].memberId`, String(retro.memberId));
-            formData.append(`retrospections[${idx}].content`, retro.content);
-        });
+            if (imageFiles.length > 0) {
+                const result = await uploadImages(imageFiles, "PROJECT");
+                storedNames = result.storedNames;
 
-        createProjectMutation.mutate(formData);
+                console.log("📌 업로드된 storedNames:", storedNames);
+            }
+
+            // JSON payload 생성
+            const payload = {
+                name,
+                intro,
+                description,
+                category: categoryMap[selectedCategory],
+                generation: Number(selectedGen),
+                tags,
+                websiteUrl,
+                playstoreUrl,
+                appstoreUrl,
+                retrospections: validRetrospections,
+                imageStoredFileNames: storedNames
+            };
+
+            createProjectMutation.mutate(payload);
+        } catch (e) {
+            console.error(e);
+            alert("이미지 업로드 실패");
+        }
     };
 
     return (
@@ -250,7 +260,7 @@ export const NewProjectPage = () => {
                                 </div>
                                 <div className="flex-1 flex gap-2">
                                     <div className="py-3 w-[118px] px-4 bg-white text-black border border-[#C4C4C4] rounded-[4px]">
-                                        Ios
+                                        IOS
                                     </div>
                                     <input
                                         value={appstoreUrl}

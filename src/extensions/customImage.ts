@@ -64,7 +64,25 @@ export const CustomImage = Node.create({
 
     // 기본 Image와 충돌 피하려고 커스텀 데이터 속성으로 파싱
     parseHTML() {
-        return [{ tag: 'img[data-custom-image="true"]' }];
+        return [
+            { tag: 'img[data-custom-image="true"]' },
+
+            // 🔥 fallback (기존 이미지 대응)
+            {
+                tag: "img[src]",
+                getAttrs: (element) => {
+                    // 이미 custom이면 중복 방지
+                    if (element.getAttribute("data-custom-image")) return false;
+
+                    return {
+                        src: element.getAttribute("src"),
+                        alt: element.getAttribute("alt"),
+                        width: element.getAttribute("data-width"),
+                        height: element.getAttribute("data-height")
+                    };
+                }
+            }
+        ];
     },
 
     renderHTML({ HTMLAttributes }) {

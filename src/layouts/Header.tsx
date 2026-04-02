@@ -23,6 +23,9 @@ export const Header = ({ white = false }: HeaderProps) => {
     const isLoggedIn = !!accessToken;
     const isGuest = role === "ROLE_GUEST";
 
+    const isProjectPage = location.pathname.startsWith(ROUTES.PROJECT);
+    const isBlogPage = location.pathname.startsWith(ROUTES.BLOG);
+
     const { data: member } = useQuery<MemberDetailResponse>({
         queryKey: ["me"],
         queryFn: fetchMyMemberInfo,
@@ -54,6 +57,37 @@ export const Header = ({ white = false }: HeaderProps) => {
     const handleLogoClick = () => {
         navigate(ROUTES.HOME);
     };
+
+    const getButtonConfig = () => {
+        if (isGuest) {
+            return {
+                label: "지원하기",
+                onClick: handleApplyButtonClick
+            };
+        }
+
+        if (isProjectPage) {
+            return {
+                label: "프로젝트 업로드",
+                onClick: () => navigate(ROUTES.PROJECT_NEW)
+            };
+        }
+
+        if (isBlogPage) {
+            return {
+                label: "블로그 글쓰기",
+                onClick: () => navigate(ROUTES.BLOG_POST)
+            };
+        }
+
+        // 기본 fallback
+        return {
+            label: "블로그 글쓰기",
+            onClick: () => navigate(ROUTES.BLOG_POST)
+        };
+    };
+
+    const { label, onClick } = getButtonConfig();
 
     return (
         <div
@@ -107,14 +141,10 @@ export const Header = ({ white = false }: HeaderProps) => {
                         {isLoggedIn ? (
                             <div className="flex  gap-4 items-center">
                                 <button
-                                    className="w-[109px] h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded-[100px] cursor-pointer text-[14px] "
-                                    onClick={
-                                        !isGuest
-                                            ? () => navigate(ROUTES.BLOG_POST)
-                                            : handleApplyButtonClick
-                                    }
+                                    className="h-[33px] px-[16px] py-[4px] border-[1px] text-[#F70] border-[#F70] rounded-[100px] cursor-pointer text-[14px] "
+                                    onClick={onClick}
                                 >
-                                    {!isGuest ? "블로그 글쓰기" : "지원하기"}
+                                    {label}
                                 </button>
                                 <MyIcon
                                     onClick={() => navigate(ROUTES.MYPAGE)}
