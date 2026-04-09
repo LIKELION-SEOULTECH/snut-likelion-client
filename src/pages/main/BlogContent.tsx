@@ -52,7 +52,6 @@ export const BlogContentPage = () => {
         enabled: !!currentId
     });
 
-    console.log("블로그 내용", blog);
     const { data: prevPost } = useQuery<BlogDetail, Error>({
         queryKey: ["blog", currentId ? currentId - 1 : undefined],
         queryFn: async () => {
@@ -60,7 +59,7 @@ export const BlogContentPage = () => {
             return res.data.data;
         },
         enabled: !!currentId && currentId > 1,
-        retry: false // Don't retry if a previous post doesn't exist
+        retry: false
     });
 
     const { data: nextPost } = useQuery<BlogDetail, Error>({
@@ -70,7 +69,7 @@ export const BlogContentPage = () => {
             return res.data.data;
         },
         enabled: !!currentId,
-        retry: false // Don't retry if a next post doesn't exist
+        retry: false
     });
 
     if (isBlogLoading) {
@@ -80,7 +79,6 @@ export const BlogContentPage = () => {
     if (!blog) return <div className="text-white flex justify-center mt-20">404 Not Found</div>;
 
     const formattedDate = new Date(blog.updatedAt).toISOString().split("T")[0].replace(/-/g, ".");
-    // const displayCategory = blog.category === "OFFICIAL" ? "세션 이야기" : "아기사자 이야기";
 
     return (
         <PageLayout white={true}>
@@ -96,7 +94,7 @@ export const BlogContentPage = () => {
                         </span>
                     </div>
                     <div className="mt-5">
-                        <ParticipantTags names={blog.taggedMemberNames} />
+                        <ParticipantTags ids={blog.taggedMemberIds} />
                     </div>
                 </section>
 

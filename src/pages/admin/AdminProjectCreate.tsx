@@ -121,12 +121,9 @@ export const AdminProjectCreatePage = () => {
             let storedNames: string[] = [];
 
             if (images.length > 0) {
-                const result = await uploadImages(images, "PROJECT");
-                //  아래에서 함수 수정해줄거임
+                const result = await uploadImages(images, "PROJECT", "IMAGE");
 
                 storedNames = result.storedNames;
-
-                console.log("📌 업로드된 이미지 keys:", storedNames);
             }
 
             // 2. payload 생성 (FormData )
@@ -136,7 +133,7 @@ export const AdminProjectCreatePage = () => {
                 description: projectDescription,
                 generation: Number(generation),
                 category,
-                imageStoredFileNames: storedNames, // 핵심
+                imageStoredFileNames: storedNames,
                 websiteUrl: webUrl || undefined,
                 appstoreUrl: iosUrl || undefined,
                 playstoreUrl: androidUrl || undefined,

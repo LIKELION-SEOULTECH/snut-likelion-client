@@ -2,16 +2,16 @@ import { useState, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { ADMIN_ABS } from "@/routes/routes";
-import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
+import AdminTextEditor, { type AdminEditorHandle } from "@/components/text-editor/AdminTextEditor";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { createAdminNotice } from "@/apis/admin/notice";
 import { toast } from "sonner";
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, X } from "lucide-react";
+import { getPresignedUrl, uploadComplete, uploadToS3 } from "@/apis/main/file";
 
 export const AdminNoticeCreatePage = () => {
-    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [type, setType] = useState("");
     const [title, setTitle] = useState("");
@@ -19,6 +19,8 @@ export const AdminNoticeCreatePage = () => {
 
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const editorRef = useRef<AdminEditorHandle>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -55,34 +57,56 @@ export const AdminNoticeCreatePage = () => {
 
     // notice 생성
     const createNoticeMutation = useMutation({
-        mutationFn: () =>
-            createAdminNotice({
+        mutationFn: async () => {
+            if (!editorRef.current) throw new Error("Editor not ready");
+
+            const { html, imageUrls } = await editorRef.current.getFinalHtmlAndImages();
+
+            const fileStoredNames = await uploadFiles(files);
+
+            return createAdminNotice({
                 title,
-                content,
-                pinned: true
-            }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["adminNotices"]
+                content: html,
+                pinned: true,
+                imageStoredFileNames: imageUrls,
+                fileStoredFileNames: fileStoredNames
             });
+        },
+
+        onSuccess: () => {
             toast(
                 <div className="flex items-center gap-2">
                     <CircleCheck size={20} className="text-green-400" />
-                    <span className="text-sm font-medium">공지가 삭제되었습니다.</span>
+                    <span className="text-sm font-medium">공지가 등록되었습니다.</span>
                 </div>,
                 {
                     unstyled: true,
                     duration: 3000,
                     classNames: {
-                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] text-white px-[23px] py-[11.5px] rounded-sm"
                     }
                 }
             );
 
             navigate(ADMIN_ABS.NOTICE);
         },
-        onError: () => {
-            alert("공지사항 등록에 실패했습니다.");
+
+        onError: (error) => {
+            console.error(error);
+
+            toast(
+                <div className="flex items-center gap-2">
+                    <X size={20} className="text-error" />
+                    <span className="text-sm font-medium">공지 등록에 실패했습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
         }
     });
 
@@ -93,6 +117,41 @@ export const AdminNoticeCreatePage = () => {
 
     const handleBackBtn = () => {
         navigate(ADMIN_ABS.NOTICE);
+    };
+
+    const getStorageType = (file: File): "IMAGE" | "FILE" => {
+        if (file.type.startsWith("image/")) return "IMAGE";
+        return "FILE";
+    };
+
+    const uploadFiles = async (files: File[]) => {
+        const storedNames: string[] = [];
+
+        for (const file of files) {
+            const storageType = getStorageType(file);
+
+            const { uploadUrl, headers, storedFileName } = await getPresignedUrl(
+                file,
+                "NOTICE",
+                storageType
+            );
+
+            await uploadToS3(uploadUrl, file, headers);
+
+            const result = await uploadComplete(
+                {
+                    storedFileName,
+                    originalFileName: file.name,
+                    contentType: file.type,
+                    contentLength: file.size
+                },
+                "NOTICE"
+            );
+
+            storedNames.push(result.storedFileName);
+        }
+
+        return storedNames;
     };
 
     return (
@@ -129,7 +188,12 @@ export const AdminNoticeCreatePage = () => {
                 <div className="flex flex-row items-start">
                     <span className="min-w-[94px] pt-[14px] medium-14 text-gray-400">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor content={content} setContent={setContent} />
+                        <AdminTextEditor
+                            ref={editorRef}
+                            content={content}
+                            setContent={setContent}
+                            uploadCategory="NOTICE"
+                        />
                     </div>
                 </div>
 

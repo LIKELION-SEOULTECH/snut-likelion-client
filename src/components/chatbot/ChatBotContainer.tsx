@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import botImg from "@/assets/home/chatBotImg.png";
+import axiosInstance from "@/apis/axiosInstance";
+import ReactMarkdown from "react-markdown";
 
 type ChatMessage = {
     id: number;
@@ -110,25 +112,33 @@ export const ChatBotContainer = () => {
 
         setTimeout(async () => {
             try {
-                const res = await fetch(" https://ai.maruhxn.store/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ text: msg })
+                const res = await axiosInstance.post("/ai/chat", {
+                    text: msg
                 });
 
-                const data = await res.json();
-                const { response } = data;
+                const answer = res.data?.data?.answer;
 
                 const botMsg: ChatMessage = {
                     id: Date.now() + 2,
                     role: "bot",
                     message: (
-                        <div>
-                            <p className="mb-1">
-                                {response || "죄송해요! 답변을 찾지 못했어요 😥"}
-                            </p>
+                        <div className="text-sm leading-[160%]">
+                            <ReactMarkdown
+                                components={{
+                                    p: ({ children }) => (
+                                        <p className="mb-2 leading-[160%]">{children}</p>
+                                    ),
+                                    ul: ({ children }) => (
+                                        <ul className="pl-4 list-disc mb-2">{children}</ul>
+                                    ),
+                                    li: ({ children }) => <li className="mb-1">{children}</li>,
+                                    strong: ({ children }) => (
+                                        <strong className="font-semibold">{children}</strong>
+                                    )
+                                }}
+                            >
+                                {answer}
+                            </ReactMarkdown>
                         </div>
                     )
                 };

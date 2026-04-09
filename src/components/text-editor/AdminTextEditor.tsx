@@ -20,9 +20,12 @@ export interface AdminEditorHandle {
     }>;
 }
 
+type UploadCategory = "BLOG" | "NOTICE" | "PROJECT" | "MEMBER";
+
 interface Props {
     content: string;
     setContent: (val: string) => void;
+    uploadCategory: UploadCategory;
 }
 
 const extensions = [
@@ -46,7 +49,7 @@ const extensions = [
 ];
 
 const AdminTextEditor = forwardRef<AdminEditorHandle | null, Props>(
-    ({ content, setContent }, ref) => {
+    ({ content, setContent, uploadCategory }, ref) => {
         const imageFileMap = useRef<Record<string, File>>({});
 
         const editor = useEditor({
@@ -103,7 +106,8 @@ const AdminTextEditor = forwardRef<AdminEditorHandle | null, Props>(
                 if (newImages.length > 0) {
                     const result = await uploadImages(
                         newImages.map((f) => f.file),
-                        "BLOG"
+                        uploadCategory,
+                        "IMAGE"
                     );
 
                     newStoredNames = result.storedNames;

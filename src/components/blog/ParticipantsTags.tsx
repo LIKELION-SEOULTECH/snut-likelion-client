@@ -1,17 +1,14 @@
+import { ParticipantTag } from "./ParticipantsTag";
+
 interface ParticipantTagsProps {
-    names: string[];
+    ids: number[];
 }
 
-export const ParticipantTags = ({ names }: ParticipantTagsProps) => {
+export const ParticipantTags = ({ ids }: ParticipantTagsProps) => {
     return (
         <div className="w-full flex flex-wrap gap-2">
-            {names.map((name) => (
-                <span
-                    key={name}
-                    className="px-3 py-1 rounded-sm bg-[#ECECEC] text-[#666666] text-base"
-                >
-                    {name}
-                </span>
+            {ids.map((id) => (
+                <ParticipantTag id={id} />
             ))}
         </div>
     );
