@@ -20,10 +20,19 @@ export interface AdminNotice {
     updatedAt: string;
 }
 
+// 공지사항 업로드 타입
+export interface CreateNoticeRequest {
+    title: string;
+    content: string;
+    pinned: boolean;
+    imageStoredFileNames?: string[];
+    fileStoredFileNames?: string[];
+}
+
 // 공지사항 수정 시 사용하는 데이터 타입 정의
 export interface UpdateNoticePayload {
     title: string;
     content: string;
-    pinned: boolean; // ✅ 이거 추가
+    pinned: boolean;
     type?: string;
 }

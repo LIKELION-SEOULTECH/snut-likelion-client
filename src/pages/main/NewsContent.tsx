@@ -71,7 +71,6 @@ export const NewsContentPage = () => {
                     </div>
                     <div className="font-bold text-[50px] mt-5">{notice.title}</div>
                     <div className="flex flex-row gap-5 text-xl text-[#666666] font-light leading-[150%] mt-[37px] ">
-                        <span className="text-black">작성자</span>
                         <span>{formatDate(notice.updatedAt)}</span>
                     </div>
                 </section>

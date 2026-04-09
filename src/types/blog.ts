@@ -18,7 +18,7 @@ export interface BlogDetail {
     images: string[];
     authorName: string;
     category: BlogCategory;
-    taggedMemberNames: string[];
+    taggedMemberIds: number[];
 }
 
 // admin blog 타입
