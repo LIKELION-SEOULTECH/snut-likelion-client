@@ -26,17 +26,11 @@ export const MenuBar = ({
         Array.from(files).forEach((file) => {
             const tempId = crypto.randomUUID();
 
-            // 🔥 file 저장
+            // file 저장
             pendingImageMap.current[tempId] = file;
 
-            // 🔥 preview URL
+            // preview URL
             const previewUrl = URL.createObjectURL(file);
-
-            console.log("📌 선택된 파일:", file.name);
-
-            console.log("📌 생성된 tempId:", tempId);
-
-            console.log("📌 pendingImageMap:", pendingImageMap.current);
 
             editor.commands.insertContentAt(editor.state.doc.content.size, [
                 {
