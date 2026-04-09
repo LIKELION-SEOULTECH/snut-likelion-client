@@ -2,18 +2,21 @@ import axios from "axios";
 import axiosInstance from "../axiosInstance";
 
 type UploadCategory = "BLOG" | "MEMBER" | "PROJECT" | "NOTICE";
+type FileStorageType = "IMAGE" | "FILE";
 
 // presigned url 발급
-export const getPresignedUrl = async (file: File, category: UploadCategory) => {
+export const getPresignedUrl = async (
+    file: File,
+    category: UploadCategory,
+    storageType: FileStorageType
+) => {
     const res = await axiosInstance.post("/admin/files/presigned-url", {
         originalFileName: file.name,
         contentType: file.type,
         contentLength: file.size,
         uploadCategory: category,
-        fileStorageType: "IMAGE"
+        fileStorageType: storageType
     });
-
-    console.log("📌 presigned:", category, res.data.data);
 
     return res.data.data;
 };
@@ -24,16 +27,9 @@ export const uploadToS3 = async (
     file: File,
     headers: Record<string, string>
 ) => {
-    console.log("📌 S3 업로드:", uploadUrl);
-
     await axios.put(uploadUrl, file, {
-        headers: {
-            "Content-Type": file.type,
-            ...headers
-        }
+        headers
     });
-
-    console.log("✅ S3 업로드 완료");
 };
 
 type UploadCompleteRequest = {
@@ -49,17 +45,20 @@ export const uploadComplete = async (data: UploadCompleteRequest, category: Uplo
         uploadCategory: category
     });
 
-    console.log("📌 uploadComplete:", category, res.data.data);
-
     return res.data.data;
 };
 
 // 단일 이미지 업로드 (멤버)
 export const uploadImage = async (
     file: File,
-    category: UploadCategory
+    category: UploadCategory,
+    fileStorageType: FileStorageType
 ): Promise<{ storedName: string; fileUrl: string }> => {
-    const { uploadUrl, headers, storedFileName } = await getPresignedUrl(file, category);
+    const { uploadUrl, headers, storedFileName } = await getPresignedUrl(
+        file,
+        category,
+        fileStorageType
+    );
 
     await uploadToS3(uploadUrl, file, headers);
 
@@ -82,13 +81,14 @@ export const uploadImage = async (
 // 이미지 여러개 업로드 (블로그, 프로젝트, 소식)
 export const uploadImages = async (
     files: File[],
-    category: UploadCategory
+    category: UploadCategory,
+    fileStorageType: FileStorageType
 ): Promise<{ storedNames: string[]; fileUrls: string[] }> => {
     const storedNames: string[] = [];
     const fileUrls: string[] = [];
 
     for (const file of files) {
-        const { storedName, fileUrl } = await uploadImage(file, category);
+        const { storedName, fileUrl } = await uploadImage(file, category, fileStorageType);
 
         storedNames.push(storedName);
         fileUrls.push(fileUrl);

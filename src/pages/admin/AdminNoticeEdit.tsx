@@ -154,7 +154,11 @@ export const AdminNoticeEditPage = () => {
                 <div className="flex flex-row gap-[18px] items-start">
                     <span className="w-19 pt-[14px] text-sm font-medium text-[#666666]">내용</span>
                     <div className="flex-1">
-                        <AdminTextEditor content={content} setContent={setContent} />
+                        <AdminTextEditor
+                            content={content}
+                            setContent={setContent}
+                            uploadCategory="NOTICE"
+                        />
                     </div>
                 </div>
                 {/* 첨부파일 */}

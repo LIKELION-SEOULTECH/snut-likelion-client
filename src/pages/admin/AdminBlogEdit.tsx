@@ -3,13 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
 import AdminTagEditor from "@/components/text-editor/AdminTagEditor";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, type UseQueryResult } from "@tanstack/react-query";
 import sample from "@/assets/home/sample.png";
 import sample1 from "@/assets/home/sample1.png";
 import { getBlogDetail } from "@/apis/main/blog";
 import { ADMIN_ABS } from "@/routes/routes";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { updateAdminBlog } from "@/apis/admin/blog";
+import { fetchMemberDetail } from "@/apis/main/member";
+import type { MemberResponse } from "@/types/members";
 
 type MentionSuggestion = {
     id: string;
@@ -60,27 +62,33 @@ export const AdminBlogEditPage = () => {
         }
     });
 
-    useEffect(() => {
-        if (adminBlog) {
-            setTitle(adminBlog.data.data.title);
-            setContent(adminBlog.data.data.contentHtml);
-            setType(adminBlog.data.data.category);
+    const ids = adminBlog?.data.data.taggedMemberIds ?? [];
 
-            // const tagData: MentionSuggestion[] =
-            //     adminBlog.data.data.taggedMemberIds?.map((tag: string, index: number) => ({
-            //         id: `${index}`,
-            //         mentionLabel: tag,
-            //         avatarUrl: index % 2 === 0 ? sample : sample1
-            //     })) || [];
-            const tagData: MentionSuggestion[] =
-                adminBlog.data.data.taggedMemberNames?.map((name: string, index: number) => ({
-                    id: `${index}-${name}`,
-                    mentionLabel: name,
-                    avatarUrl: index % 2 === 0 ? sample : sample1
-                })) || [];
-            setTags(tagData);
-        }
-    }, [adminBlog]);
+    const memberQueries = useQueries({
+        queries: ids.map((id: number) => ({
+            queryKey: ["member", id],
+            queryFn: () => fetchMemberDetail(id),
+            enabled: !!adminBlog
+        }))
+    }) as UseQueryResult<MemberResponse>[];
+
+    const isAllMembersLoaded = memberQueries.every((q) => q.isSuccess);
+
+    useEffect(() => {
+        if (!adminBlog || !isAllMembersLoaded) return;
+
+        setTitle(adminBlog.data.data.title);
+        setContent(adminBlog.data.data.contentHtml);
+        setType(adminBlog.data.data.category);
+
+        const tagData: MentionSuggestion[] = ids.map((id: number, index: number) => ({
+            id: String(id),
+            mentionLabel: memberQueries[index]?.data?.name ?? "", // 안전 처리
+            avatarUrl: index % 2 === 0 ? sample : sample1
+        }));
+
+        setTags(tagData);
+    }, [adminBlog, isAllMembersLoaded]);
 
     const handleBackBtn = () => {
         navigate(ADMIN_ABS.BLOG);
@@ -133,6 +141,7 @@ export const AdminBlogEditPage = () => {
                             ref={editorRef}
                             content={content}
                             setContent={setContent}
+                            uploadCategory="BLOG"
                         />
                     </div>
                 </div>

@@ -106,6 +106,7 @@ export const AdminBlogCreatePage = () => {
                             ref={editorRef}
                             content={content}
                             setContent={setContent}
+                            uploadCategory="BLOG"
                         />
                     </div>
                 </div>
