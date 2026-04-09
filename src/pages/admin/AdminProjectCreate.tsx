@@ -144,11 +144,9 @@ export const AdminProjectCreatePage = () => {
                 }))
             };
 
-            console.log("🚀 create project payload:", payload);
-
             createProjectMutation.mutate(payload);
         } catch (error) {
-            console.error("❌ 프로젝트 생성 실패", error);
+            console.error("프로젝트 생성 실패", error);
             alert("프로젝트 생성 실패");
         }
     };

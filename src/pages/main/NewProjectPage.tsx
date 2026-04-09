@@ -88,10 +88,8 @@ export const NewProjectPage = () => {
             let storedNames: string[] = [];
 
             if (imageFiles.length > 0) {
-                const result = await uploadImages(imageFiles, "PROJECT");
+                const result = await uploadImages(imageFiles, "PROJECT", "IMAGE");
                 storedNames = result.storedNames;
-
-                console.log("📌 업로드된 storedNames:", storedNames);
             }
 
             // JSON payload 생성

@@ -74,12 +74,11 @@ export const MemberDetailPage = () => {
         enabled: !!numericId
     });
 
-    const { data: lionInfo, isLoading: isLionInfoLoading } = useQuery({
+    const { isLoading: isLionInfoLoading } = useQuery({
         queryKey: ["lionInfo", numericId, fallbackData?.generation],
         queryFn: () => fetchLionInfo(numericId!, fallbackData.generation),
         enabled: !!numericId && !!fallbackData?.generation
     });
-    console.log("멤버 상세 정보:", lionInfo?.role);
 
     const member: (MemberDetailResponse & { part?: string; role?: string }) | null = useMemo(() => {
         if (!memberData) return null;
