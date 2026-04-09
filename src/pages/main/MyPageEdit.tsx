@@ -72,12 +72,8 @@ export const MyPageEdit = () => {
             let profileImageKey = extractKeyFromUrl(member.profileImageUrl);
 
             if (croppedImageFile) {
-                console.log("📌 프로필 이미지 업로드 시작");
-
-                const { storedName } = await uploadImage(croppedImageFile, "MEMBER");
+                const { storedName } = await uploadImage(croppedImageFile, "MEMBER", "IMAGE");
                 profileImageKey = storedName;
-
-                console.log("📌 업로드된 key:", profileImageKey);
             }
 
             const payload = {
@@ -88,8 +84,6 @@ export const MyPageEdit = () => {
                 stacks: stackList,
                 portfolioLinks: portfolioLinks.filter((link) => link.name && link.url)
             };
-
-            console.log("🚀 PATCH 요청:", payload);
 
             mutate(payload);
         } catch (error) {

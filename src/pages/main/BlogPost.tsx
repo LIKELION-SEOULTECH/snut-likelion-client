@@ -44,9 +44,8 @@ export const BlogPostPage = () => {
                     })
                     .filter((file): file is File => file !== null);
 
-                const { storedNames, fileUrls } = await uploadImages(files, "BLOG");
-                console.log("📌 storedNames:", storedNames);
-                console.log("📌 fileUrls:", fileUrls);
+                const { storedNames, fileUrls } = await uploadImages(files, "BLOG", "IMAGE");
+
                 // src 치환
                 imgEls.forEach((img, i) => {
                     img.setAttribute("src", fileUrls[i]);
@@ -68,14 +67,6 @@ export const BlogPostPage = () => {
                 },
                 submit
             );
-
-            console.log("🚀 createBlog 요청:", {
-                title,
-                contentHtml: finalHtml,
-                category: type,
-                taggedMemberIds: tags,
-                imageStoredFileNames: uploadedImages
-            });
 
             navigate("/blog");
         } catch (error) {
