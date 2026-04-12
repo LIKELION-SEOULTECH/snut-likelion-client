@@ -22,7 +22,7 @@ export const deleteMultipleProjects = async (ids: number[]) => {
 };
 
 // 프로젝트 업로드
-export const createAdminProject = async (data: CreateProjectRequest): Promise<void> => {
+export const createAdminProject = async (data: Omit<CreateProjectRequest, "retrospections">) => {
     const res = await axiosInstance.post("/admin/projects", data);
     return res.data;
 };

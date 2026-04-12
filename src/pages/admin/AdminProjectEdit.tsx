@@ -3,22 +3,54 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
 import { Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
-import { getProjectDetail, getRetrospections } from "@/apis/main/project";
-import type { RetrospectionResponse } from "@/types/project";
+import {
+    createRetrospection,
+    deleteRetrospection,
+    getProjectDetail,
+    getRetrospections
+} from "@/apis/main/project";
+import type { Retro, RetrospectionResponse } from "@/types/project";
 import { updateAdminProject } from "@/apis/admin/project";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { StackInput } from "@/components/my-page/StackInput";
 import { ADMIN_ABS } from "@/routes/routes";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { RetroRow } from "@/components/admin/project/RetroRow";
-interface Retro {
-    memberId: number | null;
-    memberName: string;
-    comment: string;
-    query: string;
-    filtered: { id: number; name: string }[];
-    showDropdown: boolean;
-}
+
+const syncAdminRetrospections = async (
+    projectId: number,
+    originalRetrospections: RetrospectionResponse[],
+    nextRetrospections: Retro[]
+) => {
+    const nextById = new Map(
+        nextRetrospections
+            .filter((retrospection) => retrospection.id)
+            .map((retrospection) => [retrospection.id, retrospection])
+    );
+    const newRetrospections = nextRetrospections.filter((retrospection) => !retrospection.id);
+
+    await Promise.all(
+        originalRetrospections.map(async (original) => {
+            const next = nextById.get(original.id);
+
+            if (!next || !next.comment.trim()) {
+                await deleteRetrospection(projectId, original.id);
+                return;
+            }
+
+            if (next.comment.trim() !== original.content.trim()) {
+                await deleteRetrospection(projectId, original.id);
+                await createRetrospection(projectId, next.comment);
+            }
+        })
+    );
+
+    await Promise.all(
+        newRetrospections
+            .filter((retrospection) => retrospection.comment.trim())
+            .map((retrospection) => createRetrospection(projectId, retrospection.comment))
+    );
+};
 
 const CATEGORY_VALUE_MAP: Record<string, string> = {
     아이디어톤: "IDEATHON",
@@ -98,6 +130,7 @@ export const AdminProjectEditPage = () => {
         setRetros(
             fetched.map(
                 (r): Retro => ({
+                    id: r.id,
                     memberId: r.writer.id,
                     memberName: r.writer.name,
                     comment: r.content,
@@ -167,11 +200,17 @@ export const AdminProjectEditPage = () => {
     };
 
     const updateProjectMutation = useMutation({
-        mutationFn: (formData: FormData) => updateAdminProject(projectIdNum, formData),
+        mutationFn: async (formData: FormData) => {
+            const updatedProject = await updateAdminProject(projectIdNum, formData);
+            await syncAdminRetrospections(projectIdNum, retrosData ?? [], retros);
+            return updatedProject;
+        },
 
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
             queryClient.invalidateQueries({ queryKey: ["adminProject", projectIdNum] });
+            queryClient.invalidateQueries({ queryKey: ["projectRetros", projectIdNum] });
+            queryClient.invalidateQueries({ queryKey: ["retrospections", projectIdNum] });
 
             alert("프로젝트가 성공적으로 수정되었습니다.");
         },
@@ -197,18 +236,6 @@ export const AdminProjectEditPage = () => {
         if (androidUrl) formData.append("playstoreUrl", androidUrl);
 
         tags.forEach((tag) => formData.append("tags", tag));
-
-        formData.append(
-            "retrospections",
-            JSON.stringify(
-                retros
-                    .filter((r) => r.memberId !== null)
-                    .map((r) => ({
-                        memberId: r.memberId,
-                        content: r.comment
-                    }))
-            )
-        );
 
         images.forEach((img) => {
             formData.append("newImages", img);
