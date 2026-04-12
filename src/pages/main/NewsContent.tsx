@@ -7,6 +7,7 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { getNoticeById } from "@/apis/main/notice";
 import { formatDate } from "@/utils/formatData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { FileText } from "lucide-react";
 
 const NewsContentSkeleton = () => (
     <PageLayout white={true}>
@@ -77,6 +78,26 @@ export const NewsContentPage = () => {
                 <div className="w-full">
                     <PostContent content={notice.content} />
                 </div>
+
+                {notice.files && notice.files.length > 0 && (
+                    <section className="w-full pl-[103px] mt-16">
+                        <div className="text-xl font-bold mb-5">첨부파일</div>
+                        <div className="flex flex-col gap-3">
+                            {notice.files.map((file) => (
+                                <a
+                                    key={file.attachmentId}
+                                    href={file.fileUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-2 text-lg text-[#666666] underline underline-offset-4 break-all"
+                                >
+                                    <FileText size={20} className="shrink-0" />
+                                    <span>{file.originalFileName || file.fileUrl}</span>
+                                </a>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 <section className="w-full mt-30">
                     <PostNavigator
