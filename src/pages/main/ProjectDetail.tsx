@@ -94,7 +94,7 @@ export default function ProjectDetailPage() {
                                 프로젝트 정보를 불러오는 중...
                             </div>
                             <div className="text-[32px] font-bold mb-8">프로젝트 회고</div>
-                            <div className="text-[32px] font-bold ">같은 기수 프로젝트</div>ㄴ
+                            <div className="text-[32px] font-bold">같은 기수 프로젝트</div>
                         </div>
                     </div>
                 </div>
@@ -236,7 +236,7 @@ export default function ProjectDetailPage() {
                         <section className="flex flex-col mb-[110px]">
                             {isAllProjectsLoading ? (
                                 <div className="mb-[109px] sm:mb-30">
-                                    <div className="text-[28px] sm:text-[32px] text-center sm:text-start font-bold leading-[130%] tracking-[-0.02] mb-10 sm:mb-0">
+                                    <div className="text-[28px] sm:text-[32px] text-left font-bold leading-[130%] tracking-[-0.02] mb-10 sm:mb-0">
                                         같은 기수 프로젝트
                                     </div>
                                     <div className="flex flex-row gap-4 justify-center sm:overflow-hidden mt-4">
