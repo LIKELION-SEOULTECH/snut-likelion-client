@@ -12,6 +12,7 @@ export const ROUTES = {
     PROJECT: "/project",
     PROJECT_DETAIL: "/project/:id",
     PROJECT_NEW: "/project-new",
+    PROJECT_EDIT: "/project/edit/:id",
 
     // member
     MEMBER: "/member",
