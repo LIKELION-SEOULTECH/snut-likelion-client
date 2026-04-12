@@ -119,13 +119,16 @@ export const RegisterForm = () => {
                             }
                             error={""}
                             disabled={!codeSent}
+                            className="pr-17 sm:pr-20"
+                            rightElement={
+                                verificationStatus !== "success" && timer > 0 ? (
+                                    <span className="text-[#F70] font-bold">
+                                        {Math.floor(timer / 60)} :{" "}
+                                        {String(timer % 60).padStart(2, "0")}
+                                    </span>
+                                ) : null
+                            }
                         />
-                        {verificationStatus !== "success" && (
-                            <div className="text-[#F70] font-bold absolute top-12 right-4 ">
-                                {timer > 0 &&
-                                    `${Math.floor(timer / 60)} : ${String(timer % 60).padStart(2, "0")}`}
-                            </div>
-                        )}
                     </div>
                     {verificationStatus && (
                         <p
