@@ -1,14 +1,24 @@
 import { StackInput } from "@/components/my-page/StackInput";
 import { NewImageDrop } from "@/components/project/NewImageDrop";
 import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsInput";
-import { useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProject } from "@/apis/main/project";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    createProject,
+    createRetrospection,
+    deleteRetrospection,
+    getProjectDetail,
+    getRetrospections,
+    updateProject
+} from "@/apis/main/project";
+import type { RetrospectionResponse } from "@/types/project";
 import axios from "axios";
 import { DropDwon } from "@/components/my-page/DropDown";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
 import { uploadImages } from "@/apis/main/file"; // 이미 만들어둔거
+import { extractKeyFromUrl } from "@/utils/file";
+
 const categoryMap: Record<string, string> = {
     전체: "",
     중앙해커톤: "HACKATHON",
@@ -17,9 +27,66 @@ const categoryMap: Record<string, string> = {
     "장기 프로젝트": "LONG_TERM_PROJECT"
 };
 
+const categoryLabelMap: Record<string, string> = {
+    HACKATHON: "중앙해커톤",
+    IDEATHON: "아이디어톤",
+    DEMO_DAY: "데모데이",
+    LONG_TERM_PROJECT: "장기 프로젝트",
+    해커톤: "중앙해커톤",
+    "중앙 해커톤": "중앙해커톤",
+    아이디어톤: "아이디어톤",
+    데모데이: "데모데이",
+    "장기 프로젝트": "장기 프로젝트"
+};
+
+type RetrospectionInput = {
+    id?: number;
+    memberId: number;
+    memberName?: string;
+    content: string;
+};
+
+const syncRetrospections = async (
+    projectId: number,
+    originalRetrospections: RetrospectionResponse[],
+    nextRetrospections: RetrospectionInput[]
+) => {
+    const nextById = new Map(
+        nextRetrospections
+            .filter((retrospection) => retrospection.id)
+            .map((retrospection) => [retrospection.id, retrospection])
+    );
+    const newRetrospections = nextRetrospections.filter((retrospection) => !retrospection.id);
+
+    await Promise.all(
+        originalRetrospections.map(async (original) => {
+            const next = nextById.get(original.id);
+
+            if (!next || !next.content.trim()) {
+                await deleteRetrospection(projectId, original.id);
+                return;
+            }
+
+            if (next.content.trim() !== original.content.trim()) {
+                await deleteRetrospection(projectId, original.id);
+                await createRetrospection(projectId, next.content);
+            }
+        })
+    );
+
+    await Promise.all(
+        newRetrospections
+            .filter((retrospection) => retrospection.content.trim())
+            .map((retrospection) => createRetrospection(projectId, retrospection.content))
+    );
+};
+
 export const NewProjectPage = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { id } = useParams<{ id: string }>();
+    const projectId = Number(id);
+    const isEditMode = Number.isFinite(projectId);
 
     const generationOptions = useMemo(() => {
         const gens = getGenerationListByYear(2025, 13);
@@ -39,15 +106,100 @@ export const NewProjectPage = () => {
     const [playstoreUrl, setPlaystoreUrl] = useState("");
     const [appstoreUrl, setAppstoreUrl] = useState("");
 
-    const [retrospections, setRetrospections] = useState([{ memberId: 0, content: "" }]);
+    const [retrospections, setRetrospections] = useState<RetrospectionInput[]>([
+        { memberId: 0, content: "" }
+    ]);
 
     const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
+
+    const { data: projectDetailData } = useQuery({
+        queryKey: ["projectDetail", projectId],
+        queryFn: () => getProjectDetail(projectId),
+        enabled: isEditMode
+    });
+
+    const { data: retrospectionData } = useQuery({
+        queryKey: ["retrospections", projectId],
+        queryFn: () => getRetrospections(projectId),
+        enabled: isEditMode
+    });
+
+    useEffect(() => {
+        if (!projectDetailData) return;
+
+        setSelectedGen(String(projectDetailData.generation ?? ""));
+        setSelectedCategory(categoryLabelMap[projectDetailData.category] ?? "");
+        setName(projectDetailData.name ?? "");
+        setIntro(projectDetailData.intro ?? "");
+        setDescription(projectDetailData.description ?? "");
+        setTags(projectDetailData.tags ?? []);
+        setWebsiteUrl(projectDetailData.websiteUrl ?? "");
+        setPlaystoreUrl(projectDetailData.playstoreUrl ?? "");
+        setAppstoreUrl(projectDetailData.appstoreUrl ?? "");
+        setExistingImageUrls(projectDetailData.imageUrls ?? []);
+    }, [projectDetailData]);
+
+    useEffect(() => {
+        if (!retrospectionData) return;
+
+        const nextRetrospections =
+            retrospectionData.length > 0
+                ? retrospectionData.map((retrospection) => ({
+                      id: retrospection.id,
+                      memberId: retrospection.writer.id,
+                      memberName: retrospection.writer.name,
+                      content: retrospection.content
+                  }))
+                : [{ memberId: 0, content: "" }];
+
+        setRetrospections(nextRetrospections);
+    }, [retrospectionData]);
 
     const createProjectMutation = useMutation({
-        mutationFn: createProject,
+        mutationFn: async (payload: {
+            name: string;
+            intro: string;
+            description: string;
+            category: string;
+            generation: number;
+            tags: string[];
+            websiteUrl?: string;
+            playstoreUrl?: string;
+            appstoreUrl?: string;
+            imageStoredFileNames: string[];
+            retrospections: RetrospectionInput[];
+        }) => {
+            const { retrospections, ...projectPayload } = payload;
+            const createdProject = await createProject(projectPayload);
+            const responseData = createdProject?.data;
+            const projectIdFromMessage = createdProject?.message?.match(/projectId=(\d+)/)?.[1];
+            const projectId =
+                responseData?.id ??
+                responseData?.projectId ??
+                (typeof responseData === "number" || typeof responseData === "string"
+                    ? responseData
+                    : undefined) ??
+                createdProject?.id ??
+                createdProject?.projectId ??
+                projectIdFromMessage;
+
+            if (!projectId) {
+                throw new Error("프로젝트 ID를 확인할 수 없습니다.");
+            }
+
+            await Promise.all(
+                retrospections.map((retrospection) =>
+                    createRetrospection(Number(projectId), retrospection.content)
+                )
+            );
+
+            return createdProject;
+        },
         onSuccess: () => {
             alert("프로젝트가 성공적으로 업로드되었습니다!");
             queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+            queryClient.invalidateQueries({ queryKey: ["retrospections"] });
             navigate("/project");
         },
         onError: (error) => {
@@ -57,6 +209,44 @@ export const NewProjectPage = () => {
                 console.error(error);
             }
             alert("업로드 중 오류가 발생했습니다.");
+        }
+    });
+
+    const updateProjectMutation = useMutation({
+        mutationFn: async (payload: {
+            name: string;
+            intro: string;
+            description: string;
+            category: string;
+            generation: number;
+            tags: string[];
+            websiteUrl?: string;
+            playstoreUrl?: string;
+            appstoreUrl?: string;
+            imageStoredFileNames: string[];
+            retrospections: RetrospectionInput[];
+        }) => {
+            const { retrospections, ...projectPayload } = payload;
+            const updatedProject = await updateProject(projectId, projectPayload);
+
+            await syncRetrospections(projectId, retrospectionData ?? [], retrospections);
+
+            return updatedProject;
+        },
+        onSuccess: () => {
+            alert("프로젝트가 성공적으로 수정되었습니다!");
+            queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+            queryClient.invalidateQueries({ queryKey: ["projectDetail", projectId] });
+            queryClient.invalidateQueries({ queryKey: ["retrospections", projectId] });
+            navigate(`/project/${projectId}`);
+        },
+        onError: (error) => {
+            if (axios.isAxiosError(error)) {
+                console.error(error.response?.data?.message || error.message);
+            } else {
+                console.error(error);
+            }
+            alert("수정 중 오류가 발생했습니다.");
         }
     });
 
@@ -74,9 +264,7 @@ export const NewProjectPage = () => {
             return;
         }
 
-        const validRetrospections = retrospections.filter(
-            (r) => r.memberId !== 0 && r.content.trim() !== ""
-        );
+        const validRetrospections = retrospections.filter((r) => r.content.trim() !== "");
 
         if (validRetrospections.length === 0) {
             alert("회고를 작성해주세요.");
@@ -93,6 +281,7 @@ export const NewProjectPage = () => {
             }
 
             // JSON payload 생성
+            const existingStoredNames = existingImageUrls.map(extractKeyFromUrl);
             const payload = {
                 name,
                 intro,
@@ -104,10 +293,28 @@ export const NewProjectPage = () => {
                 playstoreUrl,
                 appstoreUrl,
                 retrospections: validRetrospections,
-                imageStoredFileNames: storedNames
+                imageStoredFileNames: isEditMode
+                    ? [...existingStoredNames, ...storedNames]
+                    : storedNames
             };
 
-            createProjectMutation.mutate(payload);
+            if (isEditMode) {
+                updateProjectMutation.mutate({
+                    name: payload.name,
+                    intro: payload.intro,
+                    description: payload.description,
+                    category: payload.category,
+                    generation: payload.generation,
+                    tags: payload.tags,
+                    websiteUrl: payload.websiteUrl,
+                    playstoreUrl: payload.playstoreUrl,
+                    appstoreUrl: payload.appstoreUrl,
+                    imageStoredFileNames: payload.imageStoredFileNames,
+                    retrospections: payload.retrospections
+                });
+            } else {
+                createProjectMutation.mutate(payload);
+            }
         } catch (e) {
             console.error(e);
             alert("이미지 업로드 실패");
@@ -133,7 +340,7 @@ export const NewProjectPage = () => {
                         onClick={handleSubmit}
                         className="bg-[#F70] text-white font-bold px-4 py-2 rounded-[120px]"
                     >
-                        업로드
+                        {isEditMode ? "수정완료" : "업로드"}
                     </button>
                 </div>
             </div>
@@ -290,11 +497,13 @@ export const NewProjectPage = () => {
                                 (순서대로)
                                 <br />
                                 <span className="text-xs text-[#999] mt-2 ml-1">
-                                    {imageFiles.length}/50
+                                    {existingImageUrls.length + imageFiles.length}/50
                                 </span>
                             </label>
                             <NewImageDrop
                                 imageFiles={imageFiles}
+                                existingImageUrls={isEditMode ? existingImageUrls : []}
+                                onExistingImagesChange={setExistingImageUrls}
                                 onChange={(files: File[]) => {
                                     setImageFiles(files);
                                 }}

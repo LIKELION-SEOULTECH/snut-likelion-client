@@ -143,7 +143,8 @@ export const AdminNoticeCreatePage = () => {
                     storedFileName,
                     originalFileName: file.name,
                     contentType: file.type,
-                    contentLength: file.size
+                    contentLength: file.size,
+                    fileStorageType: storageType
                 },
                 "NOTICE"
             );

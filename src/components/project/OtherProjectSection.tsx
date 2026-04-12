@@ -38,7 +38,7 @@ export const OtherProjectSection = ({
 
     return (
         <div className="flex flex-col justify-center gap-8">
-            <div className="text-[28px] sm:text-[32px] font-bold leading-[130%] text-center tracking-[-0.02]">
+            <div className="text-[28px] sm:text-[32px] font-bold leading-[130%] text-left tracking-[-0.02]">
                 같은 기수 프로젝트
             </div>
             <div ref={scrollRef} className="overflow-x-auto scrollbar-hide sm:w-[1216px]">

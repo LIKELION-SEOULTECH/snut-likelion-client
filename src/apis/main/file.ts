@@ -37,6 +37,7 @@ type UploadCompleteRequest = {
     originalFileName: string;
     contentType: string;
     contentLength: number;
+    fileStorageType?: FileStorageType;
 };
 
 export const uploadComplete = async (data: UploadCompleteRequest, category: UploadCategory) => {
@@ -67,7 +68,8 @@ export const uploadImage = async (
             storedFileName,
             originalFileName: file.name,
             contentType: file.type,
-            contentLength: file.size
+            contentLength: file.size,
+            fileStorageType
         },
         category
     );

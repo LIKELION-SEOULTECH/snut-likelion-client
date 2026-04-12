@@ -10,6 +10,7 @@ interface Member {
 
 interface Retrospection {
     memberId: number;
+    memberName?: string;
     content: string;
 }
 
@@ -32,6 +33,11 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
         };
         loadMembers();
     }, []);
+
+    useEffect(() => {
+        setSearchText((prev) => value.map((item, index) => item.memberName ?? prev[index] ?? ""));
+        setShowSuggestions((prev) => value.map((_, index) => prev[index] ?? false));
+    }, [value]);
 
     const handleChange = (index: number, key: "memberId" | "content", fieldValue: string) => {
         const updated: Retrospection[] = [...value];
@@ -58,8 +64,18 @@ export const NewRetrospectionsInput = ({ value, onChange }: Props) => {
     };
 
     const handleSelectMember = (index: number, member: Member) => {
-        handleChange(index, "memberId", member.id);
-        handleSearchChange(index, member.name);
+        const updated: Retrospection[] = [...value];
+        updated[index] = {
+            ...updated[index],
+            memberId: Number(member.id),
+            memberName: member.name
+        };
+        onChange(updated);
+
+        const updatedSearchText = [...searchText];
+        updatedSearchText[index] = member.name;
+        setSearchText(updatedSearchText);
+
         setShowSuggestions((prev) => {
             const newState = [...prev];
             newState[index] = false;
