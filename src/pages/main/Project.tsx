@@ -4,12 +4,8 @@ import GenerationTabs from "@/components/project/GenerationTabs";
 import PageLayout from "@/layouts/PageLayout";
 import ProjectList from "@/components/project/ProjectList";
 import QuoteCardList from "@/components/project/QuoteCardList";
-// import { useAllProjects } from "@/hooks/useAllProjects";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
 import { useAllProjects } from "@/hooks/useAllProjects";
-// import { mock13thProjectData } from "@/constants/mockProjectData";
-
-// type ProjectCategory = "HACKATHON" | "IDEATHON" | "DEMO_DAY";
 
 const categoryMap: Record<string, string> = {
     전체: "",

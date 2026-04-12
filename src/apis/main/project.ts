@@ -1,6 +1,5 @@
 import axiosInstance from "../axiosInstance";
 import type { Project, ProjectQueryParams, RetrospectionResponse } from "@/types/project";
-import { mockProjectRetrospections } from "@/constants/mockProjectData";
 
 // 프로젝트 생성
 export const createProject = async (payload: {
@@ -14,7 +13,6 @@ export const createProject = async (payload: {
     websiteUrl?: string;
     playstoreUrl?: string;
     appstoreUrl?: string;
-    retrospections: { memberId: number; content: string }[];
 }) => {
     const res = await axiosInstance.post("/projects", payload);
     return res.data;
@@ -42,11 +40,14 @@ export const deleteProject = async (projectId: number) => {
 
 // 프로젝트 회고 전체 조회
 export const getRetrospections = async (projectId: number): Promise<RetrospectionResponse[]> => {
-    if (mockProjectRetrospections[projectId]) {
-        return Promise.resolve(mockProjectRetrospections[projectId]);
-    }
     const res = await axiosInstance.get(`/projects/${projectId}/retrospections`);
     return res.data.data;
+};
+
+// 프로젝트 회고 작성
+export const createRetrospection = async (projectId: number, content: string) => {
+    const res = await axiosInstance.post(`/projects/${projectId}/retrospections`, { content });
+    return res.data;
 };
 
 // 프로젝트 회고 삭제

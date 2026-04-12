@@ -4,7 +4,7 @@ import { NewRetrospectionsInput } from "@/components/project/NewRetrospectionsIn
 import { useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createProject } from "@/apis/main/project";
+import { createProject, createRetrospection } from "@/apis/main/project";
 import axios from "axios";
 import { DropDwon } from "@/components/my-page/DropDown";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
@@ -44,10 +44,49 @@ export const NewProjectPage = () => {
     const [imageFiles, setImageFiles] = useState<File[]>([]);
 
     const createProjectMutation = useMutation({
-        mutationFn: createProject,
+        mutationFn: async (payload: {
+            name: string;
+            intro: string;
+            description: string;
+            category: string;
+            generation: number;
+            tags: string[];
+            websiteUrl?: string;
+            playstoreUrl?: string;
+            appstoreUrl?: string;
+            imageStoredFileNames: string[];
+            retrospections: { memberId: number; content: string }[];
+        }) => {
+            const { retrospections, ...projectPayload } = payload;
+            const createdProject = await createProject(projectPayload);
+            const responseData = createdProject?.data;
+            const projectIdFromMessage = createdProject?.message?.match(/projectId=(\d+)/)?.[1];
+            const projectId =
+                responseData?.id ??
+                responseData?.projectId ??
+                (typeof responseData === "number" || typeof responseData === "string"
+                    ? responseData
+                    : undefined) ??
+                createdProject?.id ??
+                createdProject?.projectId ??
+                projectIdFromMessage;
+
+            if (!projectId) {
+                throw new Error("프로젝트 ID를 확인할 수 없습니다.");
+            }
+
+            await Promise.all(
+                retrospections.map((retrospection) =>
+                    createRetrospection(Number(projectId), retrospection.content)
+                )
+            );
+
+            return createdProject;
+        },
         onSuccess: () => {
             alert("프로젝트가 성공적으로 업로드되었습니다!");
             queryClient.invalidateQueries({ queryKey: ["allProjects"] });
+            queryClient.invalidateQueries({ queryKey: ["retrospections"] });
             navigate("/project");
         },
         onError: (error) => {
@@ -74,9 +113,7 @@ export const NewProjectPage = () => {
             return;
         }
 
-        const validRetrospections = retrospections.filter(
-            (r) => r.memberId !== 0 && r.content.trim() !== ""
-        );
+        const validRetrospections = retrospections.filter((r) => r.content.trim() !== "");
 
         if (validRetrospections.length === 0) {
             alert("회고를 작성해주세요.");
