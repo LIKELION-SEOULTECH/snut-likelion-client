@@ -2,6 +2,7 @@ import { categoryMap } from "@/types/project";
 import { useNavigate } from "react-router-dom";
 import type { ProjectCategory } from "@/types/project";
 import sample from "@/assets/common/sampleBox.png";
+import { toPublicFileUrl } from "@/utils/file";
 
 export interface ProjectBoxProps {
     id: number;
@@ -10,7 +11,7 @@ export interface ProjectBoxProps {
     generation?: number;
     category?: ProjectCategory;
     tags?: string[];
-    thumbnailUrl: string;
+    thumbnailUrl?: string | null;
     rounded?: string;
 }
 
@@ -24,6 +25,7 @@ export const ProjectBox = ({
     thumbnailUrl
 }: ProjectBoxProps) => {
     const navigate = useNavigate();
+    const imageSrc = toPublicFileUrl(thumbnailUrl) || sample;
 
     return (
         <div className="relative text-[#ffffff] rounded-[16px]">
@@ -34,7 +36,7 @@ export const ProjectBox = ({
                 <img
                     // *** 여기 주석 부분 3줄 ****//
                     // 웹 부분꺼임(지우지마유)
-                    src={thumbnailUrl || sample}
+                    src={imageSrc}
                     alt={name}
                     //**** 모바일 부분 ***//
                     //   src={image}

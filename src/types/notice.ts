@@ -7,6 +7,14 @@ export interface Notice {
     content: string;
     createdAt: string;
     updatedAt: string;
+    files?: NoticeFile[];
+    images?: NoticeFile[];
+}
+
+export interface NoticeFile {
+    attachmentId: number;
+    originalFileName: string;
+    fileUrl: string;
 }
 
 export interface AdminNotice {

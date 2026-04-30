@@ -109,6 +109,7 @@ export interface ProjectFilter {
 
 // 프로젝트 회고 타입
 export interface Retro {
+    id?: number;
     memberId: number | null;
     memberName: string;
     comment: string;

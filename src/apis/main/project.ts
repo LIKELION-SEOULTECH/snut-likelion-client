@@ -1,9 +1,7 @@
 import axiosInstance from "../axiosInstance";
 import type { Project, ProjectQueryParams, RetrospectionResponse } from "@/types/project";
-import { mockProjectRetrospections } from "@/constants/mockProjectData";
 
-// 프로젝트 생성
-export const createProject = async (payload: {
+type ProjectPayload = {
     name: string;
     intro: string;
     description: string;
@@ -14,9 +12,17 @@ export const createProject = async (payload: {
     websiteUrl?: string;
     playstoreUrl?: string;
     appstoreUrl?: string;
-    retrospections: { memberId: number; content: string }[];
-}) => {
+};
+
+// 프로젝트 생성
+export const createProject = async (payload: ProjectPayload) => {
     const res = await axiosInstance.post("/projects", payload);
+    return res.data;
+};
+
+// 프로젝트 수정
+export const updateProject = async (projectId: number, payload: ProjectPayload) => {
+    const res = await axiosInstance.patch(`/projects/${projectId}`, payload);
     return res.data;
 };
 
@@ -42,19 +48,22 @@ export const deleteProject = async (projectId: number) => {
 
 // 프로젝트 회고 전체 조회
 export const getRetrospections = async (projectId: number): Promise<RetrospectionResponse[]> => {
-    if (mockProjectRetrospections[projectId]) {
-        return Promise.resolve(mockProjectRetrospections[projectId]);
-    }
     const res = await axiosInstance.get(`/projects/${projectId}/retrospections`);
     return res.data.data;
 };
 
+// 프로젝트 회고 작성
+export const createRetrospection = async (projectId: number, content: string) => {
+    const res = await axiosInstance.post(`/projects/${projectId}/retrospections`, { content });
+    return res.data;
+};
+
 // 프로젝트 회고 삭제
 export const deleteRetrospection = (projectId: number, retrospectionId: number) => {
-    return axiosInstance.delete(`/api/v1/projects/${projectId}/retrospections/${retrospectionId}`);
+    return axiosInstance.delete(`/projects/${projectId}/retrospections/${retrospectionId}`);
 };
 
 // 프로젝트 이미지 단건 삭제
 export const deleteProjectImage = (projectId: number) => {
-    return axiosInstance.delete(`/api/v1/projects/${projectId}/images`);
+    return axiosInstance.delete(`/projects/${projectId}/images`);
 };

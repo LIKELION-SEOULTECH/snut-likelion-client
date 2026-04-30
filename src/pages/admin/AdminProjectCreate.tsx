@@ -13,6 +13,31 @@ import { CustomSelect } from "@/components/admin/common/custom-select";
 import type { CreateProjectRequest, Retro } from "@/types/project";
 import { RetroRow } from "@/components/admin/project/RetroRow";
 import { uploadImages } from "@/apis/main/file";
+import { createRetrospection } from "@/apis/main/project";
+
+type ProjectCreateResponse = {
+    data?: { id?: number; projectId?: number } | number | string;
+    id?: number;
+    projectId?: number;
+    message?: string;
+};
+
+const getProjectIdFromResponse = (response: ProjectCreateResponse) => {
+    const responseData = response?.data;
+    const projectIdFromMessage = response?.message?.match(/projectId=(\d+)/)?.[1];
+
+    return (
+        (typeof responseData === "object" && responseData
+            ? (responseData.id ?? responseData.projectId)
+            : undefined) ??
+        (typeof responseData === "number" || typeof responseData === "string"
+            ? responseData
+            : undefined) ??
+        response?.id ??
+        response?.projectId ??
+        projectIdFromMessage
+    );
+};
 
 export const AdminProjectCreatePage = () => {
     const queryClient = useQueryClient();
@@ -103,10 +128,29 @@ export const AdminProjectCreatePage = () => {
         images.length >= 0;
 
     const createProjectMutation = useMutation({
-        mutationFn: (data: CreateProjectRequest) => createAdminProject(data),
+        mutationFn: async (data: CreateProjectRequest) => {
+            const { retrospections, ...projectPayload } = data;
+            const createdProject = await createAdminProject(projectPayload);
+            const projectId = getProjectIdFromResponse(createdProject);
+
+            if (!projectId) {
+                throw new Error("프로젝트 ID를 확인할 수 없습니다.");
+            }
+
+            await Promise.all(
+                retrospections
+                    .filter((retrospection) => retrospection.content.trim())
+                    .map((retrospection) =>
+                        createRetrospection(Number(projectId), retrospection.content)
+                    )
+            );
+
+            return createdProject;
+        },
 
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
+            queryClient.invalidateQueries({ queryKey: ["retrospections"] });
             navigate(ADMIN_ABS.PROJECT);
         },
 

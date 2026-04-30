@@ -52,6 +52,7 @@ export default function MainRoutes() {
             <Route path={ROUTES.PROJECT} element={<ProjectPage />} />
             <Route path={ROUTES.PROJECT_DETAIL} element={<ProjectDetailPage />} />
             <Route path={ROUTES.PROJECT_NEW} element={<NewProjectPage />} />
+            <Route path={ROUTES.PROJECT_EDIT} element={<NewProjectPage />} />
 
             {/* 멤버 */}
             <Route path={ROUTES.MEMBER} element={<MemberPage />} />

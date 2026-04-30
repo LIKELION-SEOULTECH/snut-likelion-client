@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { ADMIN, ADMIN_ABS, ROUTES } from "@/routes/routes";
 import { toast, Toaster } from "sonner";
-import { AlertCircle, CircleCheck } from "lucide-react";
+import { AlertCircle, CircleCheck, FileText } from "lucide-react";
 export const AdminNoticeDetailPage = () => {
     const queryClient = useQueryClient();
     const { id } = useParams<{ id: string }>();
@@ -97,6 +97,25 @@ export const AdminNoticeDetailPage = () => {
                             className="text-xl"
                             dangerouslySetInnerHTML={{ __html: notice.content }}
                         />
+                    )}
+                    {notice.files && notice.files.length > 0 && (
+                        <div className="mt-10 border-t border-[#E5E5E5] pt-6">
+                            <div className="text-lg font-semibold mb-4">첨부파일</div>
+                            <div className="flex flex-col gap-3">
+                                {notice.files.map((file) => (
+                                    <a
+                                        key={file.attachmentId}
+                                        href={file.fileUrl}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center gap-2 text-base text-[#666666] underline underline-offset-4 break-all"
+                                    >
+                                        <FileText size={18} className="shrink-0" />
+                                        <span>{file.originalFileName || file.fileUrl}</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
                     )}
                 </div>
             )}

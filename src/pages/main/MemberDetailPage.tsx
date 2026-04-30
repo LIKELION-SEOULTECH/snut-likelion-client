@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { fetchLionInfo, fetchMemberDetail } from "@/apis/main/member";
-import { ProjectBox, type ProjectBoxProps } from "@/components/home/ProjectBox";
+import { ProjectBox } from "@/components/home/ProjectBox";
 import { OrangeBtn } from "@/components/Member/OrangeBtn";
 import { SmallBtn } from "@/components/Member/SmallBtn";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -11,9 +11,8 @@ import PageLayout from "@/layouts/PageLayout";
 import { ROUTES } from "@/routes/routes";
 
 import DirectoryIcon from "@/assets/project/directory-icon.svg?react";
-import type { MemberDetailResponse } from "@/types/members";
+import type { MemberDetailResponse, MemberResponse } from "@/types/members";
 import { ProjectBoxSkeleton } from "@/components/project/ProjectBoxSkeleton";
-import { mock13thProjectData, mockMemberProjectMapping } from "@/constants/mockProjectData";
 import { getProfileImage } from "@/utils/getProfileImage";
 
 const nameMap = {
@@ -66,7 +65,7 @@ export const MemberDetailPage = () => {
     const location = useLocation();
 
     const numericId = id ? Number(id) : undefined;
-    const fallbackData = location.state?.member;
+    const fallbackData = location.state?.member as MemberResponse | undefined;
 
     const { data: memberData, isLoading: isMemberLoading } = useQuery({
         queryKey: ["member", numericId],
@@ -74,29 +73,28 @@ export const MemberDetailPage = () => {
         enabled: !!numericId
     });
 
-    const { isLoading: isLionInfoLoading } = useQuery({
-        queryKey: ["lionInfo", numericId, fallbackData?.generation],
-        queryFn: () => fetchLionInfo(numericId!, fallbackData.generation),
-        enabled: !!numericId && !!fallbackData?.generation
-    });
-
-    const member: (MemberDetailResponse & { part?: string; role?: string }) | null = useMemo(() => {
+    const member:
+        | (MemberDetailResponse & { generation?: number; part?: string; role?: string })
+        | null = useMemo(() => {
         if (!memberData) return null;
-        return { ...fallbackData, ...memberData };
+        return {
+            ...memberData,
+            generation: fallbackData?.generation,
+            profileImageUrl: fallbackData?.profileImageUrl || memberData.profileImageUrl,
+            part: fallbackData?.part,
+            role: fallbackData?.role
+        };
     }, [memberData, fallbackData]);
 
-    // const projects = lionInfo?.projects ?? [];
-    const gen = 13; // 임시로 13기로 고정, API 수정되면 제거 예정
+    const selectedGeneration = member?.generation ?? member?.generations?.[0];
 
-    const projects = useMemo(() => {
-        if (!numericId) return [];
+    const { data: lionInfo, isLoading: isLionInfoLoading } = useQuery({
+        queryKey: ["lionInfo", numericId, selectedGeneration],
+        queryFn: () => fetchLionInfo(numericId!, selectedGeneration!),
+        enabled: !!numericId && !!selectedGeneration
+    });
 
-        const projectIds = mockMemberProjectMapping[numericId] || [];
-
-        return projectIds
-            .map((projectId) => mock13thProjectData.find((p) => p.id === projectId))
-            .filter((p): p is NonNullable<typeof p> => !!p);
-    }, [numericId]);
+    const projects = lionInfo?.projects ?? [];
 
     const profileSrc = getProfileImage(member?.id, member?.profileImageUrl);
 
@@ -109,7 +107,7 @@ export const MemberDetailPage = () => {
                 {isMemberLoading ? (
                     <MemberDetailSkeleton />
                 ) : member ? (
-                    <div className="flex flex-col sm:flex-row w-full h-auto gap-[43px] sm:gap-[119px]">
+                    <div className="flex flex-col sm:flex-row w-full max-w-[1216px] mx-auto h-auto gap-[43px] sm:gap-[119px]">
                         <div className="relative w-[291px]">
                             <div className="flex flex-row absolute -top-[100px] sm:-top-16 left-0 w-[291px] text-xl text-[#7F7F7F] gap-1">
                                 <span
@@ -137,7 +135,7 @@ export const MemberDetailPage = () => {
                             <div className="flex flex-col">
                                 <div className="flex gap-3 sm:gap-4 sm:pb-[41.06px] pb-6">
                                     <OrangeBtn
-                                        tag={`${member.generations?.[0] ?? ""}기`}
+                                        tag={`${selectedGeneration ?? ""}기`}
                                         isNotButton={true}
                                     />
                                     {member.role && (
@@ -174,12 +172,12 @@ export const MemberDetailPage = () => {
                                     참여한 프로젝트
                                 </h1>
                                 {isLionInfoLoading ? (
-                                    <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-40">
+                                    <div className="w-full sm:max-w-[806px] grid grid-cols-2 gap-[16px] pb-40">
                                         <Skeleton className="h-[300px] w-full rounded-lg" />
                                         <Skeleton className="h-[300px] w-full rounded-lg" />
                                     </div>
                                 ) : (
-                                    <div className="w-[806px] grid grid-cols-2 gap-[16px] pb-10 sm:pb-40">
+                                    <div className="w-full sm:max-w-[806px] grid grid-cols-2 gap-[16px] pb-10 sm:pb-40">
                                         {projects.length > 0 ? (
                                             projects
                                                 .slice() // Create a shallow copy to avoid mutating the original array
@@ -187,12 +185,8 @@ export const MemberDetailPage = () => {
                                                 .map((project) => (
                                                     <ProjectBox
                                                         key={project.id}
-                                                        // generation={fallbackData.generation}
                                                         {...project}
-                                                        generation={gen}
-                                                        category={
-                                                            project.category as ProjectBoxProps["category"]
-                                                        }
+                                                        generation={selectedGeneration}
                                                     />
                                                 ))
                                         ) : (

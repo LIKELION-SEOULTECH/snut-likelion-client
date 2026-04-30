@@ -4,36 +4,24 @@ import { Link } from "react-router-dom";
 import { ProjectBox } from "./ProjectBox";
 
 import { ROUTES } from "@/routes/routes";
-import { useEffect, useState } from "react";
-import type { ProjectData } from "@/types/project";
 
 import "swiper/css";
 import "swiper/css/autoplay";
 import { Autoplay } from "swiper/modules";
-// import { fetchAllProjects } from "@/apis/main/project";
-import { mock13thProjectData } from "@/constants/mockProjectData";
 import { ProjectBoxSkeleton } from "../project/ProjectBoxSkeleton";
+import { useAllProjects } from "@/hooks/useAllProjects";
 
 interface ProjectShowcaseSectionProps {
     handleClick: () => void;
 }
 
 export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionProps) => {
-    const [projectList, setProjectList] = useState<ProjectData[]>([]);
+    const { data: projectList = [], isLoading } = useAllProjects();
 
     const ExtendedProjectList = [...projectList, ...projectList].map((item, i) => ({
         ...item,
         key: `${item.id}-${i}`
     }));
-    useEffect(() => {
-        // const fetchProjects = async () => {
-        //     const data = await fetchAllProjects();
-        //     setProjectList(data);
-        // };
-
-        // fetchProjects();
-        setProjectList(mock13thProjectData as ProjectData[]);
-    }, []);
 
     return (
         <div className="relative flex flex-col pt-5 sm:pt-[160px] w-full text-[#ffffff] bg-[#1b1b1b] pb-25 sm:pb-[200px]">
@@ -60,7 +48,7 @@ export const ProjectShowcaseSection = ({ handleClick }: ProjectShowcaseSectionPr
 
             {/* 데스크톱 전용 Grid */}
             <div className="hidden sm:grid sm:grid-cols-3 gap-[16px] w-[1216px] mx-auto relative">
-                {projectList.length === 0
+                {isLoading
                     ? Array.from({ length: 9 }).map((_, idx) => (
                           <ProjectBoxSkeleton key={`skeleton-${idx}`} />
                       ))
