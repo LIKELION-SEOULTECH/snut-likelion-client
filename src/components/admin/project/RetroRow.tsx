@@ -1,31 +1,63 @@
 import { useMemberSearch } from "@/hooks/useMemberSearch";
 import type { SearchedMember } from "@/types/members";
 import type { Retro } from "@/types/project";
+import { useEffect, useRef } from "react";
 
 interface RetroRowProps {
     retro: Retro;
     index: number;
+    isOpen: boolean;
+    onOpen: () => void;
+    onClose: () => void;
     onChange: <K extends keyof Retro>(index: number, field: K, value: Retro[K]) => void;
     onSelect: (index: number, member: { id: number; name: string }) => void;
     onRemove?: () => void;
 }
-
-export const RetroRow = ({ retro, index, onChange, onSelect, onRemove }: RetroRowProps) => {
+export const RetroRow = ({
+    retro,
+    index,
+    isOpen,
+    onOpen,
+    onClose,
+    onChange,
+    onSelect,
+    onRemove
+}: RetroRowProps) => {
     const { data, isLoading } = useMemberSearch(retro.query);
+    const rowRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (!rowRef.current) return;
+
+            if (!rowRef.current.contains(e.target as Node)) {
+                onClose();
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [onClose]);
 
     return (
-        <div className="flex flex-row gap-2">
+        <div ref={rowRef} className="flex flex-row gap-2">
             {/* 멤버 검색 */}
             <div className="relative w-[89px]">
                 <input
                     className="w-full h-11 px-4 border border-[#C4C4C4] text-sm rounded-sm"
                     placeholder="멤버 검색"
                     value={retro.query}
-                    onChange={(e) => onChange(index, "query", e.target.value)}
-                    onFocus={() => onChange(index, "showDropdown", true)}
+                    onChange={(e) => {
+                        onChange(index, "query", e.target.value);
+                        onOpen();
+                    }}
+                    onFocus={onOpen}
                 />
 
-                {retro.showDropdown && (
+                {isOpen && (
                     <ul className="absolute z-10 w-full bg-white border rounded-sm shadow mt-1 max-h-40 overflow-auto">
                         {isLoading && (
                             <li className="px-4 py-2 text-sm text-gray-400">검색 중...</li>

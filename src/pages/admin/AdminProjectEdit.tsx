@@ -3,22 +3,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
 import { CircleCheck, Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
-import {
-    createRetrospection,
-    deleteRetrospection,
-    getProjectDetail,
-    getRetrospections
-} from "@/apis/main/project";
-import type { Retro, RetrospectionResponse } from "@/types/project";
-import { updateAdminProject } from "@/apis/admin/project";
+import { createRetrospection, deleteRetrospection } from "@/apis/main/project";
 import { getProjectDetail, getRetrospections } from "@/apis/main/project";
-import type { RetrospectionResponse } from "@/types/project";
+import type { Retro, RetrospectionResponse } from "@/types/project";
 import { deleteMultipleProjects, updateAdminProject } from "@/apis/admin/project";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { StackInput } from "@/components/my-page/StackInput";
 import { ADMIN_ABS } from "@/routes/routes";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { RetroRow } from "@/components/admin/project/RetroRow";
+import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
+import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
+import { toast } from "sonner";
+
+const CATEGORY_VALUE_MAP: Record<string, string> = {
+    아이디어톤: "IDEATHON",
+    "중앙 해커톤": "HACKATHON",
+    데모데이: "DEMO_DAY",
+    "장기 프로젝트": "LONG_TERM_PROJECT"
+};
 
 const syncAdminRetrospections = async (
     projectId: number,
@@ -54,24 +57,6 @@ const syncAdminRetrospections = async (
             .map((retrospection) => createRetrospection(projectId, retrospection.comment))
     );
 };
-import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
-import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
-import { toast } from "sonner";
-interface Retro {
-    memberId: number | null;
-    memberName: string;
-    comment: string;
-    query: string;
-    filtered: { id: number; name: string }[];
-    showDropdown: boolean;
-}
-
-const CATEGORY_VALUE_MAP: Record<string, string> = {
-    아이디어톤: "IDEATHON",
-    "중앙 해커톤": "HACKATHON",
-    데모데이: "DEMO_DAY",
-    "장기 프로젝트": "LONG_TERM_PROJECT"
-};
 
 export const AdminProjectEditPage = () => {
     const queryClient = useQueryClient();
@@ -104,9 +89,12 @@ export const AdminProjectEditPage = () => {
             showDropdown: false
         }
     ]);
+
     const [showCancelModal, setShowCancelModal] = useState(false);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const [openRetroIndex, setOpenRetroIndex] = useState<number | null>(null);
 
     const projectIdNum = Number(projectId);
 
@@ -116,7 +104,6 @@ export const AdminProjectEditPage = () => {
         enabled: !!projectId
     });
 
-    console.log(projectDetail);
     useEffect(() => {
         if (!projectDetail) return;
 
@@ -418,6 +405,9 @@ export const AdminProjectEditPage = () => {
                                 key={index}
                                 retro={retro}
                                 index={index}
+                                isOpen={openRetroIndex === index}
+                                onOpen={() => setOpenRetroIndex(index)}
+                                onClose={() => setOpenRetroIndex(null)}
                                 onChange={handleChangeRetro}
                                 onSelect={handleSelect}
                                 onRemove={index > 0 ? () => handleRemoveRetro(index) : undefined}

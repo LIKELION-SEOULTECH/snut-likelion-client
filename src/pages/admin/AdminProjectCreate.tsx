@@ -14,6 +14,7 @@ import type { CreateProjectRequest, Retro } from "@/types/project";
 import { RetroRow } from "@/components/admin/project/RetroRow";
 import { uploadImages } from "@/apis/main/file";
 import { createRetrospection } from "@/apis/main/project";
+import { toast } from "sonner";
 
 type ProjectCreateResponse = {
     data?: { id?: number; projectId?: number } | number | string;
@@ -38,7 +39,6 @@ const getProjectIdFromResponse = (response: ProjectCreateResponse) => {
         projectIdFromMessage
     );
 };
-import { toast } from "sonner";
 
 export const AdminProjectCreatePage = () => {
     const queryClient = useQueryClient();
@@ -70,7 +70,7 @@ export const AdminProjectCreatePage = () => {
             showDropdown: false
         }
     ]);
-
+    const [openRetroIndex, setOpenRetroIndex] = useState<number | null>(null);
     const isDirty =
         name.trim() !== "" ||
         intro.trim() !== "" ||
@@ -131,20 +131,34 @@ export const AdminProjectCreatePage = () => {
     const createProjectMutation = useMutation({
         mutationFn: async (data: CreateProjectRequest) => {
             const { retrospections, ...projectPayload } = data;
-            const createdProject = await createAdminProject(projectPayload);
+
+            let createdProject: ProjectCreateResponse;
+
+            try {
+                createdProject = await createAdminProject(projectPayload);
+            } catch (error) {
+                console.error(error);
+                throw new Error("PROJECT_CREATE_FAILED");
+            }
+
             const projectId = getProjectIdFromResponse(createdProject);
 
             if (!projectId) {
-                throw new Error("프로젝트 ID를 확인할 수 없습니다.");
+                throw new Error("PROJECT_ID_NOT_FOUND");
             }
 
-            await Promise.all(
-                retrospections
-                    .filter((retrospection) => retrospection.content.trim())
-                    .map((retrospection) =>
-                        createRetrospection(Number(projectId), retrospection.content)
-                    )
-            );
+            try {
+                await Promise.all(
+                    retrospections
+                        .filter((retrospection) => retrospection.content.trim())
+                        .map((retrospection) =>
+                            createRetrospection(Number(projectId), retrospection.content)
+                        )
+                );
+            } catch (error) {
+                console.error(error);
+                throw new Error("RETROSPECTION_CREATE_FAILED");
+            }
 
             return createdProject;
         },
@@ -165,12 +179,28 @@ export const AdminProjectCreatePage = () => {
             );
             queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
             queryClient.invalidateQueries({ queryKey: ["retrospections"] });
-            navigate(ADMIN_ABS.PROJECT);
             navigate(ADMIN_ABS.PROJECT, { replace: true });
         },
 
-        onError: () => {
-            alert("프로젝트 생성 실패");
+        onError: (error) => {
+            console.error(error);
+
+            if (error instanceof Error) {
+                if (error.message === "PROJECT_CREATE_FAILED") {
+                    alert("프로젝트 생성에 실패했습니다.");
+                    return;
+                }
+
+                if (error.message === "PROJECT_ID_NOT_FOUND") {
+                    alert("projectId를 확인할 수 없습니다.");
+                    return;
+                }
+
+                if (error.message === "RETROSPECTION_CREATE_FAILED") {
+                    alert("회고 생성에 실패했습니다.");
+                    return;
+                }
+            }
         }
     });
 
@@ -326,6 +356,9 @@ export const AdminProjectCreatePage = () => {
                                 key={index}
                                 retro={retro}
                                 index={index}
+                                isOpen={openRetroIndex === index}
+                                onOpen={() => setOpenRetroIndex(index)}
+                                onClose={() => setOpenRetroIndex(null)}
                                 onChange={handleChangeRetro}
                                 onSelect={handleSelect}
                                 onRemove={index > 0 ? () => handleRemoveRetro(index) : undefined}
