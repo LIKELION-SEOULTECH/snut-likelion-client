@@ -78,6 +78,7 @@ export const AdminHeader = ({
     const showBackButton =
         path.startsWith("/admin/blog/create") ||
         path.startsWith("/admin/blog/edit") ||
+        (path.startsWith("/admin/notice") && isDeleteMode) ||
         path.startsWith("/admin/notice/create") ||
         path.startsWith("/admin/notice/edit") ||
         /^\/admin\/notice\/\d+$/.test(path) ||

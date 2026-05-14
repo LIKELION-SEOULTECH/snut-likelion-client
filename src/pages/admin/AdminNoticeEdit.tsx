@@ -3,22 +3,31 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getNoticeById, updateNotice } from "@/apis/main/notice";
+import { deleteNotice, getNoticeById, updateNotice } from "@/apis/main/notice";
 import { ADMIN_ABS } from "@/routes/routes";
 import AdminTextEditor from "@/components/text-editor/AdminTextEditor";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { toast } from "sonner";
 import { AlertCircle, CircleCheck } from "lucide-react";
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter
+} from "@/components/ui/dialog";
+
 export const AdminNoticeEditPage = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const { id } = useParams<{ id: string }>();
-    const [type, setType] = useState("");
+    const [type, setType] = useState("NOTICE");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [files, setFiles] = useState<File[]>([]);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -27,6 +36,8 @@ export const AdminNoticeEditPage = () => {
         queryFn: () => getNoticeById(Number(id) || 1),
         enabled: !!id
     });
+
+    console.log(notice);
 
     useEffect(() => {
         if (notice) {
@@ -77,7 +88,7 @@ export const AdminNoticeEditPage = () => {
             toast(
                 <div className="flex items-center gap-2">
                     <CircleCheck size={20} className="text-green-400" />
-                    <span className="text-sm font-medium">게시물이 삭제되었습니다.</span>
+                    <span className="text-sm font-medium">게시물이 수정되었습니다.</span>
                 </div>,
                 {
                     unstyled: true,
@@ -109,7 +120,53 @@ export const AdminNoticeEditPage = () => {
     });
 
     const handleClickDelete = () => {
-        alert("삭제 로직 추가");
+        setShowDeleteConfirm(true);
+    };
+
+    const deleteNoticeMutation = useMutation({
+        mutationFn: (id: number) => deleteNotice(id),
+        onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">공지가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
+            queryClient.invalidateQueries({
+                queryKey: ["adminNotices"]
+            });
+            navigate(ADMIN_ABS.NOTICE);
+        },
+        onError: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <AlertCircle size={20} className="text-red-400" />
+                    <span className="text-sm font-medium">공지 삭제에 실패했습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
+        },
+        onSettled: () => {
+            setShowDeleteConfirm(false);
+        }
+    });
+
+    const handleConfirmDelete = () => {
+        if (!id) return;
+        deleteNoticeMutation.mutate(Number(id));
     };
 
     const handleUpdate = () => {
@@ -240,6 +297,35 @@ export const AdminNoticeEditPage = () => {
                     </div>
                 </div>
             </div>
+            {showDeleteConfirm && (
+                <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+                    <DialogContent className="flex flex-col justify-center w-[390px] p-7 rounded-[8px] gap-2 [&>button.absolute]:hidden">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold text-center">
+                                게시물 삭제
+                            </DialogTitle>
+                        </DialogHeader>
+                        <div className="text-center text-sm font-medium">
+                            게시물이 영구적으로 삭제되며, 다시 복구할 수 없습니다.
+                        </div>
+                        <DialogFooter className="flex h-11 justify-end gap-2 mt-4">
+                            <button
+                                type="button"
+                                onClick={handleConfirmDelete}
+                                className="flex-1 h-full border border-[#ff7700] text-black rounded-sm"
+                            >
+                                삭제하기
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="flex-1 h-full bg-[#FF7700] text-white rounded-sm"
+                            >
+                                아니요
+                            </button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            )}
         </AdminLayout>
     );
 };
