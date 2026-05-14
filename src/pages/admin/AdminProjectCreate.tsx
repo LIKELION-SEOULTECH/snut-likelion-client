@@ -1,12 +1,12 @@
 import { useState } from "react";
 import AdminLayout from "@/layouts/AdminLayout";
-import { Plus } from "lucide-react";
+import { CircleCheck, Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
 
 import { useNavigate } from "react-router-dom";
 import { createAdminProject } from "@/apis/admin/project";
 import { StackInput } from "@/components/my-page/StackInput";
-import { ProjectCreateCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
+import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
 import { ADMIN_ABS } from "@/routes/routes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CustomSelect } from "@/components/admin/common/custom-select";
@@ -38,6 +38,7 @@ const getProjectIdFromResponse = (response: ProjectCreateResponse) => {
         projectIdFromMessage
     );
 };
+import { toast } from "sonner";
 
 export const AdminProjectCreatePage = () => {
     const queryClient = useQueryClient();
@@ -125,7 +126,7 @@ export const AdminProjectCreatePage = () => {
         intro.trim() !== "" &&
         projectDescription.trim() !== "" &&
         retros.every((r) => r.memberId !== null && r.comment.trim() !== "") &&
-        images.length >= 0;
+        images.length > 0;
 
     const createProjectMutation = useMutation({
         mutationFn: async (data: CreateProjectRequest) => {
@@ -149,9 +150,23 @@ export const AdminProjectCreatePage = () => {
         },
 
         onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">프로젝트가 업로드되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
             queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
             queryClient.invalidateQueries({ queryKey: ["retrospections"] });
             navigate(ADMIN_ABS.PROJECT);
+            navigate(ADMIN_ABS.PROJECT, { replace: true });
         },
 
         onError: () => {
@@ -160,8 +175,10 @@ export const AdminProjectCreatePage = () => {
     });
 
     const handleCreateProject = async () => {
+        if (createProjectMutation.isPending) return;
+
         try {
-            // ✅ 1. 이미지 업로드
+            // 1. 이미지 업로드
             let storedNames: string[] = [];
 
             if (images.length > 0) {
@@ -205,7 +222,7 @@ export const AdminProjectCreatePage = () => {
 
     return (
         <AdminLayout
-            isFormValid={isFormValid}
+            isFormValid={isFormValid && !createProjectMutation.isPending}
             onSubmit={handleCreateProject}
             onClickBackBtn={handleBackBtn}
         >
@@ -231,7 +248,8 @@ export const AdminProjectCreatePage = () => {
                             selectList={[
                                 { label: "아이디어톤", value: "IDEATHON" },
                                 { label: "해커톤", value: "HACKATHON" },
-                                { label: "장기프로젝트", value: "LONG_TERM_PROJECT" }
+                                { label: "장기 프로젝트", value: "LONG_TERM_PROJECT" },
+                                { label: "데모데이", value: "DEMO_DAY" }
                             ]}
                         />
                     </div>
@@ -382,7 +400,7 @@ export const AdminProjectCreatePage = () => {
                 </div>
             </div>
 
-            <ProjectCreateCancelModal
+            <ProjectCancelModal
                 open={showCreateCancelModal}
                 onClose={() => {
                     setShowCreateCancelModal(false);
