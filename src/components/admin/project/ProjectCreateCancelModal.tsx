@@ -1,16 +1,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-interface ProjectCreateCancelModalProps {
+interface ProjectCancelModalProps {
     open: boolean;
-    onClose: () => void; // ❌ 취소
-    onConfirm: () => void; // ✅ 나가기 확정
+    onClose: () => void;
+    onConfirm: () => void;
 }
 
-export const ProjectCreateCancelModal = ({
-    open,
-    onClose,
-    onConfirm
-}: ProjectCreateCancelModalProps) => {
+export const ProjectCancelModal = ({ open, onClose, onConfirm }: ProjectCancelModalProps) => {
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="flex flex-col justify-center w-[442px] h-[193px] p-7 rounded-[8px] gap-2 [&>button.absolute]:hidden">

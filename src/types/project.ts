@@ -130,7 +130,9 @@ export type CreateProjectRequest = {
     playstoreUrl?: string;
     tags: string[];
     retrospections: {
+        id?: number;
         memberId: number | null;
+        memberName?: string;
         content: string;
     }[];
 };

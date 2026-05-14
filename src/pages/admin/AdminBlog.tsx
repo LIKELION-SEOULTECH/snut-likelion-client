@@ -84,8 +84,16 @@ export const AdminBlogPage = () => {
         deleteSelectedBlogs(selectedIds);
     };
 
+    const handleBackBtn = () => {
+        setIsDeleteMode(false);
+    };
+
     return (
-        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={isDeleteMode}>
+        <AdminLayout
+            onToggleDeleteMode={handleClickDelete}
+            isDeleteMode={isDeleteMode}
+            onClickBackBtn={handleBackBtn}
+        >
             {!isDeleteMode && (
                 <div className="mt-12">
                     <NoticeSearchTool onSearch={handleSearch} />
