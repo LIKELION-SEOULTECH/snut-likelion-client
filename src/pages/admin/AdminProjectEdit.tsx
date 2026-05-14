@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
-import { Plus } from "lucide-react";
+import { CircleCheck, Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
 import { getProjectDetail, getRetrospections } from "@/apis/main/project";
 import type { RetrospectionResponse } from "@/types/project";
-import { updateAdminProject } from "@/apis/admin/project";
+import { deleteMultipleProjects, updateAdminProject } from "@/apis/admin/project";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { StackInput } from "@/components/my-page/StackInput";
 import { ADMIN_ABS } from "@/routes/routes";
 import { CustomSelect } from "@/components/admin/common/custom-select";
 import { RetroRow } from "@/components/admin/project/RetroRow";
+import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
+import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
+import { toast } from "sonner";
 interface Retro {
     memberId: number | null;
     memberName: string;
@@ -58,6 +61,9 @@ export const AdminProjectEditPage = () => {
             showDropdown: false
         }
     ]);
+    const [showCancelModal, setShowCancelModal] = useState(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const projectIdNum = Number(projectId);
 
@@ -67,6 +73,7 @@ export const AdminProjectEditPage = () => {
         enabled: !!projectId
     });
 
+    console.log(projectDetail);
     useEffect(() => {
         if (!projectDetail) return;
 
@@ -155,14 +162,13 @@ export const AdminProjectEditPage = () => {
         name.trim() !== "" &&
         intro.trim() !== "" &&
         projectDescription.trim() !== "" &&
-        // retros.every((r) => r.memberId !== null && r.comment.trim() !== "") &&
         images.length >= 0;
 
     const handleBackBtn = () => {
         if (!isFormValid) {
             navigate(ADMIN_ABS.PROJECT);
         } else {
-            alert("뭐");
+            setShowCancelModal(true);
         }
     };
 
@@ -173,11 +179,24 @@ export const AdminProjectEditPage = () => {
             queryClient.invalidateQueries({ queryKey: ["adminProjects"] });
             queryClient.invalidateQueries({ queryKey: ["adminProject", projectIdNum] });
 
-            alert("프로젝트가 성공적으로 수정되었습니다.");
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">프로젝트가 수정되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
+            navigate(ADMIN_ABS.PROJECT);
         },
 
         onError: () => {
-            alert("수정 실패");
+            alert("프로젝트 수정 실패");
         }
     });
 
@@ -217,12 +236,47 @@ export const AdminProjectEditPage = () => {
         updateProjectMutation.mutate(formData);
     };
 
+    const deleteProjectsMutation = useMutation({
+        mutationFn: (ids: number[]) => deleteMultipleProjects(ids),
+        onSuccess: () => {
+            toast(
+                <div className="flex items-center gap-2">
+                    <CircleCheck size={20} className="text-green-400" />
+                    <span className="text-sm font-medium">프로젝트가 삭제되었습니다.</span>
+                </div>,
+                {
+                    unstyled: true,
+                    duration: 3000,
+                    classNames: {
+                        toast: "bg-black/60 shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-none text-white px-[23px] py-[11.5px] rounded-sm"
+                    }
+                }
+            );
+            setShowDeleteModal(false);
+
+            queryClient.invalidateQueries({
+                queryKey: ["adminProjects"]
+            });
+            navigate(ADMIN_ABS.PROJECT, { replace: true });
+        },
+        onError: () => {
+            alert("삭제에 실패했습니다.");
+        }
+    });
+
+    const handleClickDelete = () => {
+        setShowDeleteModal(true);
+    };
+
+    const handleClickDeleteConfirm = () => {
+        if (!projectIdNum) return;
+        deleteProjectsMutation.mutate([projectIdNum]);
+    };
+
     return (
         <AdminLayout
             isFormValid={isFormValid}
-            onDelete={() => {
-                alert("삭제 로직 추가");
-            }}
+            onDelete={handleClickDelete}
             onSubmit={handleUpdateProject}
             onClickBackBtn={handleBackBtn}
         >
@@ -248,7 +302,8 @@ export const AdminProjectEditPage = () => {
                             selectList={[
                                 { label: "아이디어톤", value: "IDEATHON" },
                                 { label: "해커톤", value: "HACKATHON" },
-                                { label: "장기프로젝트", value: "LONG_TERM_PROJECT" }
+                                { label: "장기 프로젝트", value: "LONG_TERM_PROJECT" },
+                                { label: "데모데이", value: "DEMO_DAY" }
                             ]}
                         />
                     </div>
@@ -398,6 +453,24 @@ export const AdminProjectEditPage = () => {
                     <ImageUpload initialUrls={imageUrls} onImagesChange={setImages} />{" "}
                 </div>
             </div>
+            <ProjectCancelModal
+                open={showCancelModal}
+                onClose={() => {
+                    setShowCancelModal(false);
+                }}
+                onConfirm={() => {
+                    setShowCancelModal(false);
+                    navigate(ADMIN_ABS.PROJECT);
+                }}
+            />
+
+            {showDeleteModal && (
+                <ProjectDeleteModal
+                    open={showDeleteModal}
+                    onClose={() => setShowDeleteModal(false)}
+                    onDelete={handleClickDeleteConfirm}
+                />
+            )}
         </AdminLayout>
     );
 };

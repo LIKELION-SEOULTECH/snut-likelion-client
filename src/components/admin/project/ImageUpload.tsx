@@ -67,7 +67,7 @@ export const ImageUpload = ({ onImagesChange, initialUrls = [] }: ImageUploadPro
             <input
                 ref={inputRef}
                 type="file"
-                accept="image/*"
+                accept="image/png,image/jpeg,image/webp"
                 className="hidden"
                 onChange={handleFileChange}
                 multiple

@@ -7,7 +7,7 @@ import { Pagination } from "@/components/common/Pagination";
 import type { Project, ProjectFilter } from "@/types/project";
 
 import { deleteMultipleProjects, getAdminProjects } from "@/apis/admin/project";
-import { ProjectDeleteConfirmDialog } from "@/components/admin/project/ProjectDeleteConfirmModal";
+
 import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminProjectSkeleton } from "@/components/admin/project/ProjectSkeleton";
@@ -28,7 +28,6 @@ export const AdminProjectPage = () => {
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const {
         data: projects,
@@ -84,7 +83,6 @@ export const AdminProjectPage = () => {
             );
             setSelectedIds([]);
             setShowDeleteModal(false);
-            setShowDeleteConfirm(true);
             setShowCheckboxes(false);
 
             queryClient.invalidateQueries({
@@ -108,12 +106,21 @@ export const AdminProjectPage = () => {
             setShowCheckboxes(true);
         }
     };
+
     const handleConfirmDelete = () => {
         deleteProjectsMutation.mutate(selectedIds);
     };
 
+    const handleBackBtn = () => {
+        setShowCheckboxes(false);
+    };
+
     return (
-        <AdminLayout onToggleDeleteMode={handleClickDelete} isDeleteMode={showCheckboxes}>
+        <AdminLayout
+            onToggleDeleteMode={handleClickDelete}
+            isDeleteMode={showCheckboxes}
+            onClickBackBtn={handleBackBtn}
+        >
             <div className="mt-12 mb-8">
                 <ProjectSearchTool onSearch={handleSearch} />
             </div>
@@ -137,7 +144,7 @@ export const AdminProjectPage = () => {
                                 <div className="mb-[210px]">
                                     <Pagination
                                         currentPage={currentPage}
-                                        totalPages={projects.content.length}
+                                        totalPages={projects.totalPages}
                                         onPageChange={(page) => setCurrentPage(page)}
                                     />
                                 </div>
@@ -152,12 +159,6 @@ export const AdminProjectPage = () => {
                     open={showDeleteModal}
                     onClose={() => setShowDeleteModal(false)}
                     onDelete={handleConfirmDelete}
-                />
-            )}
-            {showDeleteConfirm && (
-                <ProjectDeleteConfirmDialog
-                    open={showDeleteConfirm}
-                    onClose={() => setShowDeleteConfirm(false)}
                 />
             )}
         </AdminLayout>

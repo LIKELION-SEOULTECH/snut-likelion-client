@@ -76,12 +76,14 @@ export const AdminHeader = ({
 
     // 뒤로가기 버튼 있는 경우
     const showBackButton =
+        (path.startsWith("/admin/blog") && isDeleteMode) ||
         path.startsWith("/admin/blog/create") ||
         path.startsWith("/admin/blog/edit") ||
         (path.startsWith("/admin/notice") && isDeleteMode) ||
         path.startsWith("/admin/notice/create") ||
         path.startsWith("/admin/notice/edit") ||
         /^\/admin\/notice\/\d+$/.test(path) ||
+        (path.startsWith("/admin/project") && isDeleteMode) ||
         path.startsWith("/admin/project/create") ||
         path.startsWith("/admin/project/edit") ||
         path.startsWith("/admin/recruit/apply-user") ||

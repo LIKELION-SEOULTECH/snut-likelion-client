@@ -144,6 +144,7 @@ export const AdminUserRecruitPage = () => {
                     alert("변경된 사항이 없습니다.");
                 }
             }}
+            onClickBackBtn={() => setManageMode(false)}
         >
             <Toaster position="top-center" offset={{ top: 120, left: 80 }} />
             <div className="mt-12 mb-8">
