@@ -1,3 +1,4 @@
+import { ROUTES } from "@/routes/routes";
 import { useRecruitmentSchedule } from "./useRecruitment";
 
 type VisualButtonType = "MANAGER_APPLY" | "MEMBER_APPLY" | null;
@@ -89,8 +90,12 @@ export const useCombinedRecruitment = () => {
             (managerData?.generation ?? memberData?.generation ?? 0) + 1 || null;
     }
 
+    const targetRoute =
+        buttonType === "MANAGER_APPLY" ? ROUTES.RECRUIT_MANAGER : ROUTES.RECRUIT_MEMBER;
+
     return {
         buttonType,
+        targetRoute,
         nextGeneration: determinedNextGeneration,
         currentGeneration: determinedCurrentGeneration,
         isLoading: !memberRes && !managerRes

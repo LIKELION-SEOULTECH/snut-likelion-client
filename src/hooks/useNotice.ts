@@ -10,7 +10,11 @@ import {
 import type { UpdateNoticePayload } from "@/types/notice";
 
 // 전체 조회
-export const useNotices = () => useQuery({ queryKey: ["notices"], queryFn: getAllNotices });
+export const useNotices = (keyword?: string) =>
+    useQuery({
+        queryKey: ["notices", keyword],
+        queryFn: () => getAllNotices(keyword)
+    });
 
 // 단건 조회
 export const useNotice = (noticeId: number) =>

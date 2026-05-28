@@ -35,16 +35,16 @@ export const Header = ({ white = false }: HeaderProps) => {
 
     const profileImage = member?.profileImageUrl;
 
+    // MEMBER, MANAGER 모집일정
+    const { buttonType, targetRoute } = useCombinedRecruitment();
+
     const navItems = [
-        { name: "모집안내", route: ROUTES.HOME },
+        { name: "모집안내", route: targetRoute },
         { name: "프로젝트", route: ROUTES.PROJECT },
         { name: "블로그", route: ROUTES.BLOG },
         { name: "멤버", route: ROUTES.MEMBER },
         { name: "소식", route: ROUTES.NOTICE }
     ];
-
-    // MEMBER, MANAGER 모집일정
-    const { buttonType } = useCombinedRecruitment();
 
     const handleApplyButtonClick = () => {
         if (buttonType === "MANAGER_APPLY") {
@@ -108,10 +108,7 @@ export const Header = ({ white = false }: HeaderProps) => {
                     <div className="hidden sm:flex flex-row gap-[206px] sm:items-center whitespace-nowrap">
                         <div className="flex flex-row gap-22 text-16 font-medium items-center">
                             {navItems.map((item) => {
-                                const isActive =
-                                    item.route === "/"
-                                        ? location.pathname === "/"
-                                        : location.pathname.startsWith(item.route);
+                                const isActive = location.pathname.startsWith(item.route);
                                 return (
                                     <div
                                         key={item.name}

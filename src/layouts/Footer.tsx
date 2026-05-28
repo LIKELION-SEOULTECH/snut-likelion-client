@@ -1,4 +1,4 @@
-import instaramIcon from "@/assets/Footer/instageram.png";
+import instagramIcon from "@/assets/Footer/instagram.png";
 import githubIcon from "@/assets/Footer/github.png";
 
 interface FooterProps {
@@ -27,7 +27,7 @@ export const Footer = ({ white = false }: FooterProps) => {
                     rel="noopener noreferrer"
                     className="gap-[4px] flex flex-col w-[32px] h-[32px] object-fit sm:items-center"
                 >
-                    <img src={instaramIcon} alt="instagram" className="hidden sm:block" />
+                    <img src={instagramIcon} alt="instagram" className="hidden sm:block" />
                     <span className="text-xs sm:text-sm">Instagram</span>
                 </a>
                 <a

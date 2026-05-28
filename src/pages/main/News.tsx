@@ -6,6 +6,7 @@ import QuoteCardList from "@/components/project/QuoteCardList";
 import { useNotices } from "@/hooks/useNotice";
 // import { MainSearchBar } from "@/components/common/MainSearchBar";
 import { NoticeSkeleton } from "@/components/notice/NoticeSkeleton";
+import { MainSearchBar } from "@/components/common/MainSearchBar";
 
 const PAGE_SIZE = 8;
 
@@ -18,7 +19,9 @@ interface RawNotice {
 
 export const NewsPage = () => {
     const [page, setPage] = useState(1);
-    const { data, isLoading, error } = useNotices();
+    const [keyword, setKeyword] = useState("");
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const { data, isLoading, error } = useNotices(searchKeyword);
 
     const rawList = data as RawNotice[] | undefined;
 
@@ -43,7 +46,16 @@ export const NewsPage = () => {
                 </div>
 
                 <div className="w-full flex justify-start">
-                    <div className="min-w-[598px]">{/* <MainSearchBar /> */}</div>
+                    <div className="min-w-[598px]">
+                        <MainSearchBar
+                            value={keyword}
+                            onChange={setKeyword}
+                            onSearch={() => {
+                                setPage(1);
+                                setSearchKeyword(keyword);
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <div className="flex flex-col mt-18 w-full items-center">

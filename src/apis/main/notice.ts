@@ -2,8 +2,11 @@ import axiosInstance from "../axiosInstance";
 import type { Notice } from "@/types/notice";
 
 // 공지사항 전체 조회
-export const getAllNotices = async (): Promise<Notice[]> => {
-    const res = await axiosInstance.get("/notices");
+export const getAllNotices = async (keyword?: string): Promise<Notice[]> => {
+    const res = await axiosInstance.get("/notices", {
+        params: keyword ? { keyword } : undefined
+    });
+
     return res.data.data.content; // content만 반환
 };
 
