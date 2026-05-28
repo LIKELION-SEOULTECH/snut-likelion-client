@@ -40,6 +40,8 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
     const recruitmentType = isManager ? "MANAGER" : "MEMBER";
     const { data: schedule, isLoading, isError } = useRecruitmentSchedule(recruitmentType);
 
+    const hasNoSchedule = !isLoading && !isError && !schedule?.data;
+
     const { data: appsRes } = useQuery({
         queryKey: ["myApplications"],
         queryFn: fetchMyApplications,
@@ -168,8 +170,21 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                             모집 일정
                         </h4>
                         <div className="w-full sm:w-[908px] flex flex-col gap-y-3 mb-[52.36px] sm:mb-[180px]">
-                            {isLoading && <div className="text-white">Loading...</div>}
-                            {isError && <div>Error fetching schedule.</div>}
+                            {isLoading && (
+                                <div className="flex items-center justify-center w-full min-h-40 text-white rounded-xl text-2xl">
+                                    정보를 불러오는 중입니다...
+                                </div>
+                            )}
+                            {isError && (
+                                <div className="flex items-center justify-center w-full min-h-40 text-white rounded-xl text-2xl">
+                                    에러가 발생했습니다.
+                                </div>
+                            )}
+                            {hasNoSchedule && (
+                                <div className="flex items-center justify-center w-full min-h-40 text-[#666] rounded-xl text-2xl border border-[#3A3A3A]">
+                                    현재 등록된 모집 일정이 없습니다.
+                                </div>
+                            )}
                             {infoData.map((e, i) => (
                                 <div key={i} className="flex gap-x-4">
                                     <div className="w-[86px] sm:w-[148px] text-center">

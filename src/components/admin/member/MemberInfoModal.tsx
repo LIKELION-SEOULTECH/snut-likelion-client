@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { deleteMember, updateMember } from "@/apis/admin/member";
 import { CustomSelect } from "../common/custom-select";
-import { Switch } from "@/components/ui/switch";
+// import { Switch } from "@/components/ui/switch";
 import { AlertCircle, CircleCheck, X } from "lucide-react";
 import { toast, Toaster } from "sonner";
 import { departmentToEnumValue, partToEnumValue, roleToEnumValue } from "@/utils/enumLabel";
@@ -24,7 +24,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
     const [part, setPart] = useState("");
     const [role, setRole] = useState("");
     const [department, setDepartment] = useState("");
-    const [authorization, setAuthorization] = useState(false);
+    // const [authorization, setAuthorization] = useState(false);
     const [deleteConfirm, setDeleteConfirm] = useState(false);
 
     useEffect(() => {
@@ -232,7 +232,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                             </div>
 
                             {/* 권한 */}
-                            <div className="h-11 flex items-center gap-[35px]">
+                            {/* <div className="h-11 flex items-center gap-[35px]">
                                 <span className="text-sm font-semibold text-[#666666]">권한</span>
                                 <div>
                                     <Switch
@@ -242,7 +242,7 @@ export const MemberInfoModal = ({ open, onClose, member }: MemberInfoModalProps)
                                         className="bg-gray-100 data-[state=checked]:bg-primary-500"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* 버튼 */}
