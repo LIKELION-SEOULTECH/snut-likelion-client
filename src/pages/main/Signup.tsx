@@ -22,7 +22,7 @@ export const RegisterPage = () => {
 
                 <div className="flex flex-col sm:flex-row justify-between mt-23 sm:mt-[41px]">
                     <div className="flex-1 pr-0 sm:pr-10">
-                        <div className="flex justify-center font-extrabold text-[35px] sm:text-7xl mb-[54px] sm:mb-0">
+                        <div className="flex justify-center sm:justify-start font-extrabold text-[35px] sm:text-7xl mb-[54px] sm:mb-0">
                             <span className="text-white">Welcome</span>
                             <span className="text-[#FF7700]">.</span>
                         </div>

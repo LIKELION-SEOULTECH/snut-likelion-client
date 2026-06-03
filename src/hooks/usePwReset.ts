@@ -1,6 +1,7 @@
+// src/hooks/usePwReset.ts
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { findPassword, sendPwResetVerificationCode } from "@/apis/main/auth";
+import { findPassword, sendPwResetVerificationCode, verifyEmailCode } from "@/apis/main/auth";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
 
@@ -8,7 +9,8 @@ export const usePwReset = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [emailVerifiedCode, setEmailVerifiedCode] = useState("");
+    const [verificationCode, setVerificationCode] = useState("");
+    const [isEmailVerified, setIsEmailVerified] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -21,8 +23,7 @@ export const usePwReset = () => {
         username: "",
         email: "",
         password: "",
-        confirmPassword: "",
-        phoneNumber: ""
+        confirmPassword: ""
     });
 
     useEffect(() => {
@@ -35,21 +36,21 @@ export const usePwReset = () => {
         return () => clearInterval(timerId);
     }, [timer]);
 
-    const registerMutation = useMutation({
+    const resetPasswordMutation = useMutation({
         mutationFn: () =>
             findPassword({
-                code: emailVerifiedCode,
+                code: verificationCode,
                 email,
                 newPassword: password,
                 newPasswordConfirm: confirmPassword,
                 passwordMatching: password === confirmPassword
             }),
         onSuccess: () => {
-            alert("비밀번호 찾기가 완료되었습니다!");
+            alert("비밀번호가 변경되었습니다.");
             navigate(ROUTES.LOGIN);
         },
         onError: (err) => {
-            console.error("비밀번호 찾기 실패", err);
+            console.error("비밀번호 변경 실패", err);
         }
     });
 
@@ -60,8 +61,7 @@ export const usePwReset = () => {
             username: username ? "" : "이름을 입력해주세요.",
             email: email ? "" : "이메일을 입력해주세요.",
             password: password ? "" : "비밀번호를 입력해주세요.",
-            confirmPassword: confirmPassword !== password ? "비밀번호가 일치하지 않습니다." : "",
-            phoneNumber: phoneNumber ? "" : "휴대폰 번호를 입력해주세요."
+            confirmPassword: confirmPassword !== password ? "비밀번호가 일치하지 않습니다." : ""
         };
 
         setErrors(newErrors);
@@ -69,7 +69,7 @@ export const usePwReset = () => {
         const hasError = Object.values(newErrors).some((v) => v !== "");
         if (hasError) return;
 
-        registerMutation.mutate();
+        resetPasswordMutation.mutate(); // mutation 실행
     };
 
     const handleSendVerificationCode = async () => {
@@ -78,17 +78,31 @@ export const usePwReset = () => {
             await sendPwResetVerificationCode(email);
             setCodeSent(true);
 
-            setVerificationStatus(null);
-            setTimer(120);
+            setVerificationStatus(null); // 이전 인증 결과 초기화
+            setTimer(600); // 2분 타이머...
         } catch (err) {
             console.error("인증 코드 전송 실패", err);
+        }
+    };
+
+    const handleVerifyCode = async () => {
+        if (!verificationCode) return;
+        try {
+            await verifyEmailCode(email, verificationCode);
+            setIsEmailVerified(true);
+            setVerificationStatus("success");
+            setTimer(0);
+        } catch (err) {
+            console.error("인증 실패", err);
+            setVerificationStatus("fail");
         }
     };
 
     return {
         username,
         email,
-        emailVerifiedCode,
+        verificationCode,
+        isEmailVerified,
         password,
         confirmPassword,
         phoneNumber,
@@ -96,13 +110,14 @@ export const usePwReset = () => {
         errors,
         setUsername,
         setEmail,
-        setEmailVerifiedCode,
+        setVerificationCode,
         setPassword,
         setConfirmPassword,
         setPhoneNumber,
         handleSubmit,
         handleSendVerificationCode,
-        isPending: registerMutation.isPending,
+        handleVerifyCode,
+        isPending: resetPasswordMutation.isPending,
         verificationStatus,
         timer
     };
