@@ -38,6 +38,10 @@ body {
 button {
     cursor: pointer;
 }
+
+div {
+    user-select: none;
+}
 /* 일정한 속도로 부드럽게 스크롤되도록 설정 */
 .swiper-wrapper {
     transition-timing-function: linear !important;

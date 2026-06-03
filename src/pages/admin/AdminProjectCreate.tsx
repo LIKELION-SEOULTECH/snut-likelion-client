@@ -4,16 +4,15 @@ import { CircleCheck, Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
 
 import { useNavigate } from "react-router-dom";
-import { createAdminProject } from "@/apis/admin/project";
+import { createAdminProject, createAdminRetrospection } from "@/apis/admin/project";
 import { StackInput } from "@/components/my-page/StackInput";
 import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
 import { ADMIN_ABS } from "@/routes/routes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CustomSelect } from "@/components/admin/common/custom-select";
-import type { CreateProjectRequest, Retro } from "@/types/project";
+import type { CreateProjectFormRequest, Retro } from "@/types/project";
 import { RetroRow } from "@/components/admin/project/RetroRow";
 import { uploadImages } from "@/apis/main/file";
-import { createRetrospection } from "@/apis/main/project";
 import { toast } from "sonner";
 
 type ProjectCreateResponse = {
@@ -51,7 +50,7 @@ export const AdminProjectCreatePage = () => {
     const [generation, setGeneration] = useState("");
     const [category, setCategory] = useState("");
 
-    const [tags, setTags] = useState<string[]>([]);
+    const [stacks, setStacks] = useState<string[]>([]);
 
     const [projectDescription, setProjectDescription] = useState("");
     const [webUrl, setWebUrl] = useState("");
@@ -76,7 +75,7 @@ export const AdminProjectCreatePage = () => {
         intro.trim() !== "" ||
         projectDescription.trim() !== "" ||
         images.length > 0 ||
-        tags.length > 0 ||
+        stacks.length > 0 ||
         retros.some((r) => r.memberId !== null || r.comment.trim() !== "");
 
     const handleChangeRetro = <K extends keyof Retro>(index: number, field: K, value: Retro[K]) => {
@@ -129,7 +128,7 @@ export const AdminProjectCreatePage = () => {
         images.length > 0;
 
     const createProjectMutation = useMutation({
-        mutationFn: async (data: CreateProjectRequest) => {
+        mutationFn: async (data: CreateProjectFormRequest) => {
             const { retrospections, ...projectPayload } = data;
 
             let createdProject: ProjectCreateResponse;
@@ -150,9 +149,15 @@ export const AdminProjectCreatePage = () => {
             try {
                 await Promise.all(
                     retrospections
-                        .filter((retrospection) => retrospection.content.trim())
+                        .filter(
+                            (retrospection) =>
+                                retrospection.memberId !== null && retrospection.content.trim()
+                        )
                         .map((retrospection) =>
-                            createRetrospection(Number(projectId), retrospection.content)
+                            createAdminRetrospection(Number(projectId), {
+                                memberId: Number(retrospection.memberId),
+                                content: retrospection.content
+                            })
                         )
                 );
             } catch (error) {
@@ -228,7 +233,7 @@ export const AdminProjectCreatePage = () => {
                 websiteUrl: webUrl || undefined,
                 appstoreUrl: iosUrl || undefined,
                 playstoreUrl: androidUrl || undefined,
-                tags,
+                stacks,
                 retrospections: retros.map((r) => ({
                     memberId: r.memberId,
                     content: r.comment
@@ -338,7 +343,7 @@ export const AdminProjectCreatePage = () => {
                         <span className="w-[169px] h-4 flex flex-row gap-[2px] text-sm font-medium text-[#666666]">
                             <span className="flex flex-col justify-center">기술 스택</span>
                         </span>
-                        <StackInput value={tags} onChange={setTags} color="white-gray" />
+                        <StackInput value={stacks} onChange={setStacks} color="white-gray" />
                     </div>
                 </div>
 

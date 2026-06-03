@@ -32,6 +32,7 @@ export default function ProjectDetailPage() {
     const { data: projectDetailData, isLoading: isProjectDetailLoading } =
         useProjectDetail(projectId);
 
+    console.log(projectDetailData);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const slideRef = useRef<HTMLDivElement>(null);
 
@@ -113,6 +114,7 @@ export default function ProjectDetailPage() {
     const imageList = data.imageUrls ?? [];
     const isMember = data.members?.some((m: Member) => m.id === userId);
 
+    console.log(data);
     const handlePrev = () => {
         if (slideRef.current) {
             slideRef.current.scrollBy({ left: -slideRef.current.clientWidth, behavior: "smooth" });
