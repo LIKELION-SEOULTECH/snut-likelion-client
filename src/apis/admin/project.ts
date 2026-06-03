@@ -1,4 +1,4 @@
-import type { CreateProjectRequest } from "@/types/project";
+import type { CreateProjectRequest, UpdateProjectRequest } from "@/types/project";
 import axiosInstance from "../axiosInstance";
 
 // 프로젝트 리스트 조회
@@ -28,8 +28,26 @@ export const createAdminProject = async (data: Omit<CreateProjectRequest, "retro
 };
 
 // 프로젝트 수정
-export const updateAdminProject = (id: number, data: FormData) => {
+export const updateAdminProject = (id: number, data: UpdateProjectRequest) => {
     return axiosInstance.patch(`/admin/projects/${id}`, data);
 };
 
 // 프로젝트 이미지 삭제
+export const deleteAdminProjectImage = async (projectId: number, imageStoredFileName: string) => {
+    return axiosInstance.delete(`/admin/projects/${projectId}/images`, {
+        params: { imageStoredFileName }
+    });
+};
+
+// 프로젝트 회고 작성
+export const createAdminRetrospection = (
+    projectId: number,
+    data: { memberId: number; content: string }
+) => {
+    return axiosInstance.post(`/admin/projects/${projectId}/retrospections`, data);
+};
+
+// 프로젝트 회고 삭제
+export const deleteAdminRetrospection = (projectId: number, retrospectionId: number) => {
+    return axiosInstance.delete(`/admin/projects/${projectId}/retrospections/${retrospectionId}`);
+};

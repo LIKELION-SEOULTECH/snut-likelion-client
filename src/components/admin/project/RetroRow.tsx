@@ -63,10 +63,16 @@ export const RetroRow = ({
                             <li className="px-4 py-2 text-sm text-gray-400">검색 중...</li>
                         )}
 
-                        {data?.data.data.map((member: SearchedMember) => (
+                        {data?.data.data.map((member: SearchedMember, memberIndex: number) => (
                             <li
-                                key={member.id}
-                                onClick={() => onSelect(index, member)}
+                                key={`${member.id}-${memberIndex}`}
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+
+                                    onSelect(index, member);
+                                    onClose();
+                                }}
                                 className="px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer"
                             >
                                 {member.name}

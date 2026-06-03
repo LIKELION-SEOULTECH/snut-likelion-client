@@ -125,14 +125,30 @@ export type CreateProjectRequest = {
     generation: number;
     category: string;
     imageStoredFileNames: string[];
+
     websiteUrl?: string;
     appstoreUrl?: string;
     playstoreUrl?: string;
-    tags: string[];
+    stacks: string[];
+};
+
+export type UpdateProjectRequest = {
+    name: string;
+    intro: string;
+    description: string;
+    generation: number;
+    category: string;
+    newImageStoredFileNames: string[];
+
+    websiteUrl?: string;
+    appstoreUrl?: string;
+    playstoreUrl?: string;
+    stacks: string[];
+};
+
+export type CreateProjectFormRequest = CreateProjectRequest & {
     retrospections: {
-        id?: number;
         memberId: number | null;
-        memberName?: string;
         content: string;
     }[];
 };
