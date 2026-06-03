@@ -8,50 +8,50 @@ interface StackInputColor {
 
 export const StackInput = ({ value, onChange, color }: StackInputColor) => {
     const [inputValue, setInputValue] = useState("");
-    const [tags, setTags] = useState<string[]>([]);
+    const [stacks, setStacks] = useState<string[]>([]);
 
     //기존거
     useEffect(() => {
         if (value.length > 0) {
-            setTags(value);
+            setStacks(value);
         }
     }, [value]);
 
     // 바뀐거 ?
     useEffect(() => {
-        onChange(tags);
-    }, [tags, onChange]);
+        onChange(stacks);
+    }, [stacks, onChange]);
 
     const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if ((e.key === "Enter" || e.key === "," || e.key === " ") && inputValue.trim()) {
             e.preventDefault();
             const input = inputValue.trim();
 
-            const newTags = input
+            const newStacks = input
                 .split(/[, ]+/)
-                .map((tag) => tag.trim())
-                .filter((tag) => tag.length > 0 && !tags.includes(tag));
+                .map((stack) => stack.trim())
+                .filter((stack) => stack.length > 0 && !stacks.includes(stack));
 
-            if (newTags.length > 0) {
-                setTags([...tags, ...newTags]);
+            if (newStacks.length > 0) {
+                setStacks([...stacks, ...newStacks]);
             }
             setInputValue("");
         }
     };
 
-    const removeTag = (tagToRemove: string) => {
-        setTags(tags.filter((tag) => tag !== tagToRemove));
+    const removeStack = (tagToRemove: string) => {
+        setStacks(stacks.filter((stack) => stack !== tagToRemove));
     };
 
     return (
-        <div className="flex flex-1 min-h-[44px] flex-wrap py-[6px] px-2  flex-1 bg-white rounded rounded-[4px] text-black border-1 border-[#C4C4C4]  gap-y-2 ">
-            {tags.map((tag) => (
+        <div className="flex  min-h-[44px] flex-wrap py-[6px] px-2  flex-1 bg-white rounded-[4px] text-black border-1 border-[#C4C4C4]  gap-y-2 ">
+            {stacks.map((stack) => (
                 <div
-                    key={tag}
+                    key={stack}
                     className={`flex items-center rounded-[4px] px-3 py-1 text-semibold mr-2 ${color == "dark-gray" ? "bg-[#404040] text-white" : "bg-[#ECECEC] text-black"}`}
                 >
-                    {tag}
-                    <button className="ml-2 " onClick={() => removeTag(tag)}>
+                    {stack}
+                    <button className="ml-2 " onClick={() => removeStack(stack)}>
                         ×
                     </button>
                 </div>

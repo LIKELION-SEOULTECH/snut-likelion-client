@@ -96,7 +96,7 @@ export const RegisterForm = () => {
                 />
                 <button
                     type="button"
-                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-9 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
                     style={{
                         backgroundColor: email ? "#666666" : "#2D2D2D",
                         color: email ? "white" : "#666666"
@@ -144,7 +144,7 @@ export const RegisterForm = () => {
                 </div>
                 <button
                     type="button"
-                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-8 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
+                    className={`w-[111px] sm:w-[173px] h-12 sm:h-14 text-base sm:text-xl font-medium rounded-lg mt-7 sm:mt-9 flex-shrink-0 ${email ? "cursor-pointer" : "cursor-not-allowed"}`}
                     style={{
                         backgroundColor: verificationCode ? "#666666" : "#2D2D2D",
                         color: verificationCode ? "white" : "#666666"

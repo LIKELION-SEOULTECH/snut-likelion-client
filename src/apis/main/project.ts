@@ -1,27 +1,40 @@
 import axiosInstance from "../axiosInstance";
 import type { Project, ProjectQueryParams, RetrospectionResponse } from "@/types/project";
 
-type ProjectPayload = {
+type CreateProjectPayload = {
     name: string;
     intro: string;
     description: string;
     generation: number;
     category: string;
     imageStoredFileNames: string[];
-    tags: string[];
+    stacks: string[];
+    websiteUrl?: string;
+    playstoreUrl?: string;
+    appstoreUrl?: string;
+};
+
+type UpdateProjectPayload = {
+    name: string;
+    intro: string;
+    description: string;
+    generation: number;
+    category: string;
+    newImageStoredFileNames: string[];
+    stacks: string[];
     websiteUrl?: string;
     playstoreUrl?: string;
     appstoreUrl?: string;
 };
 
 // 프로젝트 생성
-export const createProject = async (payload: ProjectPayload) => {
+export const createProject = async (payload: CreateProjectPayload) => {
     const res = await axiosInstance.post("/projects", payload);
     return res.data;
 };
 
 // 프로젝트 수정
-export const updateProject = async (projectId: number, payload: ProjectPayload) => {
+export const updateProject = async (projectId: number, payload: UpdateProjectPayload) => {
     const res = await axiosInstance.patch(`/projects/${projectId}`, payload);
     return res.data;
 };
@@ -53,9 +66,14 @@ export const getRetrospections = async (projectId: number): Promise<Retrospectio
 };
 
 // 프로젝트 회고 작성
-export const createRetrospection = async (projectId: number, content: string) => {
-    const res = await axiosInstance.post(`/projects/${projectId}/retrospections`, { content });
-    return res.data;
+export const createRetrospection = (
+    projectId: number,
+    data: {
+        memberId: number;
+        content: string;
+    }
+) => {
+    return axiosInstance.post(`/projects/${projectId}/retrospections`, data);
 };
 
 // 프로젝트 회고 삭제
@@ -64,6 +82,10 @@ export const deleteRetrospection = (projectId: number, retrospectionId: number) 
 };
 
 // 프로젝트 이미지 단건 삭제
-export const deleteProjectImage = (projectId: number) => {
-    return axiosInstance.delete(`/projects/${projectId}/images`);
+export const deleteProjectImage = async (projectId: number, imageStoredFileName: string) => {
+    const res = await axiosInstance.delete(`/projects/${projectId}/images`, {
+        params: { imageStoredFileName }
+    });
+
+    return res.data;
 };

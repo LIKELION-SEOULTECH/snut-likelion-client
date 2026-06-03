@@ -3,10 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "@/layouts/AdminLayout";
 import { CircleCheck, Plus } from "lucide-react";
 import { ImageUpload } from "@/components/admin/project/ImageUpload";
-import { createRetrospection, deleteRetrospection } from "@/apis/main/project";
+import { createAdminRetrospection, deleteAdminRetrospection } from "@/apis/admin/project";
 import { getProjectDetail, getRetrospections } from "@/apis/main/project";
-import type { Retro, RetrospectionResponse } from "@/types/project";
-import { deleteMultipleProjects, updateAdminProject } from "@/apis/admin/project";
+import type { Retro, RetrospectionResponse, UpdateProjectRequest } from "@/types/project";
+import {
+    deleteAdminProjectImage,
+    deleteMultipleProjects,
+    updateAdminProject
+} from "@/apis/admin/project";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { StackInput } from "@/components/my-page/StackInput";
 import { ADMIN_ABS } from "@/routes/routes";
@@ -15,6 +19,8 @@ import { RetroRow } from "@/components/admin/project/RetroRow";
 import { ProjectCancelModal } from "@/components/admin/project/ProjectCreateCancelModal";
 import { ProjectDeleteModal } from "@/components/admin/project/ProjectDeleteModal";
 import { toast } from "sonner";
+import { uploadImages } from "@/apis/main/file";
+import { extractKeyFromUrl } from "@/utils/file";
 
 const CATEGORY_VALUE_MAP: Record<string, string> = {
     아이디어톤: "IDEATHON",
@@ -40,21 +46,35 @@ const syncAdminRetrospections = async (
             const next = nextById.get(original.id);
 
             if (!next || !next.comment.trim()) {
-                await deleteRetrospection(projectId, original.id);
+                await deleteAdminRetrospection(projectId, original.id);
                 return;
             }
 
-            if (next.comment.trim() !== original.content.trim()) {
-                await deleteRetrospection(projectId, original.id);
-                await createRetrospection(projectId, next.comment);
+            const isMemberChanged = Number(next.memberId) !== original.writer.id;
+            const isContentChanged = next.comment.trim() !== original.content.trim();
+
+            if (isMemberChanged || isContentChanged) {
+                await deleteAdminRetrospection(projectId, original.id);
+
+                await createAdminRetrospection(projectId, {
+                    memberId: Number(next.memberId),
+                    content: next.comment
+                });
             }
         })
     );
 
     await Promise.all(
         newRetrospections
-            .filter((retrospection) => retrospection.comment.trim())
-            .map((retrospection) => createRetrospection(projectId, retrospection.comment))
+            .filter(
+                (retrospection) => retrospection.memberId !== null && retrospection.comment.trim()
+            )
+            .map((retrospection) =>
+                createAdminRetrospection(projectId, {
+                    memberId: Number(retrospection.memberId),
+                    content: retrospection.comment
+                })
+            )
     );
 };
 
@@ -71,13 +91,14 @@ export const AdminProjectEditPage = () => {
     const [generation, setGeneration] = useState("");
     const [category, setCategory] = useState("");
 
-    const [tags, setTags] = useState<string[]>([]);
+    const [stacks, setStacks] = useState<string[]>([]);
 
     const [projectDescription, setProjectDescription] = useState("");
     const [webUrl, setWebUrl] = useState("");
     const [iosUrl, setIosUrl] = useState("");
     const [androidUrl, setAndroidUrl] = useState("");
     const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
 
     const [retros, setRetros] = useState<Retro[]>([
         {
@@ -117,8 +138,9 @@ export const AdminProjectEditPage = () => {
         setWebUrl(data.websiteUrl ?? "");
         setAndroidUrl(data.playstoreUrl ?? "");
         setIosUrl(data.appstoreUrl ?? "");
-        setTags(data.tags);
+        setStacks(data.stacks);
         setImageUrls(data.imageUrls);
+        setOriginalImageUrls(data.imageUrls);
     }, [projectDetail]);
 
     const { data: retrosData } = useQuery({
@@ -159,6 +181,7 @@ export const AdminProjectEditPage = () => {
                 i === index
                     ? {
                           ...r,
+                          id: r.memberId === member.id ? r.id : undefined,
                           memberId: member.id,
                           memberName: member.name,
                           query: member.name,
@@ -167,6 +190,8 @@ export const AdminProjectEditPage = () => {
                     : r
             )
         );
+
+        setOpenRetroIndex(null);
     };
 
     const handleAddRetro = () => {
@@ -204,8 +229,8 @@ export const AdminProjectEditPage = () => {
     };
 
     const updateProjectMutation = useMutation({
-        mutationFn: async (formData: FormData) => {
-            const updatedProject = await updateAdminProject(projectIdNum, formData);
+        mutationFn: async (payload: UpdateProjectRequest) => {
+            const updatedProject = await updateAdminProject(projectIdNum, payload);
             await syncAdminRetrospections(projectIdNum, retrosData ?? [], retros);
             return updatedProject;
         },
@@ -237,30 +262,43 @@ export const AdminProjectEditPage = () => {
         }
     });
 
-    const handleUpdateProject = () => {
-        if (!projectId) return;
+    const handleUpdateProject = async () => {
+        if (!projectId || updateProjectMutation.isPending) return;
 
-        const formData = new FormData();
+        try {
+            let storedNames: string[] = [];
 
-        formData.append("name", name);
-        formData.append("intro", intro);
-        formData.append("description", projectDescription);
-        formData.append("generation", generation);
-        formData.append("category", category);
+            if (images.length > 0) {
+                const result = await uploadImages(images, "PROJECT", "IMAGE");
+                storedNames = result.storedNames;
+            }
 
-        if (webUrl) formData.append("websiteUrl", webUrl);
-        if (iosUrl) formData.append("appstoreUrl", iosUrl);
-        if (androidUrl) formData.append("playstoreUrl", androidUrl);
+            const deletedImageUrls = originalImageUrls.filter((url) => !imageUrls.includes(url));
 
-        tags.forEach((tag) => formData.append("tags", tag));
+            await Promise.all(
+                deletedImageUrls.map((url) =>
+                    deleteAdminProjectImage(projectIdNum, extractKeyFromUrl(url))
+                )
+            );
 
-        images.forEach((img) => {
-            formData.append("newImages", img);
-        });
-
-        updateProjectMutation.mutate(formData);
+            const payload = {
+                name,
+                intro,
+                description: projectDescription,
+                generation: Number(generation),
+                category,
+                websiteUrl: webUrl || undefined,
+                playstoreUrl: androidUrl || undefined,
+                appstoreUrl: iosUrl || undefined,
+                newImageStoredFileNames: storedNames,
+                stacks
+            };
+            updateProjectMutation.mutate(payload);
+        } catch (error) {
+            console.error("이미지 업로드 실패", error);
+            alert("이미지 업로드에 실패했습니다.");
+        }
     };
-
     const deleteProjectsMutation = useMutation({
         mutationFn: (ids: number[]) => deleteMultipleProjects(ids),
         onSuccess: () => {
@@ -387,7 +425,7 @@ export const AdminProjectEditPage = () => {
                         <span className="w-[169px] h-4 flex flex-row gap-[2px] text-sm font-medium text-[#666666]">
                             <span className="flex flex-col justify-center">기술 스택</span>
                         </span>
-                        <StackInput value={tags} onChange={setTags} color="white-gray" />
+                        <StackInput value={stacks} onChange={setStacks} color="white-gray" />
                     </div>
                 </div>
 
@@ -402,7 +440,7 @@ export const AdminProjectEditPage = () => {
                     <div className="flex-1 flex flex-col gap-[10px]">
                         {retros.map((retro, index) => (
                             <RetroRow
-                                key={index}
+                                key={retro.id ? `retro-${retro.id}` : `new-retro-${index}`}
                                 retro={retro}
                                 index={index}
                                 isOpen={openRetroIndex === index}
@@ -478,7 +516,11 @@ export const AdminProjectEditPage = () => {
                             <span className="w-1 h-1 rounded-full bg-[#ff7700]" />
                         </span>
                     </span>
-                    <ImageUpload initialUrls={imageUrls} onImagesChange={setImages} />{" "}
+                    <ImageUpload
+                        initialUrls={imageUrls}
+                        onImagesChange={setImages}
+                        onExistingImagesChange={setImageUrls}
+                    />{" "}
                 </div>
             </div>
             <ProjectCancelModal

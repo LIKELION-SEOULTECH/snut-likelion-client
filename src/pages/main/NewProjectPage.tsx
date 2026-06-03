@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
     createProject,
     createRetrospection,
+    deleteProjectImage,
     deleteRetrospection,
     getProjectDetail,
     getRetrospections,
@@ -18,6 +19,7 @@ import { DropDwon } from "@/components/my-page/DropDown";
 import { getGenerationListByYear } from "@/utils/getGenerationList";
 import { uploadImages } from "@/apis/main/file"; // 이미 만들어둔거
 import { extractKeyFromUrl } from "@/utils/file";
+import { Spinner } from "@/components/ui/spinner";
 
 const categoryMap: Record<string, string> = {
     전체: "",
@@ -69,7 +71,10 @@ const syncRetrospections = async (
 
             if (next.content.trim() !== original.content.trim()) {
                 await deleteRetrospection(projectId, original.id);
-                await createRetrospection(projectId, next.content);
+                await createRetrospection(projectId, {
+                    memberId: Number(next.memberId),
+                    content: next.content
+                });
             }
         })
     );
@@ -77,7 +82,12 @@ const syncRetrospections = async (
     await Promise.all(
         newRetrospections
             .filter((retrospection) => retrospection.content.trim())
-            .map((retrospection) => createRetrospection(projectId, retrospection.content))
+            .map((retrospection) =>
+                createRetrospection(projectId, {
+                    memberId: Number(retrospection.memberId),
+                    content: retrospection.content
+                })
+            )
     );
 };
 
@@ -100,7 +110,7 @@ export const NewProjectPage = () => {
     const [intro, setIntro] = useState("");
     const [description, setDescription] = useState("");
 
-    const [tags, setTags] = useState<string[]>([]);
+    const [stacks, setStacks] = useState<string[]>([]);
 
     const [websiteUrl, setWebsiteUrl] = useState("");
     const [playstoreUrl, setPlaystoreUrl] = useState("");
@@ -111,7 +121,9 @@ export const NewProjectPage = () => {
     ]);
 
     const [imageFiles, setImageFiles] = useState<File[]>([]);
+
     const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
+    const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
 
     const { data: projectDetailData } = useQuery({
         queryKey: ["projectDetail", projectId],
@@ -133,11 +145,12 @@ export const NewProjectPage = () => {
         setName(projectDetailData.name ?? "");
         setIntro(projectDetailData.intro ?? "");
         setDescription(projectDetailData.description ?? "");
-        setTags(projectDetailData.tags ?? []);
+        setStacks(projectDetailData.stacks ?? []);
         setWebsiteUrl(projectDetailData.websiteUrl ?? "");
         setPlaystoreUrl(projectDetailData.playstoreUrl ?? "");
         setAppstoreUrl(projectDetailData.appstoreUrl ?? "");
         setExistingImageUrls(projectDetailData.imageUrls ?? []);
+        setOriginalImageUrls(projectDetailData.imageUrls ?? []);
     }, [projectDetailData]);
 
     useEffect(() => {
@@ -163,7 +176,7 @@ export const NewProjectPage = () => {
             description: string;
             category: string;
             generation: number;
-            tags: string[];
+            stacks: string[];
             websiteUrl?: string;
             playstoreUrl?: string;
             appstoreUrl?: string;
@@ -189,9 +202,16 @@ export const NewProjectPage = () => {
             }
 
             await Promise.all(
-                retrospections.map((retrospection) =>
-                    createRetrospection(Number(projectId), retrospection.content)
-                )
+                retrospections
+                    .filter(
+                        (retrospection) => retrospection.memberId && retrospection.content.trim()
+                    )
+                    .map((retrospection) =>
+                        createRetrospection(Number(projectId), {
+                            memberId: Number(retrospection.memberId),
+                            content: retrospection.content
+                        })
+                    )
             );
 
             return createdProject;
@@ -219,11 +239,11 @@ export const NewProjectPage = () => {
             description: string;
             category: string;
             generation: number;
-            tags: string[];
+            stacks: string[];
             websiteUrl?: string;
             playstoreUrl?: string;
             appstoreUrl?: string;
-            imageStoredFileNames: string[];
+            newImageStoredFileNames: string[];
             retrospections: RetrospectionInput[];
         }) => {
             const { retrospections, ...projectPayload } = payload;
@@ -258,7 +278,11 @@ export const NewProjectPage = () => {
         }
     };
 
+    const isSubmitting = createProjectMutation.isPending || updateProjectMutation.isPending;
+
     const handleSubmit = async () => {
+        if (isSubmitting) return;
+
         if (!name || !intro || !description || !selectedGen || !selectedCategory) {
             alert("모든 필수 항목을 작성해주세요.");
             return;
@@ -281,39 +305,42 @@ export const NewProjectPage = () => {
             }
 
             // JSON payload 생성
-            const existingStoredNames = existingImageUrls.map(extractKeyFromUrl);
-            const payload = {
+            const basePayload = {
                 name,
                 intro,
                 description,
                 category: categoryMap[selectedCategory],
                 generation: Number(selectedGen),
-                tags,
+                stacks,
                 websiteUrl,
                 playstoreUrl,
                 appstoreUrl,
-                retrospections: validRetrospections,
-                imageStoredFileNames: isEditMode
-                    ? [...existingStoredNames, ...storedNames]
-                    : storedNames
+                retrospections: validRetrospections
+            };
+
+            const createPayload = {
+                ...basePayload,
+                imageStoredFileNames: storedNames
+            };
+
+            const updatePayload = {
+                ...basePayload,
+                newImageStoredFileNames: storedNames
             };
 
             if (isEditMode) {
-                updateProjectMutation.mutate({
-                    name: payload.name,
-                    intro: payload.intro,
-                    description: payload.description,
-                    category: payload.category,
-                    generation: payload.generation,
-                    tags: payload.tags,
-                    websiteUrl: payload.websiteUrl,
-                    playstoreUrl: payload.playstoreUrl,
-                    appstoreUrl: payload.appstoreUrl,
-                    imageStoredFileNames: payload.imageStoredFileNames,
-                    retrospections: payload.retrospections
-                });
+                const deletedImageUrls = originalImageUrls.filter(
+                    (url) => !existingImageUrls.includes(url)
+                );
+
+                await Promise.all(
+                    deletedImageUrls.map((url) =>
+                        deleteProjectImage(projectId, extractKeyFromUrl(url))
+                    )
+                );
+                updateProjectMutation.mutate(updatePayload);
             } else {
-                createProjectMutation.mutate(payload);
+                createProjectMutation.mutate(createPayload);
             }
         } catch (e) {
             console.error(e);
@@ -338,9 +365,16 @@ export const NewProjectPage = () => {
                 <div className="flex gap-3">
                     <button
                         onClick={handleSubmit}
+                        disabled={isSubmitting}
                         className="bg-[#F70] text-white font-bold px-4 py-2 rounded-[120px]"
                     >
-                        {isEditMode ? "수정완료" : "업로드"}
+                        {isSubmitting ? (
+                            <Spinner className="h-6 w-12" />
+                        ) : isEditMode ? (
+                            "수정완료"
+                        ) : (
+                            "업로드"
+                        )}
                     </button>
                 </div>
             </div>
@@ -433,7 +467,7 @@ export const NewProjectPage = () => {
                                 기술 스택
                                 <span className="w-[4px] h-[4px] ml-[3px] rounded-full bg-[#FF7700]" />
                             </label>
-                            <StackInput value={tags} onChange={setTags} color="white-gray" />
+                            <StackInput value={stacks} onChange={setStacks} color="white-gray" />
                         </div>
                         {/* 프로젝트 회고 */}
                         <div className="flex ">

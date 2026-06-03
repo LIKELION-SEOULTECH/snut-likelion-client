@@ -7,17 +7,24 @@ import { X } from "lucide-react";
 interface ImageItem {
     id: string;
     url: string;
-    file: File;
+    file?: File;
+    isExisting?: boolean;
 }
 
 interface ImageUploadProps {
-    onImagesChange: (files: File[]) => void;
-    initialUrls?: string[]; // 추가
+    initialUrls?: string[];
+    onImagesChange: (images: File[]) => void;
+    onExistingImagesChange?: (urls: string[]) => void;
 }
 
-export const ImageUpload = ({ onImagesChange, initialUrls = [] }: ImageUploadProps) => {
+export const ImageUpload = ({
+    onImagesChange,
+    onExistingImagesChange,
+    initialUrls = []
+}: ImageUploadProps) => {
     const [images, setImages] = useState<ImageItem[]>([]);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const initializedRef = useRef(false);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -45,23 +52,33 @@ export const ImageUpload = ({ onImagesChange, initialUrls = [] }: ImageUploadPro
     };
 
     const handleRemove = (id: string) => {
+        const removedImage = images.find((img) => img.id === id);
+
         const updated = images.filter((img) => img.id !== id);
+
         setImages(updated);
+
         onImagesChange(updated.map((img) => img.file).filter(Boolean) as File[]);
+
+        // 기존 이미지 삭제 반영
+        if (removedImage?.isExisting) {
+            onExistingImagesChange?.(updated.filter((img) => img.isExisting).map((img) => img.url));
+        }
     };
 
     useEffect(() => {
+        if (initializedRef.current) return;
         if (initialUrls.length === 0) return;
 
         const initialImages: ImageItem[] = initialUrls.map((url) => ({
             id: crypto.randomUUID(),
             url,
-            file: null as unknown as File // 기존 이미지는 file 없음
+            isExisting: true
         }));
 
         setImages(initialImages);
+        initializedRef.current = true;
     }, [initialUrls]);
-
     return (
         <div className="flex-1">
             <input
