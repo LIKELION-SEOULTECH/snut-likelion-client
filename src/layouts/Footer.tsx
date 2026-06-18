@@ -1,5 +1,6 @@
 import instagramIcon from "@/assets/Footer/instagram.png";
 import githubIcon from "@/assets/Footer/github.png";
+import instagramWhiteIcon from "@/assets/Footer/instagram.svg";
 
 interface FooterProps {
     white?: boolean;
@@ -27,7 +28,11 @@ export const Footer = ({ white = false }: FooterProps) => {
                     rel="noopener noreferrer"
                     className="gap-[4px] flex flex-col w-[32px] h-[32px] object-fit sm:items-center"
                 >
-                    <img src={instagramIcon} alt="instagram" className="hidden sm:block" />
+                    {white ? (
+                        <img src={instagramWhiteIcon} alt="instagram" className="hidden sm:block" />
+                    ) : (
+                        <img src={instagramIcon} alt="instagram" className="hidden sm:block" />
+                    )}
                     <span className="text-xs sm:text-sm">Instagram</span>
                 </a>
                 <a
@@ -36,7 +41,7 @@ export const Footer = ({ white = false }: FooterProps) => {
                     rel="noopener noreferrer"
                     className="gap-[4px] flex flex-col w-[32px] h-[32px] object-fit sm:items-center"
                 >
-                    <img src={githubIcon} alt="instagram" className="hidden sm:block" />
+                    <img src={githubIcon} alt="gith" className="hidden sm:block" />
                     <span className="text-xs sm:text-sm">Github</span>
                 </a>
             </div>
