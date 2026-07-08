@@ -26,7 +26,7 @@ export const BottomCTASection = ({
                 style={{ background: "linear-gradient(98.85deg, #FF5900 1.18%, #FFC859 98.14%)" }}
             >
                 <img src={welcomeImg} alt="welcome" className="w-full absolute bottom-0" />
-                <h2 className="w-[772px]  text-[#1B1B1B] text-center text-2xl sm:text-[64px] font-extrabold leading-[130%] mb-5 sm:mb-[40px]">
+                <h2 className="sm:w-[772px]  text-[#1B1B1B] text-center text-2xl sm:text-[64px] font-extrabold leading-[130%] mb-5 sm:mb-[40px]">
                     지금 바로
                     <br />
                     멋사 무리에 합류하세요!
@@ -36,7 +36,7 @@ export const BottomCTASection = ({
                     className="z-10 bg-[#1B1B1B] mx-auto text-[#ECECEC] w-[180px] sm:w-[280px] h-10 sm:h-[76px] rounded-[300px] font-bold cursor-pointer flex items-center justify-center"
                 >
                     <span className="max-w-full overflow-hidden text-ellipsis  text-base sm:text-[24px]">
-                        {text ? text : "14기 모집 알림 받기 →"}
+                        {text ? text : "15기 모집 알림 받기 →"}
                     </span>
                 </button>
             </div>

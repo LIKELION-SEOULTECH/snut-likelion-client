@@ -20,7 +20,7 @@ import ChatbotCloseBtn from "@/assets/home/ChatBotClose.svg?react";
 import { ChatBotContainer } from "@/components/chatbot/ChatBotContainer";
 
 import { NotificationModal } from "@/components/home/NotificationModal";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 import { fetchRecentRecruitment } from "@/apis/main/recruitment";
 import { ROUTES } from "@/routes/routes";
 
@@ -45,15 +45,6 @@ export default function HomePage() {
         if (isModalOpen && !isDesktop) {
             document.body.style.overflow = "hidden";
             document.documentElement.style.overflow = "hidden";
-            toast("모집지원은 PC로만 가능합니다!", {
-                unstyled: true,
-                duration: 3000,
-                classNames: {
-                    toast: "bg-[#333334cc] shadow-[0px_4px_24px_rgba(0,0,0,0.16)] backdrop-blur-[12px] text-white px-4 py-[10.5px] rounded-sm",
-                    title: "text-white text-sm font-mediumt",
-                    description: "text-red-400"
-                }
-            });
         } else {
             document.body.style.overflow = "";
             document.documentElement.style.overflow = "";
@@ -219,17 +210,17 @@ export default function HomePage() {
                 {/* chatbot #29*/}
                 <section
                     onClick={() => setIsChatOpen((prev) => !prev)}
-                    className="hidden sm:block fixed bottom-16 right-28 z-50 cursor-pointer"
+                    className="block fixed bottom-12 right-5 sm:bottom-16 sm:right-28 z-50 cursor-pointer"
                 >
                     <img
                         src={ChatbotBtn}
-                        className={`w-[72px] h-[72px] ${!isChatOpen ? "flex" : "hidden"}`}
+                        className={`w-15 h-15 sm:w-[72px] sm:h-[72px] ${!isChatOpen ? "flex" : "hidden"}`}
                     />
                     <ChatbotCloseBtn
-                        className={`w-[72px] h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
+                        className={`w-15 h-15 sm:w-[72px] sm:h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
                     />
                 </section>
-                <section className="fixed bottom-[166px] bg-white  rounded-[19.585px] right-[111px] z-1000">
+                <section className="fixed w-[calc(100vw-40px)] sm:w-[395px] left-5 right-5 sm:left-auto bottom-33 sm:bottom-[166px] bg-white  rounded-[19.585px] sm:right-[111px] z-1000">
                     {isChatOpen ? <ChatBotContainer /> : null}
                 </section>
                 <MissionSection />

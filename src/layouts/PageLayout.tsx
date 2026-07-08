@@ -36,7 +36,7 @@ export default function PageLayout({
     }, [white]);
 
     return (
-        <>
+        <div>
             {isPost ? (
                 <PostHeader
                     isUploadEnabled={isUploadEnabled}
@@ -48,6 +48,6 @@ export default function PageLayout({
             )}
             <main>{children}</main>
             <Footer white={white} />
-        </>
+        </div>
     );
 }

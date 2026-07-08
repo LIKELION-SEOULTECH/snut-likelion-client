@@ -1,5 +1,6 @@
 import { ReactTyped } from "react-typed";
 import mainBg from "@/assets/home/main-bg.png";
+import mobileMainBg from "@/assets/home/mobile-main-bg.png";
 import { getRecruitmentButtonText } from "@/utils/getRecruitmentButtonText";
 
 export const MainVisualSection = ({
@@ -24,7 +25,12 @@ export const MainVisualSection = ({
             <img
                 src={mainBg}
                 alt="main background"
-                className="absolute top-0 left-0 w-full h-full object-cover z-0"
+                className="hidden sm:block sm:absolute top-0 left-0 w-full h-full object-cover z-0"
+            />
+            <img
+                src={mobileMainBg}
+                alt="mobile main background"
+                className="block sm:hidden absolute top-0 left-0 w-full h-full object-cover z-0"
             />
             {/* 컨텐츠 */}
             <div className="relative z-5">
@@ -73,7 +79,7 @@ export const MainVisualSection = ({
                     className="h-10 sm:h-18 bg-[#ff7700] text-base sm:text-[25px] font-bold rounded-[250px] mt-8 sm:mt-[54px] mb-[154px] sm:mb-[134px] px-5 sm:px-12 leading-[130%] tracking-[-0.02em] cursor-pointer"
                     onClick={onOpenModal}
                 >
-                    {text ? text : "14기 모집 알림 받기 →"}
+                    {text ? text : "15기 모집 알림 받기 →"}
                 </button>
             </div>
         </div>
