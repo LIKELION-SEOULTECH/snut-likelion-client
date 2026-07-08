@@ -36,7 +36,7 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
         return (
             <div
                 ref={bubbleRef}
-                className="text-sm text-[#fff] w-fit px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none ml-4"
+                className="text-sm text-[#fff] w-fit px-4 py-2 rounded-[12px] bg-[#404040] rounded-bl-none sm:ml-4"
             >
                 입력 중...
             </div>
@@ -48,12 +48,14 @@ const ChatBubble = ({ role, message, buttons }: ChatMessage) => {
             ref={role === "bot" ? bubbleRef : undefined}
             className={`flex flex-col ${role === "user" ? "justify-end" : "justify-start"} w-full`}
         >
-            {role === "bot" ? <img src={botImg} alt="bot" className="w-[33px] ml-4 mb-2" /> : null}
+            {role === "bot" ? (
+                <img src={botImg} alt="bot" className="w-[33px] sm:ml-4 mb-[6px] sm:mb-2" />
+            ) : null}
             <div
-                className={`max-w-[75%] flex flex-col ${buttons ? " px-4 py-5" : ""} px-4 py-2 text-sm rounded-[12px] leading-[160%]  ${
+                className={`max-w-[88%] sm:max-w-[75%] flex flex-col ${buttons ? "px-3 sm:px-4 py-4 sm:py-5" : ""} px-4 py-2 text-sm rounded-[12px] leading-[160%]  ${
                     role === "bot"
-                        ? "bg-[#404040] text-white self-start ml-4 rounded-bl-none"
-                        : "bg-[#F70] text-white self-end mr-4 rounded-br-none"
+                        ? "bg-[#404040] text-white self-start sm:ml-4 rounded-bl-none"
+                        : "bg-[#F70] text-white self-end mr-0 sm:mr-4 rounded-br-none"
                 }`}
             >
                 {message}
@@ -157,7 +159,7 @@ export const ChatBotContainer = () => {
 
     return (
         <div>
-            <div className="block w-[395px]  h-[626px] bg-[#fff] rounded-[19.585px] text-[#000]">
+            <div className="block w-full sm:w-[395px] h-full sm:h-[626px] bg-[#fff] rounded-[19.585px] text-[#000]">
                 <h4 className="flex h-[56px] text-[18px] w-full justify-center items-center font-semibold text-[#2D2D2D]">
                     멋쟁이 사자처럼 서울과학기술대학교
                 </h4>
@@ -190,7 +192,7 @@ export const ChatBotContainer = () => {
                         }}
                         type="text"
                         placeholder="질문을 입력해주세요"
-                        className="w-[355px] h-[43px] px-4 py-3 text-sm rounded-[8px] focus:outline-none mx-auto bg-[#ECECEC]"
+                        className="w-full sm:w-[355px] h-[43px] px-4 py-3 text-sm mx-5 sm:mx-0 rounded-[8px] focus:outline-none bg-[#ECECEC]"
                     />
                 </div>
                 <div className="flex py-[16px] justify-center items-center gap-[6px]">

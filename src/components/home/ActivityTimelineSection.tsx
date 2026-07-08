@@ -50,7 +50,7 @@ const ActivityTimelineSection = ({ onShowDetail }: Props) => {
                 ))}
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center mx-auto">
                 <button
                     onClick={onShowDetail}
                     className="w-28 sm:w-[216px] h-[33px] sm:h-[76px] text-sm sm:text-[24px] font-bold rounded-full cursor-pointer border-[0.4px] sm:border-[2px] border-white text-white hover:bg-[#2D2D2D] transition duration-200"

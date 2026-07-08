@@ -91,7 +91,7 @@ export const Header = ({ white = false }: HeaderProps) => {
 
     return (
         <div
-            className={`w-full min-w-330 h-[54px] sm:h-24 flex flex-row justify-start px-5 sm:px-0 sm:justify-center relative ${
+            className={`w-full min-w-30 sm:min-w-330 h-[54px] sm:h-24 flex flex-row justify-start px-5 sm:px-0 sm:justify-center relative ${
                 white
                     ? "bg-white/60 border-b border-[#ECECEC] backdrop-blur-[35px]"
                     : "bg-[#000000]"
