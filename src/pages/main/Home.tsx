@@ -192,7 +192,7 @@ export default function HomePage() {
         <PageLayout>
             <Toaster position="bottom-center" />
             <div className=" text-white bg-[#1b1b1b] relative">
-                <div className="fixed -left-[10vw] -bottom-[75px] z-20 h-[150px] w-[120vw]">
+                <div className="fixed -left-[10vw] -bottom-[75px] z-[20] h-[150px] w-[120vw]">
                     <Shadow className="w-full h-full " preserveAspectRatio="none" />
                 </div>
                 <MainVisualSection
@@ -210,7 +210,7 @@ export default function HomePage() {
                 {/* chatbot #29*/}
                 <section
                     onClick={() => setIsChatOpen((prev) => !prev)}
-                    className="block fixed bottom-12 right-5 sm:bottom-16 sm:right-28 z-50 cursor-pointer"
+                    className="block fixed bottom-12 right-5 sm:bottom-16 sm:right-28 z-[100] cursor-pointer"
                 >
                     <img
                         src={ChatbotBtn}
@@ -220,7 +220,7 @@ export default function HomePage() {
                         className={`w-15 h-15 sm:w-[72px] sm:h-[72px] ${isChatOpen ? "flex" : "hidden"}`}
                     />
                 </section>
-                <section className="fixed w-[calc(100vw-40px)] sm:w-[395px] left-5 right-5 sm:left-auto bottom-33 sm:bottom-[166px] bg-white  rounded-[19.585px] sm:right-[111px] z-1000">
+                <section className="fixed w-[calc(100vw-40px)] sm:w-[395px] left-5 right-5 sm:left-auto bottom-33 sm:bottom-[166px] bg-white  rounded-[19.585px] sm:right-[111px] z-[100]">
                     {isChatOpen ? <ChatBotContainer /> : null}
                 </section>
                 <MissionSection />
@@ -243,7 +243,7 @@ export default function HomePage() {
                     currentGeneration={currentGeneration}
                 />
                 {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                    <div className="fixed inset-0 z-[50] flex items-center justify-center bg-black/60">
                         <NotificationModal onClose={closeModal} nextGeneration={nextGeneration} />
                     </div>
                 )}
