@@ -51,7 +51,7 @@ RESTful API 구조에 대한 이해`,
     },
     {
         title: "인공지능",
-        subtitle: "A.I",
+        subtitle: "AI",
         description1: `사용자와 상호작용하는 AI 인터페이스를 개발합니다.
 프롬프트 엔지니어링 및 AI-API 연동을 담당합니다.`,
         description2: `OpenAI API 또는 유사한 LLM 기반 API 사용 경험

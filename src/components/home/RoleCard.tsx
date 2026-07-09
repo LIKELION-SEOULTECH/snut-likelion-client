@@ -1,6 +1,10 @@
 import type { RoleCardProps } from "@/types/home";
 import { RoleDetailBtn } from "./RoleDetailBtn";
 
+type Props = RoleCardProps & {
+    onDetailClick?: () => void;
+};
+
 export const RoleCard = ({
     title,
     subtitle,
@@ -8,8 +12,9 @@ export const RoleCard = ({
     description2,
     description3,
     isManeger,
-    description1_5
-}: RoleCardProps) => {
+    description1_5,
+    onDetailClick
+}: Props) => {
     return (
         <div
             className={`cursor-pointer group relative flex flex-col ${
@@ -77,7 +82,9 @@ export const RoleCard = ({
                 </div>
 
                 <div className="absolute bottom-5 left-3 sm:bottom-[26px] sm:left-5 transition-opacity duration-200 sm:group-hover:opacity-0">
-                    <RoleDetailBtn />
+                    <button onClick={onDetailClick}>
+                        <RoleDetailBtn />
+                    </button>
                 </div>
             </div>
         </div>
