@@ -250,7 +250,7 @@ export const Recruit = ({ isManager = false }: RecruitProps) => {
                             운영진 모집 분야
                         </h4>
                         <div className="relative flex flex-col items-center ">
-                            <div className="relative z-5 text-white">
+                            <div className="relative text-white">
                                 <ManegerRoleLIst />
                             </div>
                         </div>
